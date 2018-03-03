@@ -10,7 +10,7 @@ using System;
 
 namespace ASPNETCOREDEMO.Migrations
 {
-    [DbContext(typeof(MotoDBContext))]
+    [DbContext(typeof(MotoDbContext))]
     [Migration("20180303121942_firstMigration")]
     partial class firstMigration
     {

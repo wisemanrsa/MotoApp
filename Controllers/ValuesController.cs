@@ -10,11 +10,10 @@ namespace ASPNETCOREDEMO.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
-        private readonly MotoDBContext context;
-        public ValuesController(MotoDBContext context)
+        private readonly MotoDbContext ccc;
+        public ValuesController(MotoDbContext ccc)
         {
-            this.context = context;
-
+            this.ccc = ccc;
         }
         // GET api/values
         [HttpGet]
