@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ASPNETCOREDEMO.Persistence;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASPNETCOREDEMO.Controllers
@@ -9,6 +10,12 @@ namespace ASPNETCOREDEMO.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+        private readonly MotoDBContext context;
+        public ValuesController(MotoDBContext context)
+        {
+            this.context = context;
+
+        }
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
