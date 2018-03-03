@@ -27,7 +27,7 @@ module.exports = ""
 /***/ "./src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div>\n  <ul class=\"well\">\n    <li *ngFor=\"let i of items\">{{ i }}</li>\n  </ul>\n</div>\n\n"
+module.exports = "<div>\n  <input type=\"button\" class=\"btn btn-danger\" value=\"SeyHi\" (click)=sayHi()>\n  <div id=\"hi\"></div>\n\n  <ul class=\"well\">\n    <li *ngFor=\"let i of items\">{{ i }}</li>\n  </ul>\n</div>\n\n"
 
 /***/ }),
 
@@ -38,6 +38,10 @@ module.exports = "<div>\n  <ul class=\"well\">\n    <li *ngFor=\"let i of items\
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_service__ = __webpack_require__("./src/app/app.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_sweetalert2__ = __webpack_require__("./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_sweetalert2___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_sweetalert2__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jquery__ = __webpack_require__("./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_jquery__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -49,6 +53,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
+
 var AppComponent = /** @class */ (function () {
     function AppComponent(appService) {
         this.appService = appService;
@@ -58,6 +64,10 @@ var AppComponent = /** @class */ (function () {
     AppComponent.prototype.getItems = function () {
         var _this = this;
         this.appService.getItems().subscribe(function (result) { return _this.items = result; });
+    };
+    AppComponent.prototype.sayHi = function () {
+        __WEBPACK_IMPORTED_MODULE_2_sweetalert2___default()('Good day', 'Thank you', 'success');
+        __WEBPACK_IMPORTED_MODULE_3_jquery___default()('#hi').hide();
     };
     AppComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["m" /* Component */])({
