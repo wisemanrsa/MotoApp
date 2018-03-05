@@ -1,47 +1,78 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ASPNETCOREDEMO.Controllers.Resources;
 using ASPNETCOREDEMO.Models;
-using ASPNETCOREDEMO.Persistence;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using ASPNETCOREDEMO.Controllers.Resources;
+using AutoMapper;
+using ASPNETCOREDEMO.Persistence;
+using System.Threading.Tasks;
+using System;
 using Microsoft.EntityFrameworkCore;
 
 namespace ASPNETCOREDEMO.Controllers
 {
-    //[Route("/api/vehicles")]
+    [Route("api/vehicles")]
     public class VehiclesController : Controller
     {
-        
-        private readonly MotoDbContext context;
         private readonly IMapper mapper;
-        public VehiclesController(MotoDbContext context, IMapper mapper)
+        private readonly IVehicleRepository vehicleRepository;
+        private readonly IUnitOfWork unitOfWork;
+        public VehiclesController(IMapper mapper, IVehicleRepository vehicleRepository, IUnitOfWork unitOfWork)
         {
+            this.unitOfWork = unitOfWork;
+            this.vehicleRepository = vehicleRepository;
             this.mapper = mapper;
-            this.context = context;
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateVehicle([FromBody] SaveVehicleResource vehicleResource)
+        {
+            
+            var vehicle = mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource);
+            
+            vehicleRepository.Add(vehicle);
+            await unitOfWork.Complete();
+
+            vehicle = await vehicleRepository.GetVehicle(vehicle.Id);
+            var results = mapper.Map<Vehicle, VehicleResource>(vehicle);
+            return Ok(results);
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateVehicle(int id, [FromBody] SaveVehicleResource vehicleResource)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var vehicle = await vehicleRepository.GetVehicle(id);
+            if (vehicle == null) return NotFound();
+            mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource, vehicle);
+            vehicle.LastUpdate = DateTime.Now;
+
+            await unitOfWork.Complete();
+
+            vehicle = await vehicleRepository.GetVehicle(vehicle.Id);
+            var results = mapper.Map<Vehicle, VehicleResource>(vehicle);
+            return Ok(results);
         }
 
-        [HttpGet("api/makes")]
-        public async Task<IEnumerable<MakeResource>> GetMakes()
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteVehicle(int id)
         {
-            var makes = await context.Makes.ToListAsync();
-            return mapper.Map<List<Make>, List<MakeResource>>(makes);
+
+            var vehicle = await vehicleRepository.GetVehicle(id, includeRelated: false);
+            if (vehicle == null) return NotFound();
+            vehicleRepository.Remove(vehicle);
+            await unitOfWork.Complete();
+            return Ok(id);
         }
 
-        [HttpGet("/api/models/{id}")]
-        public async Task<IEnumerable<ModelResource>> GetModelAsync(int id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetVehicle(int id)
         {
-            var models = await context.Models.Where(m => m.MakeId == id).ToListAsync();
-            return mapper.Map<List<Model>, List<ModelResource>>(models);
-        }
+            var vehicle = await vehicleRepository.GetVehicle(id);
+            if (vehicle == null) return NotFound();
+            var vehicleResource = mapper.Map<Vehicle, VehicleResource>(vehicle);
 
-        [HttpGet("/api/features")]
-        public async Task<IEnumerable<FeatureResource>> GetFeatures()
-        {
-            var features = await context.Features.ToListAsync();
-            return mapper.Map<List<Feature>, List<FeatureResource>>(features);
+            return Ok(vehicleResource);
         }
     }
 }

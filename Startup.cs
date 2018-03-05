@@ -27,7 +27,11 @@ namespace ASPNETCOREDEMO
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper();
+
             services.AddDbContext<MotoDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
+            services.AddScoped<IVehicleRepository, VehicleRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             services.AddMvc();
         }
 
@@ -38,7 +42,6 @@ namespace ASPNETCOREDEMO
             {
                 app.UseDeveloperExceptionPage();
             }
-
 
             app.UseDefaultFiles();
             app.UseStaticFiles();

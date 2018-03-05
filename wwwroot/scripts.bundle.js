@@ -5857,5 +5857,886 @@ S2.define('jquery.select2',[
 }));
 
 ;!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?module.exports=t():"function"==typeof define&&define.amd?define(t):e.Sweetalert2=t()}(this,function(){"use strict";var e={title:"",titleText:"",text:"",html:"",footer:"",type:null,toast:!1,customClass:"",target:"body",backdrop:!0,animation:!0,allowOutsideClick:!0,allowEscapeKey:!0,allowEnterKey:!0,showConfirmButton:!0,showCancelButton:!1,preConfirm:null,confirmButtonText:"OK",confirmButtonAriaLabel:"",confirmButtonColor:null,confirmButtonClass:null,cancelButtonText:"Cancel",cancelButtonAriaLabel:"",cancelButtonColor:null,cancelButtonClass:null,buttonsStyling:!0,reverseButtons:!1,focusConfirm:!0,focusCancel:!1,showCloseButton:!1,closeButtonAriaLabel:"Close this dialog",showLoaderOnConfirm:!1,imageUrl:null,imageWidth:null,imageHeight:null,imageAlt:"",imageClass:null,timer:null,width:null,padding:null,background:null,input:null,inputPlaceholder:"",inputValue:"",inputOptions:{},inputAutoTrim:!0,inputClass:null,inputAttributes:{},inputValidator:null,grow:!1,position:"center",progressSteps:[],currentProgressStep:null,progressStepsDistance:null,onBeforeOpen:null,onOpen:null,onClose:null,useRejections:!1,expectRejections:!1},t=["useRejections","expectRejections"],n=function(e){var t={};for(var n in e)t[e[n]]="swal2-"+e[n];return t},o=n(["container","shown","iosfix","popup","modal","no-backdrop","toast","toast-shown","fade","show","hide","noanimation","close","title","header","content","actions","confirm","cancel","footer","icon","image","input","has-input","file","range","select","radio","checkbox","textarea","inputerror","validationerror","progresssteps","activeprogressstep","progresscircle","progressline","loading","styled","top","top-start","top-end","top-left","top-right","center","center-start","center-end","center-left","center-right","bottom","bottom-start","bottom-end","bottom-left","bottom-right","grow-row","grow-column","grow-fullscreen"]),i=n(["success","warning","info","question","error"]),r="SweetAlert2:",a=function(e){console.warn(r+" "+e)},s=function(e){console.error(r+" "+e)},u=[],l=function(e){-1===u.indexOf(e)&&(u.push(e),a(e))},c=function(e){return"function"==typeof e?e():e},d="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},p=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var o in n)Object.prototype.hasOwnProperty.call(n,o)&&(e[o]=n[o])}return e},f=function(e,t){if(Array.isArray(e))return e;if(Symbol.iterator in Object(e))return function(e,t){var n=[],o=!0,i=!1,r=void 0;try{for(var a,s=e[Symbol.iterator]();!(o=(a=s.next()).done)&&(n.push(a.value),!t||n.length!==t);o=!0);}catch(e){i=!0,r=e}finally{try{!o&&s.return&&s.return()}finally{if(i)throw r}}return n}(e,t);throw new TypeError("Invalid attempt to destructure non-iterable instance")},m={previousActiveElement:null,previousBodyPadding:null},g=function(){return"undefined"==typeof window||"undefined"==typeof document},v=function(e){var t=b();if(t&&(t.parentNode.removeChild(t),N([document.documentElement,document.body],[o["no-backdrop"],o["has-input"],o["toast-shown"]])),!g()){var n=document.createElement("div");n.className=o.container,n.innerHTML=h,("string"==typeof e.target?document.querySelector(e.target):e.target).appendChild(n);var i=y(),r=x(),a=D(r,o.input),u=D(r,o.file),l=r.querySelector("."+o.range+" input"),c=r.querySelector("."+o.range+" output"),d=D(r,o.select),p=r.querySelector("."+o.checkbox+" input"),f=D(r,o.textarea);i.setAttribute("role",e.toast?"alert":"dialog"),i.setAttribute("aria-live",e.toast?"polite":"assertive"),e.toast||i.setAttribute("aria-modal","true");var m=function(){X.isVisible()&&X.resetValidationError()};return a.oninput=m,u.onchange=m,d.onchange=m,p.onchange=m,f.oninput=m,l.oninput=function(){m(),c.value=l.value},l.onchange=function(){m(),l.nextSibling.value=l.value},i}s("SweetAlert2 requires document to initialize")},h=('\n <div aria-labelledby="'+o.title+'" aria-describedby="'+o.content+'" class="'+o.popup+'" tabindex="-1">\n   <div class="'+o.header+'">\n     <ul class="'+o.progresssteps+'"></ul>\n     <div class="'+o.icon+" "+i.error+'">\n       <span class="swal2-x-mark"><span class="swal2-x-mark-line-left"></span><span class="swal2-x-mark-line-right"></span></span>\n     </div>\n     <div class="'+o.icon+" "+i.question+'">?</div>\n     <div class="'+o.icon+" "+i.warning+'">!</div>\n     <div class="'+o.icon+" "+i.info+'">i</div>\n     <div class="'+o.icon+" "+i.success+'">\n       <div class="swal2-success-circular-line-left"></div>\n       <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span>\n       <div class="swal2-success-ring"></div> <div class="swal2-success-fix"></div>\n       <div class="swal2-success-circular-line-right"></div>\n     </div>\n     <img class="'+o.image+'" />\n     <h2 class="'+o.title+'" id="'+o.title+'"></h2>\n     <button type="button" class="'+o.close+'">×</button>\n   </div>\n   <div class="'+o.content+'">\n     <div id="'+o.content+'"></div>\n     <input class="'+o.input+'" />\n     <input type="file" class="'+o.file+'" />\n     <div class="'+o.range+'">\n       <input type="range" />\n       <output></output>\n     </div>\n     <select class="'+o.select+'"></select>\n     <div class="'+o.radio+'"></div>\n     <label for="'+o.checkbox+'" class="'+o.checkbox+'">\n       <input type="checkbox" />\n     </label>\n     <textarea class="'+o.textarea+'"></textarea>\n     <div class="'+o.validationerror+'" id="'+o.validationerror+'"></div>\n   </div>\n   <div class="'+o.actions+'">\n     <button type="button" class="'+o.confirm+'">OK</button>\n     <button type="button" class="'+o.cancel+'">Cancel</button>\n   </div>\n   <div class="'+o.footer+'">\n   </div>\n </div>\n').replace(/(^|\n)\s*/g,""),b=function(){return document.body.querySelector("."+o.container)},y=function(){return b()?b().querySelector("."+o.popup):null},w=function(e){return b()?b().querySelector("."+e):null},C=function(){return w(o.title)},x=function(){return w(o.content)},B=function(){return w(o.image)},k=function(){return w(o.progresssteps)},A=function(){return w(o.confirm)},S=function(){return w(o.cancel)},E=function(){return w(o.actions)},P=function(){return w(o.footer)},L=function(){return w(o.close)},T=function(){var e=Array.prototype.slice.call(y().querySelectorAll('[tabindex]:not([tabindex="-1"]):not([tabindex="0"])')).sort(function(e,t){return(e=parseInt(e.getAttribute("tabindex")))>(t=parseInt(t.getAttribute("tabindex")))?1:e<t?-1:0}),t=Array.prototype.slice.call(y().querySelectorAll('button, input:not([type=hidden]), textarea, select, a, [tabindex="0"]'));return function(e){for(var t=[],n=0;n<e.length;n++)-1===t.indexOf(e[n])&&t.push(e[n]);return t}(e.concat(t))},V=function(e,t){if(!e)return M(t);if("object"===(void 0===e?"undefined":d(e)))if(t.innerHTML="",0 in e)for(var n=0;n in e;n++)t.appendChild(e[n].cloneNode(!0));else t.appendChild(e.cloneNode(!0));else e&&(t.innerHTML=e);H(t)},O=function(){return!document.body.classList.contains(o["toast-shown"])},q=function(e,t){return!!e.classList&&e.classList.contains(t)},j=function(e){if(e.focus(),"file"!==e.type){var t=e.value;e.value="",e.value=t}},I=function(e,t,n){e&&t&&("string"==typeof t&&(t=t.split(/\s+/).filter(Boolean)),t.forEach(function(t){e.forEach?e.forEach(function(e){n?e.classList.add(t):e.classList.remove(t)}):n?e.classList.add(t):e.classList.remove(t)}))},R=function(e,t){I(e,t,!0)},N=function(e,t){I(e,t,!1)},D=function(e,t){for(var n=0;n<e.childNodes.length;n++)if(q(e.childNodes[n],t))return e.childNodes[n]},H=function(e){e.style.opacity="",e.style.display=e.id===o.content?"block":"flex"},M=function(e){e.style.opacity="",e.style.display="none"},U=function(e){return e&&(e.offsetWidth||e.offsetHeight||e.getClientRects().length)},W=function(){if(g())return!1;var e=document.createElement("div"),t={WebkitAnimation:"webkitAnimationEnd",OAnimation:"oAnimationEnd oanimationend",animation:"animationend"};for(var n in t)if(t.hasOwnProperty(n)&&void 0!==e.style[n])return t[n];return!1}(),z=p({},e),K=[],Z=void 0,_=void 0,Q=void 0,Y=function(e){for(var t in e)X.isValidParameter(t)||a('Unknown parameter "'+t+'"'),X.isDeprecatedParameter(t)&&l('The parameter "'+t+'" is deprecated and will be removed in the next major release.')},$=function(e){(!e.target||"string"==typeof e.target&&!document.querySelector(e.target)||"string"!=typeof e.target&&!e.target.appendChild)&&(a('Target parameter is not valid, defaulting to "body"'),e.target="body");var t=void 0,n=y(),r="string"==typeof e.target?document.querySelector(e.target):e.target;t=n&&r&&n.parentNode!==r.parentNode?v(e):n||v(e),e.width&&(t.style.width="number"==typeof e.width?e.width+"px":e.width),e.padding&&(t.style.padding="number"==typeof e.padding?e.padding+"px":e.padding),e.background&&(t.style.background=e.background);for(var u=window.getComputedStyle(t).getPropertyValue("background-color"),l=t.querySelectorAll("[class^=swal2-success-circular-line], .swal2-success-fix"),c=0;c<l.length;c++)l[c].style.backgroundColor=u;var d=b(),p=C(),f=x().querySelector("#"+o.content),m=E(),g=A(),h=S(),w=L(),T=P();if(e.titleText?p.innerText=e.titleText:e.title&&(p.innerHTML=e.title.split("\n").join("<br />")),"string"==typeof e.backdrop?b().style.background=e.backdrop:e.backdrop||R([document.documentElement,document.body],o["no-backdrop"]),e.html?V(e.html,f):e.text?(f.textContent=e.text,H(f)):M(f),e.position in o?R(d,o[e.position]):(a('The "position" parameter is not valid, defaulting to "center"'),R(d,o.center)),e.grow&&"string"==typeof e.grow){var O="grow-"+e.grow;O in o&&R(d,o[O])}"function"==typeof e.animation&&(e.animation=e.animation.call()),e.showCloseButton?(w.setAttribute("aria-label",e.closeButtonAriaLabel),H(w)):M(w),t.className=o.popup,e.toast?(R([document.documentElement,document.body],o["toast-shown"]),R(t,o.toast)):R(t,o.modal),e.customClass&&R(t,e.customClass);var q=k(),j=parseInt(null===e.currentProgressStep?X.getQueueStep():e.currentProgressStep,10);e.progressSteps&&e.progressSteps.length?(H(q),function(e){for(;e.firstChild;)e.removeChild(e.firstChild)}(q),j>=e.progressSteps.length&&a("Invalid currentProgressStep parameter, it should be less than progressSteps.length (currentProgressStep like JS arrays starts from 0)"),e.progressSteps.forEach(function(t,n){var i=document.createElement("li");if(R(i,o.progresscircle),i.innerHTML=t,n===j&&R(i,o.activeprogressstep),q.appendChild(i),n!==e.progressSteps.length-1){var r=document.createElement("li");R(r,o.progressline),e.progressStepsDistance&&(r.style.width=e.progressStepsDistance),q.appendChild(r)}})):M(q);for(var I=y().querySelectorAll("."+o.icon),D=0;D<I.length;D++)M(I[D]);if(e.type){var U=!1;for(var W in i)if(e.type===W){U=!0;break}if(!U)return s("Unknown alert type: "+e.type),!1;var z=t.querySelector("."+o.icon+"."+i[e.type]);H(z),e.animation&&R(z,"swal2-animate-"+e.type+"-icon")}var K,Z,_=B();if(e.imageUrl?(_.setAttribute("src",e.imageUrl),_.setAttribute("alt",e.imageAlt),H(_),e.imageWidth?_.setAttribute("width",e.imageWidth):_.removeAttribute("width"),e.imageHeight?_.setAttribute("height",e.imageHeight):_.removeAttribute("height"),_.className=o.image,e.imageClass&&R(_,e.imageClass)):M(_),e.showCancelButton?h.style.display="inline-block":M(h),e.showConfirmButton?(Z="display",(K=g).style.removeProperty?K.style.removeProperty(Z):K.style.removeAttribute(Z)):M(g),e.showConfirmButton||e.showCancelButton?H(m):M(m),g.innerHTML=e.confirmButtonText,h.innerHTML=e.cancelButtonText,g.setAttribute("aria-label",e.confirmButtonAriaLabel),h.setAttribute("aria-label",e.cancelButtonAriaLabel),g.className=o.confirm,R(g,e.confirmButtonClass),h.className=o.cancel,R(h,e.cancelButtonClass),e.buttonsStyling){R([g,h],o.styled),e.confirmButtonColor&&(g.style.backgroundColor=e.confirmButtonColor),e.cancelButtonColor&&(h.style.backgroundColor=e.cancelButtonColor);var Q=window.getComputedStyle(g).getPropertyValue("background-color");g.style.borderLeftColor=Q,g.style.borderRightColor=Q}else N([g,h],o.styled),g.style.backgroundColor=g.style.borderLeftColor=g.style.borderRightColor="",h.style.backgroundColor=h.style.borderLeftColor=h.style.borderRightColor="";V(e.footer,T),!0===e.animation?N(t,o.noanimation):R(t,o.noanimation),e.showLoaderOnConfirm&&!e.preConfirm&&a("showLoaderOnConfirm is set to true, but preConfirm is not defined.\nshowLoaderOnConfirm should be used together with preConfirm, see usage example:\nhttps://sweetalert2.github.io/#ajax-request")},F=function(){null===m.previousBodyPadding&&document.body.scrollHeight>window.innerHeight&&(m.previousBodyPadding=document.body.style.paddingRight,document.body.style.paddingRight=function(){if("ontouchstart"in window||navigator.msMaxTouchPoints)return 0;var e=document.createElement("div");e.style.width="50px",e.style.height="50px",e.style.overflow="scroll",document.body.appendChild(e);var t=e.offsetWidth-e.clientWidth;return document.body.removeChild(e),t}()+"px")},J=function(){if(/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream&&!q(document.body,o.iosfix)){var e=document.body.scrollTop;document.body.style.top=-1*e+"px",R(document.body,o.iosfix)}},X=function e(){for(var t=arguments.length,n=Array(t),i=0;i<t;i++)n[i]=arguments[i];if("undefined"!=typeof window){if("undefined"==typeof Promise&&s("This package requires a Promise library, please include a shim to enable it in this browser (See: https://github.com/sweetalert2/sweetalert2/wiki/Migration-from-SweetAlert-to-SweetAlert2#1-ie-support)"),void 0===n[0])return s("SweetAlert2 expects at least 1 attribute!"),!1;var r=Z={},a=r.params=p({},z);switch(d(n[0])){case"string":a.title=n[0],a.html=n[1],a.type=n[2];break;case"object":if(Y(n[0]),p(a,n[0]),a.extraParams=n[0].extraParams,"email"===a.input&&null===a.inputValidator){var u=function(e){return new Promise(function(t,n){/^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9-]{2,24}$/.test(e)?t():n("Invalid email address")})};a.inputValidator=a.expectRejections?u:e.adaptInputValidator(u)}if("url"===a.input&&null===a.inputValidator){var l=function(e){return new Promise(function(t,n){/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/.test(e)?t():n("Invalid URL")})};a.inputValidator=a.expectRejections?l:e.adaptInputValidator(l)}break;default:return s('Unexpected type of argument! Expected "string" or "object", got '+d(n[0])),!1}$(a);var g=r.domCache={popup:y(),container:b(),content:x(),actions:E(),confirmButton:A(),cancelButton:S(),closeButton:L(),validationError:w(o.validationerror),progressSteps:k()};return new Promise(function(t,n){var i=function(n){e.closePopup(a.onClose),a.useRejections?t(n):t({value:n})},r=function(o){e.closePopup(a.onClose),a.useRejections?n(o):t({dismiss:o})},u=function(t){e.closePopup(a.onClose),n(t)};a.timer&&(g.popup.timeout=setTimeout(function(){return r("timer")},a.timer));a.input&&setTimeout(function(){var t=e.getInput();t&&j(t)},0);for(var l=function(t){if(a.showLoaderOnConfirm&&e.showLoading(),a.preConfirm){e.resetValidationError();var n=Promise.resolve().then(function(){return a.preConfirm(t,a.extraParams)});a.expectRejections?n.then(function(e){return i(e||t)},function(t){e.hideLoading(),t&&e.showValidationError(t)}):n.then(function(n){U(g.validationError)||!1===n?e.hideLoading():i(n||t)},function(e){return u(e)})}else i(t)},p=function(t){var n=t||window.event,o=n.target||n.srcElement,i=g.confirmButton,s=g.cancelButton,c=i&&(i===o||i.contains(o)),d=s&&(s===o||s.contains(o));switch(n.type){case"click":if(c&&e.isVisible())if(e.disableButtons(),a.input){var p=function(){var t=e.getInput();if(!t)return null;switch(a.input){case"checkbox":return t.checked?1:0;case"radio":return t.checked?t.value:null;case"file":return t.files.length?t.files[0]:null;default:return a.inputAutoTrim?t.value.trim():t.value}}();if(a.inputValidator){e.disableInput();var f=Promise.resolve().then(function(){return a.inputValidator(p,a.extraParams)});a.expectRejections?f.then(function(){e.enableButtons(),e.enableInput(),l(p)},function(t){e.enableButtons(),e.enableInput(),t&&e.showValidationError(t)}):f.then(function(t){e.enableButtons(),e.enableInput(),t?e.showValidationError(t):l(p)},function(e){return u(e)})}else l(p)}else l(!0);else d&&e.isVisible()&&(e.disableButtons(),r(e.DismissReason.cancel))}},v=g.popup.querySelectorAll("button"),h=0;h<v.length;h++)v[h].onclick=p,v[h].onmouseover=p,v[h].onmouseout=p,v[h].onmousedown=p;if(g.closeButton.onclick=function(){r(e.DismissReason.close)},a.toast)g.popup.onclick=function(t){t.target!==g.popup||a.showConfirmButton||a.showCancelButton||a.allowOutsideClick&&(e.closePopup(a.onClose),r(e.DismissReason.backdrop))};else{var w=!1;g.popup.onmousedown=function(){g.container.onmouseup=function(e){g.container.onmouseup=void 0,e.target===g.container&&(w=!0)}},g.container.onmousedown=function(){g.popup.onmouseup=function(e){g.popup.onmouseup=void 0,(e.target===g.popup||g.popup.contains(e.target))&&(w=!0)}},g.container.onclick=function(t){w?w=!1:t.target===g.container&&c(a.allowOutsideClick)&&r(e.DismissReason.backdrop)}}a.reverseButtons?g.confirmButton.parentNode.insertBefore(g.cancelButton,g.confirmButton):g.confirmButton.parentNode.insertBefore(g.confirmButton,g.cancelButton);var C=function(e,t){for(var n=T(a.focusCancel),o=0;o<n.length;o++){(e+=t)===n.length?e=0:-1===e&&(e=n.length-1);var i=n[e];if(U(i))return i.focus()}};a.toast&&Q&&(window.onkeydown=_,Q=!1),a.toast||Q||(_=window.onkeydown,Q=!0,window.onkeydown=function(t){var n=t||window.event;if("Enter"!==n.key||n.isComposing)if("Tab"===n.key){for(var o=n.target||n.srcElement,i=T(a.focusCancel),s=-1,u=0;u<i.length;u++)if(o===i[u]){s=u;break}n.shiftKey?C(s,-1):C(s,1),n.stopPropagation(),n.preventDefault()}else-1!==["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Left","Right","Up","Down"].indexOf(n.key)?document.activeElement===g.confirmButton&&U(g.cancelButton)?g.cancelButton.focus():document.activeElement===g.cancelButton&&U(g.confirmButton)&&g.confirmButton.focus():"Escape"!==n.key&&"Esc"!==n.key||!0!==c(a.allowEscapeKey)||r(e.DismissReason.esc);else if(n.target===e.getInput()){if(-1!==["textarea","file"].indexOf(a.input))return;e.clickConfirm(),n.preventDefault()}}),e.enableButtons(),e.hideLoading(),e.resetValidationError(),a.input&&R(document.body,o["has-input"]);for(var x=["input","file","range","select","radio","checkbox","textarea"],B=void 0,k=0;k<x.length;k++){var A=o[x[k]],S=D(g.content,A);if(B=e.getInput(x[k])){for(var E in B.attributes)if(B.attributes.hasOwnProperty(E)){var P=B.attributes[E].name;"type"!==P&&"value"!==P&&B.removeAttribute(P)}for(var L in a.inputAttributes)B.setAttribute(L,a.inputAttributes[L])}S.className=A,a.inputClass&&R(S,a.inputClass),M(S)}var V,I,z,K,Z,Y=void 0;switch(a.input){case"text":case"email":case"password":case"number":case"tel":case"url":(B=D(g.content,o.input)).value=a.inputValue,B.placeholder=a.inputPlaceholder,B.type=a.input,H(B);break;case"file":(B=D(g.content,o.file)).placeholder=a.inputPlaceholder,B.type=a.input,H(B);break;case"range":var $=D(g.content,o.range),X=$.querySelector("input"),G=$.querySelector("output");X.value=a.inputValue,X.type=a.input,G.value=a.inputValue,H($);break;case"select":var ee=D(g.content,o.select);if(ee.innerHTML="",a.inputPlaceholder){var te=document.createElement("option");te.innerHTML=a.inputPlaceholder,te.value="",te.disabled=!0,te.selected=!0,ee.appendChild(te)}Y=function(e){e.forEach(function(e){var t=f(e,2),n=t[0],o=t[1],i=document.createElement("option");i.value=n,i.innerHTML=o,a.inputValue.toString()===n.toString()&&(i.selected=!0),ee.appendChild(i)}),H(ee),ee.focus()};break;case"radio":var ne=D(g.content,o.radio);ne.innerHTML="",Y=function(e){e.forEach(function(e){var t=f(e,2),n=t[0],i=t[1],r=document.createElement("input"),s=document.createElement("label");r.type="radio",r.name=o.radio,r.value=n,a.inputValue.toString()===n.toString()&&(r.checked=!0),s.innerHTML=i,s.insertBefore(r,s.firstChild),ne.appendChild(s)}),H(ne);var t=ne.querySelectorAll("input");t.length&&t[0].focus()};break;case"checkbox":var oe=D(g.content,o.checkbox),ie=e.getInput("checkbox");ie.type="checkbox",ie.value=1,ie.id=o.checkbox,ie.checked=Boolean(a.inputValue);var re=oe.getElementsByTagName("span");re.length&&oe.removeChild(re[0]),(re=document.createElement("span")).innerHTML=a.inputPlaceholder,oe.appendChild(re),H(oe);break;case"textarea":var ae=D(g.content,o.textarea);ae.value=a.inputValue,ae.placeholder=a.inputPlaceholder,H(ae);break;case null:break;default:s('Unexpected type of input! Expected "text", "email", "password", "number", "tel", "select", "radio", "checkbox", "textarea", "file" or "url", got "'+a.input+'"')}if("select"===a.input||"radio"===a.input){var se=function(e){return Y((n=[],(t=e)instanceof Map?t.forEach(function(e,t){n.push([t,e])}):Object.keys(t).forEach(function(e){n.push([e,t[e]])}),n));var t,n};a.inputOptions instanceof Promise?(e.showLoading(),a.inputOptions.then(function(t){e.hideLoading(),se(t)})):"object"===d(a.inputOptions)?se(a.inputOptions):s("Unexpected type of inputOptions! Expected object, Map or Promise, got "+d(a.inputOptions))}V=a.animation,I=a.onBeforeOpen,z=a.onOpen,K=b(),Z=y(),null!==I&&"function"==typeof I&&I(Z),V?(R(Z,o.show),R(K,o.fade),N(Z,o.hide)):N(Z,o.fade),H(Z),K.style.overflowY="hidden",W&&!q(Z,o.noanimation)?Z.addEventListener(W,function e(){Z.removeEventListener(W,e),K.style.overflowY="auto"}):K.style.overflowY="auto",R([document.documentElement,document.body,K],o.shown),O()&&(F(),J()),m.previousActiveElement=document.activeElement,null!==z&&"function"==typeof z&&setTimeout(function(){z(Z)}),a.toast||(c(a.allowEnterKey)?a.focusCancel&&U(g.cancelButton)?g.cancelButton.focus():a.focusConfirm&&U(g.confirmButton)?g.confirmButton.focus():C(-1,1):document.activeElement&&document.activeElement.blur()),g.container.scrollTop=0})}};return X.isVisible=function(){return!!y()},X.queue=function(e){K=e;var t=function(){K=[],document.body.removeAttribute("data-swal2-queue-step")},n=[];return new Promise(function(e,o){!function o(i,r){i<K.length?(document.body.setAttribute("data-swal2-queue-step",i),X(K[i]).then(function(a){void 0!==a.value?(n.push(a.value),o(i+1,r)):(t(),e({dismiss:a.dismiss}))})):(t(),e({value:n}))}(0)})},X.getQueueStep=function(){return document.body.getAttribute("data-swal2-queue-step")},X.insertQueueStep=function(e,t){return t&&t<K.length?K.splice(t,0,e):K.push(e)},X.deleteQueueStep=function(e){void 0!==K[e]&&K.splice(e,1)},X.close=X.closePopup=X.closeModal=X.closeToast=function(e){var t=b(),n=y();if(n){N(n,o.show),R(n,o.hide),clearTimeout(n.timeout),document.body.classList.contains(o["toast-shown"])||(!function(){if(m.previousActiveElement&&m.previousActiveElement.focus){var e=window.scrollX,t=window.scrollY;m.previousActiveElement.focus(),void 0!==e&&void 0!==t&&window.scrollTo(e,t)}}(),window.onkeydown=_,Q=!1);var i=function(){t.parentNode&&t.parentNode.removeChild(t),N([document.documentElement,document.body],[o.shown,o["no-backdrop"],o["has-input"],o["toast-shown"]]),O()&&(null!==m.previousBodyPadding&&(document.body.style.paddingRight=m.previousBodyPadding,m.previousBodyPadding=null),function(){if(q(document.body,o.iosfix)){var e=parseInt(document.body.style.top,10);N(document.body,o.iosfix),document.body.style.top="",document.body.scrollTop=-1*e}}())};W&&!q(n,o.noanimation)?n.addEventListener(W,function e(){n.removeEventListener(W,e),q(n,o.hide)&&i()}):i(),null!==e&&"function"==typeof e&&setTimeout(function(){e(n)})}},X.clickConfirm=function(){return A().click()},X.clickCancel=function(){return S().click()},X.showLoading=X.enableLoading=function(){var e=y();e||X(""),e=y();var t=E(),n=A(),i=S();H(t),H(n),R([e,t],o.loading),n.disabled=!0,i.disabled=!0,e.setAttribute("data-loading",!0),e.setAttribute("aria-busy",!0),e.focus()},X.isValidParameter=function(t){return e.hasOwnProperty(t)||"extraParams"===t},X.isDeprecatedParameter=function(e){return-1!==t.indexOf(e)},X.setDefaults=function(e){if(!e||"object"!==(void 0===e?"undefined":d(e)))return s("the argument for setDefaults() is required and has to be a object");for(var t in Y(e),e)X.isValidParameter(t)&&(z[t]=e[t])},X.resetDefaults=function(){z=p({},e)},X.adaptInputValidator=function(e){return function(t,n){return e.call(this,t,n).then(function(){},function(e){return e})}},X.getTitle=function(){return C()},X.getContent=function(){return x()},X.getImage=function(){return B()},X.getButtonsWrapper=function(){return l("swal.getButtonsWrapper() is deprecated and will be removed in the next major release, use swal.getActions() instead"),w(o.actions)},X.getActions=function(){return E()},X.getConfirmButton=function(){return A()},X.getCancelButton=function(){return S()},X.getFooter=function(){return P()},X.isLoading=function(){return y().hasAttribute("data-loading")},X.hideLoading=X.disableLoading=function(){if(Z){var e=Z,t=e.params,n=e.domCache;t.showConfirmButton||(M(n.confirmButton),t.showCancelButton||M(n.actions)),N([n.popup,n.actions],o.loading),n.popup.removeAttribute("aria-busy"),n.popup.removeAttribute("data-loading"),n.confirmButton.disabled=!1,n.cancelButton.disabled=!1}},X.getInput=function(e){if(Z){var t=Z,n=t.params,i=t.domCache;if(!(e=e||n.input))return null;switch(e){case"select":case"textarea":case"file":return D(i.content,o[e]);case"checkbox":return i.popup.querySelector("."+o.checkbox+" input");case"radio":return i.popup.querySelector("."+o.radio+" input:checked")||i.popup.querySelector("."+o.radio+" input:first-child");case"range":return i.popup.querySelector("."+o.range+" input");default:return D(i.content,o.input)}}},X.enableButtons=function(){if(Z){var e=Z.domCache;e.confirmButton.disabled=!1,e.cancelButton.disabled=!1}},X.disableButtons=function(){if(Z){var e=Z.domCache;e.confirmButton.disabled=!0,e.cancelButton.disabled=!0}},X.enableConfirmButton=function(){Z&&(Z.domCache.confirmButton.disabled=!1)},X.disableConfirmButton=function(){Z&&(Z.domCache.confirmButton.disabled=!0)},X.enableInput=function(){if(Z){var e=X.getInput();if(!e)return!1;if("radio"===e.type)for(var t=e.parentNode.parentNode.querySelectorAll("input"),n=0;n<t.length;n++)t[n].disabled=!1;else e.disabled=!1}},X.disableInput=function(){if(Z){var e=X.getInput();if(!e)return!1;if(e&&"radio"===e.type)for(var t=e.parentNode.parentNode.querySelectorAll("input"),n=0;n<t.length;n++)t[n].disabled=!0;else e.disabled=!0}},X.showValidationError=function(e){if(Z){var t=Z.domCache;t.validationError.innerHTML=e;var n=window.getComputedStyle(t.popup);t.validationError.style.marginLeft="-"+n.getPropertyValue("padding-left"),t.validationError.style.marginRight="-"+n.getPropertyValue("padding-right"),H(t.validationError);var i=X.getInput();i&&(i.setAttribute("aria-invalid",!0),i.setAttribute("aria-describedBy",o.validationerror),j(i),R(i,o.inputerror))}},X.resetValidationError=function(){if(Z){var e=Z.domCache;e.validationError&&M(e.validationError);var t=X.getInput();t&&(t.removeAttribute("aria-invalid"),t.removeAttribute("aria-describedBy"),N(t,o.inputerror))}},X.getProgressSteps=function(){if(Z)return Z.params.progressSteps},X.setProgressSteps=function(e){if(Z){var t=Z.params;t.progressSteps=e,$(t)}},X.showProgressSteps=function(){if(Z){var e=Z.domCache;H(e.progressSteps)}},X.hideProgressSteps=function(){if(Z){var e=Z.domCache;M(e.progressSteps)}},X.DismissReason=Object.freeze({cancel:"cancel",backdrop:"overlay",close:"close",esc:"esc",timer:"timer"}),X.noop=function(){},X.version="7.13.1",X.default=X,"undefined"!=typeof window&&"object"===d(window._swalDefaults)&&X.setDefaults(window._swalDefaults),X}),"undefined"!=typeof window&&window.Sweetalert2&&(window.sweetAlert=window.swal=window.Sweetalert2);
+;/*!
+	PURE Unobtrusive Rendering Engine for HTML
+
+	Licensed under the MIT licenses.
+	More information at: http://www.opensource.org
+
+	Copyright (c) 2008-2016 Michael Cvilic - BeeBole.com
+
+	Thanks to Rog Peppe for the functional JS jump
+	revision: 2.85
+*/
+
+var $p = function(){
+	var args = arguments,
+		sel = args[0],
+		ctxt = false;
+
+	if(typeof sel === 'string'){
+		ctxt = args[1] || false;
+	}else if(sel && !sel[0] && !sel.length){
+		sel = [sel];
+	}
+	return $p.core(sel, ctxt);
+},
+pure = $p;
+
+
+$p.core = function(sel, ctxt, plugins){
+	//get an instance of the plugins
+	var templates = [], i, ii,
+		// set the signature string that will be replaced at render time
+		Sig = '_s' + Math.floor( Math.random() * 1000000 ) + '_',
+		// another signature to prepend to attributes and avoid checks: style, height, on[events]...
+		attPfx = '_a' + Math.floor( Math.random() * 1000000 ) + '_',
+		// rx to parse selectors, e.g. "+tr.foo[class]"
+		selRx = /^(\+)?([^\@\+]+)?\@?([^\+]+)?(\+)?$/,
+		// set automatically attributes for some tags
+		autoAttr = {
+			IMG:'src',
+			INPUT:'value'
+		},
+		// check if the argument is an array - thanks salty-horse (Ori Avtalion)
+		isArray = Array.isArray ?
+			function(o) {
+				return Array.isArray(o);
+			} :
+			function(o) {
+				return Object.prototype.toString.call(o) === "[object Array]";
+			};
+
+	plugins = plugins || getPlugins();
+
+	//search for the template node(s)
+	switch(typeof sel){
+		case 'string':
+			templates = plugins.find(ctxt || document, sel);
+			if(templates.length === 0) {
+				error('The template "' + sel + '" was not found');
+			}
+		break;
+		case 'undefined':
+			error('The root of the template is undefined, check your selector');
+		break;
+		default:
+			templates = sel;
+	}
+
+	for( i = 0, ii = templates.length; i < ii; i++){
+		plugins[i] = templates[i];
+	}
+	plugins.length = ii;
+
+	/* * * * * * * * * * * * * * * * * * * * * * * * * *
+		core functions
+	 * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
+	// error utility
+	function error(e){
+		if(typeof console !== 'undefined'){
+			console.log(e);
+			//debugger;
+		}
+		throw 'pure error: ' + e;
+	}
+
+	//return a new instance of plugins
+	function getPlugins(){
+		var plugins = $p.plugins,
+			f = function(){};
+		f.prototype = plugins;
+
+		// do not overwrite functions if external definition
+		f.prototype.compile    = plugins.compile || compile;
+		f.prototype.render     = plugins.render || render;
+		f.prototype.autoRender = plugins.autoRender || autoRender;
+		f.prototype.find       = plugins.find || find;
+
+		// give the compiler and the error handling to the plugin context
+		f.prototype._compiler  = compiler;
+		f.prototype._error     = error;
+
+		return new f();
+	}
+
+	// returns the outer HTML of a node
+	function outerHTML(node){
+		// if IE, Chrome take the internal method otherwise build one
+		return /*node.outerHTML || */(
+			function(n){
+				return document.createElement('div').appendChild( n.cloneNode(true) ).parentNode.innerHTML;
+			/*var div = document.createElement('div'), h;
+			div.appendChild( n.cloneNode(true) );
+				h = div.innerHTML;
+				div = null;
+				return h;*/
+			}(node));
+	}
+
+	// returns the string generator function
+	function wrapquote(qfn, f){
+		return function(ctxt){
+			return qfn( String( f.call(ctxt.item || ctxt.context, ctxt) ) ) ;
+		};
+	}
+
+	// default find using querySelector when available on the browser
+	function find(n, sel){
+		if(typeof n === 'string'){
+			sel = n;
+			n = false;
+		}
+		return (n||document).querySelectorAll( sel );
+	}
+
+	// create a function that concatenates constant string
+	// sections (given in parts) and the results of called
+	// functions to fill in the gaps between parts (fns).
+	// fns[n] fills in the gap between parts[n-1] and parts[n];
+	// fns[0] is unused.
+	// this is the inner template evaluation loop.
+	function concatenator(parts, fns){
+		return function(ctxt){
+			var strs = [ parts[ 0 ] ],
+				n = parts.length,
+				fnVal, pVal, attLine, pos, i;
+			try{
+				for(i = 1; i < n; i++){
+					fnVal = fns[i].call( this, ctxt );
+					pVal = parts[i];
+
+					// if the value is empty and attribute, remove it
+					if(fnVal === ''){
+						attLine = strs[ strs.length - 1 ];
+						if( ( pos = attLine.search( /[^\s]+=\"?$/ ) ) > -1){
+							strs[ strs.length - 1 ] = attLine.substring( 0, pos );
+							pVal = pVal.substr( 1 );
+						}
+					}
+
+					strs[ strs.length ] = fnVal;
+					strs[ strs.length ] = pVal;
+				}
+				return strs.join('');
+			}catch(e){
+				if(console && console.log){
+					console.log(
+						e.stack ||
+						e.message + ' (' + e.type + ( e['arguments'] ? ', ' + e['arguments'].join('-') : '' ) + '). Use Firefox or Chromium/Chrome to get a full stack of the error. ' );
+				}
+				return '';
+			}
+		};
+	}
+
+	// parse and check the loop directive
+	function parseloopspec(p){
+		var m = p.match( /^(\w+)\s*<-\s*(\S+)?$/ );
+		if(m === null){
+			error('bad loop spec: "' + p + '"');
+		}
+		if(m[1] === 'item'){
+			error('"item<-..." is a reserved word for the current running iteration.\n\nPlease choose another name for your loop.');
+		}
+		if( !m[2] || m[2].toLowerCase() === 'context' ){ //undefined or space(IE)
+			m[2] = function(ctxt){return ctxt.context;};
+		}else if( m[2] && m[2].indexOf('context') === 0 ){ //undefined or space(IE)
+			m[2] = dataselectfn( m[2].replace(/^context\.?/, '') );
+		}
+		return {name: m[1], sel: m[2]};
+	}
+
+	// parse a data selector and return a function that
+	// can traverse the data accordingly, given a context.
+	function dataselectfn (sel){
+		if( typeof(sel) === 'function' ){
+			//handle false values in function directive
+			return function ( ctxt ){
+				var r = sel.call( ctxt.item || ctxt.context || ctxt, ctxt );
+				return !r && r !== 0 ? '' : r;
+			};
+		}
+		//check for a valid js variable name with hyphen(for properties only), $, _ and :
+		var m = sel.match(/^[\da-zA-Z\$_\@\#][\w\$:\-\#]*(\.[\w\$:\-\#]*[^\.])*$/),
+			found = false, s = sel, parts = [], pfns = [], i = 0, retStr;
+
+		if(m === null){
+			// check if literal
+			if(/\'|\"/.test( s.charAt(0) )){
+				if(/\'|\"/.test( s.charAt(s.length-1) )){
+					retStr = s.substring(1, s.length-1);
+					return function(){ return retStr; };
+				}
+			}else{
+				// check if literal + #{var}
+				while((m = s.match(/#\{([^{}]+)\}/)) !== null){
+					found = true;
+					parts[i++] = s.slice(0, m.index);
+					pfns[i] = dataselectfn(m[1]);
+					s = s.slice(m.index + m[0].length, s.length);
+				}
+			}
+			if(!found){ //constant, return it
+				return function(){ return sel; };
+			}
+			parts[i] = s;
+			return concatenator(parts, pfns);
+		}
+		m = sel.split('.');
+		return function(ctxt){
+			var data = ctxt.context || ctxt,
+				v = ctxt[m[0]],
+				i = 0,
+				n,
+				dm;
+
+			if(v && typeof v.item !== 'undefined'){
+				i += 1;
+				if(m[i] === 'pos'){
+					//allow pos to be kept by string. Tx to Adam Freidin
+					return v.pos;
+				}
+				data = v.item;
+			}
+			n = m.length;
+
+			while( i < n ){
+				if(!data){break;}
+				dm = data[ m[i] ];
+				//if it is a function call it
+				data = typeof dm === 'function' ? dm.call( data ) : dm;
+				i++;
+			}
+
+			return !data && data !== 0 ? '':data;
+		};
+	}
+
+	// wrap in an object the target node/attr and their properties
+	function gettarget(dom, sel, isloop){
+		var osel, prepend, selector, attr, append, target = [], m,
+			setstr, getstr, quotefn, isStyle, isClass, attName, setfn;
+		if( typeof sel === 'string' ){
+			osel = sel;
+			m = sel.match(selRx);
+			if( !m ){
+				error( 'bad selector syntax: ' + sel );
+			}
+
+			prepend = m[1];
+			selector = m[2];
+			attr = m[3];
+			append = m[4];
+
+			if(selector === '.' || !selector && attr ){
+				target[0] = dom;
+			}else{
+				target = plugins.find(dom, selector);
+			}
+			if(!target || target.length === 0){
+				return error('The node "' + sel + '" was not found in the template:\n' + outerHTML(dom).replace(/\t/g,'  '));
+			}
+		}else{
+			// autoRender node
+			prepend = sel.prepend;
+			attr = sel.attr;
+			append = sel.append;
+			target = [dom];
+		}
+
+		if( prepend || append ){
+			if( prepend && append ){
+				error('append/prepend cannot take place at the same time');
+			}else if( isloop ){
+				error('no append/prepend/replace modifiers allowed for loop target');
+			}else if( append && isloop ){
+				error('cannot append with loop (sel: ' + osel + ')');
+			}
+		}
+
+		if(attr){
+			isStyle = /^style$/i.test(attr);
+			isClass = /^class$/i.test(attr);
+			attName = isClass ? 'className' : attr;
+			setstr = function(node, s) {
+				node.setAttribute(attPfx + attr, s);
+				if ( node[attName] && !isStyle) {
+					try{node[attName] = '';}catch(e){} //FF4 gives an error sometimes
+				}
+				if (node.nodeType === 1) {
+					node.removeAttribute(attr);
+					if(isClass){
+						node.removeAttribute(attName);
+					}
+				}
+			};
+			if (isStyle || isClass) {//IE no quotes special care
+				if(isStyle){
+					getstr = function(n){ return n.style.cssText; };
+				}else{
+					getstr = function(n){ return n.className;	};
+				}
+			}else {
+				getstr = function(n){ return n.getAttribute(attr); };
+			}
+			quotefn = function(s){ return s.replace(/\"/g, '&quot;'); };
+			if(prepend){
+				setfn = function(node, s){ setstr( node, s + getstr( node )); };
+			}else if(append){
+				setfn = function(node, s){ setstr( node, getstr( node ) + s); };
+			}else{
+				setfn = function(node, s){ setstr( node, s ); };
+			}
+		}else{
+			if (isloop) {
+				setfn = function(node, s) {
+					var pn = node.parentNode;
+					if (pn) {
+						//replace node with s
+						pn.insertBefore(document.createTextNode(s), node.nextSibling);
+						pn.removeChild(node);
+					}else{
+						error('The template root, can\'t be looped.');
+					}
+				};
+			} else {
+				if (prepend) {
+					setfn = function(node, s) { node.insertBefore(document.createTextNode(s), node.firstChild);	};
+				} else if (append) {
+					setfn = function(node, s) { node.appendChild(document.createTextNode(s));};
+				} else {
+					setfn = function(node, s) {
+						while (node.firstChild) { node.removeChild(node.firstChild); }
+						node.appendChild(document.createTextNode(s));
+					};
+				}
+			}
+			quotefn = function(s) { return s; };
+		}
+		return { attr: attr, nodes: target, set: setfn, sel: osel, quotefn: quotefn };
+	}
+
+	function setsig(target, n){
+		var sig = Sig + n + ':', i;
+		for(i = 0; i < target.nodes.length; i++){
+			// could check for overlapping targets here.
+			target.set( target.nodes[i], sig );
+		}
+	}
+
+	// read de loop data, and pass it to the inner rendering function
+	function loopfn(name, dselect, inner, sorter, filter){
+		return function(ctxt){
+			var a = dselect(ctxt),
+				old = ctxt[name],
+				temp = { items : a },
+				filtered = 0,
+				length,
+				strs = [],
+				buildArg = function(idx, temp, ftr, len){
+					//keep the current loop. Tx to Adam Freidin
+					var save_pos = ctxt.pos,
+						save_item = ctxt.item,
+						save_items = ctxt.items;
+					ctxt.pos = temp.pos = idx;
+					ctxt.item = temp.item = a[ idx ];
+					ctxt.items = a;
+					//if array, set a length property - filtered items
+					if(typeof len !== 'undefined'){ ctxt.length = len; }
+					//if filter directive
+					if(typeof ftr === 'function' && ftr.call(ctxt.item, ctxt) === false){
+						filtered++;
+						return;
+					}
+					strs.push( inner.call(ctxt.item, ctxt ) );
+					//restore the current loop
+					ctxt.pos = save_pos;
+					ctxt.item = save_item;
+					ctxt.items = save_items;
+				},
+				cmv = function(p){
+					if( ctxt[ p ] ){
+						delete ctxt[ p ];
+					}
+				},
+				prop, i, ii;
+			ctxt[name] = temp;
+			if( isArray(a) ){
+				length = a.length || 0;
+				// if sort directive
+				if(typeof sorter === 'function'){
+					a.sort(function(a, b){
+						return sorter.call(ctxt, a, b);
+					});
+				}
+				//loop on array
+				for(i = 0, ii = length; i < ii; i++){
+					buildArg(i, temp, filter, length - filtered);
+				}
+			}else{
+				if(a && typeof sorter !== 'undefined'){
+					error('sort is only available on arrays, not objects');
+				}
+				//loop on collections
+				for( prop in a ){
+					if( a.hasOwnProperty( prop ) ){
+						buildArg(prop, temp, filter);
+					}
+				}
+			}
+
+			if( typeof old !== 'undefined'){
+				ctxt[ name ] = old;
+			}else{
+				cmv( name );
+			}
+			return strs.join('');
+		};
+	}
+	// generate the template for a loop node
+	function loopgen(dom, sel, loop, fns){
+		var already = false, ls, sorter, filter, prop, dsel, spec, itersel, target, nodes, node, inner;
+		for(prop in loop){
+			if(loop.hasOwnProperty(prop)){
+				if(prop === 'sort'){
+					sorter = loop.sort;
+				}else if(prop === 'filter'){
+					filter = loop.filter;
+				}else if(already){
+					error('cannot have more than one loop on a target');
+				}else{
+					ls = prop;
+					already = true;
+				}
+			}
+		}
+		if(!ls){
+			error('Error in the selector: ' + sel + '\nA directive action must be a string, a function or a loop(<-)');
+		}
+		dsel = loop[ls];
+		// if it's a simple data selector then we default to contents, not replacement.
+		if(typeof dsel === 'string' || typeof dsel === 'function'){
+			loop = {};
+			loop[ls] = {root: dsel};
+			return loopgen(dom, sel, loop, fns);
+		}
+
+		spec = parseloopspec(ls);
+		itersel = dataselectfn(spec.sel);
+		target = gettarget(dom, sel, true);
+		nodes = target.nodes;
+
+		for(i = 0; i < nodes.length; i++){
+			node = nodes[i];
+			inner = compiler(node, dsel);
+			fns[fns.length] = wrapquote(target.quotefn, loopfn(spec.name, itersel, inner, sorter, filter));
+			target.nodes = [node];		// N.B. side effect on target.
+			setsig(target, fns.length - 1);
+		}
+		return target;
+	}
+
+	function getAutoNodes(n, data){
+		var ns = n.getElementsByTagName('*'),
+			an = [],
+			openLoops = {a:[],l:{}},
+			cspec,
+			isNodeValue,
+			i, ii, j, jj, ni, cs, cj;
+		//for each node found in the template
+		for(i = -1, ii = ns.length; i < ii; i++){
+			ni = i > -1 ?ns[i]:n;
+			if(ni.nodeType === 1 && ni.className !== ''){
+				//when a className is found
+				cs = ni.className.split(' ');
+				// for each className
+				for(j = 0, jj=cs.length;j<jj;j++){
+					cj = cs[j];
+					// check if it is related to a context property
+					cspec = checkClass(cj, ni.tagName);
+					// if so, store the node, plus the type of data
+					if(cspec !== false){
+						isNodeValue = /nodevalue/i.test(cspec.attr);
+						if(cspec.sel.indexOf('@') > -1 || isNodeValue){
+							ni.className = ni.className.replace('@'+cspec.attr, '');
+							if(isNodeValue){
+								cspec.attr = false;
+							}
+						}
+						an.push({n:ni, cspec:cspec});
+					}
+				}
+			}
+		}
+
+		function checkClass(c, tagName){
+			// read the class
+			var ca = c.match(selRx),
+				attr = ca[3] || autoAttr[tagName],
+				cspec = {prepend:!!ca[1], prop:ca[2], attr:attr, append:!!ca[4], sel:c},
+				i, ii, loopi, loopil, val;
+			// check in existing open loops
+			for(i = openLoops.a.length-1; i >= 0; i--){
+				loopi = openLoops.a[i];
+				loopil = loopi.l[0];
+				val = loopil && loopil[cspec.prop];
+				if(typeof val !== 'undefined'){
+					cspec.prop = loopi.p + '.' + cspec.prop;
+					if(openLoops.l[cspec.prop] === true){
+						val = val[0];
+					}
+					break;
+				}
+			}
+			// not found check first level of data
+			if(typeof val === 'undefined'){
+				val = dataselectfn(cspec.prop)(isArray(data) ? data[0] : data);
+				// nothing found return
+				if(val === ''){
+					return false;
+				}
+			}
+			// set the spec for autoNode
+			if(isArray(val)){
+				openLoops.a.push( {l:val, p:cspec.prop} );
+				openLoops.l[cspec.prop] = true;
+				cspec.t = 'loop';
+			}else{
+				cspec.t = 'str';
+			}
+			return cspec;
+		}
+
+		return an;
+
+	}
+
+	// returns a function that, given a context argument,
+	// will render the template defined by dom and directive.
+	function compiler(dom, directive, data, ans){
+		var fns = [], j, jj, iii, cspec, n, target, nodes, itersel, node, inner, h, parts,  pfns = [], p, classes = {},
+		doDirective = function( psel, pdirective ){
+			var ii = 0,
+				dsel = pdirective[psel],
+				sels = psel.split(/\s*,\s*/), //allow selector separation by quotes
+				sl = sels.length;
+			do{
+				if(typeof dsel === 'function' || typeof dsel === 'string'){
+					// set the value for the node/attr
+					psel = sels[ii];
+					target = gettarget(dom, psel, false);
+					setsig(target, fns.length);
+					fns[fns.length] = wrapquote(target.quotefn, dataselectfn(dsel));
+				}else{
+					// loop on node
+					loopgen(dom, psel, dsel, fns);
+				}
+			}while(++ii < sl);
+		};
+		// autoRendering nodes parsing -> auto-nodes
+		ans = ans || data && getAutoNodes(dom, data);
+		if(data){
+			// for each auto-nodes
+			while(ans.length > 0){
+				cspec = ans[0].cspec;
+				n = ans[0].n;
+				ans.splice(0, 1);
+				if(cspec.t === 'str'){
+					// if the target is a value
+					target = gettarget(n, cspec, false);
+					setsig(target, fns.length);
+					fns[fns.length] = wrapquote(target.quotefn, dataselectfn(cspec.prop));
+				}else{
+					// if the target is a loop
+					itersel = dataselectfn(cspec.sel);
+					target = gettarget(n, cspec, true);
+					nodes = target.nodes;
+					for(j = 0, jj = nodes.length; j < jj; j++){
+						node = nodes[j];
+						inner = compiler(node, false, data, ans);
+						fns[fns.length] = wrapquote(target.quotefn, loopfn(cspec.sel, itersel, inner));
+						target.nodes = [node];
+						setsig(target, fns.length - 1);
+					}
+				}
+			}
+		}
+		// read directives
+		for(sel in directive){
+			if( sel.indexOf('@class') >= 0 ){
+				//skip the classes and do it at the end to avoid selector errors of class not found
+				classes[sel] = directive[sel];
+				continue;
+			}
+			doDirective( sel, directive );
+		}
+
+		for( sel in classes ){
+			doDirective( sel, classes );
+		}
+		// convert node to a string
+		h = outerHTML(dom);
+			// IE adds an unremovable "selected, value" attribute
+			// hard replace while waiting for a better solution
+		h = h.replace(/<([^>]+)\s(value\=""|selected)\s?([^>]*)>/ig, "<$1 $3>");
+
+		// remove attribute prefix
+		h = h.split(attPfx).join('');
+
+		// slice the html string at "Sig"
+		parts = h.split( Sig );
+		// for each slice add the return string of
+		for(iii = 1; iii < parts.length; iii++){
+			p = parts[iii];
+			// part is of the form "fn-number:..." as placed there by setsig.
+			pfns[iii] = fns[ parseInt(p, 10) ];
+			parts[iii] = p.substring( p.indexOf(':') + 1 );
+		}
+		return concatenator(parts, pfns);
+	}
+	// compile the template with directive
+	// if a context is passed, the autoRendering is triggered automatically
+	// return a function waiting the data as argument
+	function compile(directive, ctxt, template){
+		var rfn = compiler( ( template || this[0] ).cloneNode(true), directive, ctxt);
+		return function(context){
+			return rfn({context:context});
+		};
+	}
+	//compile with the directive as argument
+	// run the template function on the context argument
+	// return an HTML string
+	// should replace the template and return this
+	function render(ctxt, directive){
+		var fn = typeof directive === 'function' && directive, i, ii;
+		for(i = 0, ii = this.length; i < ii; i++){
+			this[i] = replaceWith( this[i], (fn || plugins.compile( directive, false, this[i] ))( ctxt, false ));
+		}
+		return this;
+	}
+
+	// compile the template with autoRender
+	// run the template function on the context argument
+	// return an HTML string
+	function autoRender(ctxt, directive){
+		var fn = plugins.compile( directive, ctxt, this[0] ), i, ii;
+		for(i = 0, ii = this.length; i < ii; i++){
+			this[i] = replaceWith( this[i], fn( ctxt, false));
+		}
+		return this;
+	}
+
+	function replaceWith(elm, html) {
+		var ne,
+			ep = elm.parentNode,
+			depth = 0,
+			tmp,
+			db = document.body || document.getElementsByTagNameNS( 'http://www.w3.org/1999/xhtml', 'body')[0];//DOM or XML body, thanks to https://github.com/peter-kehl
+		if(!ep){ //if no parents
+			ep = document.createElement('DIV');
+			ep.appendChild(elm);
+		}
+		switch (elm.tagName) {
+			case 'BODY': //thanks to milan.adamovsky@gmail.com
+				ep.removeChild(elm);
+				ep.innerHTML += html;
+				return ep.getElementsByTagName('BODY')[0];
+			case 'TBODY': case 'THEAD': case 'TFOOT':
+				html = '<TABLE>' + html + '</TABLE>';
+				depth = 1;
+			break;
+			case 'TR':
+				html = '<TABLE><TBODY>' + html + '</TBODY></TABLE>';
+				depth = 2;
+			break;
+			case 'TD': case 'TH':
+				html = '<TABLE><TBODY><TR>' + html + '</TR></TBODY></TABLE>';
+				depth = 3;
+			break;
+			case 'OPTGROUP': case 'OPTION':
+				html = '<SELECT>' + html + '</SELECT>';
+				depth = 1;
+			break;
+		}
+		tmp = document.createElement('SPAN');
+		if( tmp.style ){ //check if XML document
+			tmp.style.display = 'none';
+		}
+		db.appendChild(tmp);
+		tmp.innerHTML = html;
+		ne = tmp.firstChild;
+		while (depth--) {
+			ne = ne.firstChild;
+		}
+		ep.insertBefore(ne, elm);
+		ep.removeChild(elm);
+		db.removeChild(tmp);
+		elm = ne;
+
+		ne = ep = null;
+		return elm;
+	}
+
+	return plugins;
+};
+
+$p.plugins = {};
+
+$p.libs = {
+	dojo:function(){
+		return function(n, sel){
+			return dojo.query(sel, n);
+		};
+	},
+	domassistant:function(){
+		DOMAssistant.attach({
+			publicMethods : [ 'compile', 'render', 'autoRender'],
+			compile:function(directive, ctxt){
+				return $p([this]).compile(directive, ctxt);
+			},
+			render:function(ctxt, directive){
+				return $( $p([this]).render(ctxt, directive) )[0];
+			},
+			autoRender:function(ctxt, directive){
+				return $( $p([this]).autoRender(ctxt, directive) )[0];
+			}
+		});
+		return function(n, sel){
+			return $(n).cssSelect(sel);
+		};
+	},
+	ext:function(){//Thanks to Greg Steirer
+		return function(n, sel){
+			return Ext.query(sel, n);
+		};
+	},
+	jquery:function(){
+		jQuery.fn.extend({
+			directives:function(directive){
+				this._pure_d = directive; return this;
+			},
+			compile:function(directive, ctxt){
+				return $p(this).compile(this._pure_d || directive, ctxt);
+			},
+			render:function(ctxt, directive){
+				return jQuery( $p( this ).render( ctxt, this._pure_d || directive ) );
+			},
+			autoRender:function(ctxt, directive){
+				return jQuery( $p( this ).autoRender( ctxt, this._pure_d || directive ) );
+			}
+		});
+		return function(n, sel){
+			return jQuery(n).find(sel);
+		};
+	},
+	mootools:function(){
+		Element.implement({
+			compile:function(directive, ctxt){
+				return $p(this).compile(directive, ctxt);
+			},
+			render:function(ctxt, directive){
+				return $p([this]).render(ctxt, directive);
+			},
+			autoRender:function(ctxt, directive){
+				return $p([this]).autoRender(ctxt, directive);
+			}
+		});
+		return function(n, sel){
+			return $(n).getElements(sel);
+		};
+	},
+	prototype:function(){
+		Element.addMethods({
+			compile:function(element, directive, ctxt){
+				return $p([element]).compile(directive, ctxt);
+			},
+			render:function(element, ctxt, directive){
+				return $p([element]).render(ctxt, directive);
+			},
+			autoRender:function(element, ctxt, directive){
+				return $p([element]).autoRender(ctxt, directive);
+			}
+		});
+		return function(n, sel){
+			n = n === document ? n.body : n;
+			return typeof n === 'string' ? $$(n) : $(n).select(sel);
+		};
+	},
+	sizzle:function(){
+		return function(n, sel){
+			return Sizzle(sel, n);
+		};
+	},
+	sly:function(){
+		return function(n, sel){
+			return Sly(sel, n);
+		};
+	},
+	yui:function(){ //Thanks to https://github.com/soljin
+		if(typeof document.querySelector === 'undefined'){
+			YUI().use("node",function(Y){
+				$p.plugins.find = function(n, sel){
+					return Y.NodeList.getDOMNodes(Y.one(n).all(sel));
+				};
+			});
+		}
+		YUI.add("pure-yui",function(Y){
+			Y.Node.prototype.directives = function(directive){
+				this._pure_d = directive; return this;
+			};
+			Y.Node.prototype.compile = function(directive, ctxt){
+				return $p([this._node]).compile(this._pure_d || directive, ctxt);
+			};
+			Y.Node.prototype.render = function(ctxt, directive){
+				return Y.one($p([this._node]).render(ctxt, this._pure_d || directive));
+			};
+			Y.Node.prototype.autoRender = function(ctxt, directive){
+				return Y.one($p([this._node]).autoRender(ctxt, this._pure_d || directive));
+			};
+		},"0.1",{requires:["node"]});
+
+		return true;
+	}
+};
+
+// get lib specifics if available
+(function(){
+	var libSel,
+		libkey =
+			typeof dojo         !== 'undefined' && 'dojo' ||
+			typeof DOMAssistant !== 'undefined' && 'domassistant' ||
+			typeof Ext          !== 'undefined' && 'ext' ||
+			typeof jQuery       !== 'undefined' && 'jquery' ||
+			typeof MooTools     !== 'undefined' && 'mootools' ||
+			typeof Prototype    !== 'undefined' && 'prototype' ||
+			typeof Sizzle       !== 'undefined' && 'sizzle' ||
+			typeof Sly          !== 'undefined' && 'sly' ||
+			typeof YUI          !== 'undefined' && 'yui';
+
+	//add library methods
+	if(libkey){
+		libSel = $p.libs[libkey]();
+	}
+
+	//if no native selector available
+	if( typeof document.querySelector === 'undefined' ){
+		//take it from the JS lib
+		if( typeof libSel === 'function' ){
+			$p.plugins.find = libSel;
+		//if nothing throw an error
+		}else if( !libSel ){
+			throw 'you need a JS library with a CSS selector engine';
+		}
+	}
+
+	//for node.js
+	if(typeof exports !== 'undefined'){
+		exports.$p = $p;
+	}
+}());
+
 ;
 //# sourceMappingURL=scripts.bundle.js.map

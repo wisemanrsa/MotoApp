@@ -1,0 +1,44 @@
+<h1>New Vehicle</h1>
+<form>
+  <div class="form-group">
+    <label for="make">Make</label>
+    <select id="make" class="form-control" name="vehicleId" [(ngModel)]="vehicleId" (change)="getModels()">
+      <option value=""></option>
+      <option *ngFor="let m of makes" value="{{m.id}}">{{m.name}}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="model">Model</label>
+    <select id="model" class="form-control" name="modelId" [(ngModel)]="modelId">
+      <option value=""></option>
+      <option *ngFor="let m of models" value="{{m.id}}">{{m.name}}</option>
+    </select>
+  </div>
+  <p>Is this vehicle registered?</p>
+  <label for="registred" class="radio-inline">
+    <input type="radio" name="isRegistered" id="registred" value="true">Yes
+  </label>
+  <label for="notRegistred" class="radio-inline">
+    <input type="radio" name="isRegistered" id="notRegistred" value="false">No
+  </label>
+  <h2>Features</h2>
+  <div *ngFor="let f of features" class="checkbox">
+    <label for="feature{{f.id}}">
+      <input type="checkbox" class="checkbox" id=feature{{f.id}}> {{f.name}}
+    </label>
+  </div>
+  <h2>Contact</h2>
+  <div class="form-group">
+    <label for="contactName">Name</label>
+    <input type="text" id="contactName" class="form-control" name="contactName">
+  </div>
+  <div class="form-group">
+    <label for="contactNumber">Number</label>
+    <input type="number" id="contactNumber" class="form-control" name="contactNumber">
+  </div>
+  <div class="form-group">
+    <label for="contactEmail">Email</label>
+    <input type="email" id="contactEmail" class="form-control" name="contactEmail">
+  </div>
+  <button class="btn btn-primary">Save</button>
+</form>

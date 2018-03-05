@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using ASPNETCOREDEMO.Controllers.Resources;
 using ASPNETCOREDEMO.Models;
 using AutoMapper;
@@ -8,8 +10,32 @@ namespace ASPNETCOREDEMO.Mapping
     {
         public MappingProfile()
         {
+            //domain to resource
             CreateMap<Make, MakeResource>();
-            CreateMap<Model, ModelResource>();
+            CreateMap<Model, KeyValuePairResource>();
+            CreateMap<Contact, ContactResource>();
+            CreateMap<Vehicle, SaveVehicleResource>();
+            CreateMap<Vehicle, VehicleResource>()
+            .ForMember(vr => vr.Contact, opt => opt.MapFrom(v => v.Contact))
+            .ForMember(vr => vr.Features, opt => opt.MapFrom(v => v.Features.Select(vf => new KeyValuePairResource {Id = vf.Feature.Id, Name = vf.Feature.Name})));
+
+
+            //resource to domain
+            CreateMap<ContactResource, Contact>();
+            CreateMap<SaveVehicleResource, Vehicle>()
+                .ForMember(v => v.Id, opt => opt.Ignore())
+                .ForMember(v => v.Features, opt => opt.Ignore())
+                .ForMember(v => v.Contact, opt => opt.MapFrom(vr => vr.Contact))
+                .AfterMap((vr, v) => {
+                    var removedFeatures = v.Features.Where(f => !vr.Features.Contains(f.FeatureId));
+                    foreach( var f in removedFeatures)
+                        v.Features.Remove(f);
+
+                    var newFeatures = vr.Features.Where(id => !v.Features.Any(f => f.FeatureId == id)).Select(id => new VehicleFeature{FeatureId = id});
+                    foreach (var f in newFeatures)
+                        v.Features.Add(f);
+                });
+           
         }
     }
 }
