@@ -11,7 +11,6 @@ export class VehicleComponent implements OnInit {
   features: any = [];
   makes: any = [];
   models: any = [];
-  vehicleId: any;
   vehicle: any = {
     features: [],
     contact: {}
@@ -25,11 +24,26 @@ export class VehicleComponent implements OnInit {
   }
 
   getModels() {
-    if (this.vehicleId == '') {
+    if (this.vehicle.makeId == null) {
       this.models = [];
       return;
     }
-    this.vehicleService.getModels(this.vehicleId).subscribe(models => this.models = models);
+    this.vehicleService.getModels(this.vehicle.makeId).subscribe(models => this.models = models);
+    delete this.vehicle.modelId;
+  }
+
+  onFeatureToggle(featureId, $event) {
+    if ($event.target.checked) {
+      this.vehicle.features.push(featureId);
+    } else {
+      const index = this.vehicle.features.indexOf(featureId);
+      this.vehicle.features.splice(index, 1);
+    }
+  }
+
+  submit() {
+    delete this.vehicle.makeId;
+    this.vehicleService.create(this.vehicle).subscribe(x => console.log(x));
   }
 
 }
