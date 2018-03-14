@@ -10,7 +10,6 @@ namespace ASPNETCOREDEMO.Models
     {
         public int Id { get; set; }
         public int ModelId { get; set; }
-        public Make Make {get; set;}
         public Model Model { get; set; }
         public bool IsRegistered { get; set; }
         public Contact Contact { get; set; }
