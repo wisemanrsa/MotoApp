@@ -17,7 +17,8 @@ namespace ASPNETCOREDEMO.Mapping
             CreateMap<Vehicle, SaveVehicleResource>();
             CreateMap<Vehicle, VehicleResource>()
             .ForMember(vr => vr.Contact, opt => opt.MapFrom(v => v.Contact))
-            .ForMember(vr => vr.Features, opt => opt.MapFrom(v => v.Features.Select(vf => new KeyValuePairResource {Id = vf.Feature.Id, Name = vf.Feature.Name})));
+            .ForMember(vr => vr.Features, opt => opt.MapFrom(v => v.Features.Select(vf => new KeyValuePairResource {Id = vf.Feature.Id, Name = vf.Feature.Name})))
+            .ForMember(vr => vr.Make, opt => opt.MapFrom(v => v.Model.Make));
             
 
 
