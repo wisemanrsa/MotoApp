@@ -1,5 +1,1676 @@
 webpackJsonp(["vendor"],{
 
+/***/ "./node_modules/@angular/animations/esm5/animations.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export AnimationBuilder */
+/* unused harmony export AnimationFactory */
+/* unused harmony export AUTO_STYLE */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return animate; });
+/* unused harmony export animateChild */
+/* unused harmony export animation */
+/* unused harmony export group */
+/* unused harmony export keyframes */
+/* unused harmony export query */
+/* unused harmony export sequence */
+/* unused harmony export stagger */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return state; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return style; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return transition; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return trigger; });
+/* unused harmony export useAnimation */
+/* unused harmony export NoopAnimationPlayer */
+/* unused harmony export ɵAnimationGroupPlayer */
+/* unused harmony export ɵPRE_STYLE */
+/**
+ * @license Angular v5.2.8
+ * (c) 2010-2018 Google, Inc. https://angular.io/
+ * License: MIT
+ */
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * AnimationBuilder is an injectable service that is available when the {\@link
+ * BrowserAnimationsModule BrowserAnimationsModule} or {\@link NoopAnimationsModule
+ * NoopAnimationsModule} modules are used within an application.
+ *
+ * The purpose if this service is to produce an animation sequence programmatically within an
+ * angular component or directive.
+ *
+ * Programmatic animations are first built and then a player is created when the build animation is
+ * attached to an element.
+ *
+ * ```ts
+ * // remember to include the BrowserAnimationsModule module for this to work...
+ * import {AnimationBuilder} from '\@angular/animations';
+ *
+ * class MyCmp {
+ *   constructor(private _builder: AnimationBuilder) {}
+ *
+ *   makeAnimation(element: any) {
+ *     // first build the animation
+ *     const myAnimation = this._builder.build([
+ *       style({ width: 0 }),
+ *       animate(1000, style({ width: '100px' }))
+ *     ]);
+ *
+ *     // then create a player from it
+ *     const player = myAnimation.create(element);
+ *
+ *     player.play();
+ *   }
+ * }
+ * ```
+ *
+ * When an animation is built an instance of {\@link AnimationFactory AnimationFactory} will be
+ * returned. Using that an {\@link AnimationPlayer AnimationPlayer} can be created which can then be
+ * used to start the animation.
+ *
+ * \@experimental Animation support is experimental.
+ * @abstract
+ */
+var AnimationBuilder = /** @class */ (function () {
+    function AnimationBuilder() {
+    }
+    return AnimationBuilder;
+}());
+/**
+ * An instance of `AnimationFactory` is returned from {\@link AnimationBuilder#build
+ * AnimationBuilder.build}.
+ *
+ * \@experimental Animation support is experimental.
+ * @abstract
+ */
+var AnimationFactory = /** @class */ (function () {
+    function AnimationFactory() {
+    }
+    return AnimationFactory;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ * @record
+ */
+
+/**
+ * \@experimental Animation support is experimental.
+ */
+var AUTO_STYLE = '*';
+/**
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link trigger trigger animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link state state animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link transition transition animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link keyframes keyframes animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link style style animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link animate animate animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link animateChild animateChild animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link useAnimation useAnimation animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link sequence sequence animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link group group animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * Metadata representing the entry of animations. Instances of this interface are provided via the
+ * animation DSL when the {\@link stagger stagger animation function} is called.
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * `trigger` is an animation-specific function that is designed to be used inside of Angular's
+ * animation DSL language. If this information is new, please navigate to the
+ * {\@link Component#animations component animations metadata page} to gain a better
+ * understanding of how animations in Angular are used.
+ *
+ * `trigger` Creates an animation trigger which will a list of {\@link state state} and
+ * {\@link transition transition} entries that will be evaluated when the expression
+ * bound to the trigger changes.
+ *
+ * Triggers are registered within the component annotation data under the
+ * {\@link Component#animations animations section}. An animation trigger can be placed on an element
+ * within a template by referencing the name of the trigger followed by the expression value that
+ * the
+ * trigger is bound to (in the form of `[\@triggerName]="expression"`.
+ *
+ * Animation trigger bindings strigify values and then match the previous and current values against
+ * any linked transitions. If a boolean value is provided into the trigger binding then it will both
+ * be represented as `1` or `true` and `0` or `false` for a true and false boolean values
+ * respectively.
+ *
+ * ### Usage
+ *
+ * `trigger` will create an animation trigger reference based on the provided `name` value. The
+ * provided `animation` value is expected to be an array consisting of {\@link state state} and
+ * {\@link transition transition} declarations.
+ *
+ * ```typescript
+ * \@Component({
+ *   selector: 'my-component',
+ *   templateUrl: 'my-component-tpl.html',
+ *   animations: [
+ *     trigger("myAnimationTrigger", [
+ *       state(...),
+ *       state(...),
+ *       transition(...),
+ *       transition(...)
+ *     ])
+ *   ]
+ * })
+ * class MyComponent {
+ *   myStatusExp = "something";
+ * }
+ * ```
+ *
+ * The template associated with this component will make use of the `myAnimationTrigger` animation
+ * trigger by binding to an element within its template code.
+ *
+ * ```html
+ * <!-- somewhere inside of my-component-tpl.html -->
+ * <div [\@myAnimationTrigger]="myStatusExp">...</div>
+ * ```
+ *
+ * ## Disable Animations
+ * A special animation control binding called `\@.disabled` can be placed on an element which will
+ * then disable animations for any inner animation triggers situated within the element as well as
+ * any animations on the element itself.
+ *
+ * When true, the `\@.disabled` binding will prevent all animations from rendering. The example
+ * below shows how to use this feature:
+ *
+ * ```ts
+ * \@Component({
+ *   selector: 'my-component',
+ *   template: `
+ *     <div [\@.disabled]="isDisabled">
+ *       <div [\@childAnimation]="exp"></div>
+ *     </div>
+ *   `,
+ *   animations: [
+ *     trigger("childAnimation", [
+ *       // ...
+ *     ])
+ *   ]
+ * })
+ * class MyComponent {
+ *   isDisabled = true;
+ *   exp = '...';
+ * }
+ * ```
+ *
+ * The `\@childAnimation` trigger will not animate because `\@.disabled` prevents it from happening
+ * (when true).
+ *
+ * Note that `\@.disabled` will only disable all animations (this means any animations running on
+ * the same element will also be disabled).
+ *
+ * ### Disabling Animations Application-wide
+ * When an area of the template is set to have animations disabled, **all** inner components will
+ * also have their animations disabled as well. This means that all animations for an angular
+ * application can be disabled by placing a host binding set on `\@.disabled` on the topmost Angular
+ * component.
+ *
+ * ```ts
+ * import {Component, HostBinding} from '\@angular/core';
+ *
+ * \@Component({
+ *   selector: 'app-component',
+ *   templateUrl: 'app.component.html',
+ * })
+ * class AppComponent {
+ *   \@HostBinding('\@.disabled')
+ *   public animationsDisabled = true;
+ * }
+ * ```
+ *
+ * ### What about animations that us `query()` and `animateChild()`?
+ * Despite inner animations being disabled, a parent animation can {\@link query query} for inner
+ * elements located in disabled areas of the template and still animate them as it sees fit. This is
+ * also the case for when a sub animation is queried by a parent and then later animated using {\@link
+ * animateChild animateChild}.
+ *
+ * \@experimental Animation support is experimental.
+ * @param {?} name
+ * @param {?} definitions
+ * @return {?}
+ */
+function trigger(name, definitions) {
+    return { type: 7 /* Trigger */, name: name, definitions: definitions, options: {} };
+}
+/**
+ * `animate` is an animation-specific function that is designed to be used inside of Angular's
+ * animation DSL language. If this information is new, please navigate to the {\@link
+ * Component#animations component animations metadata page} to gain a better understanding of
+ * how animations in Angular are used.
+ *
+ * `animate` specifies an animation step that will apply the provided `styles` data for a given
+ * amount of time based on the provided `timing` expression value. Calls to `animate` are expected
+ * to be used within {\@link sequence an animation sequence}, {\@link group group}, or {\@link
+ * transition transition}.
+ *
+ * ### Usage
+ *
+ * The `animate` function accepts two input parameters: `timing` and `styles`:
+ *
+ * - `timing` is a string based value that can be a combination of a duration with optional delay
+ * and easing values. The format for the expression breaks down to `duration delay easing`
+ * (therefore a value such as `1s 100ms ease-out` will be parse itself into `duration=1000,
+ * delay=100, easing=ease-out`. If a numeric value is provided then that will be used as the
+ * `duration` value in millisecond form.
+ * - `styles` is the style input data which can either be a call to {\@link style style} or {\@link
+ * keyframes keyframes}. If left empty then the styles from the destination state will be collected
+ * and used (this is useful when describing an animation step that will complete an animation by
+ * {\@link transition#the-final-animate-call animating to the final state}).
+ *
+ * ```typescript
+ * // various functions for specifying timing data
+ * animate(500, style(...))
+ * animate("1s", style(...))
+ * animate("100ms 0.5s", style(...))
+ * animate("5s ease", style(...))
+ * animate("5s 10ms cubic-bezier(.17,.67,.88,.1)", style(...))
+ *
+ * // either style() of keyframes() can be used
+ * animate(500, style({ background: "red" }))
+ * animate(500, keyframes([
+ *   style({ background: "blue" })),
+ *   style({ background: "red" }))
+ * ])
+ * ```
+ *
+ * {\@example core/animation/ts/dsl/animation_example.ts region='Component'}
+ *
+ * \@experimental Animation support is experimental.
+ * @param {?} timings
+ * @param {?=} styles
+ * @return {?}
+ */
+function animate(timings, styles) {
+    if (styles === void 0) { styles = null; }
+    return { type: 4 /* Animate */, styles: styles, timings: timings };
+}
+/**
+ * `group` is an animation-specific function that is designed to be used inside of Angular's
+ * animation DSL language. If this information is new, please navigate to the {\@link
+ * Component#animations component animations metadata page} to gain a better understanding of
+ * how animations in Angular are used.
+ *
+ * `group` specifies a list of animation steps that are all run in parallel. Grouped animations are
+ * useful when a series of styles must be animated/closed off at different starting/ending times.
+ *
+ * The `group` function can either be used within a {\@link sequence sequence} or a {\@link transition
+ * transition} and it will only continue to the next instruction once all of the inner animation
+ * steps have completed.
+ *
+ * ### Usage
+ *
+ * The `steps` data that is passed into the `group` animation function can either consist of {\@link
+ * style style} or {\@link animate animate} function calls. Each call to `style()` or `animate()`
+ * within a group will be executed instantly (use {\@link keyframes keyframes} or a {\@link
+ * animate#usage animate() with a delay value} to offset styles to be applied at a later time).
+ *
+ * ```typescript
+ * group([
+ *   animate("1s", { background: "black" }))
+ *   animate("2s", { color: "white" }))
+ * ])
+ * ```
+ *
+ * {\@example core/animation/ts/dsl/animation_example.ts region='Component'}
+ *
+ * \@experimental Animation support is experimental.
+ * @param {?} steps
+ * @param {?=} options
+ * @return {?}
+ */
+function group(steps, options) {
+    if (options === void 0) { options = null; }
+    return { type: 3 /* Group */, steps: steps, options: options };
+}
+/**
+ * `sequence` is an animation-specific function that is designed to be used inside of Angular's
+ * animation DSL language. If this information is new, please navigate to the {\@link
+ * Component#animations component animations metadata page} to gain a better understanding of
+ * how animations in Angular are used.
+ *
+ * `sequence` Specifies a list of animation steps that are run one by one. (`sequence` is used by
+ * default when an array is passed as animation data into {\@link transition transition}.)
+ *
+ * The `sequence` function can either be used within a {\@link group group} or a {\@link transition
+ * transition} and it will only continue to the next instruction once each of the inner animation
+ * steps have completed.
+ *
+ * To perform animation styling in parallel with other animation steps then have a look at the
+ * {\@link group group} animation function.
+ *
+ * ### Usage
+ *
+ * The `steps` data that is passed into the `sequence` animation function can either consist of
+ * {\@link style style} or {\@link animate animate} function calls. A call to `style()` will apply the
+ * provided styling data immediately while a call to `animate()` will apply its styling data over a
+ * given time depending on its timing data.
+ *
+ * ```typescript
+ * sequence([
+ *   style({ opacity: 0 })),
+ *   animate("1s", { opacity: 1 }))
+ * ])
+ * ```
+ *
+ * {\@example core/animation/ts/dsl/animation_example.ts region='Component'}
+ *
+ * \@experimental Animation support is experimental.
+ * @param {?} steps
+ * @param {?=} options
+ * @return {?}
+ */
+function sequence(steps, options) {
+    if (options === void 0) { options = null; }
+    return { type: 2 /* Sequence */, steps: steps, options: options };
+}
+/**
+ * `style` is an animation-specific function that is designed to be used inside of Angular's
+ * animation DSL language. If this information is new, please navigate to the {\@link
+ * Component#animations component animations metadata page} to gain a better understanding of
+ * how animations in Angular are used.
+ *
+ * `style` declares a key/value object containing CSS properties/styles that can then be used for
+ * {\@link state animation states}, within an {\@link sequence animation sequence}, or as styling data
+ * for both {\@link animate animate} and {\@link keyframes keyframes}.
+ *
+ * ### Usage
+ *
+ * `style` takes in a key/value string map as data and expects one or more CSS property/value pairs
+ * to be defined.
+ *
+ * ```typescript
+ * // string values are used for css properties
+ * style({ background: "red", color: "blue" })
+ *
+ * // numerical (pixel) values are also supported
+ * style({ width: 100, height: 0 })
+ * ```
+ *
+ * #### Auto-styles (using `*`)
+ *
+ * When an asterix (`*`) character is used as a value then it will be detected from the element
+ * being animated and applied as animation data when the animation starts.
+ *
+ * This feature proves useful for a state depending on layout and/or environment factors; in such
+ * cases the styles are calculated just before the animation starts.
+ *
+ * ```typescript
+ * // the steps below will animate from 0 to the
+ * // actual height of the element
+ * style({ height: 0 }),
+ * animate("1s", style({ height: "*" }))
+ * ```
+ *
+ * {\@example core/animation/ts/dsl/animation_example.ts region='Component'}
+ *
+ * \@experimental Animation support is experimental.
+ * @param {?} tokens
+ * @return {?}
+ */
+function style(tokens) {
+    return { type: 6 /* Style */, styles: tokens, offset: null };
+}
+/**
+ * `state` is an animation-specific function that is designed to be used inside of Angular's
+ * animation DSL language. If this information is new, please navigate to the {\@link
+ * Component#animations component animations metadata page} to gain a better understanding of
+ * how animations in Angular are used.
+ *
+ * `state` declares an animation state within the given trigger. When a state is active within a
+ * component then its associated styles will persist on the element that the trigger is attached to
+ * (even when the animation ends).
+ *
+ * To animate between states, have a look at the animation {\@link transition transition} DSL
+ * function. To register states to an animation trigger please have a look at the {\@link trigger
+ * trigger} function.
+ *
+ * #### The `void` state
+ *
+ * The `void` state value is a reserved word that angular uses to determine when the element is not
+ * apart of the application anymore (e.g. when an `ngIf` evaluates to false then the state of the
+ * associated element is void).
+ *
+ * #### The `*` (default) state
+ *
+ * The `*` state (when styled) is a fallback state that will be used if the state that is being
+ * animated is not declared within the trigger.
+ *
+ * ### Usage
+ *
+ * `state` will declare an animation state with its associated styles
+ * within the given trigger.
+ *
+ * - `stateNameExpr` can be one or more state names separated by commas.
+ * - `styles` refers to the {\@link style styling data} that will be persisted on the element once
+ * the state has been reached.
+ *
+ * ```typescript
+ * // "void" is a reserved name for a state and is used to represent
+ * // the state in which an element is detached from from the application.
+ * state("void", style({ height: 0 }))
+ *
+ * // user-defined states
+ * state("closed", style({ height: 0 }))
+ * state("open, visible", style({ height: "*" }))
+ * ```
+ *
+ * {\@example core/animation/ts/dsl/animation_example.ts region='Component'}
+ *
+ * \@experimental Animation support is experimental.
+ * @param {?} name
+ * @param {?} styles
+ * @param {?=} options
+ * @return {?}
+ */
+function state(name, styles, options) {
+    return { type: 0 /* State */, name: name, styles: styles, options: options };
+}
+/**
+ * `keyframes` is an animation-specific function that is designed to be used inside of Angular's
+ * animation DSL language. If this information is new, please navigate to the {\@link
+ * Component#animations component animations metadata page} to gain a better understanding of
+ * how animations in Angular are used.
+ *
+ * `keyframes` specifies a collection of {\@link style style} entries each optionally characterized
+ * by an `offset` value.
+ *
+ * ### Usage
+ *
+ * The `keyframes` animation function is designed to be used alongside the {\@link animate animate}
+ * animation function. Instead of applying animations from where they are currently to their
+ * destination, keyframes can describe how each style entry is applied and at what point within the
+ * animation arc (much like CSS Keyframe Animations do).
+ *
+ * For each `style()` entry an `offset` value can be set. Doing so allows to specifiy at what
+ * percentage of the animate time the styles will be applied.
+ *
+ * ```typescript
+ * // the provided offset values describe when each backgroundColor value is applied.
+ * animate("5s", keyframes([
+ *   style({ backgroundColor: "red", offset: 0 }),
+ *   style({ backgroundColor: "blue", offset: 0.2 }),
+ *   style({ backgroundColor: "orange", offset: 0.3 }),
+ *   style({ backgroundColor: "black", offset: 1 })
+ * ]))
+ * ```
+ *
+ * Alternatively, if there are no `offset` values used within the style entries then the offsets
+ * will be calculated automatically.
+ *
+ * ```typescript
+ * animate("5s", keyframes([
+ *   style({ backgroundColor: "red" }) // offset = 0
+ *   style({ backgroundColor: "blue" }) // offset = 0.33
+ *   style({ backgroundColor: "orange" }) // offset = 0.66
+ *   style({ backgroundColor: "black" }) // offset = 1
+ * ]))
+ * ```
+ *
+ * {\@example core/animation/ts/dsl/animation_example.ts region='Component'}
+ *
+ * \@experimental Animation support is experimental.
+ * @param {?} steps
+ * @return {?}
+ */
+function keyframes(steps) {
+    return { type: 5 /* Keyframes */, steps: steps };
+}
+/**
+ * `transition` is an animation-specific function that is designed to be used inside of Angular's
+ * animation DSL language. If this information is new, please navigate to the {\@link
+ * Component#animations component animations metadata page} to gain a better understanding of
+ * how animations in Angular are used.
+ *
+ * `transition` declares the {\@link sequence sequence of animation steps} that will be run when the
+ * provided `stateChangeExpr` value is satisfied. The `stateChangeExpr` consists of a `state1 =>
+ * state2` which consists of two known states (use an asterix (`*`) to refer to a dynamic starting
+ * and/or ending state).
+ *
+ * A function can also be provided as the `stateChangeExpr` argument for a transition and this
+ * function will be executed each time a state change occurs. If the value returned within the
+ * function is true then the associated animation will be run.
+ *
+ * Animation transitions are placed within an {\@link trigger animation trigger}. For an transition
+ * to animate to a state value and persist its styles then one or more {\@link state animation
+ * states} is expected to be defined.
+ *
+ * ### Usage
+ *
+ * An animation transition is kicked off the `stateChangeExpr` predicate evaluates to true based on
+ * what the previous state is and what the current state has become. In other words, if a transition
+ * is defined that matches the old/current state criteria then the associated animation will be
+ * triggered.
+ *
+ * ```typescript
+ * // all transition/state changes are defined within an animation trigger
+ * trigger("myAnimationTrigger", [
+ *   // if a state is defined then its styles will be persisted when the
+ *   // animation has fully completed itself
+ *   state("on", style({ background: "green" })),
+ *   state("off", style({ background: "grey" })),
+ *
+ *   // a transition animation that will be kicked off when the state value
+ *   // bound to "myAnimationTrigger" changes from "on" to "off"
+ *   transition("on => off", animate(500)),
+ *
+ *   // it is also possible to do run the same animation for both directions
+ *   transition("on <=> off", animate(500)),
+ *
+ *   // or to define multiple states pairs separated by commas
+ *   transition("on => off, off => void", animate(500)),
+ *
+ *   // this is a catch-all state change for when an element is inserted into
+ *   // the page and the destination state is unknown
+ *   transition("void => *", [
+ *     style({ opacity: 0 }),
+ *     animate(500)
+ *   ]),
+ *
+ *   // this will capture a state change between any states
+ *   transition("* => *", animate("1s 0s")),
+ *
+ *   // you can also go full out and include a function
+ *   transition((fromState, toState) => {
+ *     // when `true` then it will allow the animation below to be invoked
+ *     return fromState == "off" && toState == "on";
+ *   }, animate("1s 0s"))
+ * ])
+ * ```
+ *
+ * The template associated with this component will make use of the `myAnimationTrigger` animation
+ * trigger by binding to an element within its template code.
+ *
+ * ```html
+ * <!-- somewhere inside of my-component-tpl.html -->
+ * <div [\@myAnimationTrigger]="myStatusExp">...</div>
+ * ```
+ *
+ * #### The final `animate` call
+ *
+ * If the final step within the transition steps is a call to `animate()` that **only** uses a
+ * timing value with **no style data** then it will be automatically used as the final animation arc
+ * for the element to animate itself to the final state. This involves an automatic mix of
+ * adding/removing CSS styles so that the element will be in the exact state it should be for the
+ * applied state to be presented correctly.
+ *
+ * ```
+ * // start off by hiding the element, but make sure that it animates properly to whatever state
+ * // is currently active for "myAnimationTrigger"
+ * transition("void => *", [
+ *   style({ opacity: 0 }),
+ *   animate(500)
+ * ])
+ * ```
+ *
+ * ### Using :enter and :leave
+ *
+ * Given that enter (insertion) and leave (removal) animations are so common, the `transition`
+ * function accepts both `:enter` and `:leave` values which are aliases for the `void => *` and `*
+ * => void` state changes.
+ *
+ * ```
+ * transition(":enter", [
+ *   style({ opacity: 0 }),
+ *   animate(500, style({ opacity: 1 }))
+ * ]),
+ * transition(":leave", [
+ *   animate(500, style({ opacity: 0 }))
+ * ])
+ * ```
+ *
+ * ### Boolean values
+ * if a trigger binding value is a boolean value then it can be matched using a transition
+ * expression that compares `true` and `false` or `1` and `0`.
+ *
+ * ```
+ * // in the template
+ * <div [\@openClose]="open ? true : false">...</div>
+ *
+ * // in the component metadata
+ * trigger('openClose', [
+ *   state('true', style({ height: '*' })),
+ *   state('false', style({ height: '0px' })),
+ *   transition('false <=> true', animate(500))
+ * ])
+ * ```
+ *
+ * ### Using :increment and :decrement
+ * In addition to the :enter and :leave transition aliases, the :increment and :decrement aliases
+ * can be used to kick off a transition when a numeric value has increased or decreased in value.
+ *
+ * ```
+ * import {group, animate, query, transition, style, trigger} from '\@angular/animations';
+ * import {Component} from '\@angular/core';
+ *
+ * \@Component({
+ *   selector: 'banner-carousel-component',
+ *   styles: [`
+ *     .banner-container {
+ *        position:relative;
+ *        height:500px;
+ *        overflow:hidden;
+ *      }
+ *     .banner-container > .banner {
+ *        position:absolute;
+ *        left:0;
+ *        top:0;
+ *        font-size:200px;
+ *        line-height:500px;
+ *        font-weight:bold;
+ *        text-align:center;
+ *        width:100%;
+ *      }
+ *   `],
+ *   template: `
+ *     <button (click)="previous()">Previous</button>
+ *     <button (click)="next()">Next</button>
+ *     <hr>
+ *     <div [\@bannerAnimation]="selectedIndex" class="banner-container">
+ *       <div class="banner" *ngFor="let banner of banners"> {{ banner }} </div>
+ *     </div>
+ *   `,
+ *   animations: [
+ *     trigger('bannerAnimation', [
+ *       transition(":increment", group([
+ *         query(':enter', [
+ *           style({ left: '100%' }),
+ *           animate('0.5s ease-out', style('*'))
+ *         ]),
+ *         query(':leave', [
+ *           animate('0.5s ease-out', style({ left: '-100%' }))
+ *         ])
+ *       ])),
+ *       transition(":decrement", group([
+ *         query(':enter', [
+ *           style({ left: '-100%' }),
+ *           animate('0.5s ease-out', style('*'))
+ *         ]),
+ *         query(':leave', [
+ *           animate('0.5s ease-out', style({ left: '100%' }))
+ *         ])
+ *       ]))
+ *     ])
+ *   ]
+ * })
+ * class BannerCarouselComponent {
+ *   allBanners: string[] = ['1', '2', '3', '4'];
+ *   selectedIndex: number = 0;
+ *
+ *   get banners() {
+ *      return [this.allBanners[this.selectedIndex]];
+ *   }
+ *
+ *   previous() {
+ *     this.selectedIndex = Math.max(this.selectedIndex - 1, 0);
+ *   }
+ *
+ *   next() {
+ *     this.selectedIndex = Math.min(this.selectedIndex + 1, this.allBanners.length - 1);
+ *   }
+ * }
+ * ```
+ *
+ * {\@example core/animation/ts/dsl/animation_example.ts region='Component'}
+ *
+ * \@experimental Animation support is experimental.
+ * @param {?} stateChangeExpr
+ * @param {?} steps
+ * @param {?=} options
+ * @return {?}
+ */
+function transition(stateChangeExpr, steps, options) {
+    if (options === void 0) { options = null; }
+    return { type: 1 /* Transition */, expr: stateChangeExpr, animation: steps, options: options };
+}
+/**
+ * `animation` is an animation-specific function that is designed to be used inside of Angular's
+ * animation DSL language.
+ *
+ * `var myAnimation = animation(...)` is designed to produce a reusable animation that can be later
+ * invoked in another animation or sequence. Reusable animations are designed to make use of
+ * animation parameters and the produced animation can be used via the `useAnimation` method.
+ *
+ * ```
+ * var fadeAnimation = animation([
+ *   style({ opacity: '{{ start }}' }),
+ *   animate('{{ time }}',
+ *     style({ opacity: '{{ end }}'}))
+ * ], { params: { time: '1000ms', start: 0, end: 1 }});
+ * ```
+ *
+ * If parameters are attached to an animation then they act as **default parameter values**. When an
+ * animation is invoked via `useAnimation` then parameter values are allowed to be passed in
+ * directly. If any of the passed in parameter values are missing then the default values will be
+ * used.
+ *
+ * ```
+ * useAnimation(fadeAnimation, {
+ *   params: {
+ *     time: '2s',
+ *     start: 1,
+ *     end: 0
+ *   }
+ * })
+ * ```
+ *
+ * If one or more parameter values are missing before animated then an error will be thrown.
+ *
+ * \@experimental Animation support is experimental.
+ * @param {?} steps
+ * @param {?=} options
+ * @return {?}
+ */
+function animation(steps, options) {
+    if (options === void 0) { options = null; }
+    return { type: 8 /* Reference */, animation: steps, options: options };
+}
+/**
+ * `animateChild` is an animation-specific function that is designed to be used inside of Angular's
+ * animation DSL language. It works by allowing a queried element to execute its own
+ * animation within the animation sequence.
+ *
+ * Each time an animation is triggered in angular, the parent animation
+ * will always get priority and any child animations will be blocked. In order
+ * for a child animation to run, the parent animation must query each of the elements
+ * containing child animations and then allow the animations to run using `animateChild`.
+ *
+ * The example HTML code below shows both parent and child elements that have animation
+ * triggers that will execute at the same time.
+ *
+ * ```html
+ * <!-- parent-child.component.html -->
+ * <button (click)="exp =! exp">Toggle</button>
+ * <hr>
+ *
+ * <div [\@parentAnimation]="exp">
+ *   <header>Hello</header>
+ *   <div [\@childAnimation]="exp">
+ *       one
+ *   </div>
+ *   <div [\@childAnimation]="exp">
+ *       two
+ *   </div>
+ *   <div [\@childAnimation]="exp">
+ *       three
+ *   </div>
+ * </div>
+ * ```
+ *
+ * Now when the `exp` value changes to true, only the `parentAnimation` animation will animate
+ * because it has priority. However, using `query` and `animateChild` each of the inner animations
+ * can also fire:
+ *
+ * ```ts
+ * // parent-child.component.ts
+ * import {trigger, transition, animate, style, query, animateChild} from '\@angular/animations';
+ * \@Component({
+ *   selector: 'parent-child-component',
+ *   animations: [
+ *     trigger('parentAnimation', [
+ *       transition('false => true', [
+ *         query('header', [
+ *           style({ opacity: 0 }),
+ *           animate(500, style({ opacity: 1 }))
+ *         ]),
+ *         query('\@childAnimation', [
+ *           animateChild()
+ *         ])
+ *       ])
+ *     ]),
+ *     trigger('childAnimation', [
+ *       transition('false => true', [
+ *         style({ opacity: 0 }),
+ *         animate(500, style({ opacity: 1 }))
+ *       ])
+ *     ])
+ *   ]
+ * })
+ * class ParentChildCmp {
+ *   exp: boolean = false;
+ * }
+ * ```
+ *
+ * In the animation code above, when the `parentAnimation` transition kicks off it first queries to
+ * find the header element and fades it in. It then finds each of the sub elements that contain the
+ * `\@childAnimation` trigger and then allows for their animations to fire.
+ *
+ * This example can be further extended by using stagger:
+ *
+ * ```ts
+ * query('\@childAnimation', stagger(100, [
+ *   animateChild()
+ * ]))
+ * ```
+ *
+ * Now each of the sub animations start off with respect to the `100ms` staggering step.
+ *
+ * ## The first frame of child animations
+ * When sub animations are executed using `animateChild` the animation engine will always apply the
+ * first frame of every sub animation immediately at the start of the animation sequence. This way
+ * the parent animation does not need to set any initial styling data on the sub elements before the
+ * sub animations kick off.
+ *
+ * In the example above the first frame of the `childAnimation`'s `false => true` transition
+ * consists of a style of `opacity: 0`. This is applied immediately when the `parentAnimation`
+ * animation transition sequence starts. Only then when the `\@childAnimation` is queried and called
+ * with `animateChild` will it then animate to its destination of `opacity: 1`.
+ *
+ * Note that this feature designed to be used alongside {\@link query query()} and it will only work
+ * with animations that are assigned using the Angular animation DSL (this means that CSS keyframes
+ * and transitions are not handled by this API).
+ *
+ * \@experimental Animation support is experimental.
+ * @param {?=} options
+ * @return {?}
+ */
+function animateChild(options) {
+    if (options === void 0) { options = null; }
+    return { type: 9 /* AnimateChild */, options: options };
+}
+/**
+ * `useAnimation` is an animation-specific function that is designed to be used inside of Angular's
+ * animation DSL language. It is used to kick off a reusable animation that is created using {\@link
+ * animation animation()}.
+ *
+ * \@experimental Animation support is experimental.
+ * @param {?} animation
+ * @param {?=} options
+ * @return {?}
+ */
+function useAnimation(animation, options) {
+    if (options === void 0) { options = null; }
+    return { type: 10 /* AnimateRef */, animation: animation, options: options };
+}
+/**
+ * `query` is an animation-specific function that is designed to be used inside of Angular's
+ * animation DSL language.
+ *
+ * query() is used to find one or more inner elements within the current element that is
+ * being animated within the sequence. The provided animation steps are applied
+ * to the queried element (by default, an array is provided, then this will be
+ * treated as an animation sequence).
+ *
+ * ### Usage
+ *
+ * query() is designed to collect mutiple elements and works internally by using
+ * `element.querySelectorAll`. An additional options object can be provided which
+ * can be used to limit the total amount of items to be collected.
+ *
+ * ```js
+ * query('div', [
+ *   animate(...),
+ *   animate(...)
+ * ], { limit: 1 })
+ * ```
+ *
+ * query(), by default, will throw an error when zero items are found. If a query
+ * has the `optional` flag set to true then this error will be ignored.
+ *
+ * ```js
+ * query('.some-element-that-may-not-be-there', [
+ *   animate(...),
+ *   animate(...)
+ * ], { optional: true })
+ * ```
+ *
+ * ### Special Selector Values
+ *
+ * The selector value within a query can collect elements that contain angular-specific
+ * characteristics
+ * using special pseudo-selectors tokens.
+ *
+ * These include:
+ *
+ *  - Querying for newly inserted/removed elements using `query(":enter")`/`query(":leave")`
+ *  - Querying all currently animating elements using `query(":animating")`
+ *  - Querying elements that contain an animation trigger using `query("\@triggerName")`
+ *  - Querying all elements that contain an animation triggers using `query("\@*")`
+ *  - Including the current element into the animation sequence using `query(":self")`
+ *
+ *
+ *  Each of these pseudo-selector tokens can be merged together into a combined query selector
+ * string:
+ *
+ *  ```
+ *  query(':self, .record:enter, .record:leave, \@subTrigger', [...])
+ *  ```
+ *
+ * ### Demo
+ *
+ * ```
+ * \@Component({
+ *   selector: 'inner',
+ *   template: `
+ *     <div [\@queryAnimation]="exp">
+ *       <h1>Title</h1>
+ *       <div class="content">
+ *         Blah blah blah
+ *       </div>
+ *     </div>
+ *   `,
+ *   animations: [
+ *    trigger('queryAnimation', [
+ *      transition('* => goAnimate', [
+ *        // hide the inner elements
+ *        query('h1', style({ opacity: 0 })),
+ *        query('.content', style({ opacity: 0 })),
+ *
+ *        // animate the inner elements in, one by one
+ *        query('h1', animate(1000, style({ opacity: 1 })),
+ *        query('.content', animate(1000, style({ opacity: 1 })),
+ *      ])
+ *    ])
+ *  ]
+ * })
+ * class Cmp {
+ *   exp = '';
+ *
+ *   goAnimate() {
+ *     this.exp = 'goAnimate';
+ *   }
+ * }
+ * ```
+ *
+ * \@experimental Animation support is experimental.
+ * @param {?} selector
+ * @param {?} animation
+ * @param {?=} options
+ * @return {?}
+ */
+function query(selector, animation, options) {
+    if (options === void 0) { options = null; }
+    return { type: 11 /* Query */, selector: selector, animation: animation, options: options };
+}
+/**
+ * `stagger` is an animation-specific function that is designed to be used inside of Angular's
+ * animation DSL language. It is designed to be used inside of an animation {\@link query query()}
+ * and works by issuing a timing gap between after each queried item is animated.
+ *
+ * ### Usage
+ *
+ * In the example below there is a container element that wraps a list of items stamped out
+ * by an ngFor. The container element contains an animation trigger that will later be set
+ * to query for each of the inner items.
+ *
+ * ```html
+ * <!-- list.component.html -->
+ * <button (click)="toggle()">Show / Hide Items</button>
+ * <hr />
+ * <div [\@listAnimation]="items.length">
+ *   <div *ngFor="let item of items">
+ *     {{ item }}
+ *   </div>
+ * </div>
+ * ```
+ *
+ * The component code for this looks as such:
+ *
+ * ```ts
+ * import {trigger, transition, style, animate, query, stagger} from '\@angular/animations';
+ * \@Component({
+ *   templateUrl: 'list.component.html',
+ *   animations: [
+ *     trigger('listAnimation', [
+ *        //...
+ *     ])
+ *   ]
+ * })
+ * class ListComponent {
+ *   items = [];
+ *
+ *   showItems() {
+ *     this.items = [0,1,2,3,4];
+ *   }
+ *
+ *   hideItems() {
+ *     this.items = [];
+ *   }
+ *
+ *   toggle() {
+ *     this.items.length ? this.hideItems() : this.showItems();
+ *   }
+ * }
+ * ```
+ *
+ * And now for the animation trigger code:
+ *
+ * ```ts
+ * trigger('listAnimation', [
+ *   transition('* => *', [ // each time the binding value changes
+ *     query(':leave', [
+ *       stagger(100, [
+ *         animate('0.5s', style({ opacity: 0 }))
+ *       ])
+ *     ]),
+ *     query(':enter', [
+ *       style({ opacity: 0 }),
+ *       stagger(100, [
+ *         animate('0.5s', style({ opacity: 1 }))
+ *       ])
+ *     ])
+ *   ])
+ * ])
+ * ```
+ *
+ * Now each time the items are added/removed then either the opacity
+ * fade-in animation will run or each removed item will be faded out.
+ * When either of these animations occur then a stagger effect will be
+ * applied after each item's animation is started.
+ *
+ * \@experimental Animation support is experimental.
+ * @param {?} timings
+ * @param {?} animation
+ * @return {?}
+ */
+function stagger(timings, animation) {
+    return { type: 12 /* Stagger */, timings: timings, animation: animation };
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ * @param {?} cb
+ * @return {?}
+ */
+function scheduleMicroTask(cb) {
+    Promise.resolve(null).then(cb);
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * AnimationPlayer controls an animation sequence that was produced from a programmatic animation.
+ * (see {\@link AnimationBuilder AnimationBuilder} for more information on how to create programmatic
+ * animations.)
+ *
+ * \@experimental Animation support is experimental.
+ * @record
+ */
+
+/**
+ * \@experimental Animation support is experimental.
+ */
+var NoopAnimationPlayer = /** @class */ (function () {
+    function NoopAnimationPlayer() {
+        this._onDoneFns = [];
+        this._onStartFns = [];
+        this._onDestroyFns = [];
+        this._started = false;
+        this._destroyed = false;
+        this._finished = false;
+        this.parentPlayer = null;
+        this.totalTime = 0;
+    }
+    /**
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype._onFinish = /**
+     * @return {?}
+     */
+    function () {
+        if (!this._finished) {
+            this._finished = true;
+            this._onDoneFns.forEach(function (fn) { return fn(); });
+            this._onDoneFns = [];
+        }
+    };
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype.onStart = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onStartFns.push(fn); };
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype.onDone = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onDoneFns.push(fn); };
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype.onDestroy = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onDestroyFns.push(fn); };
+    /**
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype.hasStarted = /**
+     * @return {?}
+     */
+    function () { return this._started; };
+    /**
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype.init = /**
+     * @return {?}
+     */
+    function () { };
+    /**
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype.play = /**
+     * @return {?}
+     */
+    function () {
+        if (!this.hasStarted()) {
+            this._onStart();
+            this.triggerMicrotask();
+        }
+        this._started = true;
+    };
+    /* @internal */
+    /**
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype.triggerMicrotask = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        scheduleMicroTask(function () { return _this._onFinish(); });
+    };
+    /**
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype._onStart = /**
+     * @return {?}
+     */
+    function () {
+        this._onStartFns.forEach(function (fn) { return fn(); });
+        this._onStartFns = [];
+    };
+    /**
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype.pause = /**
+     * @return {?}
+     */
+    function () { };
+    /**
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype.restart = /**
+     * @return {?}
+     */
+    function () { };
+    /**
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype.finish = /**
+     * @return {?}
+     */
+    function () { this._onFinish(); };
+    /**
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype.destroy = /**
+     * @return {?}
+     */
+    function () {
+        if (!this._destroyed) {
+            this._destroyed = true;
+            if (!this.hasStarted()) {
+                this._onStart();
+            }
+            this.finish();
+            this._onDestroyFns.forEach(function (fn) { return fn(); });
+            this._onDestroyFns = [];
+        }
+    };
+    /**
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype.reset = /**
+     * @return {?}
+     */
+    function () { };
+    /**
+     * @param {?} p
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype.setPosition = /**
+     * @param {?} p
+     * @return {?}
+     */
+    function (p) { };
+    /**
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype.getPosition = /**
+     * @return {?}
+     */
+    function () { return 0; };
+    /* @internal */
+    /**
+     * @param {?} phaseName
+     * @return {?}
+     */
+    NoopAnimationPlayer.prototype.triggerCallback = /**
+     * @param {?} phaseName
+     * @return {?}
+     */
+    function (phaseName) {
+        var /** @type {?} */ methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
+        methods.forEach(function (fn) { return fn(); });
+        methods.length = 0;
+    };
+    return NoopAnimationPlayer;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var AnimationGroupPlayer = /** @class */ (function () {
+    function AnimationGroupPlayer(_players) {
+        var _this = this;
+        this._onDoneFns = [];
+        this._onStartFns = [];
+        this._finished = false;
+        this._started = false;
+        this._destroyed = false;
+        this._onDestroyFns = [];
+        this.parentPlayer = null;
+        this.totalTime = 0;
+        this.players = _players;
+        var /** @type {?} */ doneCount = 0;
+        var /** @type {?} */ destroyCount = 0;
+        var /** @type {?} */ startCount = 0;
+        var /** @type {?} */ total = this.players.length;
+        if (total == 0) {
+            scheduleMicroTask(function () { return _this._onFinish(); });
+        }
+        else {
+            this.players.forEach(function (player) {
+                player.onDone(function () {
+                    if (++doneCount == total) {
+                        _this._onFinish();
+                    }
+                });
+                player.onDestroy(function () {
+                    if (++destroyCount == total) {
+                        _this._onDestroy();
+                    }
+                });
+                player.onStart(function () {
+                    if (++startCount == total) {
+                        _this._onStart();
+                    }
+                });
+            });
+        }
+        this.totalTime = this.players.reduce(function (time, player) { return Math.max(time, player.totalTime); }, 0);
+    }
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype._onFinish = /**
+     * @return {?}
+     */
+    function () {
+        if (!this._finished) {
+            this._finished = true;
+            this._onDoneFns.forEach(function (fn) { return fn(); });
+            this._onDoneFns = [];
+        }
+    };
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.init = /**
+     * @return {?}
+     */
+    function () { this.players.forEach(function (player) { return player.init(); }); };
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.onStart = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onStartFns.push(fn); };
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype._onStart = /**
+     * @return {?}
+     */
+    function () {
+        if (!this.hasStarted()) {
+            this._started = true;
+            this._onStartFns.forEach(function (fn) { return fn(); });
+            this._onStartFns = [];
+        }
+    };
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.onDone = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onDoneFns.push(fn); };
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.onDestroy = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) { this._onDestroyFns.push(fn); };
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.hasStarted = /**
+     * @return {?}
+     */
+    function () { return this._started; };
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.play = /**
+     * @return {?}
+     */
+    function () {
+        if (!this.parentPlayer) {
+            this.init();
+        }
+        this._onStart();
+        this.players.forEach(function (player) { return player.play(); });
+    };
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.pause = /**
+     * @return {?}
+     */
+    function () { this.players.forEach(function (player) { return player.pause(); }); };
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.restart = /**
+     * @return {?}
+     */
+    function () { this.players.forEach(function (player) { return player.restart(); }); };
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.finish = /**
+     * @return {?}
+     */
+    function () {
+        this._onFinish();
+        this.players.forEach(function (player) { return player.finish(); });
+    };
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.destroy = /**
+     * @return {?}
+     */
+    function () { this._onDestroy(); };
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype._onDestroy = /**
+     * @return {?}
+     */
+    function () {
+        if (!this._destroyed) {
+            this._destroyed = true;
+            this._onFinish();
+            this.players.forEach(function (player) { return player.destroy(); });
+            this._onDestroyFns.forEach(function (fn) { return fn(); });
+            this._onDestroyFns = [];
+        }
+    };
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.reset = /**
+     * @return {?}
+     */
+    function () {
+        this.players.forEach(function (player) { return player.reset(); });
+        this._destroyed = false;
+        this._finished = false;
+        this._started = false;
+    };
+    /**
+     * @param {?} p
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.setPosition = /**
+     * @param {?} p
+     * @return {?}
+     */
+    function (p) {
+        var /** @type {?} */ timeAtPosition = p * this.totalTime;
+        this.players.forEach(function (player) {
+            var /** @type {?} */ position = player.totalTime ? Math.min(1, timeAtPosition / player.totalTime) : 1;
+            player.setPosition(position);
+        });
+    };
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.getPosition = /**
+     * @return {?}
+     */
+    function () {
+        var /** @type {?} */ min = 0;
+        this.players.forEach(function (player) {
+            var /** @type {?} */ p = player.getPosition();
+            min = Math.min(p, min);
+        });
+        return min;
+    };
+    /**
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.beforeDestroy = /**
+     * @return {?}
+     */
+    function () {
+        this.players.forEach(function (player) {
+            if (player.beforeDestroy) {
+                player.beforeDestroy();
+            }
+        });
+    };
+    /* @internal */
+    /**
+     * @param {?} phaseName
+     * @return {?}
+     */
+    AnimationGroupPlayer.prototype.triggerCallback = /**
+     * @param {?} phaseName
+     * @return {?}
+     */
+    function (phaseName) {
+        var /** @type {?} */ methods = phaseName == 'start' ? this._onStartFns : this._onDoneFns;
+        methods.forEach(function (fn) { return fn(); });
+        methods.length = 0;
+    };
+    return AnimationGroupPlayer;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+var ɵPRE_STYLE = '!';
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @module
+ * @description
+ * Entry point for all public APIs of this package.
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * Generated bundle index. Do not edit.
+ */
+
+
+//# sourceMappingURL=animations.js.map
+
+
+/***/ }),
+
 /***/ "./node_modules/@angular/common/esm5/common.js":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -45166,7 +46837,7 @@ var Extractor = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Subject__ = __webpack_require__("./node_modules/rxjs/_esm5/Subject.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_Subscription__ = __webpack_require__("./node_modules/rxjs/_esm5/Subscription.js");
 /**
- * @license Angular v5.2.7
+ * @license Angular v5.2.8
  * (c) 2010-2018 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -45884,7 +47555,7 @@ var Version = /** @class */ (function () {
 /**
  * \@stable
  */
-var VERSION = new Version('5.2.7');
+var VERSION = new Version('5.2.8');
 
 /**
  * @fileoverview added by tsickle
@@ -65461,7 +67132,7 @@ var DEFAULT_VALUE_ACCESSOR = {
  * @return {?}
  */
 function _isAndroid() {
-    var /** @type {?} */ userAgent = Object(__WEBPACK_IMPORTED_MODULE_5__angular_platform_browser__["c" /* ɵgetDOM */])() ? Object(__WEBPACK_IMPORTED_MODULE_5__angular_platform_browser__["c" /* ɵgetDOM */])().getUserAgent() : '';
+    var /** @type {?} */ userAgent = Object(__WEBPACK_IMPORTED_MODULE_5__angular_platform_browser__["d" /* ɵgetDOM */])() ? Object(__WEBPACK_IMPORTED_MODULE_5__angular_platform_browser__["d" /* ɵgetDOM */])().getUserAgent() : '';
     return /android (\d+)/.test(userAgent.toLowerCase());
 }
 /**
@@ -73306,7 +74977,7 @@ var ResourceLoaderImpl = /** @class */ (function (_super) {
  * found in the LICENSE file at https://angular.io/license
  */
 var INTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS = [
-    __WEBPACK_IMPORTED_MODULE_3__angular_platform_browser__["b" /* ɵINTERNAL_BROWSER_PLATFORM_PROVIDERS */],
+    __WEBPACK_IMPORTED_MODULE_3__angular_platform_browser__["c" /* ɵINTERNAL_BROWSER_PLATFORM_PROVIDERS */],
     {
         provide: __WEBPACK_IMPORTED_MODULE_1__angular_core__["i" /* COMPILER_OPTIONS */],
         useValue: { providers: [{ provide: __WEBPACK_IMPORTED_MODULE_0__angular_compiler__["s" /* ResourceLoader */], useClass: ResourceLoaderImpl, deps: [] }] },
@@ -73462,10 +75133,10 @@ var platformBrowserDynamic = Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__[
 /* unused harmony export EventManager */
 /* unused harmony export HAMMER_GESTURE_CONFIG */
 /* unused harmony export HammerGestureConfig */
-/* unused harmony export DomSanitizer */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return DomSanitizer; });
 /* unused harmony export VERSION */
 /* unused harmony export ɵBROWSER_SANITIZATION_PROVIDERS */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return INTERNAL_BROWSER_PLATFORM_PROVIDERS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return INTERNAL_BROWSER_PLATFORM_PROVIDERS; });
 /* unused harmony export ɵinitDomAdapter */
 /* unused harmony export ɵBrowserDomAdapter */
 /* unused harmony export ɵBrowserPlatformLocation */
@@ -73474,7 +75145,7 @@ var platformBrowserDynamic = Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__[
 /* unused harmony export ɵescapeHtml */
 /* unused harmony export ɵELEMENT_PROBE_PROVIDERS */
 /* unused harmony export ɵDomAdapter */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getDOM; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return getDOM; });
 /* unused harmony export ɵsetRootDomAdapter */
 /* unused harmony export ɵDomRendererFactory2 */
 /* unused harmony export ɵNAMESPACE_URIS */
@@ -86234,7 +87905,7 @@ function setupRouter(ref, urlSerializer, contexts, location, injector, loader, c
         router.errorHandler = opts.errorHandler;
     }
     if (opts.enableTracing) {
-        var /** @type {?} */ dom_1 = Object(__WEBPACK_IMPORTED_MODULE_20__angular_platform_browser__["c" /* ɵgetDOM */])();
+        var /** @type {?} */ dom_1 = Object(__WEBPACK_IMPORTED_MODULE_20__angular_platform_browser__["d" /* ɵgetDOM */])();
         router.events.subscribe(function (e) {
             dom_1.logGroup("Router Event: " + ((/** @type {?} */ (e.constructor))).name);
             dom_1.log(e.toString());
@@ -96857,6 +98528,845 @@ return jQuery;
 
 /***/ }),
 
+/***/ "./node_modules/ngx-toastr/esm5/ngx-toastr.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export ComponentPortal */
+/* unused harmony export BasePortalHost */
+/* unused harmony export Overlay */
+/* unused harmony export OVERLAY_PROVIDERS */
+/* unused harmony export OverlayContainer */
+/* unused harmony export OverlayRef */
+/* unused harmony export ToastContainerDirective */
+/* unused harmony export ToastContainerModule */
+/* unused harmony export Toast */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ToastrService; });
+/* unused harmony export ToastPackage */
+/* unused harmony export DefaultGlobalConfig */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ToastrModule; });
+/* unused harmony export ToastRef */
+/* unused harmony export ToastInjector */
+/* unused harmony export TOAST_CONFIG */
+/* unused harmony export ToastNoAnimation */
+/* unused harmony export ToastNoAnimationModule */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tslib__ = __webpack_require__("./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__ = __webpack_require__("./node_modules/rxjs/_esm5/Subject.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_platform_browser__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/platform-browser.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_animations__ = __webpack_require__("./node_modules/@angular/animations/esm5/animations.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_common__ = __webpack_require__("./node_modules/@angular/common/esm5/common.js");
+
+
+
+
+
+
+
+var ComponentPortal = /** @class */ (function () {
+    function ComponentPortal(component, injector) {
+        this.component = component;
+        this.injector = injector;
+    }
+    ComponentPortal.prototype.attach = function (host, newestOnTop) {
+        this._attachedHost = host;
+        return host.attach(this, newestOnTop);
+    };
+    ComponentPortal.prototype.detach = function () {
+        var host = this._attachedHost;
+        if (host) {
+            this._attachedHost = undefined;
+            return host.detach();
+        }
+    };
+    Object.defineProperty(ComponentPortal.prototype, "isAttached", {
+        get: function () {
+            return this._attachedHost != null;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ComponentPortal.prototype.setAttachedHost = function (host) {
+        this._attachedHost = host;
+    };
+    return ComponentPortal;
+}());
+var BasePortalHost = /** @class */ (function () {
+    function BasePortalHost() {
+    }
+    BasePortalHost.prototype.attach = function (portal, newestOnTop) {
+        this._attachedPortal = portal;
+        return this.attachComponentPortal(portal, newestOnTop);
+    };
+    BasePortalHost.prototype.detach = function () {
+        if (this._attachedPortal) {
+            this._attachedPortal.setAttachedHost();
+        }
+        this._attachedPortal = undefined;
+        if (this._disposeFn) {
+            this._disposeFn();
+            this._disposeFn = undefined;
+        }
+    };
+    BasePortalHost.prototype.setDisposeFn = function (fn) {
+        this._disposeFn = fn;
+    };
+    return BasePortalHost;
+}());
+var DomPortalHost = /** @class */ (function (_super) {
+    Object(__WEBPACK_IMPORTED_MODULE_0_tslib__["b" /* __extends */])(DomPortalHost, _super);
+    function DomPortalHost(_hostDomElement, _componentFactoryResolver, _appRef) {
+        var _this = _super.call(this) || this;
+        _this._hostDomElement = _hostDomElement;
+        _this._componentFactoryResolver = _componentFactoryResolver;
+        _this._appRef = _appRef;
+        return _this;
+    }
+    DomPortalHost.prototype.attachComponentPortal = function (portal, newestOnTop) {
+        var _this = this;
+        var componentFactory = this._componentFactoryResolver.resolveComponentFactory(portal.component);
+        var componentRef;
+        componentRef = componentFactory.create(portal.injector);
+        this._appRef.attachView(componentRef.hostView);
+        this.setDisposeFn(function () {
+            _this._appRef.detachView(componentRef.hostView);
+            componentRef.destroy();
+        });
+        if (newestOnTop) {
+            this._hostDomElement.insertBefore(this._getComponentRootNode(componentRef), this._hostDomElement.firstChild);
+        }
+        else {
+            this._hostDomElement.appendChild(this._getComponentRootNode(componentRef));
+        }
+        return componentRef;
+    };
+    DomPortalHost.prototype._getComponentRootNode = function (componentRef) {
+        return (((componentRef.hostView)).rootNodes[0]);
+    };
+    return DomPortalHost;
+}(BasePortalHost));
+var OverlayRef = /** @class */ (function () {
+    function OverlayRef(_portalHost) {
+        this._portalHost = _portalHost;
+    }
+    OverlayRef.prototype.attach = function (portal, newestOnTop) {
+        if (newestOnTop === void 0) { newestOnTop = true; }
+        return this._portalHost.attach(portal, newestOnTop);
+    };
+    OverlayRef.prototype.detach = function () {
+        return this._portalHost.detach();
+    };
+    return OverlayRef;
+}());
+var OverlayContainer = /** @class */ (function () {
+    function OverlayContainer() {
+    }
+    OverlayContainer.prototype.getContainerElement = function () {
+        if (!this._containerElement) {
+            this._createContainer();
+        }
+        return this._containerElement;
+    };
+    OverlayContainer.prototype._createContainer = function () {
+        var container = document.createElement('div');
+        container.classList.add('overlay-container');
+        document.body.appendChild(container);
+        this._containerElement = container;
+    };
+    return OverlayContainer;
+}());
+var Overlay = /** @class */ (function () {
+    function Overlay(_overlayContainer, _componentFactoryResolver, _appRef) {
+        this._overlayContainer = _overlayContainer;
+        this._componentFactoryResolver = _componentFactoryResolver;
+        this._appRef = _appRef;
+        this._paneElements = {};
+    }
+    Overlay.prototype.create = function (positionClass, overlayContainer) {
+        return this._createOverlayRef(this.getPaneElement(positionClass, overlayContainer));
+    };
+    Overlay.prototype.getPaneElement = function (positionClass, overlayContainer) {
+        if (positionClass === void 0) { positionClass = ''; }
+        if (!this._paneElements[positionClass]) {
+            this._paneElements[positionClass] = this._createPaneElement(positionClass, overlayContainer);
+        }
+        return this._paneElements[positionClass];
+    };
+    Overlay.prototype._createPaneElement = function (positionClass, overlayContainer) {
+        var pane = document.createElement('div');
+        pane.id = 'toast-container';
+        pane.classList.add(positionClass);
+        pane.classList.add('toast-container');
+        if (!overlayContainer) {
+            this._overlayContainer.getContainerElement().appendChild(pane);
+        }
+        else {
+            overlayContainer.getContainerElement().appendChild(pane);
+        }
+        return pane;
+    };
+    Overlay.prototype._createPortalHost = function (pane) {
+        return new DomPortalHost(pane, this._componentFactoryResolver, this._appRef);
+    };
+    Overlay.prototype._createOverlayRef = function (pane) {
+        return new OverlayRef(this._createPortalHost(pane));
+    };
+    return Overlay;
+}());
+Overlay.decorators = [
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["A" /* Injectable */] },
+];
+Overlay.ctorParameters = function () { return [
+    { type: OverlayContainer, },
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["p" /* ComponentFactoryResolver */], },
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["g" /* ApplicationRef */], },
+]; };
+var OVERLAY_PROVIDERS = [
+    Overlay,
+    OverlayContainer,
+];
+var ToastContainerDirective = /** @class */ (function () {
+    function ToastContainerDirective(el) {
+        this.el = el;
+    }
+    ToastContainerDirective.prototype.getContainerElement = function () {
+        return this.el.nativeElement;
+    };
+    return ToastContainerDirective;
+}());
+ToastContainerDirective.decorators = [
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["s" /* Directive */], args: [{
+                selector: '[toastContainer]',
+                exportAs: 'toastContainer',
+            },] },
+];
+ToastContainerDirective.ctorParameters = function () { return [
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["t" /* ElementRef */], },
+]; };
+var ToastContainerModule = /** @class */ (function () {
+    function ToastContainerModule() {
+    }
+    return ToastContainerModule;
+}());
+ToastContainerModule.decorators = [
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["I" /* NgModule */], args: [{
+                declarations: [ToastContainerDirective],
+                exports: [ToastContainerDirective],
+            },] },
+];
+ToastContainerModule.ctorParameters = function () { return []; };
+var ToastPackage = /** @class */ (function () {
+    function ToastPackage(toastId, config, message, title, toastType, toastRef) {
+        var _this = this;
+        this.toastId = toastId;
+        this.config = config;
+        this.message = message;
+        this.title = title;
+        this.toastType = toastType;
+        this.toastRef = toastRef;
+        this._onTap = new __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__["a" /* Subject */]();
+        this._onAction = new __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__["a" /* Subject */]();
+        this.toastRef.afterClosed().subscribe(function () {
+            _this._onAction.complete();
+            _this._onTap.complete();
+        });
+    }
+    ToastPackage.prototype.triggerTap = function () {
+        this._onTap.next();
+        this._onTap.complete();
+    };
+    ToastPackage.prototype.onTap = function () {
+        return this._onTap.asObservable();
+    };
+    ToastPackage.prototype.triggerAction = function (action) {
+        this._onAction.next(action);
+    };
+    ToastPackage.prototype.onAction = function () {
+        return this._onAction.asObservable();
+    };
+    return ToastPackage;
+}());
+var ToastRef = /** @class */ (function () {
+    function ToastRef(_overlayRef) {
+        this._overlayRef = _overlayRef;
+        this._afterClosed = new __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__["a" /* Subject */]();
+        this._activate = new __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__["a" /* Subject */]();
+        this._manualClose = new __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__["a" /* Subject */]();
+    }
+    ToastRef.prototype.manualClose = function () {
+        this._manualClose.next();
+        this._manualClose.complete();
+    };
+    ToastRef.prototype.manualClosed = function () {
+        return this._manualClose.asObservable();
+    };
+    ToastRef.prototype.close = function () {
+        this._overlayRef.detach();
+        this._afterClosed.next();
+        this._afterClosed.complete();
+        this._manualClose.complete();
+        this._activate.complete();
+    };
+    ToastRef.prototype.afterClosed = function () {
+        return this._afterClosed.asObservable();
+    };
+    ToastRef.prototype.isInactive = function () {
+        return this._activate.isStopped;
+    };
+    ToastRef.prototype.activate = function () {
+        this._activate.next();
+        this._activate.complete();
+    };
+    ToastRef.prototype.afterActivate = function () {
+        return this._activate.asObservable();
+    };
+    return ToastRef;
+}());
+var ToastInjector = /** @class */ (function () {
+    function ToastInjector(_toastPackage, _parentInjector) {
+        this._toastPackage = _toastPackage;
+        this._parentInjector = _parentInjector;
+    }
+    ToastInjector.prototype.get = function (token, notFoundValue) {
+        if (token === ToastPackage && this._toastPackage) {
+            return this._toastPackage;
+        }
+        return this._parentInjector.get(token, notFoundValue);
+    };
+    return ToastInjector;
+}());
+var TOAST_CONFIG = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["B" /* InjectionToken */]('ToastConfig');
+var ToastrService = /** @class */ (function () {
+    function ToastrService(token, overlay, _injector, sanitizer, ngZone) {
+        this.overlay = overlay;
+        this._injector = _injector;
+        this.sanitizer = sanitizer;
+        this.ngZone = ngZone;
+        this.currentlyActive = 0;
+        this.toasts = [];
+        this.index = 0;
+        var defaultConfig = new token.defaults;
+        this.toastrConfig = Object.assign({}, defaultConfig, token.config);
+        this.toastrConfig.iconClasses = Object.assign({}, defaultConfig.iconClasses, token.config.iconClasses);
+    }
+    ToastrService.prototype.show = function (message, title, override, type) {
+        if (override === void 0) { override = {}; }
+        if (type === void 0) { type = ''; }
+        return this._preBuildNotification(type, message, title, this.applyConfig(override));
+    };
+    ToastrService.prototype.success = function (message, title, override) {
+        if (override === void 0) { override = {}; }
+        var type = this.toastrConfig.iconClasses.success || '';
+        return this._preBuildNotification(type, message, title, this.applyConfig(override));
+    };
+    ToastrService.prototype.error = function (message, title, override) {
+        if (override === void 0) { override = {}; }
+        var type = this.toastrConfig.iconClasses.error || '';
+        return this._preBuildNotification(type, message, title, this.applyConfig(override));
+    };
+    ToastrService.prototype.info = function (message, title, override) {
+        if (override === void 0) { override = {}; }
+        var type = this.toastrConfig.iconClasses.info || '';
+        return this._preBuildNotification(type, message, title, this.applyConfig(override));
+    };
+    ToastrService.prototype.warning = function (message, title, override) {
+        if (override === void 0) { override = {}; }
+        var type = this.toastrConfig.iconClasses.warning || '';
+        return this._preBuildNotification(type, message, title, this.applyConfig(override));
+    };
+    ToastrService.prototype.clear = function (toastId) {
+        try {
+            for (var _a = Object(__WEBPACK_IMPORTED_MODULE_0_tslib__["c" /* __values */])(this.toasts), _b = _a.next(); !_b.done; _b = _a.next()) {
+                var toast = _b.value;
+                if (toastId !== undefined) {
+                    if (toast.toastId === toastId) {
+                        toast.toastRef.manualClose();
+                        return;
+                    }
+                }
+                else {
+                    toast.toastRef.manualClose();
+                }
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+        var e_1, _c;
+    };
+    ToastrService.prototype.remove = function (toastId) {
+        var found = this._findToast(toastId);
+        if (!found) {
+            return false;
+        }
+        found.activeToast.toastRef.close();
+        this.toasts.splice(found.index, 1);
+        this.currentlyActive = this.currentlyActive - 1;
+        if (!this.toastrConfig.maxOpened || !this.toasts.length) {
+            return false;
+        }
+        if (this.currentlyActive <= +this.toastrConfig.maxOpened && this.toasts[this.currentlyActive]) {
+            var p = this.toasts[this.currentlyActive].toastRef;
+            if (!p.isInactive()) {
+                this.currentlyActive = this.currentlyActive + 1;
+                p.activate();
+            }
+        }
+        return true;
+    };
+    ToastrService.prototype.isDuplicate = function (message) {
+        for (var i = 0; i < this.toasts.length; i++) {
+            if (this.toasts[i].message === message) {
+                return true;
+            }
+        }
+        return false;
+    };
+    ToastrService.prototype.applyConfig = function (override) {
+        if (override === void 0) { override = {}; }
+        return Object.assign({}, this.toastrConfig, override);
+    };
+    ToastrService.prototype._findToast = function (toastId) {
+        for (var i = 0; i < this.toasts.length; i++) {
+            if (this.toasts[i].toastId === toastId) {
+                return { index: i, activeToast: this.toasts[i] };
+            }
+        }
+        return null;
+    };
+    ToastrService.prototype._preBuildNotification = function (toastType, message, title, config) {
+        var _this = this;
+        if (config.onActivateTick) {
+            return this.ngZone.run(function () { return _this._buildNotification(toastType, message, title, config); });
+        }
+        return this._buildNotification(toastType, message, title, config);
+    };
+    ToastrService.prototype._buildNotification = function (toastType, message, title, config) {
+        var _this = this;
+        if (!config.toastComponent) {
+            throw new Error('toastComponent required');
+        }
+        if (message && this.toastrConfig.preventDuplicates && this.isDuplicate(message)) {
+            return null;
+        }
+        this.previousToastMessage = message;
+        var keepInactive = false;
+        if (this.toastrConfig.maxOpened && this.currentlyActive >= this.toastrConfig.maxOpened) {
+            keepInactive = true;
+            if (this.toastrConfig.autoDismiss) {
+                this.clear(this.toasts[this.toasts.length - 1].toastId);
+            }
+        }
+        var overlayRef = this.overlay.create(config.positionClass, this.overlayContainer);
+        this.index = this.index + 1;
+        var sanitizedMessage = message;
+        if (message && config.enableHtml) {
+            sanitizedMessage = this.sanitizer.sanitize(__WEBPACK_IMPORTED_MODULE_1__angular_core__["_0" /* SecurityContext */].HTML, message);
+        }
+        var toastRef = new ToastRef(overlayRef);
+        var toastPackage = new ToastPackage(this.index, config, sanitizedMessage, title, toastType, toastRef);
+        var toastInjector = new ToastInjector(toastPackage, this._injector);
+        var component = new ComponentPortal(config.toastComponent, toastInjector);
+        var ins = {
+            toastId: this.index,
+            message: message || '',
+            toastRef: toastRef,
+            onShown: toastRef.afterActivate(),
+            onHidden: toastRef.afterClosed(),
+            onTap: toastPackage.onTap(),
+            onAction: toastPackage.onAction(),
+            portal: overlayRef.attach(component, this.toastrConfig.newestOnTop),
+        };
+        if (!keepInactive) {
+            setTimeout(function () {
+                ins.toastRef.activate();
+                _this.currentlyActive = _this.currentlyActive + 1;
+            });
+        }
+        this.toasts.push(ins);
+        return ins;
+    };
+    return ToastrService;
+}());
+ToastrService.decorators = [
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["A" /* Injectable */] },
+];
+ToastrService.ctorParameters = function () { return [
+    { type: undefined, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["z" /* Inject */], args: [TOAST_CONFIG,] },] },
+    { type: Overlay, },
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["C" /* Injector */], },
+    { type: __WEBPACK_IMPORTED_MODULE_3__angular_platform_browser__["b" /* DomSanitizer */], },
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["N" /* NgZone */], },
+]; };
+var Toast = /** @class */ (function () {
+    function Toast(toastrService, toastPackage, ngZone) {
+        var _this = this;
+        this.toastrService = toastrService;
+        this.toastPackage = toastPackage;
+        this.ngZone = ngZone;
+        this.width = -1;
+        this.toastClasses = '';
+        this.state = {
+            value: 'inactive',
+            params: {
+                easeTime: this.toastPackage.config.easeTime,
+                easing: 'ease-in',
+            },
+        };
+        this.message = toastPackage.message;
+        this.title = toastPackage.title;
+        this.options = toastPackage.config;
+        this.toastClasses = toastPackage.toastType + " " + toastPackage.config.toastClass;
+        this.sub = toastPackage.toastRef.afterActivate().subscribe(function () {
+            _this.activateToast();
+        });
+        this.sub1 = toastPackage.toastRef.manualClosed().subscribe(function () {
+            _this.remove();
+        });
+    }
+    Toast.prototype.ngOnDestroy = function () {
+        this.sub.unsubscribe();
+        this.sub1.unsubscribe();
+        clearInterval(this.intervalId);
+        clearTimeout(this.timeout);
+    };
+    Toast.prototype.activateToast = function () {
+        var _this = this;
+        this.state = Object.assign({}, this.state, { value: 'active' });
+        if (!this.options.disableTimeOut && this.options.timeOut) {
+            this.outsideTimeout(function () { return _this.remove(); }, this.options.timeOut);
+            this.hideTime = new Date().getTime() + this.options.timeOut;
+            if (this.options.progressBar) {
+                this.outsideInterval(function () { return _this.updateProgress(); }, 10);
+            }
+        }
+    };
+    Toast.prototype.updateProgress = function () {
+        if (this.width === 0 || this.width === 100 || !this.options.timeOut) {
+            return;
+        }
+        var now = new Date().getTime();
+        var remaining = this.hideTime - now;
+        this.width = (remaining / this.options.timeOut) * 100;
+        if (this.options.progressAnimation === 'increasing') {
+            this.width = 100 - this.width;
+        }
+        if (this.width <= 0) {
+            this.width = 0;
+        }
+        if (this.width >= 100) {
+            this.width = 100;
+        }
+    };
+    Toast.prototype.remove = function () {
+        var _this = this;
+        if (this.state.value === 'removed') {
+            return;
+        }
+        clearTimeout(this.timeout);
+        this.state = Object.assign({}, this.state, { value: 'removed' });
+        this.outsideTimeout(function () { return _this.toastrService.remove(_this.toastPackage.toastId); }, +this.toastPackage.config.easeTime);
+    };
+    Toast.prototype.tapToast = function () {
+        if (this.state.value === 'removed') {
+            return;
+        }
+        this.toastPackage.triggerTap();
+        if (this.options.tapToDismiss) {
+            this.remove();
+        }
+    };
+    Toast.prototype.stickAround = function () {
+        if (this.state.value === 'removed') {
+            return;
+        }
+        clearTimeout(this.timeout);
+        this.options.timeOut = 0;
+        this.hideTime = 0;
+        clearInterval(this.intervalId);
+        this.width = 0;
+    };
+    Toast.prototype.delayedHideToast = function () {
+        var _this = this;
+        if (this.options.disableTimeOut
+            || this.options.extendedTimeOut === 0
+            || this.state.value === 'removed') {
+            return;
+        }
+        this.outsideTimeout(function () { return _this.remove(); }, this.options.extendedTimeOut);
+        this.options.timeOut = this.options.extendedTimeOut;
+        this.hideTime = new Date().getTime() + (this.options.timeOut || 0);
+        this.width = -1;
+        if (this.options.progressBar) {
+            this.outsideInterval(function () { return _this.updateProgress(); }, 10);
+        }
+    };
+    Toast.prototype.outsideTimeout = function (func, timeout) {
+        var _this = this;
+        if (this.ngZone) {
+            this.ngZone.runOutsideAngular(function () { return _this.timeout = setTimeout(function () { return _this.runInsideAngular(func); }, timeout); });
+        }
+        else {
+            this.timeout = setTimeout(function () { return func(); }, timeout);
+        }
+    };
+    Toast.prototype.outsideInterval = function (func, timeout) {
+        var _this = this;
+        if (this.ngZone) {
+            this.ngZone.runOutsideAngular(function () { return _this.intervalId = setInterval(function () { return _this.runInsideAngular(func); }, timeout); });
+        }
+        else {
+            this.intervalId = setInterval(function () { return func(); }, timeout);
+        }
+    };
+    Toast.prototype.runInsideAngular = function (func) {
+        if (this.ngZone) {
+            this.ngZone.run(function () { return func(); });
+        }
+        else {
+            func();
+        }
+    };
+    return Toast;
+}());
+Toast.decorators = [
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["n" /* Component */], args: [{
+                selector: '[toast-component]',
+                template: "\n  <button *ngIf=\"options.closeButton\" (click)=\"remove()\" class=\"toast-close-button\" aria-label=\"Close\">\n    <span aria-hidden=\"true\">&times;</span>\n  </button>\n  <div *ngIf=\"title\" [class]=\"options.titleClass\" [attr.aria-label]=\"title\">\n    {{ title }}\n  </div>\n  <div *ngIf=\"message && options.enableHtml\" role=\"alertdialog\" aria-live=\"polite\"\n    [class]=\"options.messageClass\" [innerHTML]=\"message\">\n  </div>\n  <div *ngIf=\"message && !options.enableHtml\" role=\"alertdialog\" aria-live=\"polite\"\n    [class]=\"options.messageClass\" [attr.aria-label]=\"message\">\n    {{ message }}\n  </div>\n  <div *ngIf=\"options.progressBar\">\n    <div class=\"toast-progress\" [style.width]=\"width + '%'\"></div>\n  </div>\n  ",
+                animations: [
+                    Object(__WEBPACK_IMPORTED_MODULE_4__angular_animations__["e" /* trigger */])('flyInOut', [
+                        Object(__WEBPACK_IMPORTED_MODULE_4__angular_animations__["b" /* state */])('inactive', Object(__WEBPACK_IMPORTED_MODULE_4__angular_animations__["c" /* style */])({
+                            display: 'none',
+                            opacity: 0,
+                        })),
+                        Object(__WEBPACK_IMPORTED_MODULE_4__angular_animations__["b" /* state */])('active', Object(__WEBPACK_IMPORTED_MODULE_4__angular_animations__["c" /* style */])({})),
+                        Object(__WEBPACK_IMPORTED_MODULE_4__angular_animations__["b" /* state */])('removed', Object(__WEBPACK_IMPORTED_MODULE_4__angular_animations__["c" /* style */])({ opacity: 0 })),
+                        Object(__WEBPACK_IMPORTED_MODULE_4__angular_animations__["d" /* transition */])('inactive => active', Object(__WEBPACK_IMPORTED_MODULE_4__angular_animations__["a" /* animate */])('{{ easeTime }}ms {{ easing }}')),
+                        Object(__WEBPACK_IMPORTED_MODULE_4__angular_animations__["d" /* transition */])('active => removed', Object(__WEBPACK_IMPORTED_MODULE_4__angular_animations__["a" /* animate */])('{{ easeTime }}ms {{ easing }}')),
+                    ]),
+                ],
+                preserveWhitespaces: false,
+            },] },
+];
+Toast.ctorParameters = function () { return [
+    { type: ToastrService, },
+    { type: ToastPackage, },
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["N" /* NgZone */], },
+]; };
+Toast.propDecorators = {
+    "toastClasses": [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["x" /* HostBinding */], args: ['class',] },],
+    "state": [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["x" /* HostBinding */], args: ['@flyInOut',] },],
+    "tapToast": [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["y" /* HostListener */], args: ['click',] },],
+    "stickAround": [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["y" /* HostListener */], args: ['mouseenter',] },],
+    "delayedHideToast": [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["y" /* HostListener */], args: ['mouseleave',] },],
+};
+var DefaultGlobalConfig = /** @class */ (function () {
+    function DefaultGlobalConfig() {
+        this.maxOpened = 0;
+        this.autoDismiss = false;
+        this.newestOnTop = true;
+        this.preventDuplicates = false;
+        this.iconClasses = {
+            error: 'toast-error',
+            info: 'toast-info',
+            success: 'toast-success',
+            warning: 'toast-warning',
+        };
+        this.toastComponent = Toast;
+        this.closeButton = false;
+        this.timeOut = 5000;
+        this.extendedTimeOut = 1000;
+        this.enableHtml = false;
+        this.progressBar = false;
+        this.toastClass = 'toast';
+        this.positionClass = 'toast-top-right';
+        this.titleClass = 'toast-title';
+        this.messageClass = 'toast-message';
+        this.easing = 'ease-in';
+        this.easeTime = 300;
+        this.tapToDismiss = true;
+        this.onActivateTick = false;
+        this.progressAnimation = 'decreasing';
+    }
+    return DefaultGlobalConfig;
+}());
+var ToastrModule = /** @class */ (function () {
+    function ToastrModule(parentModule) {
+        if (parentModule) {
+            throw new Error('ToastrModule is already loaded. It should only be imported in your application\'s main module.');
+        }
+    }
+    ToastrModule.forRoot = function (config) {
+        if (config === void 0) { config = {}; }
+        return {
+            ngModule: ToastrModule,
+            providers: [
+                { provide: TOAST_CONFIG, useValue: { config: config, defaults: DefaultGlobalConfig } },
+                OverlayContainer,
+                Overlay,
+                ToastrService,
+            ],
+        };
+    };
+    return ToastrModule;
+}());
+ToastrModule.decorators = [
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["I" /* NgModule */], args: [{
+                imports: [__WEBPACK_IMPORTED_MODULE_5__angular_common__["b" /* CommonModule */]],
+                exports: [Toast],
+                declarations: [Toast],
+                entryComponents: [Toast],
+            },] },
+];
+ToastrModule.ctorParameters = function () { return [
+    { type: ToastrModule, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["O" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_2" /* SkipSelf */] },] },
+]; };
+var ToastNoAnimation = /** @class */ (function () {
+    function ToastNoAnimation(toastrService, toastPackage, appRef) {
+        var _this = this;
+        this.toastrService = toastrService;
+        this.toastPackage = toastPackage;
+        this.appRef = appRef;
+        this.width = -1;
+        this.toastClasses = '';
+        this.state = 'inactive';
+        this.message = toastPackage.message;
+        this.title = toastPackage.title;
+        this.options = toastPackage.config;
+        this.toastClasses = toastPackage.toastType + " " + toastPackage.config.toastClass;
+        this.sub = toastPackage.toastRef.afterActivate().subscribe(function () {
+            _this.activateToast();
+        });
+        this.sub1 = toastPackage.toastRef.manualClosed().subscribe(function () {
+            _this.remove();
+        });
+    }
+    ToastNoAnimation.prototype.ngOnDestroy = function () {
+        this.sub.unsubscribe();
+        this.sub1.unsubscribe();
+        clearInterval(this.intervalId);
+        clearTimeout(this.timeout);
+    };
+    ToastNoAnimation.prototype.activateToast = function () {
+        var _this = this;
+        this.state = 'active';
+        if (!this.options.disableTimeOut && this.options.timeOut) {
+            this.timeout = setTimeout(function () {
+                _this.remove();
+            }, this.options.timeOut);
+            this.hideTime = new Date().getTime() + this.options.timeOut;
+            if (this.options.progressBar) {
+                this.intervalId = setInterval(function () { return _this.updateProgress(); }, 10);
+            }
+        }
+        if (this.options.onActivateTick) {
+            this.appRef.tick();
+        }
+    };
+    ToastNoAnimation.prototype.updateProgress = function () {
+        if (this.width === 0 || this.width === 100 || !this.options.timeOut) {
+            return;
+        }
+        var now = new Date().getTime();
+        var remaining = this.hideTime - now;
+        this.width = remaining / this.options.timeOut * 100;
+        if (this.options.progressAnimation === 'increasing') {
+            this.width = 100 - this.width;
+        }
+        if (this.width <= 0) {
+            this.width = 0;
+        }
+        if (this.width >= 100) {
+            this.width = 100;
+        }
+    };
+    ToastNoAnimation.prototype.remove = function () {
+        var _this = this;
+        if (this.state === 'removed') {
+            return;
+        }
+        clearTimeout(this.timeout);
+        this.state = 'removed';
+        this.timeout = setTimeout(function () { return _this.toastrService.remove(_this.toastPackage.toastId); });
+    };
+    ToastNoAnimation.prototype.tapToast = function () {
+        if (this.state === 'removed') {
+            return;
+        }
+        this.toastPackage.triggerTap();
+        if (this.options.tapToDismiss) {
+            this.remove();
+        }
+    };
+    ToastNoAnimation.prototype.stickAround = function () {
+        if (this.state === 'removed') {
+            return;
+        }
+        clearTimeout(this.timeout);
+        this.options.timeOut = 0;
+        this.hideTime = 0;
+        clearInterval(this.intervalId);
+        this.width = 0;
+    };
+    ToastNoAnimation.prototype.delayedHideToast = function () {
+        var _this = this;
+        if (this.options.disableTimeOut
+            || this.options.extendedTimeOut === 0
+            || this.state === 'removed') {
+            return;
+        }
+        this.timeout = setTimeout(function () { return _this.remove(); }, this.options.extendedTimeOut);
+        this.options.timeOut = this.options.extendedTimeOut;
+        this.hideTime = new Date().getTime() + (this.options.timeOut || 0);
+        this.width = -1;
+        if (this.options.progressBar) {
+            this.intervalId = setInterval(function () { return _this.updateProgress(); }, 10);
+        }
+    };
+    return ToastNoAnimation;
+}());
+ToastNoAnimation.decorators = [
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["n" /* Component */], args: [{
+                selector: '[toast-component]',
+                template: "\n  <button *ngIf=\"options.closeButton\" (click)=\"remove()\" class=\"toast-close-button\" aria-label=\"Close\">\n    <span aria-hidden=\"true\">&times;</span>\n  </button>\n  <div *ngIf=\"title\" [class]=\"options.titleClass\" [attr.aria-label]=\"title\">\n    {{ title }}\n  </div>\n  <div *ngIf=\"message && options.enableHtml\" role=\"alert\" aria-live=\"polite\"\n    [class]=\"options.messageClass\" [innerHTML]=\"message\">\n  </div>\n  <div *ngIf=\"message && !options.enableHtml\" role=\"alert\" aria-live=\"polite\"\n    [class]=\"options.messageClass\" [attr.aria-label]=\"message\">\n    {{ message }}\n  </div>\n  <div *ngIf=\"options.progressBar\">\n    <div class=\"toast-progress\" [style.width]=\"width + '%'\"></div>\n  </div>\n  ",
+            },] },
+];
+ToastNoAnimation.ctorParameters = function () { return [
+    { type: ToastrService, },
+    { type: ToastPackage, },
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["g" /* ApplicationRef */], },
+]; };
+ToastNoAnimation.propDecorators = {
+    "toastClasses": [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["x" /* HostBinding */], args: ['class',] },],
+    "tapToast": [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["y" /* HostListener */], args: ['click',] },],
+    "stickAround": [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["y" /* HostListener */], args: ['mouseenter',] },],
+    "delayedHideToast": [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["y" /* HostListener */], args: ['mouseleave',] },],
+};
+var ToastNoAnimationModule = /** @class */ (function () {
+    function ToastNoAnimationModule() {
+    }
+    return ToastNoAnimationModule;
+}());
+ToastNoAnimationModule.decorators = [
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["I" /* NgModule */], args: [{
+                imports: [__WEBPACK_IMPORTED_MODULE_5__angular_common__["b" /* CommonModule */]],
+                declarations: [ToastNoAnimation],
+                exports: [ToastNoAnimation],
+                entryComponents: [ToastNoAnimation],
+            },] },
+];
+ToastNoAnimationModule.ctorParameters = function () { return []; };
+
+
+//# sourceMappingURL=ngx-toastr.js.map
+
+
+/***/ }),
+
 /***/ "./node_modules/rxjs/_esm5/BehaviorSubject.js":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -104800,7 +107310,7 @@ if (typeof window !== 'undefined' && window.Sweetalert2) window.sweetAlert = win
 /* unused harmony export __awaiter */
 /* unused harmony export __generator */
 /* unused harmony export __exportStar */
-/* unused harmony export __values */
+/* harmony export (immutable) */ __webpack_exports__["c"] = __values;
 /* unused harmony export __read */
 /* unused harmony export __spread */
 /* unused harmony export __await */

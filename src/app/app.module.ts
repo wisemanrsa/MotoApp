@@ -1,6 +1,7 @@
+// import { AppErrorHandler } from './app.error-handler';
 import { AppService } from './app.service';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 
 
 import { AppComponent } from './app.component';
@@ -11,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { MenuComponent } from './components/menu/menu.component';
 import { HomeComponent } from './components/home/home.component';
 import { VehicleService } from './services/vehicle.service';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -24,9 +26,10 @@ import { VehicleService } from './services/vehicle.service';
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    ToastrModule.forRoot()
   ],
-  providers: [AppService, VehicleService],
+  providers: [/*{provide: ErrorHandler, useClass: AppErrorHandler}*/ AppService, VehicleService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,6 +1,7 @@
 import { VehicleService } from './../../services/vehicle.service';
 import { Component, OnInit } from '@angular/core';
 import $ from 'jquery';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-vehicle',
@@ -17,7 +18,7 @@ export class VehicleComponent implements OnInit {
     contact: {}
   };
 
-  constructor(private vehicleService: VehicleService) { }
+  constructor(private vehicleService: VehicleService, private notifier: ToastrService) { }
 
   ngOnInit() {
     this.vehicleService.getMakes().subscribe(makes => this.makes = makes);
@@ -29,7 +30,11 @@ export class VehicleComponent implements OnInit {
       this.models = [];
       return;
     }
-    this.vehicleService.getModels(this.vehicle.makeId).subscribe(models => this.models = models);
+    this.vehicleService.getModels(this.vehicle.makeId)
+      .subscribe(models => {
+        this.models = models;
+        this.notifier.success('Models loaded', 'Awesome');
+      });
     delete this.vehicle.modelId;
   }
 
@@ -43,6 +48,7 @@ export class VehicleComponent implements OnInit {
   }
 
   submit() {
+    $('.ui.basic.modal').show();
     delete this.vehicle.makeId;
     this.vehicleService.create(this.vehicle).subscribe(x => console.log(x));
   }

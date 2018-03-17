@@ -145,12 +145,15 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_menu_menu_component__ = __webpack_require__("./src/app/components/menu/menu.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_home_home_component__ = __webpack_require__("./src/app/components/home/home.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__services_vehicle_service__ = __webpack_require__("./src/app/services/vehicle.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_ngx_toastr__ = __webpack_require__("./node_modules/ngx-toastr/esm5/ngx-toastr.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+// import { AppErrorHandler } from './app.error-handler';
+
 
 
 
@@ -177,9 +180,10 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["a" /* BrowserModule */],
                 __WEBPACK_IMPORTED_MODULE_4__angular_common_http__["b" /* HttpClientModule */],
                 __WEBPACK_IMPORTED_MODULE_6__app_routing_module__["a" /* AppRoutingModule */],
-                __WEBPACK_IMPORTED_MODULE_7__angular_forms__["a" /* FormsModule */]
+                __WEBPACK_IMPORTED_MODULE_7__angular_forms__["a" /* FormsModule */],
+                __WEBPACK_IMPORTED_MODULE_11_ngx_toastr__["a" /* ToastrModule */].forRoot()
             ],
-            providers: [__WEBPACK_IMPORTED_MODULE_0__app_service__["a" /* AppService */], __WEBPACK_IMPORTED_MODULE_10__services_vehicle_service__["a" /* VehicleService */]],
+            providers: [/*{provide: ErrorHandler, useClass: AppErrorHandler}*/ __WEBPACK_IMPORTED_MODULE_0__app_service__["a" /* AppService */], __WEBPACK_IMPORTED_MODULE_10__services_vehicle_service__["a" /* VehicleService */]],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */]]
         })
     ], AppModule);
@@ -336,7 +340,7 @@ module.exports = ""
 /***/ "./src/app/components/vehicle/vehicle.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n  <div class=\"col-md-3 col-lg-3\"></div>\n  <div class=\"col-md-3 col-lg-3\">\n    <h1>New Vehicle</h1>\n<p>{{vehicle | json}}</p>\n<form (submit)=\"submit()\">\n  <div class=\"form-group\">\n    <label for=\"make\">Make</label>\n    <select id=\"make\" class=\"form-control\" name=\"makeId\" [(ngModel)]=\"vehicle.makeId\" (change)=\"getModels()\" required #make=\"ngModel\">\n      <option value=\"\"></option>\n      <option *ngFor=\"let m of makes\" value=\"{{m.id}}\">{{m.name}}</option>\n    </select>\n    <div class=\"alert alert-danger\" *ngIf=\"make.touched && !make.valid\">Please select Make</div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"model\">Model</label>\n    <select id=\"model\" class=\"form-control\" name=\"modelId\" [(ngModel)]=\"vehicle.modelId\" required #model=\"ngModel\">\n      <option value=\"\"></option>\n      <option *ngFor=\"let m of models\" value=\"{{m.id}}\">{{m.name}}</option>\n    </select>\n    <div class=\"alert alert-danger\" *ngIf=\"model.touched && !model.valid\">Please select Model</div>\n  </div>\n  <p>Is this vehicle registered?</p>\n  <label for=\"registred\" class=\"radio-inline\">\n    <input type=\"radio\" name=\"isRegistered\" id=\"registred\" value=\"true\" [(ngModel)]=\"vehicle.isRegistered\">Yes\n  </label>\n  <label for=\"notRegistred\" class=\"radio-inline\">\n    <input type=\"radio\" name=\"isRegistered\" id=\"notRegistred\" value=\"false\" [(ngModel)]=\"vehicle.isRegistered\">No\n  </label>\n  <h2>Features</h2>\n  <div *ngFor=\"let f of features\" class=\"checkbox\">\n    <label for=\"feature{{f.id}}\">\n      <input type=\"checkbox\" class=\"checkbox\" id=\"feature{{f.id}}\" (change)=\"onFeatureToggle(f.id, $event)\"> {{f.name}}\n    </label>\n  </div>\n  <h2>Contact</h2>\n  <div class=\"form-group\">\n    <label for=\"contactName\">Name</label>\n    <input type=\"text\" id=\"contactName\" class=\"form-control\" name=\"contactName\" [(ngModel)]=\"vehicle.contact.name\" #contactName=\"ngModel\">\n    <div class=\"alert alert-danger\" *ngIf=\"contactName.touched && !contactName.valid\">Please provide contact name</div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"contactNumber\">Number</label>\n    <input type=\"number\" id=\"contactNumber\" class=\"form-control\" name=\"contactNumber\" [(ngModel)]=\"vehicle.contact.number\" #contactNumber=\"ngModel\">\n    <div class=\"alert alert-danger\" *ngIf=\"contactNumber.touched && !contactNumber.valid\">Please Provide contact person's number</div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"contactEmail\">Email</label>\n    <input type=\"email\" id=\"contactEmail\" class=\"form-control\" name=\"contactEmail\" [(ngModel)]=\"vehicle.contact.email\">\n  </div>\n  <button class=\"btn btn-primary\">Save</button>\n</form>\n\n  </div>\n  <div class=\"col-md-3 col-lg-3\"></div>\n</div>"
+module.exports = "<div class=\"row\">\n  <div class=\"col-md-3 col-lg-3\"></div>\n  <div class=\"col-md-3 col-lg-3\">\n    <h1>New Vehicle</h1>\n<form (submit)=\"submit()\">\n  <div class=\"form-group\">\n    <label for=\"make\">Make</label>\n    <select id=\"make\" class=\"form-control\" name=\"makeId\" [(ngModel)]=\"vehicle.makeId\" (change)=\"getModels()\" required #make=\"ngModel\">\n      <option value=\"\"></option>\n      <option *ngFor=\"let m of makes\" value=\"{{m.id}}\">{{m.name}}</option>\n    </select>\n    <div class=\"alert alert-danger\" *ngIf=\"make.touched && !make.valid\">Please select Make</div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"model\">Model</label>\n    <select id=\"model\" class=\"form-control\" name=\"modelId\" [(ngModel)]=\"vehicle.modelId\" required #model=\"ngModel\">\n      <option value=\"\"></option>\n      <option *ngFor=\"let m of models\" value=\"{{m.id}}\">{{m.name}}</option>\n    </select>\n    <div class=\"alert alert-danger\" *ngIf=\"model.touched && !model.valid\">Please select Model</div>\n  </div>\n  <p>Is this vehicle registered?</p>\n  <label for=\"registred\" class=\"radio-inline\">\n    <input type=\"radio\" name=\"isRegistered\" id=\"registred\" value=\"true\" [(ngModel)]=\"vehicle.isRegistered\">Yes\n  </label>\n  <label for=\"notRegistred\" class=\"radio-inline\">\n    <input type=\"radio\" name=\"isRegistered\" id=\"notRegistred\" value=\"false\" [(ngModel)]=\"vehicle.isRegistered\">No\n  </label>\n  <h2>Features</h2>\n  <div *ngFor=\"let f of features\" class=\"checkbox\">\n    <label for=\"feature{{f.id}}\">\n      <input type=\"checkbox\" class=\"checkbox\" id=\"feature{{f.id}}\" (change)=\"onFeatureToggle(f.id, $event)\"> {{f.name}}\n    </label>\n  </div>\n  <h2>Contact</h2>\n  <div class=\"form-group\">\n    <label for=\"contactName\">Name</label>\n    <input type=\"text\" id=\"contactName\" class=\"form-control\" name=\"contactName\" [(ngModel)]=\"vehicle.contact.name\" #contactName=\"ngModel\">\n    <div class=\"alert alert-danger\" *ngIf=\"contactName.touched && !contactName.valid\">Please provide contact name</div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"contactNumber\">Number</label>\n    <input type=\"number\" id=\"contactNumber\" class=\"form-control\" name=\"contactNumber\" [(ngModel)]=\"vehicle.contact.number\" #contactNumber=\"ngModel\">\n    <div class=\"alert alert-danger\" *ngIf=\"contactNumber.touched && !contactNumber.valid\">Please Provide contact person's number</div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"contactEmail\">Email</label>\n    <input type=\"email\" id=\"contactEmail\" class=\"form-control\" name=\"contactEmail\" [(ngModel)]=\"vehicle.contact.email\">\n  </div>\n  <button class=\"btn btn-primary\">Save</button>\n</form>\n\n  </div>\n  <div class=\"col-md-3 col-lg-3\"></div>\n</div>\n\n\n\n\n<div class=\"ui basic modal\">\n  <div class=\"ui icon header\">\n    <i class=\"archive icon\"></i>\n    Archive Old Messages\n  </div>\n  <div class=\"content\">\n    <p>Your inbox is getting full, would you like us to enable automatic archiving of old messages?</p>\n  </div>\n  <div class=\"actions\">\n    <div class=\"ui red basic cancel inverted button\">\n      <i class=\"remove icon\"></i>\n      No\n    </div>\n    <div class=\"ui green ok inverted button\">\n      <i class=\"checkmark icon\"></i>\n      Yes\n    </div>\n  </div>\n</div>"
 
 /***/ }),
 
@@ -347,6 +351,9 @@ module.exports = "<div class=\"row\">\n  <div class=\"col-md-3 col-lg-3\"></div>
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return VehicleComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_vehicle_service__ = __webpack_require__("./src/app/services/vehicle.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery__ = __webpack_require__("./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ngx_toastr__ = __webpack_require__("./node_modules/ngx-toastr/esm5/ngx-toastr.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -358,9 +365,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
+
 var VehicleComponent = /** @class */ (function () {
-    function VehicleComponent(vehicleService) {
+    function VehicleComponent(vehicleService, notifier) {
         this.vehicleService = vehicleService;
+        this.notifier = notifier;
         this.features = [];
         this.makes = [];
         this.models = [];
@@ -380,7 +390,11 @@ var VehicleComponent = /** @class */ (function () {
             this.models = [];
             return;
         }
-        this.vehicleService.getModels(this.vehicle.makeId).subscribe(function (models) { return _this.models = models; });
+        this.vehicleService.getModels(this.vehicle.makeId)
+            .subscribe(function (models) {
+            _this.models = models;
+            _this.notifier.success('Models loaded', 'Awesome');
+        });
         delete this.vehicle.modelId;
     };
     VehicleComponent.prototype.onFeatureToggle = function (featureId, $event) {
@@ -393,6 +407,7 @@ var VehicleComponent = /** @class */ (function () {
         }
     };
     VehicleComponent.prototype.submit = function () {
+        __WEBPACK_IMPORTED_MODULE_2_jquery___default()('.ui.basic.modal').show();
         delete this.vehicle.makeId;
         this.vehicleService.create(this.vehicle).subscribe(function (x) { return console.log(x); });
     };
@@ -402,7 +417,7 @@ var VehicleComponent = /** @class */ (function () {
             template: __webpack_require__("./src/app/components/vehicle/vehicle.component.html"),
             styles: [__webpack_require__("./src/app/components/vehicle/vehicle.component.css")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__services_vehicle_service__["a" /* VehicleService */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__services_vehicle_service__["a" /* VehicleService */], __WEBPACK_IMPORTED_MODULE_3_ngx_toastr__["b" /* ToastrService */]])
     ], VehicleComponent);
     return VehicleComponent;
 }());
