@@ -13,6 +13,8 @@ import { MenuComponent } from './components/menu/menu.component';
 import { HomeComponent } from './components/home/home.component';
 import { VehicleService } from './services/vehicle.service';
 import { ToastrModule } from 'ngx-toastr';
+import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
+
 
 
 @NgModule({
@@ -20,12 +22,13 @@ import { ToastrModule } from 'ngx-toastr';
     AppComponent,
     VehicleComponent,
     MenuComponent,
-    HomeComponent
+    HomeComponent,
+    VehicleListComponent
   ],
   imports: [
+    AppRoutingModule,
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule,
     FormsModule,
     ToastrModule.forRoot()
   ],

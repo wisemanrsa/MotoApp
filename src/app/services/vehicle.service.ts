@@ -22,4 +22,16 @@ export class VehicleService {
     return this.http.post('/api/vehicles', vehicle);
   }
 
+  delete(id) {
+    return this.http.delete('/api/vehicles/' + id);
+  }
+
+  getVehicle(id: any) {
+    return this.http.get('/api/vehicles/' + id);
+  }
+
+  getVehicles() {
+    return this.http.get('/api/vehicles');
+  }
+
 }

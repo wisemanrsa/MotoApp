@@ -21,15 +21,15 @@
   </div>
   <p>Is this vehicle registered?</p>
   <label for="registred" class="radio-inline">
-    <input type="radio" name="isRegistered" id="registred" value="true" [(ngModel)]="vehicle.isRegistered">Yes
+    <input type="radio" name="isRegistered" id="registred" [value]="true" [(ngModel)]="vehicle.isRegistered">Yes
   </label>
   <label for="notRegistred" class="radio-inline">
-    <input type="radio" name="isRegistered" id="notRegistred" value="false" [(ngModel)]="vehicle.isRegistered">No
+    <input type="radio" name="isRegistered" id="notRegistred" [value]="false" [(ngModel)]="vehicle.isRegistered">No
   </label>
   <h2>Features</h2>
   <div *ngFor="let f of features" class="checkbox">
     <label for="feature{{f.id}}">
-      <input type="checkbox" class="checkbox" id="feature{{f.id}}" (change)="onFeatureToggle(f.id, $event)"> {{f.name}}
+      <input type="checkbox" class="checkbox" id="feature{{f.id}}" (change)="onFeatureToggle(f.id, $event)" [checked]="checkFeature(f.id)"> {{f.name}}
     </label>
   </div>
   <h2>Contact</h2>
@@ -40,7 +40,7 @@
   </div>
   <div class="form-group">
     <label for="contactNumber">Number</label>
-    <input type="number" id="contactNumber" class="form-control" name="contactNumber" [(ngModel)]="vehicle.contact.number" #contactNumber="ngModel">
+    <input type="text" id="contactNumber" class="form-control" name="contactNumber" [(ngModel)]="vehicle.contact.number" #contactNumber="ngModel">
     <div class="alert alert-danger" *ngIf="contactNumber.touched && !contactNumber.valid">Please Provide contact person's number</div>
   </div>
   <div class="form-group">
@@ -52,27 +52,4 @@
 
   </div>
   <div class="col-md-3 col-lg-3"></div>
-</div>
-
-
-
-
-<div class="ui basic modal">
-  <div class="ui icon header">
-    <i class="archive icon"></i>
-    Archive Old Messages
-  </div>
-  <div class="content">
-    <p>Your inbox is getting full, would you like us to enable automatic archiving of old messages?</p>
-  </div>
-  <div class="actions">
-    <div class="ui red basic cancel inverted button">
-      <i class="remove icon"></i>
-      No
-    </div>
-    <div class="ui green ok inverted button">
-      <i class="checkmark icon"></i>
-      Yes
-    </div>
-  </div>
 </div>

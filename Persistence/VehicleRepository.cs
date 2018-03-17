@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ASPNETCOREDEMO.Models;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,16 @@ namespace ASPNETCOREDEMO.Persistence
         {
             this.context = context;
 
+        }
+
+        public async Task<IEnumerable<Vehicle>> GetVehicles() {
+            return await context.Vehicles
+                .Include(v => v.Model)
+                    .ThenInclude(vm => vm.Make)
+                .Include(v => v.Features)
+                    .ThenInclude(vf => vf.Feature)
+                .Include(v => v.Contact)
+                .ToListAsync();
         }
         public async Task<Vehicle> GetVehicle(int id, bool includeRelated = true)
         {

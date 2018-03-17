@@ -6,6 +6,7 @@ using ASPNETCOREDEMO.Persistence;
 using System.Threading.Tasks;
 using System;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace ASPNETCOREDEMO.Controllers
 {
@@ -21,6 +22,15 @@ namespace ASPNETCOREDEMO.Controllers
             this.vehicleRepository = vehicleRepository;
             this.mapper = mapper;
         }
+
+        [HttpGet]
+        public async Task<IEnumerable<VehicleResource>> GetVehicles() 
+        {
+            var vehicles = await vehicleRepository.GetVehicles();
+            
+            return mapper.Map<IEnumerable<Vehicle>, IEnumerable<VehicleResource>>(vehicles);
+        }
+        
         [HttpPost]
         public async Task<IActionResult> CreateVehicle([FromBody] SaveVehicleResource vehicleResource)
         {

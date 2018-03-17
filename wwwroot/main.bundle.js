@@ -26,12 +26,14 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_home_home_component__ = __webpack_require__("./src/app/components/home/home.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_vehicle_vehicle_component__ = __webpack_require__("./src/app/components/vehicle/vehicle.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_vehicle_list_vehicle_list_component__ = __webpack_require__("./src/app/components/vehicle-list/vehicle-list.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -44,6 +46,14 @@ var routes = [
     {
         path: 'vehicle/new',
         component: __WEBPACK_IMPORTED_MODULE_3__components_vehicle_vehicle_component__["a" /* VehicleComponent */]
+    },
+    {
+        path: 'vehicle/:id',
+        component: __WEBPACK_IMPORTED_MODULE_3__components_vehicle_vehicle_component__["a" /* VehicleComponent */]
+    },
+    {
+        path: 'vehicles',
+        component: __WEBPACK_IMPORTED_MODULE_4__components_vehicle_list_vehicle_list_component__["a" /* VehicleListComponent */]
     }
 ];
 var AppRoutingModule = /** @class */ (function () {
@@ -51,8 +61,8 @@ var AppRoutingModule = /** @class */ (function () {
     }
     AppRoutingModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["I" /* NgModule */])({
-            imports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* RouterModule */].forRoot(routes)],
-            exports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* RouterModule */]]
+            imports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* RouterModule */].forRoot(routes)],
+            exports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* RouterModule */]]
         })
     ], AppRoutingModule);
     return AppRoutingModule;
@@ -104,12 +114,7 @@ var AppComponent = /** @class */ (function () {
     function AppComponent(appService) {
         this.appService = appService;
         this.items = [];
-        this.getItems();
     }
-    AppComponent.prototype.getItems = function () {
-        var _this = this;
-        this.appService.getItems().subscribe(function (result) { return _this.items = result; });
-    };
     AppComponent.prototype.sayHi = function () {
         __WEBPACK_IMPORTED_MODULE_2_sweetalert2___default()('Good day', 'Thank you', 'success');
         __WEBPACK_IMPORTED_MODULE_3_jquery___default()('#hi').hide();
@@ -146,6 +151,7 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_home_home_component__ = __webpack_require__("./src/app/components/home/home.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__services_vehicle_service__ = __webpack_require__("./src/app/services/vehicle.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_ngx_toastr__ = __webpack_require__("./node_modules/ngx-toastr/esm5/ngx-toastr.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__components_vehicle_list_vehicle_list_component__ = __webpack_require__("./src/app/components/vehicle-list/vehicle-list.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -153,6 +159,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 // import { AppErrorHandler } from './app.error-handler';
+
 
 
 
@@ -174,12 +181,13 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */],
                 __WEBPACK_IMPORTED_MODULE_5__components_vehicle_vehicle_component__["a" /* VehicleComponent */],
                 __WEBPACK_IMPORTED_MODULE_8__components_menu_menu_component__["a" /* MenuComponent */],
-                __WEBPACK_IMPORTED_MODULE_9__components_home_home_component__["a" /* HomeComponent */]
+                __WEBPACK_IMPORTED_MODULE_9__components_home_home_component__["a" /* HomeComponent */],
+                __WEBPACK_IMPORTED_MODULE_12__components_vehicle_list_vehicle_list_component__["a" /* VehicleListComponent */]
             ],
             imports: [
+                __WEBPACK_IMPORTED_MODULE_6__app_routing_module__["a" /* AppRoutingModule */],
                 __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["a" /* BrowserModule */],
                 __WEBPACK_IMPORTED_MODULE_4__angular_common_http__["b" /* HttpClientModule */],
-                __WEBPACK_IMPORTED_MODULE_6__app_routing_module__["a" /* AppRoutingModule */],
                 __WEBPACK_IMPORTED_MODULE_7__angular_forms__["a" /* FormsModule */],
                 __WEBPACK_IMPORTED_MODULE_11_ngx_toastr__["a" /* ToastrModule */].forRoot()
             ],
@@ -216,9 +224,6 @@ var AppService = /** @class */ (function () {
     function AppService(http) {
         this.http = http;
     }
-    AppService.prototype.getItems = function () {
-        return this.http.get('/api/values');
-    };
     AppService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]])
@@ -290,7 +295,7 @@ module.exports = "body {\r\n    margin:0;\r\n    padding:0;\r\n    background:#2
 /***/ "./src/app/components/menu/menu.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n\t<ul>\n\t    <li><a routerLink=\"\"><span title=\"Home\">Home</span></a></li>\n\t    <li><a routerLink=\"vehicle/new\"><span title=\"New Vehicle\">New Vehicle</span></a></li>\n\t    <li><a routerLink=\"\"><span title=\"Service\">Service</span></a></li>\n\t    <li><a routerLink=\"\"><span title=\"Contact\">Contact</span></a></li>\n\t</ul>\n</div>"
+module.exports = "<div class=\"container\">\n\t<ul>\n\t    <li><a routerLink=\"\"><span title=\"Home\">Home</span></a></li>\n\t    <li><a routerLink=\"vehicles\"><span title=\"Vehicles\">Vehicles</span></a></li>\n\t    <li><a routerLink=\"\"><span title=\"Service\">Service</span></a></li>\n\t    <li><a routerLink=\"\"><span title=\"Contact\">Contact</span></a></li>\n\t</ul>\n</div>"
 
 /***/ }),
 
@@ -330,29 +335,28 @@ var MenuComponent = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/components/vehicle/vehicle.component.css":
+/***/ "./src/app/components/vehicle-list/vehicle-list.component.css":
 /***/ (function(module, exports) {
 
 module.exports = ""
 
 /***/ }),
 
-/***/ "./src/app/components/vehicle/vehicle.component.html":
+/***/ "./src/app/components/vehicle-list/vehicle-list.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n  <div class=\"col-md-3 col-lg-3\"></div>\n  <div class=\"col-md-3 col-lg-3\">\n    <h1>New Vehicle</h1>\n<form (submit)=\"submit()\">\n  <div class=\"form-group\">\n    <label for=\"make\">Make</label>\n    <select id=\"make\" class=\"form-control\" name=\"makeId\" [(ngModel)]=\"vehicle.makeId\" (change)=\"getModels()\" required #make=\"ngModel\">\n      <option value=\"\"></option>\n      <option *ngFor=\"let m of makes\" value=\"{{m.id}}\">{{m.name}}</option>\n    </select>\n    <div class=\"alert alert-danger\" *ngIf=\"make.touched && !make.valid\">Please select Make</div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"model\">Model</label>\n    <select id=\"model\" class=\"form-control\" name=\"modelId\" [(ngModel)]=\"vehicle.modelId\" required #model=\"ngModel\">\n      <option value=\"\"></option>\n      <option *ngFor=\"let m of models\" value=\"{{m.id}}\">{{m.name}}</option>\n    </select>\n    <div class=\"alert alert-danger\" *ngIf=\"model.touched && !model.valid\">Please select Model</div>\n  </div>\n  <p>Is this vehicle registered?</p>\n  <label for=\"registred\" class=\"radio-inline\">\n    <input type=\"radio\" name=\"isRegistered\" id=\"registred\" value=\"true\" [(ngModel)]=\"vehicle.isRegistered\">Yes\n  </label>\n  <label for=\"notRegistred\" class=\"radio-inline\">\n    <input type=\"radio\" name=\"isRegistered\" id=\"notRegistred\" value=\"false\" [(ngModel)]=\"vehicle.isRegistered\">No\n  </label>\n  <h2>Features</h2>\n  <div *ngFor=\"let f of features\" class=\"checkbox\">\n    <label for=\"feature{{f.id}}\">\n      <input type=\"checkbox\" class=\"checkbox\" id=\"feature{{f.id}}\" (change)=\"onFeatureToggle(f.id, $event)\"> {{f.name}}\n    </label>\n  </div>\n  <h2>Contact</h2>\n  <div class=\"form-group\">\n    <label for=\"contactName\">Name</label>\n    <input type=\"text\" id=\"contactName\" class=\"form-control\" name=\"contactName\" [(ngModel)]=\"vehicle.contact.name\" #contactName=\"ngModel\">\n    <div class=\"alert alert-danger\" *ngIf=\"contactName.touched && !contactName.valid\">Please provide contact name</div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"contactNumber\">Number</label>\n    <input type=\"number\" id=\"contactNumber\" class=\"form-control\" name=\"contactNumber\" [(ngModel)]=\"vehicle.contact.number\" #contactNumber=\"ngModel\">\n    <div class=\"alert alert-danger\" *ngIf=\"contactNumber.touched && !contactNumber.valid\">Please Provide contact person's number</div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"contactEmail\">Email</label>\n    <input type=\"email\" id=\"contactEmail\" class=\"form-control\" name=\"contactEmail\" [(ngModel)]=\"vehicle.contact.email\">\n  </div>\n  <button class=\"btn btn-primary\">Save</button>\n</form>\n\n  </div>\n  <div class=\"col-md-3 col-lg-3\"></div>\n</div>\n\n\n\n\n<div class=\"ui basic modal\">\n  <div class=\"ui icon header\">\n    <i class=\"archive icon\"></i>\n    Archive Old Messages\n  </div>\n  <div class=\"content\">\n    <p>Your inbox is getting full, would you like us to enable automatic archiving of old messages?</p>\n  </div>\n  <div class=\"actions\">\n    <div class=\"ui red basic cancel inverted button\">\n      <i class=\"remove icon\"></i>\n      No\n    </div>\n    <div class=\"ui green ok inverted button\">\n      <i class=\"checkmark icon\"></i>\n      Yes\n    </div>\n  </div>\n</div>"
+module.exports = "<h2>Vehicles</h2>\n<input type=\"button\" class=\"btn btn-primary\" (click)=\"newVehicle()\"value=\"New Vehicle\">\n\n<div class=\"form-group well\">\n  <label for=\"make\">Make</label>\n  <select id=\"make\" class=\"form-control\" [(ngModel)]=\"filter.makeId\" (change)=\"onFilterChange()\">\n    <option value=\"\"></option>\n    <option *ngFor=\"let m of makes\" value=\"{{m.id}}\">{{m.name}}</option>\n  </select>\n</div>\n\n<div class=\"container\">\n  <table class=\"table\">\n    <tr>\n      <td><h2>Id</h2></td>\n      <td><h2>Make</h2></td>\n      <td><h2>Model</h2></td>\n      <td></td>\n    </tr>\n    <tr *ngFor=\"let v of vehicles;\">\n      <td>{{v.id}}</td>\n      <td>{{v.make.name}}</td>\n      <td>{{v.model.name}}</td>\n      <td>\n        <input type=\"button\" class=\"btn btn-primary\" value=\"View\">\n        <input type=\"button\" class=\"btn btn-warning\" (click)=\"edit(v.id)\" value=\"Edit\">\n        <input type=\"button\" class=\"btn btn-danger\" (click)=\"delete(v.id)\"value=\"Delete\">\n      </td>\n    </tr>\n  </table>\n</div>\n"
 
 /***/ }),
 
-/***/ "./src/app/components/vehicle/vehicle.component.ts":
+/***/ "./src/app/components/vehicle-list/vehicle-list.component.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return VehicleComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_vehicle_service__ = __webpack_require__("./src/app/services/vehicle.service.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return VehicleListComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery__ = __webpack_require__("./node_modules/jquery/dist/jquery.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_vehicle_service__ = __webpack_require__("./src/app/services/vehicle.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ngx_toastr__ = __webpack_require__("./node_modules/ngx-toastr/esm5/ngx-toastr.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -367,8 +371,96 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+var VehicleListComponent = /** @class */ (function () {
+    function VehicleListComponent(vehicleService, notifier, router) {
+        this.vehicleService = vehicleService;
+        this.notifier = notifier;
+        this.router = router;
+        this.filter = {};
+    }
+    VehicleListComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.vehicleService.getVehicles().subscribe(function (v) { return _this.vehicles = _this.allVehicles = v; });
+        this.vehicleService.getMakes().subscribe(function (m) { return _this.makes = m; });
+    };
+    VehicleListComponent.prototype.delete = function (id) {
+        if (confirm('Are you sure you want to delete this vehicle')) {
+            console.log(id);
+        }
+    };
+    VehicleListComponent.prototype.edit = function (id) {
+        this.router.navigate(['/vehicle/' + id]);
+    };
+    VehicleListComponent.prototype.newVehicle = function () {
+        this.router.navigate(['/vehicle/new']);
+    };
+    VehicleListComponent.prototype.onFilterChange = function () {
+        var _this = this;
+        var vehicles = this.allVehicles;
+        if (this.filter.makeId) {
+            vehicles = vehicles.filter(function (v) { return v.make.id == _this.filter.makeId; });
+        }
+        this.vehicles = vehicles;
+    };
+    VehicleListComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["n" /* Component */])({
+            selector: 'app-vehicle-list',
+            template: __webpack_require__("./src/app/components/vehicle-list/vehicle-list.component.html"),
+            styles: [__webpack_require__("./src/app/components/vehicle-list/vehicle-list.component.css")]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__services_vehicle_service__["a" /* VehicleService */], __WEBPACK_IMPORTED_MODULE_3_ngx_toastr__["b" /* ToastrService */], __WEBPACK_IMPORTED_MODULE_0__angular_router__["b" /* Router */]])
+    ], VehicleListComponent);
+    return VehicleListComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/components/vehicle/vehicle.component.css":
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/components/vehicle/vehicle.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"row\">\n  <div class=\"col-md-3 col-lg-3\"></div>\n  <div class=\"col-md-3 col-lg-3\">\n    <h1>New Vehicle</h1>\n<form (submit)=\"submit()\">\n  <div class=\"form-group\">\n    <label for=\"make\">Make</label>\n    <select id=\"make\" class=\"form-control\" name=\"makeId\" [(ngModel)]=\"vehicle.makeId\" (change)=\"getModels()\" required #make=\"ngModel\">\n      <option value=\"\"></option>\n      <option *ngFor=\"let m of makes\" value=\"{{m.id}}\">{{m.name}}</option>\n    </select>\n    <div class=\"alert alert-danger\" *ngIf=\"make.touched && !make.valid\">Please select Make</div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"model\">Model</label>\n    <select id=\"model\" class=\"form-control\" name=\"modelId\" [(ngModel)]=\"vehicle.modelId\" required #model=\"ngModel\">\n      <option value=\"\"></option>\n      <option *ngFor=\"let m of models\" value=\"{{m.id}}\">{{m.name}}</option>\n    </select>\n    <div class=\"alert alert-danger\" *ngIf=\"model.touched && !model.valid\">Please select Model</div>\n  </div>\n  <p>Is this vehicle registered?</p>\n  <label for=\"registred\" class=\"radio-inline\">\n    <input type=\"radio\" name=\"isRegistered\" id=\"registred\" [value]=\"true\" [(ngModel)]=\"vehicle.isRegistered\">Yes\n  </label>\n  <label for=\"notRegistred\" class=\"radio-inline\">\n    <input type=\"radio\" name=\"isRegistered\" id=\"notRegistred\" [value]=\"false\" [(ngModel)]=\"vehicle.isRegistered\">No\n  </label>\n  <h2>Features</h2>\n  <div *ngFor=\"let f of features\" class=\"checkbox\">\n    <label for=\"feature{{f.id}}\">\n      <input type=\"checkbox\" class=\"checkbox\" id=\"feature{{f.id}}\" (change)=\"onFeatureToggle(f.id, $event)\" [checked]=\"checkFeature(f.id)\"> {{f.name}}\n    </label>\n  </div>\n  <h2>Contact</h2>\n  <div class=\"form-group\">\n    <label for=\"contactName\">Name</label>\n    <input type=\"text\" id=\"contactName\" class=\"form-control\" name=\"contactName\" [(ngModel)]=\"vehicle.contact.name\" #contactName=\"ngModel\">\n    <div class=\"alert alert-danger\" *ngIf=\"contactName.touched && !contactName.valid\">Please provide contact name</div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"contactNumber\">Number</label>\n    <input type=\"text\" id=\"contactNumber\" class=\"form-control\" name=\"contactNumber\" [(ngModel)]=\"vehicle.contact.number\" #contactNumber=\"ngModel\">\n    <div class=\"alert alert-danger\" *ngIf=\"contactNumber.touched && !contactNumber.valid\">Please Provide contact person's number</div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"contactEmail\">Email</label>\n    <input type=\"email\" id=\"contactEmail\" class=\"form-control\" name=\"contactEmail\" [(ngModel)]=\"vehicle.contact.email\">\n  </div>\n  <button class=\"btn btn-primary\">Save</button>\n</form>\n\n  </div>\n  <div class=\"col-md-3 col-lg-3\"></div>\n</div>"
+
+/***/ }),
+
+/***/ "./src/app/components/vehicle/vehicle.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return VehicleComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_vehicle_service__ = __webpack_require__("./src/app/services/vehicle.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery__ = __webpack_require__("./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ngx_toastr__ = __webpack_require__("./node_modules/ngx-toastr/esm5/ngx-toastr.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
 var VehicleComponent = /** @class */ (function () {
-    function VehicleComponent(vehicleService, notifier) {
+    function VehicleComponent(route, router, vehicleService, notifier) {
+        var _this = this;
+        this.route = route;
+        this.router = router;
         this.vehicleService = vehicleService;
         this.notifier = notifier;
         this.features = [];
@@ -378,24 +470,45 @@ var VehicleComponent = /** @class */ (function () {
             features: [],
             contact: {}
         };
+        this.route.params.subscribe(function (p) {
+            _this.vehicle.id = +p['id'];
+        }, function (err) {
+            _this.router.navigate(['/home']);
+        });
     }
     VehicleComponent.prototype.ngOnInit = function () {
         var _this = this;
+        if (this.vehicle.id) {
+            this.vehicleService.getVehicle(this.vehicle.id).subscribe(function (v) {
+                _this.vehicle = v;
+                _this.setVehicle(v);
+                console.log(_this.vehicle);
+            });
+        }
         this.vehicleService.getMakes().subscribe(function (makes) { return _this.makes = makes; });
         this.vehicleService.getFeatures().subscribe(function (f) { return _this.features = f; });
     };
+    VehicleComponent.prototype.setVehicle = function (moto) {
+        var _this = this;
+        this.vehicle.id = moto.id;
+        this.vehicle.makeId = moto.make.id;
+        this.vehicleService.getModels(this.vehicle.makeId).subscribe(function (models) {
+            _this.models = models;
+        });
+        this.vehicle.modelId = moto.model.id;
+        this.vehicle.Contact = moto.contact;
+        this.vehicle.features = moto.features;
+    };
     VehicleComponent.prototype.getModels = function () {
         var _this = this;
+        delete this.vehicle.modelId;
         if (this.vehicle.makeId == null) {
             this.models = [];
             return;
         }
-        this.vehicleService.getModels(this.vehicle.makeId)
-            .subscribe(function (models) {
+        this.vehicleService.getModels(this.vehicle.makeId).subscribe(function (models) {
             _this.models = models;
-            _this.notifier.success('Models loaded', 'Awesome');
         });
-        delete this.vehicle.modelId;
     };
     VehicleComponent.prototype.onFeatureToggle = function (featureId, $event) {
         if ($event.target.checked) {
@@ -417,7 +530,10 @@ var VehicleComponent = /** @class */ (function () {
             template: __webpack_require__("./src/app/components/vehicle/vehicle.component.html"),
             styles: [__webpack_require__("./src/app/components/vehicle/vehicle.component.css")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__services_vehicle_service__["a" /* VehicleService */], __WEBPACK_IMPORTED_MODULE_3_ngx_toastr__["b" /* ToastrService */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__angular_router__["a" /* ActivatedRoute */],
+            __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */],
+            __WEBPACK_IMPORTED_MODULE_0__services_vehicle_service__["a" /* VehicleService */],
+            __WEBPACK_IMPORTED_MODULE_3_ngx_toastr__["b" /* ToastrService */]])
     ], VehicleComponent);
     return VehicleComponent;
 }());
@@ -459,6 +575,15 @@ var VehicleService = /** @class */ (function () {
     };
     VehicleService.prototype.create = function (vehicle) {
         return this.http.post('/api/vehicles', vehicle);
+    };
+    VehicleService.prototype.delete = function (id) {
+        return this.http.delete('/api/vehicles/' + id);
+    };
+    VehicleService.prototype.getVehicle = function (id) {
+        return this.http.get('/api/vehicles/' + id);
+    };
+    VehicleService.prototype.getVehicles = function () {
+        return this.http.get('/api/vehicles');
     };
     VehicleService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["A" /* Injectable */])(),

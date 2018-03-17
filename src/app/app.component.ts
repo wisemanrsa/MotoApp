@@ -12,13 +12,8 @@ export class AppComponent {
   items: any = [];
 
   constructor(private appService: AppService) {
-    this.getItems();
-  }
 
-  getItems(): void {
-    this.appService.getItems().subscribe(result => this.items = result);
   }
-
   sayHi() {
     swal(
       'Good day',

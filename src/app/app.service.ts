@@ -7,8 +7,4 @@ export class AppService {
 
   constructor(private http: HttpClient) { }
 
-  getItems() {
-    return this.http.get('/api/values');
-  }
-
 }
