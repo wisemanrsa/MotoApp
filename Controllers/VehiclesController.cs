@@ -24,9 +24,11 @@ namespace ASPNETCOREDEMO.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<VehicleResource>> GetVehicles() 
+        public async Task<IEnumerable<VehicleResource>> GetVehicles(VehicleQueryResource filterResource) 
         {
-            var vehicles = await vehicleRepository.GetVehicles();
+
+            var filter = mapper.Map<VehicleQueryResource, VehicleQuery>(filterResource);
+            var vehicles = await vehicleRepository.GetVehicles(filter);
             
             return mapper.Map<IEnumerable<Vehicle>, IEnumerable<VehicleResource>>(vehicles);
         }

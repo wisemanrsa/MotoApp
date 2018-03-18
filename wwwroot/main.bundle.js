@@ -380,7 +380,7 @@ var VehicleListComponent = /** @class */ (function () {
     }
     VehicleListComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.vehicleService.getVehicles().subscribe(function (v) { return _this.vehicles = _this.allVehicles = v; });
+        this.populateVehicles();
         this.vehicleService.getMakes().subscribe(function (m) { return _this.makes = m; });
     };
     VehicleListComponent.prototype.delete = function (id) {
@@ -394,13 +394,12 @@ var VehicleListComponent = /** @class */ (function () {
     VehicleListComponent.prototype.newVehicle = function () {
         this.router.navigate(['/vehicle/new']);
     };
-    VehicleListComponent.prototype.onFilterChange = function () {
+    VehicleListComponent.prototype.populateVehicles = function () {
         var _this = this;
-        var vehicles = this.allVehicles;
-        if (this.filter.makeId) {
-            vehicles = vehicles.filter(function (v) { return v.make.id == _this.filter.makeId; });
-        }
-        this.vehicles = vehicles;
+        this.vehicleService.getVehicles(this.filter).subscribe(function (v) { return _this.vehicles = v; });
+    };
+    VehicleListComponent.prototype.onFilterChange = function () {
+        this.populateVehicles();
     };
     VehicleListComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["n" /* Component */])({
@@ -427,7 +426,7 @@ module.exports = ""
 /***/ "./src/app/components/vehicle/vehicle.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n  <div class=\"col-md-3 col-lg-3\"></div>\n  <div class=\"col-md-3 col-lg-3\">\n    <h1>New Vehicle</h1>\n<form (submit)=\"submit()\">\n  <div class=\"form-group\">\n    <label for=\"make\">Make</label>\n    <select id=\"make\" class=\"form-control\" name=\"makeId\" [(ngModel)]=\"vehicle.makeId\" (change)=\"getModels()\" required #make=\"ngModel\">\n      <option value=\"\"></option>\n      <option *ngFor=\"let m of makes\" value=\"{{m.id}}\">{{m.name}}</option>\n    </select>\n    <div class=\"alert alert-danger\" *ngIf=\"make.touched && !make.valid\">Please select Make</div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"model\">Model</label>\n    <select id=\"model\" class=\"form-control\" name=\"modelId\" [(ngModel)]=\"vehicle.modelId\" required #model=\"ngModel\">\n      <option value=\"\"></option>\n      <option *ngFor=\"let m of models\" value=\"{{m.id}}\">{{m.name}}</option>\n    </select>\n    <div class=\"alert alert-danger\" *ngIf=\"model.touched && !model.valid\">Please select Model</div>\n  </div>\n  <p>Is this vehicle registered?</p>\n  <label for=\"registred\" class=\"radio-inline\">\n    <input type=\"radio\" name=\"isRegistered\" id=\"registred\" [value]=\"true\" [(ngModel)]=\"vehicle.isRegistered\">Yes\n  </label>\n  <label for=\"notRegistred\" class=\"radio-inline\">\n    <input type=\"radio\" name=\"isRegistered\" id=\"notRegistred\" [value]=\"false\" [(ngModel)]=\"vehicle.isRegistered\">No\n  </label>\n  <h2>Features</h2>\n  <div *ngFor=\"let f of features\" class=\"checkbox\">\n    <label for=\"feature{{f.id}}\">\n      <input type=\"checkbox\" class=\"checkbox\" id=\"feature{{f.id}}\" (change)=\"onFeatureToggle(f.id, $event)\" [checked]=\"checkFeature(f.id)\"> {{f.name}}\n    </label>\n  </div>\n  <h2>Contact</h2>\n  <div class=\"form-group\">\n    <label for=\"contactName\">Name</label>\n    <input type=\"text\" id=\"contactName\" class=\"form-control\" name=\"contactName\" [(ngModel)]=\"vehicle.contact.name\" #contactName=\"ngModel\">\n    <div class=\"alert alert-danger\" *ngIf=\"contactName.touched && !contactName.valid\">Please provide contact name</div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"contactNumber\">Number</label>\n    <input type=\"text\" id=\"contactNumber\" class=\"form-control\" name=\"contactNumber\" [(ngModel)]=\"vehicle.contact.number\" #contactNumber=\"ngModel\">\n    <div class=\"alert alert-danger\" *ngIf=\"contactNumber.touched && !contactNumber.valid\">Please Provide contact person's number</div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"contactEmail\">Email</label>\n    <input type=\"email\" id=\"contactEmail\" class=\"form-control\" name=\"contactEmail\" [(ngModel)]=\"vehicle.contact.email\">\n  </div>\n  <button class=\"btn btn-primary\">Save</button>\n</form>\n\n  </div>\n  <div class=\"col-md-3 col-lg-3\"></div>\n</div>"
+module.exports = "<div class=\"row\">\n  <div class=\"col-md-3 col-lg-3\"></div>\n  <div class=\"col-md-3 col-lg-3\">\n    <h1>New Vehicle</h1>\n<form (submit)=\"submit()\">\n  <div class=\"form-group\">\n    <label for=\"make\">Make</label>\n    <select id=\"make\" class=\"form-control\" name=\"makeId\" [(ngModel)]=\"vehicle.makeId\" (change)=\"getModels()\" required #make=\"ngModel\">\n      <option value=\"\"></option>\n      <option *ngFor=\"let m of makes\" value=\"{{m.id}}\">{{m.name}}</option>\n    </select>\n    <div class=\"alert alert-danger\" *ngIf=\"make.touched && !make.valid\">Please select Make</div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"model\">Model</label>\n    <select id=\"model\" class=\"form-control\" name=\"modelId\" [(ngModel)]=\"vehicle.modelId\" required #model=\"ngModel\">\n      <option value=\"\"></option>\n      <option *ngFor=\"let m of models\" value=\"{{m.id}}\">{{m.name}}</option>\n    </select>\n    <div class=\"alert alert-danger\" *ngIf=\"model.touched && !model.valid\">Please select Model</div>\n  </div>\n  <p>Is this vehicle registered?</p>\n  <label for=\"registred\" class=\"radio-inline\">\n    <input type=\"radio\" name=\"isRegistered\" id=\"registred\" [value]=\"true\" [(ngModel)]=\"vehicle.isRegistered\">Yes\n  </label>\n  <label for=\"notRegistred\" class=\"radio-inline\">\n    <input type=\"radio\" name=\"isRegistered\" id=\"notRegistred\" [value]=\"false\" [(ngModel)]=\"vehicle.isRegistered\">No\n  </label>\n  <h2>Features</h2>\n  <div *ngFor=\"let f of features\" class=\"checkbox\">\n    <label for=\"feature{{f.id}}\">\n      <input type=\"checkbox\" class=\"checkbox\" id=\"feature{{f.id}}\" (change)=\"onFeatureToggle(f.id, $event)\"> {{f.name}}\n    </label>\n  </div>\n  <h2>Contact</h2>\n  <div class=\"form-group\">\n    <label for=\"contactName\">Name</label>\n    <input type=\"text\" id=\"contactName\" class=\"form-control\" name=\"contactName\" [(ngModel)]=\"vehicle.contact.name\" #contactName=\"ngModel\">\n    <div class=\"alert alert-danger\" *ngIf=\"contactName.touched && !contactName.valid\">Please provide contact name</div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"contactNumber\">Number</label>\n    <input type=\"text\" id=\"contactNumber\" class=\"form-control\" name=\"contactNumber\" [(ngModel)]=\"vehicle.contact.number\" #contactNumber=\"ngModel\">\n    <div class=\"alert alert-danger\" *ngIf=\"contactNumber.touched && !contactNumber.valid\">Please Provide contact person's number</div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"contactEmail\">Email</label>\n    <input type=\"email\" id=\"contactEmail\" class=\"form-control\" name=\"contactEmail\" [(ngModel)]=\"vehicle.contact.email\">\n  </div>\n  <button class=\"btn btn-primary\">Save</button>\n</form>\n\n  </div>\n  <div class=\"col-md-3 col-lg-3\"></div>\n</div>"
 
 /***/ }),
 
@@ -582,8 +581,18 @@ var VehicleService = /** @class */ (function () {
     VehicleService.prototype.getVehicle = function (id) {
         return this.http.get('/api/vehicles/' + id);
     };
-    VehicleService.prototype.getVehicles = function () {
-        return this.http.get('/api/vehicles');
+    VehicleService.prototype.getVehicles = function (filter) {
+        return this.http.get('/api/vehicles' + '?' + this.toQueryString(filter));
+    };
+    VehicleService.prototype.toQueryString = function (obj) {
+        var parts = [];
+        for (var prop in obj) {
+            var value = obj[prop];
+            if (value != null && value != undefined) {
+                parts.push(encodeURIComponent(prop) + '=' + encodeURIComponent(value));
+            }
+        }
+        return parts.join('&');
     };
     VehicleService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["A" /* Injectable */])(),

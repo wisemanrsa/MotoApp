@@ -12,14 +12,13 @@ export class VehicleListComponent implements OnInit {
 
   filter: any = {};
   vehicles: any;
-  allVehicles: any;
   vehicle: any;
   makes: any;
 
   constructor(private vehicleService: VehicleService, private notifier: ToastrService, private router: Router) { }
 
   ngOnInit() {
-    this.vehicleService.getVehicles().subscribe(v => this.vehicles = this.allVehicles = v);
+    this.populateVehicles();
     this.vehicleService.getMakes().subscribe(m => this.makes = m);
   }
 
@@ -37,14 +36,11 @@ export class VehicleListComponent implements OnInit {
     this.router.navigate(['/vehicle/new']);
   }
 
-  onFilterChange() {
-    let vehicles = this.allVehicles;
-
-    if (this.filter.makeId) {
-      vehicles = vehicles.filter(v => v.make.id == this.filter.makeId);
-    }
-
-    this.vehicles = vehicles;
+  populateVehicles() {
+    this.vehicleService.getVehicles(this.filter).subscribe(v => this.vehicles = v);
   }
 
+  onFilterChange() {
+    this.populateVehicles();
+  }
 }

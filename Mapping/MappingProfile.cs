@@ -23,6 +23,7 @@ namespace ASPNETCOREDEMO.Mapping
 
 
             //resource to domain
+            CreateMap<VehicleQueryResource, VehicleQuery>();
             CreateMap<ContactResource, Contact>()
                 .ForMember(c => c.Id, opt => opt.Ignore());
             CreateMap<SaveVehicleResource, Vehicle>()
