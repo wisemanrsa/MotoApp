@@ -22,11 +22,12 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppRoutingModule; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_home_home_component__ = __webpack_require__("./src/app/components/home/home.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_vehicle_vehicle_component__ = __webpack_require__("./src/app/components/vehicle/vehicle.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_vehicle_list_vehicle_list_component__ = __webpack_require__("./src/app/components/vehicle-list/vehicle-list.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_view_vehicle_view_vehicle_component__ = __webpack_require__("./src/app/components/view-vehicle/view-vehicle.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_home_home_component__ = __webpack_require__("./src/app/components/home/home.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_vehicle_vehicle_component__ = __webpack_require__("./src/app/components/vehicle/vehicle.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_vehicle_list_vehicle_list_component__ = __webpack_require__("./src/app/components/vehicle-list/vehicle-list.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -38,31 +39,36 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 var routes = [
     {
         path: '',
-        component: __WEBPACK_IMPORTED_MODULE_2__components_home_home_component__["a" /* HomeComponent */]
+        component: __WEBPACK_IMPORTED_MODULE_3__components_home_home_component__["a" /* HomeComponent */]
     },
     {
         path: 'vehicle/new',
-        component: __WEBPACK_IMPORTED_MODULE_3__components_vehicle_vehicle_component__["a" /* VehicleComponent */]
+        component: __WEBPACK_IMPORTED_MODULE_4__components_vehicle_vehicle_component__["a" /* VehicleComponent */]
     },
     {
         path: 'vehicle/:id',
-        component: __WEBPACK_IMPORTED_MODULE_3__components_vehicle_vehicle_component__["a" /* VehicleComponent */]
+        component: __WEBPACK_IMPORTED_MODULE_4__components_vehicle_vehicle_component__["a" /* VehicleComponent */]
+    },
+    {
+        path: 'vehicle/view/:id',
+        component: __WEBPACK_IMPORTED_MODULE_0__components_view_vehicle_view_vehicle_component__["a" /* ViewVehicleComponent */]
     },
     {
         path: 'vehicles',
-        component: __WEBPACK_IMPORTED_MODULE_4__components_vehicle_list_vehicle_list_component__["a" /* VehicleListComponent */]
+        component: __WEBPACK_IMPORTED_MODULE_5__components_vehicle_list_vehicle_list_component__["a" /* VehicleListComponent */]
     }
 ];
 var AppRoutingModule = /** @class */ (function () {
     function AppRoutingModule() {
     }
     AppRoutingModule = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["I" /* NgModule */])({
-            imports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* RouterModule */].forRoot(routes)],
-            exports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* RouterModule */]]
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["I" /* NgModule */])({
+            imports: [__WEBPACK_IMPORTED_MODULE_2__angular_router__["c" /* RouterModule */].forRoot(routes)],
+            exports: [__WEBPACK_IMPORTED_MODULE_2__angular_router__["c" /* RouterModule */]]
         })
     ], AppRoutingModule);
     return AppRoutingModule;
@@ -152,6 +158,7 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__services_vehicle_service__ = __webpack_require__("./src/app/services/vehicle.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_ngx_toastr__ = __webpack_require__("./node_modules/ngx-toastr/esm5/ngx-toastr.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__components_vehicle_list_vehicle_list_component__ = __webpack_require__("./src/app/components/vehicle-list/vehicle-list.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__components_view_vehicle_view_vehicle_component__ = __webpack_require__("./src/app/components/view-vehicle/view-vehicle.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -159,6 +166,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 // import { AppErrorHandler } from './app.error-handler';
+
 
 
 
@@ -182,7 +190,8 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_5__components_vehicle_vehicle_component__["a" /* VehicleComponent */],
                 __WEBPACK_IMPORTED_MODULE_8__components_menu_menu_component__["a" /* MenuComponent */],
                 __WEBPACK_IMPORTED_MODULE_9__components_home_home_component__["a" /* HomeComponent */],
-                __WEBPACK_IMPORTED_MODULE_12__components_vehicle_list_vehicle_list_component__["a" /* VehicleListComponent */]
+                __WEBPACK_IMPORTED_MODULE_12__components_vehicle_list_vehicle_list_component__["a" /* VehicleListComponent */],
+                __WEBPACK_IMPORTED_MODULE_13__components_view_vehicle_view_vehicle_component__["a" /* ViewVehicleComponent */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_6__app_routing_module__["a" /* AppRoutingModule */],
@@ -345,7 +354,7 @@ module.exports = ""
 /***/ "./src/app/components/vehicle-list/vehicle-list.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h2>Vehicles</h2>\n<input type=\"button\" class=\"btn btn-primary\" (click)=\"newVehicle()\"value=\"New Vehicle\">\n\n<div class=\"form-group well\">\n  <label for=\"make\">Make</label>\n  <select id=\"make\" class=\"form-control\" [(ngModel)]=\"filter.makeId\" (change)=\"onFilterChange()\">\n    <option value=\"\"></option>\n    <option *ngFor=\"let m of makes\" value=\"{{m.id}}\">{{m.name}}</option>\n  </select>\n</div>\n\n<div class=\"container\">\n  <table class=\"table\">\n    <tr>\n      <td><h2>Id</h2></td>\n      <td><h2>Make</h2></td>\n      <td><h2>Model</h2></td>\n      <td></td>\n    </tr>\n    <tr *ngFor=\"let v of vehicles;\">\n      <td>{{v.id}}</td>\n      <td>{{v.make.name}}</td>\n      <td>{{v.model.name}}</td>\n      <td>\n        <input type=\"button\" class=\"btn btn-primary\" value=\"View\">\n        <input type=\"button\" class=\"btn btn-warning\" (click)=\"edit(v.id)\" value=\"Edit\">\n        <input type=\"button\" class=\"btn btn-danger\" (click)=\"delete(v.id)\"value=\"Delete\">\n      </td>\n    </tr>\n  </table>\n</div>\n"
+module.exports = "<h2>Vehicles</h2>\n<input type=\"button\" class=\"btn btn-primary\" (click)=\"newVehicle()\"value=\"New Vehicle\">\n\n<div class=\"form-group well\">\n  <label for=\"make\">Make</label>\n  <select id=\"make\" class=\"form-control\" [(ngModel)]=\"filter.makeId\" (change)=\"onFilterChange()\">\n    <option value=\"\"></option>\n    <option *ngFor=\"let m of makes\" value=\"{{m.id}}\">{{m.name}}</option>\n  </select>\n</div>\n\n<div class=\"container\">\n  <table class=\"table\">\n    <thead>\n      <tr>\n        <th>Id</th>\n        <th (click)=\"sortBy('make')\">Make</th>\n        <th (click)=\"sortBy('model')\">Model</th>\n        <th></th>\n      </tr>\n    </thead>\n    <tr *ngFor=\"let v of vehicles;\">\n      <td>{{v.id}}</td>\n      <td>{{v.make.name}}</td>\n      <td>{{v.model.name}}</td>\n      <td>\n        <input type=\"button\" class=\"btn btn-primary\" (click)=\"viewVehicle(v.id)\" value=\"View\">\n        <input type=\"button\" class=\"btn btn-warning\" (click)=\"edit(v.id)\" value=\"Edit\">\n        <input type=\"button\" class=\"btn btn-danger\" (click)=\"delete(v.id)\"value=\"Delete\">\n      </td>\n    </tr>\n  </table>\n</div>\n"
 
 /***/ }),
 
@@ -394,11 +403,24 @@ var VehicleListComponent = /** @class */ (function () {
     VehicleListComponent.prototype.newVehicle = function () {
         this.router.navigate(['/vehicle/new']);
     };
+    VehicleListComponent.prototype.viewVehicle = function (id) {
+        this.router.navigate(['/vehicle/view/' + id]);
+    };
     VehicleListComponent.prototype.populateVehicles = function () {
         var _this = this;
         this.vehicleService.getVehicles(this.filter).subscribe(function (v) { return _this.vehicles = v; });
     };
     VehicleListComponent.prototype.onFilterChange = function () {
+        this.populateVehicles();
+    };
+    VehicleListComponent.prototype.sortBy = function (columnName) {
+        if (this.filter.sortBy == columnName) {
+            this.filter.isSortAscending = !this.filter.isSortAscending;
+        }
+        else {
+            this.filter.sortBy = columnName;
+            this.filter.isSortAscending = true;
+        }
         this.populateVehicles();
     };
     VehicleListComponent = __decorate([
@@ -541,6 +563,82 @@ var VehicleComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/components/view-vehicle/view-vehicle.component.css":
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/components/view-vehicle/view-vehicle.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"row div\">\r\n  <div class=\"col-lg-4 col-md-4\"></div>\r\n  <div class=\"col-lg-4 col-md-4\">\r\n    <input type=\"button\" class=\"btn btn-primary\" value=\"Vehicle\" (click)=\"boolShowVehicle()\">\r\n    <input type=\"button\" class=\"btn btn-primary\" value=\"Photos\" (click)=\"boolShowPhotos()\">\r\n  </div>\r\n  <div class=\"col-lg-4 col-md-4\"></div>\r\n</div>\r\n\r\n<div class=\"row\" *ngIf=\"showVehicle\">\r\n  <div class=\"col-lg-4 col-md-4\">\r\n    <h4>Details</h4>\r\n    <p>Make: {{ vehicle?.make?.name}}</p>\r\n    <p>Model: {{ vehicle?.model?.name}}</p>\r\n  </div>\r\n  <div class=\"col-lg-4 col-md-4\">\r\n    <h4>Vehicle Features</h4>\r\n    <div *ngFor=\"let f of vehicle.features\">\r\n      <p>{{f.name}}</p>\r\n    </div>\r\n  </div>\r\n  <div class=\"col-lg-4 col-md-4\">\r\n    <h4>Contact Details</h4>\r\n    <p>Name: {{ vehicle?.contact?.name}}</p>\r\n    <p>Number: {{ vehicle?.contact?.number}}</p>\r\n    <p>Email: {{ vehicle?.contact?.email}}</p>\r\n  </div>\r\n</div>\r\n\r\n<div class=\"row\" *ngIf=\"!showVehicle\">\r\n  <div class=\"col-lg-4 col-md-4\">\r\n  </div>\r\n  <div class=\"col-lg-4 col-md-4\">\r\n      <h4>Photos</h4>\r\n  </div>\r\n  <div class=\"col-lg-4 col-md-4\">\r\n  </div>\r\n</div>\r\n"
+
+/***/ }),
+
+/***/ "./src/app/components/view-vehicle/view-vehicle.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ViewVehicleComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_vehicle_service__ = __webpack_require__("./src/app/services/vehicle.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var ViewVehicleComponent = /** @class */ (function () {
+    function ViewVehicleComponent(vehicleService, route) {
+        var _this = this;
+        this.vehicleService = vehicleService;
+        this.route = route;
+        this.vehicle = {};
+        this.showVehicle = true;
+        this.route.params.subscribe(function (p) { return _this.vehicle.id = +p['id']; });
+    }
+    ViewVehicleComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.vehicleService.getVehicle(this.vehicle.id).subscribe(function (v) { return _this.setVehicle(v); });
+    };
+    ViewVehicleComponent.prototype.setVehicle = function (moto) {
+        this.vehicle.id = moto.id;
+        this.vehicle.features = moto.features;
+        this.vehicle.model = moto.model;
+        this.vehicle.make = moto.make;
+        this.vehicle.features = moto.features;
+        this.vehicle.contact = moto.contact;
+    };
+    ViewVehicleComponent.prototype.boolShowVehicle = function () {
+        this.showVehicle = true;
+    };
+    ViewVehicleComponent.prototype.boolShowPhotos = function () {
+        this.showVehicle = false;
+    };
+    ViewVehicleComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["n" /* Component */])({
+            selector: 'app-view-vehicle',
+            template: __webpack_require__("./src/app/components/view-vehicle/view-vehicle.component.html"),
+            styles: [__webpack_require__("./src/app/components/view-vehicle/view-vehicle.component.css")]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__services_vehicle_service__["a" /* VehicleService */], __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* ActivatedRoute */]])
+    ], ViewVehicleComponent);
+    return ViewVehicleComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/services/vehicle.service.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -582,7 +680,10 @@ var VehicleService = /** @class */ (function () {
         return this.http.get('/api/vehicles/' + id);
     };
     VehicleService.prototype.getVehicles = function (filter) {
-        return this.http.get('/api/vehicles' + '?' + this.toQueryString(filter));
+        if (this.haveFilters(filter)) {
+            return this.http.get('/api/vehicles' + '?' + this.toQueryString(filter));
+        }
+        return this.http.get('/api/vehicles');
     };
     VehicleService.prototype.toQueryString = function (obj) {
         var parts = [];
@@ -593,6 +694,15 @@ var VehicleService = /** @class */ (function () {
             }
         }
         return parts.join('&');
+    };
+    VehicleService.prototype.haveFilters = function (obj) {
+        for (var prop in obj) {
+            var value = obj[prop];
+            if (value != null && value != undefined) {
+                return true;
+            }
+        }
+        return false;
     };
     VehicleService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["A" /* Injectable */])(),

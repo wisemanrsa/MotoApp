@@ -14,6 +14,7 @@ import { HomeComponent } from './components/home/home.component';
 import { VehicleService } from './services/vehicle.service';
 import { ToastrModule } from 'ngx-toastr';
 import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
+import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.component';
 
 
 
@@ -23,7 +24,8 @@ import { VehicleListComponent } from './components/vehicle-list/vehicle-list.com
     VehicleComponent,
     MenuComponent,
     HomeComponent,
-    VehicleListComponent
+    VehicleListComponent,
+    ViewVehicleComponent
   ],
   imports: [
     AppRoutingModule,

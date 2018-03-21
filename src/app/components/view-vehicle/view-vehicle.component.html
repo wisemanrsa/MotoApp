@@ -1,0 +1,38 @@
+<div class="row div">
+  <div class="col-lg-4 col-md-4"></div>
+  <div class="col-lg-4 col-md-4">
+    <input type="button" class="btn btn-primary" value="Vehicle" (click)="boolShowVehicle()">
+    <input type="button" class="btn btn-primary" value="Photos" (click)="boolShowPhotos()">
+  </div>
+  <div class="col-lg-4 col-md-4"></div>
+</div>
+
+<div class="row" *ngIf="showVehicle">
+  <div class="col-lg-4 col-md-4">
+    <h4>Details</h4>
+    <p>Make: {{ vehicle?.make?.name}}</p>
+    <p>Model: {{ vehicle?.model?.name}}</p>
+  </div>
+  <div class="col-lg-4 col-md-4">
+    <h4>Vehicle Features</h4>
+    <div *ngFor="let f of vehicle.features">
+      <p>{{f.name}}</p>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-4">
+    <h4>Contact Details</h4>
+    <p>Name: {{ vehicle?.contact?.name}}</p>
+    <p>Number: {{ vehicle?.contact?.number}}</p>
+    <p>Email: {{ vehicle?.contact?.email}}</p>
+  </div>
+</div>
+
+<div class="row" *ngIf="!showVehicle">
+  <div class="col-lg-4 col-md-4">
+  </div>
+  <div class="col-lg-4 col-md-4">
+      <h4>Photos</h4>
+  </div>
+  <div class="col-lg-4 col-md-4">
+  </div>
+</div>

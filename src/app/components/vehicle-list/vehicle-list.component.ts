@@ -36,11 +36,25 @@ export class VehicleListComponent implements OnInit {
     this.router.navigate(['/vehicle/new']);
   }
 
+  viewVehicle(id) {
+    this.router.navigate(['/vehicle/view/' + id]);
+  }
+
   populateVehicles() {
     this.vehicleService.getVehicles(this.filter).subscribe(v => this.vehicles = v);
   }
 
   onFilterChange() {
+    this.populateVehicles();
+  }
+
+  sortBy(columnName) {
+    if (this.filter.sortBy == columnName) {
+      this.filter.isSortAscending = !this.filter.isSortAscending;
+    } else {
+      this.filter.sortBy = columnName;
+      this.filter.isSortAscending = true;
+    }
     this.populateVehicles();
   }
 }

@@ -43,10 +43,13 @@ namespace ASPNETCOREDEMO.Persistence
 
         private IQueryable<Vehicle> ApplyOrdering(IQueryable<Vehicle> query, VehicleQuery queryObj, Dictionary<string, Expression<Func<Vehicle, object>>> columnsMap)
         {
-            if (queryObj.IsSortAscending) 
-                return query.OrderBy(columnsMap[queryObj.SortBy]);
-            else
-                return query.OrderByDescending(columnsMap[queryObj.SortBy]); 
+            if (queryObj.SortBy != null) {
+                if (queryObj.IsSortAscending) 
+                    return query.OrderBy(columnsMap[queryObj.SortBy]);
+                else
+                    return query.OrderByDescending(columnsMap[queryObj.SortBy]); 
+            }
+            return query;
         }
         public async Task<Vehicle> GetVehicle(int id, bool includeRelated = true)
         {

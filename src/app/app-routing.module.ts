@@ -1,3 +1,4 @@
+import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
@@ -16,6 +17,10 @@ const routes: Routes = [
   {
     path: 'vehicle/:id',
     component: VehicleComponent
+  },
+  {
+    path: 'vehicle/view/:id',
+    component: ViewVehicleComponent
   },
   {
     path: 'vehicles',

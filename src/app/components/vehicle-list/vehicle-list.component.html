@@ -11,18 +11,20 @@
 
 <div class="container">
   <table class="table">
-    <tr>
-      <td><h2>Id</h2></td>
-      <td><h2>Make</h2></td>
-      <td><h2>Model</h2></td>
-      <td></td>
-    </tr>
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th (click)="sortBy('make')">Make</th>
+        <th (click)="sortBy('model')">Model</th>
+        <th></th>
+      </tr>
+    </thead>
     <tr *ngFor="let v of vehicles;">
       <td>{{v.id}}</td>
       <td>{{v.make.name}}</td>
       <td>{{v.model.name}}</td>
       <td>
-        <input type="button" class="btn btn-primary" value="View">
+        <input type="button" class="btn btn-primary" (click)="viewVehicle(v.id)" value="View">
         <input type="button" class="btn btn-warning" (click)="edit(v.id)" value="Edit">
         <input type="button" class="btn btn-danger" (click)="delete(v.id)"value="Delete">
       </td>

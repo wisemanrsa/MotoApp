@@ -88,7 +88,7 @@ module.exports = "\n@import url(https://fonts.googleapis.com/css?family=Lato:400
 /***/ "./node_modules/raw-loader/index.js!./node_modules/postcss-loader/lib/index.js??embedded!./src/styles.css":
 /***/ (function(module, exports) {
 
-module.exports = "/* You can add global styles to this file, and also import other style files */\n"
+module.exports = ".div {\n    margin: 20px;\n    padding: 20px;\n    left: 20px;\n}"
 
 /***/ }),
 

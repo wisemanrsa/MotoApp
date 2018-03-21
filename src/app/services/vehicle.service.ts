@@ -31,7 +31,10 @@ export class VehicleService {
   }
 
   getVehicles(filter) {
-    return this.http.get('/api/vehicles' + '?' + this.toQueryString(filter));
+    if (this.haveFilters(filter)) {
+      return this.http.get('/api/vehicles' + '?' + this.toQueryString(filter));
+    }
+    return this.http.get('/api/vehicles');
   }
 
   toQueryString(obj) {
@@ -43,6 +46,16 @@ export class VehicleService {
       }
     }
     return parts.join('&');
+  }
+
+  haveFilters(obj) {
+    for (let prop in obj) {
+      var value = obj[prop];
+      if (value != null && value != undefined) {
+       return true;
+      }
+    }
+    return false;
   }
 
 }
