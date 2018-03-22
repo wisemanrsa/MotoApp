@@ -9,6 +9,7 @@ namespace ASPNETCOREDEMO.Persistence
         public DbSet<Model> Models {get; set;}
         public DbSet<Feature> Features {get; set;}
         public DbSet<Vehicle> Vehicles {get; set;}
+        public DbSet<Photo> Photos {get; set;}
         public MotoDbContext(DbContextOptions<MotoDbContext> options)
             :base(options)
         {

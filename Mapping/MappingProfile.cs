@@ -11,6 +11,7 @@ namespace ASPNETCOREDEMO.Mapping
         public MappingProfile()
         {
             //domain to resource
+            CreateMap<Photo, PhotoResource>();
             CreateMap<Make, MakeResource>();
             CreateMap<Model, KeyValuePairResource>();
             CreateMap<Contact, ContactResource>();
