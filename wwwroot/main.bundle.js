@@ -145,26 +145,28 @@ var AppComponent = /** @class */ (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_service__ = __webpack_require__("./src/app/app.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/platform-browser.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_component__ = __webpack_require__("./src/app/app.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_common_http__ = __webpack_require__("./node_modules/@angular/common/esm5/http.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_vehicle_vehicle_component__ = __webpack_require__("./src/app/components/vehicle/vehicle.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_routing_module__ = __webpack_require__("./src/app/app-routing.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_menu_menu_component__ = __webpack_require__("./src/app/components/menu/menu.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_home_home_component__ = __webpack_require__("./src/app/components/home/home.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__services_vehicle_service__ = __webpack_require__("./src/app/services/vehicle.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_ngx_toastr__ = __webpack_require__("./node_modules/ngx-toastr/esm5/ngx-toastr.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__components_vehicle_list_vehicle_list_component__ = __webpack_require__("./src/app/components/vehicle-list/vehicle-list.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__components_view_vehicle_view_vehicle_component__ = __webpack_require__("./src/app/components/view-vehicle/view-vehicle.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_photo_service__ = __webpack_require__("./src/app/services/photo.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_service__ = __webpack_require__("./src/app/app.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/platform-browser.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__("./src/app/app.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_common_http__ = __webpack_require__("./node_modules/@angular/common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_vehicle_vehicle_component__ = __webpack_require__("./src/app/components/vehicle/vehicle.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_routing_module__ = __webpack_require__("./src/app/app-routing.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_menu_menu_component__ = __webpack_require__("./src/app/components/menu/menu.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_home_home_component__ = __webpack_require__("./src/app/components/home/home.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__services_vehicle_service__ = __webpack_require__("./src/app/services/vehicle.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_ngx_toastr__ = __webpack_require__("./node_modules/ngx-toastr/esm5/ngx-toastr.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__components_vehicle_list_vehicle_list_component__ = __webpack_require__("./src/app/components/vehicle-list/vehicle-list.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__components_view_vehicle_view_vehicle_component__ = __webpack_require__("./src/app/components/view-vehicle/view-vehicle.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 // import { AppErrorHandler } from './app.error-handler';
 
 
@@ -184,24 +186,24 @@ var AppModule = /** @class */ (function () {
     function AppModule() {
     }
     AppModule = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["I" /* NgModule */])({
+        Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["I" /* NgModule */])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */],
-                __WEBPACK_IMPORTED_MODULE_5__components_vehicle_vehicle_component__["a" /* VehicleComponent */],
-                __WEBPACK_IMPORTED_MODULE_8__components_menu_menu_component__["a" /* MenuComponent */],
-                __WEBPACK_IMPORTED_MODULE_9__components_home_home_component__["a" /* HomeComponent */],
-                __WEBPACK_IMPORTED_MODULE_12__components_vehicle_list_vehicle_list_component__["a" /* VehicleListComponent */],
-                __WEBPACK_IMPORTED_MODULE_13__components_view_vehicle_view_vehicle_component__["a" /* ViewVehicleComponent */]
+                __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */],
+                __WEBPACK_IMPORTED_MODULE_6__components_vehicle_vehicle_component__["a" /* VehicleComponent */],
+                __WEBPACK_IMPORTED_MODULE_9__components_menu_menu_component__["a" /* MenuComponent */],
+                __WEBPACK_IMPORTED_MODULE_10__components_home_home_component__["a" /* HomeComponent */],
+                __WEBPACK_IMPORTED_MODULE_13__components_vehicle_list_vehicle_list_component__["a" /* VehicleListComponent */],
+                __WEBPACK_IMPORTED_MODULE_14__components_view_vehicle_view_vehicle_component__["a" /* ViewVehicleComponent */]
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_6__app_routing_module__["a" /* AppRoutingModule */],
-                __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["a" /* BrowserModule */],
-                __WEBPACK_IMPORTED_MODULE_4__angular_common_http__["b" /* HttpClientModule */],
-                __WEBPACK_IMPORTED_MODULE_7__angular_forms__["a" /* FormsModule */],
-                __WEBPACK_IMPORTED_MODULE_11_ngx_toastr__["a" /* ToastrModule */].forRoot()
+                __WEBPACK_IMPORTED_MODULE_7__app_routing_module__["a" /* AppRoutingModule */],
+                __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["a" /* BrowserModule */],
+                __WEBPACK_IMPORTED_MODULE_5__angular_common_http__["b" /* HttpClientModule */],
+                __WEBPACK_IMPORTED_MODULE_8__angular_forms__["a" /* FormsModule */],
+                __WEBPACK_IMPORTED_MODULE_12_ngx_toastr__["a" /* ToastrModule */].forRoot()
             ],
-            providers: [/*{provide: ErrorHandler, useClass: AppErrorHandler}*/ __WEBPACK_IMPORTED_MODULE_0__app_service__["a" /* AppService */], __WEBPACK_IMPORTED_MODULE_10__services_vehicle_service__["a" /* VehicleService */]],
-            bootstrap: [__WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */]]
+            providers: [/*{provide: ErrorHandler, useClass: AppErrorHandler}*/ __WEBPACK_IMPORTED_MODULE_1__app_service__["a" /* AppService */], __WEBPACK_IMPORTED_MODULE_11__services_vehicle_service__["a" /* VehicleService */], __WEBPACK_IMPORTED_MODULE_0__services_photo_service__["a" /* PhotoService */]],
+            bootstrap: [__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */]]
         })
     ], AppModule);
     return AppModule;
@@ -573,7 +575,7 @@ module.exports = ""
 /***/ "./src/app/components/view-vehicle/view-vehicle.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row div\">\r\n  <div class=\"col-lg-4 col-md-4\"></div>\r\n  <div class=\"col-lg-4 col-md-4\">\r\n    <input type=\"button\" class=\"btn btn-primary\" value=\"Vehicle\" (click)=\"boolShowVehicle()\">\r\n    <input type=\"button\" class=\"btn btn-primary\" value=\"Photos\" (click)=\"boolShowPhotos()\">\r\n  </div>\r\n  <div class=\"col-lg-4 col-md-4\"></div>\r\n</div>\r\n\r\n<div class=\"row\" *ngIf=\"showVehicle\">\r\n  <div class=\"col-lg-4 col-md-4\">\r\n    <h4>Details</h4>\r\n    <p>Make: {{ vehicle?.make?.name}}</p>\r\n    <p>Model: {{ vehicle?.model?.name}}</p>\r\n  </div>\r\n  <div class=\"col-lg-4 col-md-4\">\r\n    <h4>Vehicle Features</h4>\r\n    <div *ngFor=\"let f of vehicle.features\">\r\n      <p>{{f.name}}</p>\r\n    </div>\r\n  </div>\r\n  <div class=\"col-lg-4 col-md-4\">\r\n    <h4>Contact Details</h4>\r\n    <p>Name: {{ vehicle?.contact?.name}}</p>\r\n    <p>Number: {{ vehicle?.contact?.number}}</p>\r\n    <p>Email: {{ vehicle?.contact?.email}}</p>\r\n  </div>\r\n</div>\r\n\r\n<div class=\"row\" *ngIf=\"!showVehicle\">\r\n  <div class=\"col-lg-4 col-md-4\">\r\n  </div>\r\n  <div class=\"col-lg-4 col-md-4\">\r\n      <h4>Photos</h4>\r\n  </div>\r\n  <div class=\"col-lg-4 col-md-4\">\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"row div\">\r\n  <div class=\"col-lg-4 col-md-4\"></div>\r\n  <div class=\"col-lg-4 col-md-4\">\r\n    <input type=\"button\" class=\"btn btn-primary\" value=\"Vehicle\" (click)=\"boolShowVehicle()\">\r\n    <input type=\"button\" class=\"btn btn-primary\" value=\"Photos\" (click)=\"boolShowPhotos()\">\r\n  </div>\r\n  <div class=\"col-lg-4 col-md-4\"></div>\r\n</div>\r\n\r\n<div class=\"row\" *ngIf=\"showVehicle\">\r\n  <div class=\"col-lg-4 col-md-4\">\r\n    <h4>Details</h4>\r\n    <p>Make: {{ vehicle?.make?.name}}</p>\r\n    <p>Model: {{ vehicle?.model?.name}}</p>\r\n  </div>\r\n  <div class=\"col-lg-4 col-md-4\">\r\n    <h4>Vehicle Features</h4>\r\n    <div *ngFor=\"let f of vehicle.features\">\r\n      <p>{{f.name}}</p>\r\n    </div>\r\n  </div>\r\n  <div class=\"col-lg-4 col-md-4\">\r\n    <h4>Contact Details</h4>\r\n    <p>Name: {{ vehicle?.contact?.name}}</p>\r\n    <p>Number: {{ vehicle?.contact?.number}}</p>\r\n    <p>Email: {{ vehicle?.contact?.email}}</p>\r\n  </div>\r\n</div>\r\n\r\n<div class=\"row\" *ngIf=\"!showVehicle\">\r\n  <div class=\"col-lg-4 col-md-4\">\r\n  </div>\r\n  <div class=\"col-lg-4 col-md-4\">\r\n      <h4>Photos</h4>\r\n      <div>\r\n        <input type=\"file\" (change)=\"uploadPhoto()\" #fileInput>\r\n      </div>\r\n  </div>\r\n  <div class=\"col-lg-4 col-md-4\">\r\n  </div>\r\n</div>\r\n<div class=\"div\" *ngIf=\"!showVehicle\">\r\n  <img  class=\"img-thumbnail\" *ngFor=\"let p of photos\" src=\"/uploads/{{p.fileName}}\">\r\n</div>\r\n"
 
 /***/ }),
 
@@ -582,9 +584,10 @@ module.exports = "<div class=\"row div\">\r\n  <div class=\"col-lg-4 col-md-4\">
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ViewVehicleComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_vehicle_service__ = __webpack_require__("./src/app/services/vehicle.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_photo_service__ = __webpack_require__("./src/app/services/photo.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_vehicle_service__ = __webpack_require__("./src/app/services/vehicle.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -597,18 +600,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var ViewVehicleComponent = /** @class */ (function () {
-    function ViewVehicleComponent(vehicleService, route) {
+    function ViewVehicleComponent(vehicleService, route, photoService) {
         var _this = this;
         this.vehicleService = vehicleService;
         this.route = route;
+        this.photoService = photoService;
         this.vehicle = {};
         this.showVehicle = true;
+        this.photos = [];
         this.route.params.subscribe(function (p) { return _this.vehicle.id = +p['id']; });
     }
     ViewVehicleComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.vehicleService.getVehicle(this.vehicle.id).subscribe(function (v) { return _this.setVehicle(v); });
+        this.getPhotos();
     };
     ViewVehicleComponent.prototype.setVehicle = function (moto) {
         this.vehicle.id = moto.id;
@@ -624,15 +631,69 @@ var ViewVehicleComponent = /** @class */ (function () {
     ViewVehicleComponent.prototype.boolShowPhotos = function () {
         this.showVehicle = false;
     };
+    ViewVehicleComponent.prototype.uploadPhoto = function () {
+        var _this = this;
+        var nativeElement = this.fileInput.nativeElement;
+        this.photoService.upload(this.vehicle.id, nativeElement.files[0]).subscribe(function (x) { return _this.photos.push(x); });
+    };
+    ViewVehicleComponent.prototype.getPhotos = function () {
+        var _this = this;
+        this.photoService.getPhotos(this.vehicle.id).subscribe(function (photos) { return _this.photos = photos; });
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["_9" /* ViewChild */])('fileInput'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2__angular_core__["t" /* ElementRef */])
+    ], ViewVehicleComponent.prototype, "fileInput", void 0);
     ViewVehicleComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["n" /* Component */])({
+        Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["n" /* Component */])({
             selector: 'app-view-vehicle',
             template: __webpack_require__("./src/app/components/view-vehicle/view-vehicle.component.html"),
             styles: [__webpack_require__("./src/app/components/view-vehicle/view-vehicle.component.css")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__services_vehicle_service__["a" /* VehicleService */], __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* ActivatedRoute */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_vehicle_service__["a" /* VehicleService */], __WEBPACK_IMPORTED_MODULE_3__angular_router__["a" /* ActivatedRoute */], __WEBPACK_IMPORTED_MODULE_0__services_photo_service__["a" /* PhotoService */]])
     ], ViewVehicleComponent);
     return ViewVehicleComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/services/photo.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PhotoService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__("./node_modules/@angular/common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var PhotoService = /** @class */ (function () {
+    function PhotoService(http) {
+        this.http = http;
+    }
+    PhotoService.prototype.upload = function (vid, photo) {
+        var formData = new FormData();
+        formData.append('file', photo);
+        return this.http.post("/api/vehicles/" + vid + "/photos", formData);
+    };
+    PhotoService.prototype.getPhotos = function (id) {
+        return this.http.get("/api/vehicles/" + id + "/photos");
+    };
+    PhotoService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["A" /* Injectable */])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */]])
+    ], PhotoService);
+    return PhotoService;
 }());
 
 
@@ -745,7 +806,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 if (__WEBPACK_IMPORTED_MODULE_3__environments_environment__["a" /* environment */].production) {
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_13" /* enableProdMode */])();
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* enableProdMode */])();
 }
 Object(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_2__app_app_module__["a" /* AppModule */])
     .catch(function (err) { return console.log(err); });

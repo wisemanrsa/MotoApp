@@ -1,3 +1,4 @@
+import { PhotoService } from './services/photo.service';
 // import { AppErrorHandler } from './app.error-handler';
 import { AppService } from './app.service';
 import { BrowserModule } from '@angular/platform-browser';
@@ -34,7 +35,7 @@ import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.com
     FormsModule,
     ToastrModule.forRoot()
   ],
-  providers: [/*{provide: ErrorHandler, useClass: AppErrorHandler}*/ AppService, VehicleService],
+  providers: [/*{provide: ErrorHandler, useClass: AppErrorHandler}*/ AppService, VehicleService, PhotoService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

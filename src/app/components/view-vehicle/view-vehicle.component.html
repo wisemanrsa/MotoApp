@@ -32,7 +32,13 @@
   </div>
   <div class="col-lg-4 col-md-4">
       <h4>Photos</h4>
+      <div>
+        <input type="file" (change)="uploadPhoto()" #fileInput>
+      </div>
   </div>
   <div class="col-lg-4 col-md-4">
   </div>
+</div>
+<div class="div" *ngIf="!showVehicle">
+  <img  class="img-thumbnail" *ngFor="let p of photos" src="/uploads/{{p.fileName}}">
 </div>

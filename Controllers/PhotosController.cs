@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,8 +22,10 @@ namespace ASPNETCOREDEMO.Controllers
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
         private readonly PhotoSettings photoSettings;
-        public PhotosController(IHostingEnvironment host, IVehicleRepository repo, IUnitOfWork unitOfWork, IMapper mapper, IOptionsSnapshot<PhotoSettings> options)
+        private readonly IPhotosRepository photosRepository;
+        public PhotosController(IHostingEnvironment host, IVehicleRepository repo, IUnitOfWork unitOfWork, IMapper mapper, IPhotosRepository photosRepository, IOptionsSnapshot<PhotoSettings> options)
         {
+            this.photosRepository = photosRepository;
             this.photoSettings = options.Value;
             this.mapper = mapper;
             this.unitOfWork = unitOfWork;
@@ -37,7 +41,7 @@ namespace ASPNETCOREDEMO.Controllers
             if (file == null) return BadRequest("File is null");
             if (file.Length == 0) return BadRequest("No file");
             if (file.Length > photoSettings.MaxBytes) return BadRequest("Max file size exceeded");
-            if (!photoSettings.IsSupportedFile(file.FileName)) return BadRequest("Max file size exceeded");
+            if (!photoSettings.IsSupportedFile(file.FileName)) return BadRequest("Unsupported File");
 
             var uploadsFolderPath = Path.Combine(host.WebRootPath, "uploads");
             if (!Directory.Exists(uploadsFolderPath))
@@ -56,6 +60,12 @@ namespace ASPNETCOREDEMO.Controllers
             await unitOfWork.Complete();
             var photoResource = mapper.Map<Photo, PhotoResource>(photo);
             return Ok(photoResource);
+        }
+        [HttpGet("/api/vehicles/{vehicleId}/photos")]
+        public async Task<IEnumerable<PhotoResource>> GetPhotos(int vehicleId)
+        {
+            var photos = await photosRepository.GetPhotos(vehicleId);
+            return mapper.Map<IEnumerable<Photo>, IEnumerable<PhotoResource>>(photos);
         }
     }
 }

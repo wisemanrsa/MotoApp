@@ -32,6 +32,7 @@ namespace ASPNETCOREDEMO
             services.AddDbContext<MotoDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IPhotosRepository, PhotosRepository>();
 
             services.AddMvc();
         }
