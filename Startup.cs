@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ASPNETCOREDEMO.Models;
 using ASPNETCOREDEMO.Persistence;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -34,12 +35,24 @@ namespace ASPNETCOREDEMO
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IPhotosRepository, PhotosRepository>();
 
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = "https://moto-app.auth0.com/";
+                options.Audience = "https://api.motoapp.com";
+            });
+    
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseAuthentication();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

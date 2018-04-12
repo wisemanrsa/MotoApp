@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASPNETCOREDEMO.Controllers
 {
@@ -34,6 +35,7 @@ namespace ASPNETCOREDEMO.Controllers
         }
         
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateVehicle([FromBody] SaveVehicleResource vehicleResource)
         {
             
@@ -47,6 +49,7 @@ namespace ASPNETCOREDEMO.Controllers
             return Ok(results);
         }
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateVehicle(int id, [FromBody] SaveVehicleResource vehicleResource)
         {
             if (!ModelState.IsValid)
@@ -67,6 +70,7 @@ namespace ASPNETCOREDEMO.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteVehicle(int id)
         {
 

@@ -3,6 +3,7 @@ import { PhotoService } from './services/photo.service';
 import { AppService } from './app.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 
 import { AppComponent } from './app.component';
@@ -16,6 +17,7 @@ import { VehicleService } from './services/vehicle.service';
 import { ToastrModule } from 'ngx-toastr';
 import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
 import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.component';
+import { MaterialModule } from './material.module';
 
 
 
@@ -29,10 +31,12 @@ import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.com
     ViewVehicleComponent
   ],
   imports: [
+    BrowserAnimationsModule,
     AppRoutingModule,
     BrowserModule,
     HttpClientModule,
     FormsModule,
+    MaterialModule,
     ToastrModule.forRoot()
   ],
   providers: [/*{provide: ErrorHandler, useClass: AppErrorHandler}*/ AppService, VehicleService, PhotoService],

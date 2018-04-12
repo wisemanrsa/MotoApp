@@ -6,6 +6,7 @@ using ASPNETCOREDEMO.Controllers.Resources;
 using ASPNETCOREDEMO.Models;
 using ASPNETCOREDEMO.Persistence;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

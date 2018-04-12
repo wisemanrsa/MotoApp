@@ -6738,6 +6738,10542 @@ $p.libs = {
 	}
 }());
 
+;(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define("auth0-js", [], factory);
+	else if(typeof exports === 'object')
+		exports["auth0-js"] = factory();
+	else
+		root["auth0"] = factory();
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(59);
+
+
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* eslint-disable no-param-reassign */
+	/* eslint-disable no-restricted-syntax */
+	/* eslint-disable guard-for-in */
+	
+	var assert = __webpack_require__(4);
+	var objectAssign = __webpack_require__(15);
+	
+	function pick(object, keys) {
+	  return keys.reduce(function(prev, key) {
+	    if (object[key]) {
+	      prev[key] = object[key];
+	    }
+	    return prev;
+	  }, {});
+	}
+	
+	function getKeysNotIn(obj, allowedKeys) {
+	  var notAllowed = [];
+	  for (var key in obj) {
+	    if (allowedKeys.indexOf(key) === -1) {
+	      notAllowed.push(key);
+	    }
+	  }
+	  return notAllowed;
+	}
+	
+	function objectValues(obj) {
+	  var values = [];
+	  for (var key in obj) {
+	    values.push(obj[key]);
+	  }
+	  return values;
+	}
+	
+	function extend() {
+	  var params = objectValues(arguments);
+	  params.unshift({});
+	  return objectAssign.get().apply(undefined, params);
+	}
+	
+	function merge(object, keys) {
+	  return {
+	    base: keys ? pick(object, keys) : object,
+	    with: function(object2, keys2) {
+	      object2 = keys2 ? pick(object2, keys2) : object2;
+	      return extend(this.base, object2);
+	    }
+	  };
+	}
+	
+	function blacklist(object, blacklistedKeys) {
+	  return Object.keys(object).reduce(function(p, key) {
+	    if (blacklistedKeys.indexOf(key) === -1) {
+	      p[key] = object[key];
+	    }
+	    return p;
+	  }, {});
+	}
+	
+	function camelToSnake(str) {
+	  var newKey = '';
+	  var index = 0;
+	  var code;
+	  var wasPrevNumber = true;
+	  var wasPrevUppercase = true;
+	
+	  while (index < str.length) {
+	    code = str.charCodeAt(index);
+	    if (
+	      (!wasPrevUppercase && code >= 65 && code <= 90) ||
+	      (!wasPrevNumber && code >= 48 && code <= 57)
+	    ) {
+	      newKey += '_';
+	      newKey += str[index].toLowerCase();
+	    } else {
+	      newKey += str[index].toLowerCase();
+	    }
+	    wasPrevNumber = code >= 48 && code <= 57;
+	    wasPrevUppercase = code >= 65 && code <= 90;
+	    index++;
+	  }
+	
+	  return newKey;
+	}
+	
+	function snakeToCamel(str) {
+	  var parts = str.split('_');
+	  return parts.reduce(function(p, c) {
+	    return p + c.charAt(0).toUpperCase() + c.slice(1);
+	  }, parts.shift());
+	}
+	
+	function toSnakeCase(object, exceptions) {
+	  if (typeof object !== 'object' || assert.isArray(object) || object === null) {
+	    return object;
+	  }
+	  exceptions = exceptions || [];
+	
+	  return Object.keys(object).reduce(function(p, key) {
+	    var newKey = exceptions.indexOf(key) === -1 ? camelToSnake(key) : key;
+	    p[newKey] = toSnakeCase(object[key]);
+	    return p;
+	  }, {});
+	}
+	
+	function toCamelCase(object, exceptions) {
+	  if (typeof object !== 'object' || assert.isArray(object) || object === null) {
+	    return object;
+	  }
+	
+	  exceptions = exceptions || [];
+	
+	  return Object.keys(object).reduce(function(p, key) {
+	    var newKey = exceptions.indexOf(key) === -1 ? snakeToCamel(key) : key;
+	    p[newKey] = toCamelCase(object[key]);
+	    return p;
+	  }, {});
+	}
+	
+	function getLocationFromUrl(href) {
+	  var match = href.match(
+	    /^(https?:)\/\/(([^:/?#]*)(?::([0-9]+))?)([/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/
+	  );
+	  return (
+	    match && {
+	      href: href,
+	      protocol: match[1],
+	      host: match[2],
+	      hostname: match[3],
+	      port: match[4],
+	      pathname: match[5],
+	      search: match[6],
+	      hash: match[7]
+	    }
+	  );
+	}
+	
+	function getOriginFromUrl(url) {
+	  if (!url) {
+	    return undefined;
+	  }
+	  var parsed = getLocationFromUrl(url);
+	  var origin = parsed.protocol + '//' + parsed.hostname;
+	  if (parsed.port) {
+	    origin += ':' + parsed.port;
+	  }
+	  return origin;
+	}
+	
+	module.exports = {
+	  toSnakeCase: toSnakeCase,
+	  toCamelCase: toCamelCase,
+	  blacklist: blacklist,
+	  merge: merge,
+	  pick: pick,
+	  getKeysNotIn: getKeysNotIn,
+	  extend: extend,
+	  getOriginFromUrl: getOriginFromUrl,
+	  getLocationFromUrl: getLocationFromUrl
+	};
+
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {var objectHelper = __webpack_require__(1);
+	
+	function redirect(url) {
+	  global.window.location = url;
+	}
+	
+	function getDocument() {
+	  return global.window.document;
+	}
+	
+	function getWindow() {
+	  return global.window;
+	}
+	
+	function getOrigin() {
+	  var location = global.window.location;
+	  var origin = location.origin;
+	  if (!origin) {
+	    origin = objectHelper.getOriginFromUrl(location.href);
+	  }
+	  return origin;
+	}
+	
+	module.exports = {
+	  redirect: redirect,
+	  getDocument: getDocument,
+	  getWindow: getWindow,
+	  getOrigin: getOrigin
+	};
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (name, context, definition) {
+	  if (typeof module !== 'undefined' && module.exports) module.exports = definition();
+	  else if (true) !(__WEBPACK_AMD_DEFINE_FACTORY__ = (definition), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  else context[name] = definition();
+	})('urljoin', this, function () {
+	
+	  function normalize (str, options) {
+	
+	    // make sure protocol is followed by two slashes
+	    str = str.replace(/:\//g, '://');
+	
+	    // remove consecutive slashes
+	    str = str.replace(/([^:\s])\/+/g, '$1/');
+	
+	    // remove trailing slash before parameters or hash
+	    str = str.replace(/\/(\?|&|#[^!])/g, '$1');
+	
+	    // replace ? in parameters with &
+	    str = str.replace(/(\?.+)\?/g, '$1&');
+	
+	    return str;
+	  }
+	
+	  return function () {
+	    var input = arguments;
+	    var options = {};
+	
+	    if (typeof arguments[0] === 'object') {
+	      // new syntax with array and options
+	      input = arguments[0];
+	      options = arguments[1] || {};
+	    }
+	
+	    var joined = [].slice.call(input, 0).join('/');
+	    return normalize(joined, options);
+	  };
+	
+	});
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	var toString = Object.prototype.toString;
+	
+	function attribute(o, attr, type, text) {
+	  type = type === 'array' ? 'object' : type;
+	  if (o && typeof o[attr] !== type) {
+	    throw new Error(text);
+	  }
+	}
+	
+	function variable(o, type, text) {
+	  if (typeof o !== type) {
+	    throw new Error(text);
+	  }
+	}
+	
+	function value(o, values, text) {
+	  if (values.indexOf(o) === -1) {
+	    throw new Error(text);
+	  }
+	}
+	
+	function check(o, config, attributes) {
+	  if (!config.optional || o) {
+	    variable(o, config.type, config.message);
+	  }
+	  if (config.type === 'object' && attributes) {
+	    var keys = Object.keys(attributes);
+	
+	    for (var index = 0; index < keys.length; index++) {
+	      var a = keys[index];
+	      if (!attributes[a].optional || o[a]) {
+	        if (!attributes[a].condition || attributes[a].condition(o)) {
+	          attribute(o, a, attributes[a].type, attributes[a].message);
+	          if (attributes[a].values) {
+	            value(o[a], attributes[a].values, attributes[a].value_message);
+	          }
+	        }
+	      }
+	    }
+	  }
+	}
+	
+	/**
+	 * Wrap `Array.isArray` Polyfill for IE9
+	 * source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray
+	 *
+	 * @param {Array} array
+	 * @private
+	 */
+	function isArray(array) {
+	  if (this.supportsIsArray()) {
+	    return Array.isArray(array);
+	  }
+	
+	  return toString.call(array) === '[object Array]';
+	}
+	
+	function supportsIsArray() {
+	  return Array.isArray != null;
+	}
+	
+	module.exports = {
+	  check: check,
+	  attribute: attribute,
+	  variable: variable,
+	  value: value,
+	  isArray: isArray,
+	  supportsIsArray: supportsIsArray
+	};
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var error = __webpack_require__(26);
+	var objectHelper = __webpack_require__(1);
+	
+	function wrapCallback(cb, options) {
+	  options = options || {};
+	  options.ignoreCasing = options.ignoreCasing ? options.ignoreCasing : false;
+	
+	  return function(err, data) {
+	    var errObj;
+	
+	    if (!err && !data) {
+	      return cb(error.buildResponse('generic_error', 'Something went wrong'));
+	    }
+	
+	    if (!err && data.err) {
+	      err = data.err;
+	      data = null;
+	    }
+	
+	    if (!err && data.error) {
+	      err = data;
+	      data = null;
+	    }
+	
+	    if (err) {
+	      errObj = {
+	        original: err
+	      };
+	
+	      if (err.response && err.response.statusCode) {
+	        errObj.statusCode = err.response.statusCode;
+	      }
+	
+	      if (err.response && err.response.statusText) {
+	        errObj.statusText = err.response.statusText;
+	      }
+	
+	      if (err.response && err.response.body) {
+	        err = err.response.body;
+	      }
+	
+	      if (err.err) {
+	        err = err.err;
+	      }
+	      errObj.code = err.error || err.code || err.error_code || err.status || null;
+	      errObj.description =
+	        err.errorDescription ||
+	        err.error_description ||
+	        err.description ||
+	        err.error ||
+	        err.details ||
+	        err.err ||
+	        null;
+	      if (options.forceLegacyError) {
+	        errObj.error = errObj.code;
+	        errObj.error_description = errObj.description;
+	      }
+	
+	      if (err.name) {
+	        errObj.name = err.name;
+	      }
+	
+	      if (err.policy) {
+	        errObj.policy = err.policy;
+	      }
+	
+	      return cb(errObj);
+	    }
+	
+	    if (data.type && (data.type === 'text/html' || data.type === 'text/plain')) {
+	      return cb(null, data.text);
+	    }
+	
+	    if (options.ignoreCasing) {
+	      return cb(null, data.body || data);
+	    }
+	
+	    return cb(null, objectHelper.toCamelCase(data.body || data));
+	  };
+	}
+	
+	module.exports = wrapCallback;
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var stringify = __webpack_require__(14);
+	var parse = __webpack_require__(13);
+	var formats = __webpack_require__(8);
+	
+	module.exports = {
+	    formats: formats,
+	    parse: parse,
+	    stringify: stringify
+	};
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	/* eslint-disable no-console */
+	
+	function Warn(options) {
+	  this.disableWarnings = options.disableWarnings;
+	}
+	
+	Warn.prototype.warning = function(message) {
+	  if (this.disableWarnings) {
+	    return;
+	  }
+	
+	  console.warn(message);
+	};
+	
+	module.exports = Warn;
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var replace = String.prototype.replace;
+	var percentTwenties = /%20/g;
+	
+	module.exports = {
+	    'default': 'RFC3986',
+	    formatters: {
+	        RFC1738: function (value) {
+	            return replace.call(value, percentTwenties, '+');
+	        },
+	        RFC3986: function (value) {
+	            return value;
+	        }
+	    },
+	    RFC1738: 'RFC1738',
+	    RFC3986: 'RFC3986'
+	};
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var has = Object.prototype.hasOwnProperty;
+	
+	var hexTable = (function () {
+	    var array = [];
+	    for (var i = 0; i < 256; ++i) {
+	        array.push('%' + ((i < 16 ? '0' : '') + i.toString(16)).toUpperCase());
+	    }
+	
+	    return array;
+	}());
+	
+	exports.arrayToObject = function (source, options) {
+	    var obj = options && options.plainObjects ? Object.create(null) : {};
+	    for (var i = 0; i < source.length; ++i) {
+	        if (typeof source[i] !== 'undefined') {
+	            obj[i] = source[i];
+	        }
+	    }
+	
+	    return obj;
+	};
+	
+	exports.merge = function (target, source, options) {
+	    if (!source) {
+	        return target;
+	    }
+	
+	    if (typeof source !== 'object') {
+	        if (Array.isArray(target)) {
+	            target.push(source);
+	        } else if (typeof target === 'object') {
+	            if (options.plainObjects || options.allowPrototypes || !has.call(Object.prototype, source)) {
+	                target[source] = true;
+	            }
+	        } else {
+	            return [target, source];
+	        }
+	
+	        return target;
+	    }
+	
+	    if (typeof target !== 'object') {
+	        return [target].concat(source);
+	    }
+	
+	    var mergeTarget = target;
+	    if (Array.isArray(target) && !Array.isArray(source)) {
+	        mergeTarget = exports.arrayToObject(target, options);
+	    }
+	
+	    if (Array.isArray(target) && Array.isArray(source)) {
+	        source.forEach(function (item, i) {
+	            if (has.call(target, i)) {
+	                if (target[i] && typeof target[i] === 'object') {
+	                    target[i] = exports.merge(target[i], item, options);
+	                } else {
+	                    target.push(item);
+	                }
+	            } else {
+	                target[i] = item;
+	            }
+	        });
+	        return target;
+	    }
+	
+	    return Object.keys(source).reduce(function (acc, key) {
+	        var value = source[key];
+	
+	        if (Object.prototype.hasOwnProperty.call(acc, key)) {
+	            acc[key] = exports.merge(acc[key], value, options);
+	        } else {
+	            acc[key] = value;
+	        }
+	        return acc;
+	    }, mergeTarget);
+	};
+	
+	exports.decode = function (str) {
+	    try {
+	        return decodeURIComponent(str.replace(/\+/g, ' '));
+	    } catch (e) {
+	        return str;
+	    }
+	};
+	
+	exports.encode = function (str) {
+	    // This code was originally written by Brian White (mscdex) for the io.js core querystring library.
+	    // It has been adapted here for stricter adherence to RFC 3986
+	    if (str.length === 0) {
+	        return str;
+	    }
+	
+	    var string = typeof str === 'string' ? str : String(str);
+	
+	    var out = '';
+	    for (var i = 0; i < string.length; ++i) {
+	        var c = string.charCodeAt(i);
+	
+	        if (
+	            c === 0x2D || // -
+	            c === 0x2E || // .
+	            c === 0x5F || // _
+	            c === 0x7E || // ~
+	            (c >= 0x30 && c <= 0x39) || // 0-9
+	            (c >= 0x41 && c <= 0x5A) || // a-z
+	            (c >= 0x61 && c <= 0x7A) // A-Z
+	        ) {
+	            out += string.charAt(i);
+	            continue;
+	        }
+	
+	        if (c < 0x80) {
+	            out = out + hexTable[c];
+	            continue;
+	        }
+	
+	        if (c < 0x800) {
+	            out = out + (hexTable[0xC0 | (c >> 6)] + hexTable[0x80 | (c & 0x3F)]);
+	            continue;
+	        }
+	
+	        if (c < 0xD800 || c >= 0xE000) {
+	            out = out + (hexTable[0xE0 | (c >> 12)] + hexTable[0x80 | ((c >> 6) & 0x3F)] + hexTable[0x80 | (c & 0x3F)]);
+	            continue;
+	        }
+	
+	        i += 1;
+	        c = 0x10000 + (((c & 0x3FF) << 10) | (string.charCodeAt(i) & 0x3FF));
+	        out += hexTable[0xF0 | (c >> 18)] + hexTable[0x80 | ((c >> 12) & 0x3F)] + hexTable[0x80 | ((c >> 6) & 0x3F)] + hexTable[0x80 | (c & 0x3F)]; // eslint-disable-line max-len
+	    }
+	
+	    return out;
+	};
+	
+	exports.compact = function (obj, references) {
+	    if (typeof obj !== 'object' || obj === null) {
+	        return obj;
+	    }
+	
+	    var refs = references || [];
+	    var lookup = refs.indexOf(obj);
+	    if (lookup !== -1) {
+	        return refs[lookup];
+	    }
+	
+	    refs.push(obj);
+	
+	    if (Array.isArray(obj)) {
+	        var compacted = [];
+	
+	        for (var i = 0; i < obj.length; ++i) {
+	            if (obj[i] && typeof obj[i] === 'object') {
+	                compacted.push(exports.compact(obj[i], refs));
+	            } else if (typeof obj[i] !== 'undefined') {
+	                compacted.push(obj[i]);
+	            }
+	        }
+	
+	        return compacted;
+	    }
+	
+	    var keys = Object.keys(obj);
+	    keys.forEach(function (key) {
+	        obj[key] = exports.compact(obj[key], refs);
+	    });
+	
+	    return obj;
+	};
+	
+	exports.isRegExp = function (obj) {
+	    return Object.prototype.toString.call(obj) === '[object RegExp]';
+	};
+	
+	exports.isBuffer = function (obj) {
+	    if (obj === null || typeof obj === 'undefined') {
+	        return false;
+	    }
+	
+	    return !!(obj.constructor && obj.constructor.isBuffer && obj.constructor.isBuffer(obj));
+	};
+
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	module.exports = { raw: '9.4.1' };
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* eslint-disable no-param-reassign */
+	var request = __webpack_require__(21);
+	var base64Url = __webpack_require__(25);
+	var version = __webpack_require__(10);
+	
+	// ------------------------------------------------ RequestWrapper
+	
+	function RequestWrapper(req) {
+	  this.request = req;
+	  this.method = req.method;
+	  this.url = req.url;
+	  this.body = req._data;
+	  this.headers = req._header;
+	}
+	
+	RequestWrapper.prototype.abort = function() {
+	  this.request.abort();
+	};
+	
+	RequestWrapper.prototype.getMethod = function() {
+	  return this.method;
+	};
+	
+	RequestWrapper.prototype.getBody = function() {
+	  return this.body;
+	};
+	
+	RequestWrapper.prototype.getUrl = function() {
+	  return this.url;
+	};
+	
+	RequestWrapper.prototype.getHeaders = function() {
+	  return this.headers;
+	};
+	
+	// ------------------------------------------------ RequestObj
+	
+	function RequestObj(req) {
+	  this.request = req;
+	}
+	
+	RequestObj.prototype.set = function(key, value) {
+	  this.request = this.request.set(key, value);
+	  return this;
+	};
+	
+	RequestObj.prototype.send = function(body) {
+	  this.request = this.request.send(body);
+	  return this;
+	};
+	
+	RequestObj.prototype.withCredentials = function() {
+	  this.request = this.request.withCredentials();
+	  return this;
+	};
+	
+	RequestObj.prototype.end = function(cb) {
+	  this.request = this.request.end(cb);
+	  return new RequestWrapper(this.request);
+	};
+	
+	// ------------------------------------------------ RequestBuilder
+	
+	function RequestBuilder(options) {
+	  this._sendTelemetry = options._sendTelemetry === false ? options._sendTelemetry : true;
+	  this._telemetryInfo = options._telemetryInfo || null;
+	  this._timesToRetryFailedRequests = options._timesToRetryFailedRequests;
+	  this.headers = options.headers || {};
+	}
+	
+	RequestBuilder.prototype.setCommonConfiguration = function(ongoingRequest, options) {
+	  options = options || {};
+	
+	  if (this._timesToRetryFailedRequests > 0) {
+	    ongoingRequest = ongoingRequest.retry(this._timesToRetryFailedRequests);
+	  }
+	
+	  if (options.noHeaders) {
+	    return ongoingRequest;
+	  }
+	
+	  var headers = this.headers;
+	  ongoingRequest = ongoingRequest.set('Content-Type', 'application/json');
+	
+	  var keys = Object.keys(this.headers);
+	
+	  for (var a = 0; a < keys.length; a++) {
+	    ongoingRequest = ongoingRequest.set(keys[a], headers[keys[a]]);
+	  }
+	
+	  if (this._sendTelemetry) {
+	    ongoingRequest = ongoingRequest.set('Auth0-Client', this.getTelemetryData());
+	  }
+	
+	  return ongoingRequest;
+	};
+	
+	RequestBuilder.prototype.getTelemetryData = function() {
+	  var clientInfo = this._telemetryInfo || { name: 'auth0.js', version: version.raw };
+	  var jsonClientInfo = JSON.stringify(clientInfo);
+	  return base64Url.encode(jsonClientInfo);
+	};
+	
+	RequestBuilder.prototype.get = function(url, options) {
+	  return new RequestObj(this.setCommonConfiguration(request.get(url), options));
+	};
+	
+	RequestBuilder.prototype.post = function(url, options) {
+	  return new RequestObj(this.setCommonConfiguration(request.post(url), options));
+	};
+	
+	RequestBuilder.prototype.patch = function(url, options) {
+	  return new RequestObj(this.setCommonConfiguration(request.patch(url), options));
+	};
+	
+	module.exports = RequestBuilder;
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	;(function (root, factory) {
+		if (true) {
+			// CommonJS
+			module.exports = exports = factory();
+		}
+		else if (typeof define === "function" && define.amd) {
+			// AMD
+			define([], factory);
+		}
+		else {
+			// Global (browser)
+			root.CryptoJS = factory();
+		}
+	}(this, function () {
+	
+		/**
+		 * CryptoJS core components.
+		 */
+		var CryptoJS = CryptoJS || (function (Math, undefined) {
+		    /*
+		     * Local polyfil of Object.create
+		     */
+		    var create = Object.create || (function () {
+		        function F() {};
+	
+		        return function (obj) {
+		            var subtype;
+	
+		            F.prototype = obj;
+	
+		            subtype = new F();
+	
+		            F.prototype = null;
+	
+		            return subtype;
+		        };
+		    }())
+	
+		    /**
+		     * CryptoJS namespace.
+		     */
+		    var C = {};
+	
+		    /**
+		     * Library namespace.
+		     */
+		    var C_lib = C.lib = {};
+	
+		    /**
+		     * Base object for prototypal inheritance.
+		     */
+		    var Base = C_lib.Base = (function () {
+	
+	
+		        return {
+		            /**
+		             * Creates a new object that inherits from this object.
+		             *
+		             * @param {Object} overrides Properties to copy into the new object.
+		             *
+		             * @return {Object} The new object.
+		             *
+		             * @static
+		             *
+		             * @example
+		             *
+		             *     var MyType = CryptoJS.lib.Base.extend({
+		             *         field: 'value',
+		             *
+		             *         method: function () {
+		             *         }
+		             *     });
+		             */
+		            extend: function (overrides) {
+		                // Spawn
+		                var subtype = create(this);
+	
+		                // Augment
+		                if (overrides) {
+		                    subtype.mixIn(overrides);
+		                }
+	
+		                // Create default initializer
+		                if (!subtype.hasOwnProperty('init') || this.init === subtype.init) {
+		                    subtype.init = function () {
+		                        subtype.$super.init.apply(this, arguments);
+		                    };
+		                }
+	
+		                // Initializer's prototype is the subtype object
+		                subtype.init.prototype = subtype;
+	
+		                // Reference supertype
+		                subtype.$super = this;
+	
+		                return subtype;
+		            },
+	
+		            /**
+		             * Extends this object and runs the init method.
+		             * Arguments to create() will be passed to init().
+		             *
+		             * @return {Object} The new object.
+		             *
+		             * @static
+		             *
+		             * @example
+		             *
+		             *     var instance = MyType.create();
+		             */
+		            create: function () {
+		                var instance = this.extend();
+		                instance.init.apply(instance, arguments);
+	
+		                return instance;
+		            },
+	
+		            /**
+		             * Initializes a newly created object.
+		             * Override this method to add some logic when your objects are created.
+		             *
+		             * @example
+		             *
+		             *     var MyType = CryptoJS.lib.Base.extend({
+		             *         init: function () {
+		             *             // ...
+		             *         }
+		             *     });
+		             */
+		            init: function () {
+		            },
+	
+		            /**
+		             * Copies properties into this object.
+		             *
+		             * @param {Object} properties The properties to mix in.
+		             *
+		             * @example
+		             *
+		             *     MyType.mixIn({
+		             *         field: 'value'
+		             *     });
+		             */
+		            mixIn: function (properties) {
+		                for (var propertyName in properties) {
+		                    if (properties.hasOwnProperty(propertyName)) {
+		                        this[propertyName] = properties[propertyName];
+		                    }
+		                }
+	
+		                // IE won't copy toString using the loop above
+		                if (properties.hasOwnProperty('toString')) {
+		                    this.toString = properties.toString;
+		                }
+		            },
+	
+		            /**
+		             * Creates a copy of this object.
+		             *
+		             * @return {Object} The clone.
+		             *
+		             * @example
+		             *
+		             *     var clone = instance.clone();
+		             */
+		            clone: function () {
+		                return this.init.prototype.extend(this);
+		            }
+		        };
+		    }());
+	
+		    /**
+		     * An array of 32-bit words.
+		     *
+		     * @property {Array} words The array of 32-bit words.
+		     * @property {number} sigBytes The number of significant bytes in this word array.
+		     */
+		    var WordArray = C_lib.WordArray = Base.extend({
+		        /**
+		         * Initializes a newly created word array.
+		         *
+		         * @param {Array} words (Optional) An array of 32-bit words.
+		         * @param {number} sigBytes (Optional) The number of significant bytes in the words.
+		         *
+		         * @example
+		         *
+		         *     var wordArray = CryptoJS.lib.WordArray.create();
+		         *     var wordArray = CryptoJS.lib.WordArray.create([0x00010203, 0x04050607]);
+		         *     var wordArray = CryptoJS.lib.WordArray.create([0x00010203, 0x04050607], 6);
+		         */
+		        init: function (words, sigBytes) {
+		            words = this.words = words || [];
+	
+		            if (sigBytes != undefined) {
+		                this.sigBytes = sigBytes;
+		            } else {
+		                this.sigBytes = words.length * 4;
+		            }
+		        },
+	
+		        /**
+		         * Converts this word array to a string.
+		         *
+		         * @param {Encoder} encoder (Optional) The encoding strategy to use. Default: CryptoJS.enc.Hex
+		         *
+		         * @return {string} The stringified word array.
+		         *
+		         * @example
+		         *
+		         *     var string = wordArray + '';
+		         *     var string = wordArray.toString();
+		         *     var string = wordArray.toString(CryptoJS.enc.Utf8);
+		         */
+		        toString: function (encoder) {
+		            return (encoder || Hex).stringify(this);
+		        },
+	
+		        /**
+		         * Concatenates a word array to this word array.
+		         *
+		         * @param {WordArray} wordArray The word array to append.
+		         *
+		         * @return {WordArray} This word array.
+		         *
+		         * @example
+		         *
+		         *     wordArray1.concat(wordArray2);
+		         */
+		        concat: function (wordArray) {
+		            // Shortcuts
+		            var thisWords = this.words;
+		            var thatWords = wordArray.words;
+		            var thisSigBytes = this.sigBytes;
+		            var thatSigBytes = wordArray.sigBytes;
+	
+		            // Clamp excess bits
+		            this.clamp();
+	
+		            // Concat
+		            if (thisSigBytes % 4) {
+		                // Copy one byte at a time
+		                for (var i = 0; i < thatSigBytes; i++) {
+		                    var thatByte = (thatWords[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
+		                    thisWords[(thisSigBytes + i) >>> 2] |= thatByte << (24 - ((thisSigBytes + i) % 4) * 8);
+		                }
+		            } else {
+		                // Copy one word at a time
+		                for (var i = 0; i < thatSigBytes; i += 4) {
+		                    thisWords[(thisSigBytes + i) >>> 2] = thatWords[i >>> 2];
+		                }
+		            }
+		            this.sigBytes += thatSigBytes;
+	
+		            // Chainable
+		            return this;
+		        },
+	
+		        /**
+		         * Removes insignificant bits.
+		         *
+		         * @example
+		         *
+		         *     wordArray.clamp();
+		         */
+		        clamp: function () {
+		            // Shortcuts
+		            var words = this.words;
+		            var sigBytes = this.sigBytes;
+	
+		            // Clamp
+		            words[sigBytes >>> 2] &= 0xffffffff << (32 - (sigBytes % 4) * 8);
+		            words.length = Math.ceil(sigBytes / 4);
+		        },
+	
+		        /**
+		         * Creates a copy of this word array.
+		         *
+		         * @return {WordArray} The clone.
+		         *
+		         * @example
+		         *
+		         *     var clone = wordArray.clone();
+		         */
+		        clone: function () {
+		            var clone = Base.clone.call(this);
+		            clone.words = this.words.slice(0);
+	
+		            return clone;
+		        },
+	
+		        /**
+		         * Creates a word array filled with random bytes.
+		         *
+		         * @param {number} nBytes The number of random bytes to generate.
+		         *
+		         * @return {WordArray} The random word array.
+		         *
+		         * @static
+		         *
+		         * @example
+		         *
+		         *     var wordArray = CryptoJS.lib.WordArray.random(16);
+		         */
+		        random: function (nBytes) {
+		            var words = [];
+	
+		            var r = (function (m_w) {
+		                var m_w = m_w;
+		                var m_z = 0x3ade68b1;
+		                var mask = 0xffffffff;
+	
+		                return function () {
+		                    m_z = (0x9069 * (m_z & 0xFFFF) + (m_z >> 0x10)) & mask;
+		                    m_w = (0x4650 * (m_w & 0xFFFF) + (m_w >> 0x10)) & mask;
+		                    var result = ((m_z << 0x10) + m_w) & mask;
+		                    result /= 0x100000000;
+		                    result += 0.5;
+		                    return result * (Math.random() > .5 ? 1 : -1);
+		                }
+		            });
+	
+		            for (var i = 0, rcache; i < nBytes; i += 4) {
+		                var _r = r((rcache || Math.random()) * 0x100000000);
+	
+		                rcache = _r() * 0x3ade67b7;
+		                words.push((_r() * 0x100000000) | 0);
+		            }
+	
+		            return new WordArray.init(words, nBytes);
+		        }
+		    });
+	
+		    /**
+		     * Encoder namespace.
+		     */
+		    var C_enc = C.enc = {};
+	
+		    /**
+		     * Hex encoding strategy.
+		     */
+		    var Hex = C_enc.Hex = {
+		        /**
+		         * Converts a word array to a hex string.
+		         *
+		         * @param {WordArray} wordArray The word array.
+		         *
+		         * @return {string} The hex string.
+		         *
+		         * @static
+		         *
+		         * @example
+		         *
+		         *     var hexString = CryptoJS.enc.Hex.stringify(wordArray);
+		         */
+		        stringify: function (wordArray) {
+		            // Shortcuts
+		            var words = wordArray.words;
+		            var sigBytes = wordArray.sigBytes;
+	
+		            // Convert
+		            var hexChars = [];
+		            for (var i = 0; i < sigBytes; i++) {
+		                var bite = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
+		                hexChars.push((bite >>> 4).toString(16));
+		                hexChars.push((bite & 0x0f).toString(16));
+		            }
+	
+		            return hexChars.join('');
+		        },
+	
+		        /**
+		         * Converts a hex string to a word array.
+		         *
+		         * @param {string} hexStr The hex string.
+		         *
+		         * @return {WordArray} The word array.
+		         *
+		         * @static
+		         *
+		         * @example
+		         *
+		         *     var wordArray = CryptoJS.enc.Hex.parse(hexString);
+		         */
+		        parse: function (hexStr) {
+		            // Shortcut
+		            var hexStrLength = hexStr.length;
+	
+		            // Convert
+		            var words = [];
+		            for (var i = 0; i < hexStrLength; i += 2) {
+		                words[i >>> 3] |= parseInt(hexStr.substr(i, 2), 16) << (24 - (i % 8) * 4);
+		            }
+	
+		            return new WordArray.init(words, hexStrLength / 2);
+		        }
+		    };
+	
+		    /**
+		     * Latin1 encoding strategy.
+		     */
+		    var Latin1 = C_enc.Latin1 = {
+		        /**
+		         * Converts a word array to a Latin1 string.
+		         *
+		         * @param {WordArray} wordArray The word array.
+		         *
+		         * @return {string} The Latin1 string.
+		         *
+		         * @static
+		         *
+		         * @example
+		         *
+		         *     var latin1String = CryptoJS.enc.Latin1.stringify(wordArray);
+		         */
+		        stringify: function (wordArray) {
+		            // Shortcuts
+		            var words = wordArray.words;
+		            var sigBytes = wordArray.sigBytes;
+	
+		            // Convert
+		            var latin1Chars = [];
+		            for (var i = 0; i < sigBytes; i++) {
+		                var bite = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
+		                latin1Chars.push(String.fromCharCode(bite));
+		            }
+	
+		            return latin1Chars.join('');
+		        },
+	
+		        /**
+		         * Converts a Latin1 string to a word array.
+		         *
+		         * @param {string} latin1Str The Latin1 string.
+		         *
+		         * @return {WordArray} The word array.
+		         *
+		         * @static
+		         *
+		         * @example
+		         *
+		         *     var wordArray = CryptoJS.enc.Latin1.parse(latin1String);
+		         */
+		        parse: function (latin1Str) {
+		            // Shortcut
+		            var latin1StrLength = latin1Str.length;
+	
+		            // Convert
+		            var words = [];
+		            for (var i = 0; i < latin1StrLength; i++) {
+		                words[i >>> 2] |= (latin1Str.charCodeAt(i) & 0xff) << (24 - (i % 4) * 8);
+		            }
+	
+		            return new WordArray.init(words, latin1StrLength);
+		        }
+		    };
+	
+		    /**
+		     * UTF-8 encoding strategy.
+		     */
+		    var Utf8 = C_enc.Utf8 = {
+		        /**
+		         * Converts a word array to a UTF-8 string.
+		         *
+		         * @param {WordArray} wordArray The word array.
+		         *
+		         * @return {string} The UTF-8 string.
+		         *
+		         * @static
+		         *
+		         * @example
+		         *
+		         *     var utf8String = CryptoJS.enc.Utf8.stringify(wordArray);
+		         */
+		        stringify: function (wordArray) {
+		            try {
+		                return decodeURIComponent(escape(Latin1.stringify(wordArray)));
+		            } catch (e) {
+		                throw new Error('Malformed UTF-8 data');
+		            }
+		        },
+	
+		        /**
+		         * Converts a UTF-8 string to a word array.
+		         *
+		         * @param {string} utf8Str The UTF-8 string.
+		         *
+		         * @return {WordArray} The word array.
+		         *
+		         * @static
+		         *
+		         * @example
+		         *
+		         *     var wordArray = CryptoJS.enc.Utf8.parse(utf8String);
+		         */
+		        parse: function (utf8Str) {
+		            return Latin1.parse(unescape(encodeURIComponent(utf8Str)));
+		        }
+		    };
+	
+		    /**
+		     * Abstract buffered block algorithm template.
+		     *
+		     * The property blockSize must be implemented in a concrete subtype.
+		     *
+		     * @property {number} _minBufferSize The number of blocks that should be kept unprocessed in the buffer. Default: 0
+		     */
+		    var BufferedBlockAlgorithm = C_lib.BufferedBlockAlgorithm = Base.extend({
+		        /**
+		         * Resets this block algorithm's data buffer to its initial state.
+		         *
+		         * @example
+		         *
+		         *     bufferedBlockAlgorithm.reset();
+		         */
+		        reset: function () {
+		            // Initial values
+		            this._data = new WordArray.init();
+		            this._nDataBytes = 0;
+		        },
+	
+		        /**
+		         * Adds new data to this block algorithm's buffer.
+		         *
+		         * @param {WordArray|string} data The data to append. Strings are converted to a WordArray using UTF-8.
+		         *
+		         * @example
+		         *
+		         *     bufferedBlockAlgorithm._append('data');
+		         *     bufferedBlockAlgorithm._append(wordArray);
+		         */
+		        _append: function (data) {
+		            // Convert string to WordArray, else assume WordArray already
+		            if (typeof data == 'string') {
+		                data = Utf8.parse(data);
+		            }
+	
+		            // Append
+		            this._data.concat(data);
+		            this._nDataBytes += data.sigBytes;
+		        },
+	
+		        /**
+		         * Processes available data blocks.
+		         *
+		         * This method invokes _doProcessBlock(offset), which must be implemented by a concrete subtype.
+		         *
+		         * @param {boolean} doFlush Whether all blocks and partial blocks should be processed.
+		         *
+		         * @return {WordArray} The processed data.
+		         *
+		         * @example
+		         *
+		         *     var processedData = bufferedBlockAlgorithm._process();
+		         *     var processedData = bufferedBlockAlgorithm._process(!!'flush');
+		         */
+		        _process: function (doFlush) {
+		            // Shortcuts
+		            var data = this._data;
+		            var dataWords = data.words;
+		            var dataSigBytes = data.sigBytes;
+		            var blockSize = this.blockSize;
+		            var blockSizeBytes = blockSize * 4;
+	
+		            // Count blocks ready
+		            var nBlocksReady = dataSigBytes / blockSizeBytes;
+		            if (doFlush) {
+		                // Round up to include partial blocks
+		                nBlocksReady = Math.ceil(nBlocksReady);
+		            } else {
+		                // Round down to include only full blocks,
+		                // less the number of blocks that must remain in the buffer
+		                nBlocksReady = Math.max((nBlocksReady | 0) - this._minBufferSize, 0);
+		            }
+	
+		            // Count words ready
+		            var nWordsReady = nBlocksReady * blockSize;
+	
+		            // Count bytes ready
+		            var nBytesReady = Math.min(nWordsReady * 4, dataSigBytes);
+	
+		            // Process blocks
+		            if (nWordsReady) {
+		                for (var offset = 0; offset < nWordsReady; offset += blockSize) {
+		                    // Perform concrete-algorithm logic
+		                    this._doProcessBlock(dataWords, offset);
+		                }
+	
+		                // Remove processed words
+		                var processedWords = dataWords.splice(0, nWordsReady);
+		                data.sigBytes -= nBytesReady;
+		            }
+	
+		            // Return processed words
+		            return new WordArray.init(processedWords, nBytesReady);
+		        },
+	
+		        /**
+		         * Creates a copy of this object.
+		         *
+		         * @return {Object} The clone.
+		         *
+		         * @example
+		         *
+		         *     var clone = bufferedBlockAlgorithm.clone();
+		         */
+		        clone: function () {
+		            var clone = Base.clone.call(this);
+		            clone._data = this._data.clone();
+	
+		            return clone;
+		        },
+	
+		        _minBufferSize: 0
+		    });
+	
+		    /**
+		     * Abstract hasher template.
+		     *
+		     * @property {number} blockSize The number of 32-bit words this hasher operates on. Default: 16 (512 bits)
+		     */
+		    var Hasher = C_lib.Hasher = BufferedBlockAlgorithm.extend({
+		        /**
+		         * Configuration options.
+		         */
+		        cfg: Base.extend(),
+	
+		        /**
+		         * Initializes a newly created hasher.
+		         *
+		         * @param {Object} cfg (Optional) The configuration options to use for this hash computation.
+		         *
+		         * @example
+		         *
+		         *     var hasher = CryptoJS.algo.SHA256.create();
+		         */
+		        init: function (cfg) {
+		            // Apply config defaults
+		            this.cfg = this.cfg.extend(cfg);
+	
+		            // Set initial values
+		            this.reset();
+		        },
+	
+		        /**
+		         * Resets this hasher to its initial state.
+		         *
+		         * @example
+		         *
+		         *     hasher.reset();
+		         */
+		        reset: function () {
+		            // Reset data buffer
+		            BufferedBlockAlgorithm.reset.call(this);
+	
+		            // Perform concrete-hasher logic
+		            this._doReset();
+		        },
+	
+		        /**
+		         * Updates this hasher with a message.
+		         *
+		         * @param {WordArray|string} messageUpdate The message to append.
+		         *
+		         * @return {Hasher} This hasher.
+		         *
+		         * @example
+		         *
+		         *     hasher.update('message');
+		         *     hasher.update(wordArray);
+		         */
+		        update: function (messageUpdate) {
+		            // Append
+		            this._append(messageUpdate);
+	
+		            // Update the hash
+		            this._process();
+	
+		            // Chainable
+		            return this;
+		        },
+	
+		        /**
+		         * Finalizes the hash computation.
+		         * Note that the finalize operation is effectively a destructive, read-once operation.
+		         *
+		         * @param {WordArray|string} messageUpdate (Optional) A final message update.
+		         *
+		         * @return {WordArray} The hash.
+		         *
+		         * @example
+		         *
+		         *     var hash = hasher.finalize();
+		         *     var hash = hasher.finalize('message');
+		         *     var hash = hasher.finalize(wordArray);
+		         */
+		        finalize: function (messageUpdate) {
+		            // Final message update
+		            if (messageUpdate) {
+		                this._append(messageUpdate);
+		            }
+	
+		            // Perform concrete-hasher logic
+		            var hash = this._doFinalize();
+	
+		            return hash;
+		        },
+	
+		        blockSize: 512/32,
+	
+		        /**
+		         * Creates a shortcut function to a hasher's object interface.
+		         *
+		         * @param {Hasher} hasher The hasher to create a helper for.
+		         *
+		         * @return {Function} The shortcut function.
+		         *
+		         * @static
+		         *
+		         * @example
+		         *
+		         *     var SHA256 = CryptoJS.lib.Hasher._createHelper(CryptoJS.algo.SHA256);
+		         */
+		        _createHelper: function (hasher) {
+		            return function (message, cfg) {
+		                return new hasher.init(cfg).finalize(message);
+		            };
+		        },
+	
+		        /**
+		         * Creates a shortcut function to the HMAC's object interface.
+		         *
+		         * @param {Hasher} hasher The hasher to use in this HMAC helper.
+		         *
+		         * @return {Function} The shortcut function.
+		         *
+		         * @static
+		         *
+		         * @example
+		         *
+		         *     var HmacSHA256 = CryptoJS.lib.Hasher._createHmacHelper(CryptoJS.algo.SHA256);
+		         */
+		        _createHmacHelper: function (hasher) {
+		            return function (message, key) {
+		                return new C_algo.HMAC.init(hasher, key).finalize(message);
+		            };
+		        }
+		    });
+	
+		    /**
+		     * Algorithm namespace.
+		     */
+		    var C_algo = C.algo = {};
+	
+		    return C;
+		}(Math));
+	
+	
+		return CryptoJS;
+	
+	}));
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var utils = __webpack_require__(9);
+	
+	var has = Object.prototype.hasOwnProperty;
+	
+	var defaults = {
+	    allowDots: false,
+	    allowPrototypes: false,
+	    arrayLimit: 20,
+	    decoder: utils.decode,
+	    delimiter: '&',
+	    depth: 5,
+	    parameterLimit: 1000,
+	    plainObjects: false,
+	    strictNullHandling: false
+	};
+	
+	var parseValues = function parseQueryStringValues(str, options) {
+	    var obj = {};
+	    var parts = str.split(options.delimiter, options.parameterLimit === Infinity ? undefined : options.parameterLimit);
+	
+	    for (var i = 0; i < parts.length; ++i) {
+	        var part = parts[i];
+	        var pos = part.indexOf(']=') === -1 ? part.indexOf('=') : part.indexOf(']=') + 1;
+	
+	        var key, val;
+	        if (pos === -1) {
+	            key = options.decoder(part);
+	            val = options.strictNullHandling ? null : '';
+	        } else {
+	            key = options.decoder(part.slice(0, pos));
+	            val = options.decoder(part.slice(pos + 1));
+	        }
+	        if (has.call(obj, key)) {
+	            obj[key] = [].concat(obj[key]).concat(val);
+	        } else {
+	            obj[key] = val;
+	        }
+	    }
+	
+	    return obj;
+	};
+	
+	var parseObject = function parseObjectRecursive(chain, val, options) {
+	    if (!chain.length) {
+	        return val;
+	    }
+	
+	    var root = chain.shift();
+	
+	    var obj;
+	    if (root === '[]') {
+	        obj = [];
+	        obj = obj.concat(parseObject(chain, val, options));
+	    } else {
+	        obj = options.plainObjects ? Object.create(null) : {};
+	        var cleanRoot = root.charAt(0) === '[' && root.charAt(root.length - 1) === ']' ? root.slice(1, -1) : root;
+	        var index = parseInt(cleanRoot, 10);
+	        if (
+	            !isNaN(index) &&
+	            root !== cleanRoot &&
+	            String(index) === cleanRoot &&
+	            index >= 0 &&
+	            (options.parseArrays && index <= options.arrayLimit)
+	        ) {
+	            obj = [];
+	            obj[index] = parseObject(chain, val, options);
+	        } else {
+	            obj[cleanRoot] = parseObject(chain, val, options);
+	        }
+	    }
+	
+	    return obj;
+	};
+	
+	var parseKeys = function parseQueryStringKeys(givenKey, val, options) {
+	    if (!givenKey) {
+	        return;
+	    }
+	
+	    // Transform dot notation to bracket notation
+	    var key = options.allowDots ? givenKey.replace(/\.([^.[]+)/g, '[$1]') : givenKey;
+	
+	    // The regex chunks
+	
+	    var brackets = /(\[[^[\]]*])/;
+	    var child = /(\[[^[\]]*])/g;
+	
+	    // Get the parent
+	
+	    var segment = brackets.exec(key);
+	    var parent = segment ? key.slice(0, segment.index) : key;
+	
+	    // Stash the parent if it exists
+	
+	    var keys = [];
+	    if (parent) {
+	        // If we aren't using plain objects, optionally prefix keys
+	        // that would overwrite object prototype properties
+	        if (!options.plainObjects && has.call(Object.prototype, parent)) {
+	            if (!options.allowPrototypes) {
+	                return;
+	            }
+	        }
+	
+	        keys.push(parent);
+	    }
+	
+	    // Loop through children appending to the array until we hit depth
+	
+	    var i = 0;
+	    while ((segment = child.exec(key)) !== null && i < options.depth) {
+	        i += 1;
+	        if (!options.plainObjects && has.call(Object.prototype, segment[1].slice(1, -1))) {
+	            if (!options.allowPrototypes) {
+	                return;
+	            }
+	        }
+	        keys.push(segment[1]);
+	    }
+	
+	    // If there's a remainder, just add whatever is left
+	
+	    if (segment) {
+	        keys.push('[' + key.slice(segment.index) + ']');
+	    }
+	
+	    return parseObject(keys, val, options);
+	};
+	
+	module.exports = function (str, opts) {
+	    var options = opts || {};
+	
+	    if (options.decoder !== null && options.decoder !== undefined && typeof options.decoder !== 'function') {
+	        throw new TypeError('Decoder has to be a function.');
+	    }
+	
+	    options.delimiter = typeof options.delimiter === 'string' || utils.isRegExp(options.delimiter) ? options.delimiter : defaults.delimiter;
+	    options.depth = typeof options.depth === 'number' ? options.depth : defaults.depth;
+	    options.arrayLimit = typeof options.arrayLimit === 'number' ? options.arrayLimit : defaults.arrayLimit;
+	    options.parseArrays = options.parseArrays !== false;
+	    options.decoder = typeof options.decoder === 'function' ? options.decoder : defaults.decoder;
+	    options.allowDots = typeof options.allowDots === 'boolean' ? options.allowDots : defaults.allowDots;
+	    options.plainObjects = typeof options.plainObjects === 'boolean' ? options.plainObjects : defaults.plainObjects;
+	    options.allowPrototypes = typeof options.allowPrototypes === 'boolean' ? options.allowPrototypes : defaults.allowPrototypes;
+	    options.parameterLimit = typeof options.parameterLimit === 'number' ? options.parameterLimit : defaults.parameterLimit;
+	    options.strictNullHandling = typeof options.strictNullHandling === 'boolean' ? options.strictNullHandling : defaults.strictNullHandling;
+	
+	    if (str === '' || str === null || typeof str === 'undefined') {
+	        return options.plainObjects ? Object.create(null) : {};
+	    }
+	
+	    var tempObj = typeof str === 'string' ? parseValues(str, options) : str;
+	    var obj = options.plainObjects ? Object.create(null) : {};
+	
+	    // Iterate over the keys and setup the new object
+	
+	    var keys = Object.keys(tempObj);
+	    for (var i = 0; i < keys.length; ++i) {
+	        var key = keys[i];
+	        var newObj = parseKeys(key, tempObj[key], options);
+	        obj = utils.merge(obj, newObj, options);
+	    }
+	
+	    return utils.compact(obj);
+	};
+
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var utils = __webpack_require__(9);
+	var formats = __webpack_require__(8);
+	
+	var arrayPrefixGenerators = {
+	    brackets: function brackets(prefix) { // eslint-disable-line func-name-matching
+	        return prefix + '[]';
+	    },
+	    indices: function indices(prefix, key) { // eslint-disable-line func-name-matching
+	        return prefix + '[' + key + ']';
+	    },
+	    repeat: function repeat(prefix) { // eslint-disable-line func-name-matching
+	        return prefix;
+	    }
+	};
+	
+	var toISO = Date.prototype.toISOString;
+	
+	var defaults = {
+	    delimiter: '&',
+	    encode: true,
+	    encoder: utils.encode,
+	    encodeValuesOnly: false,
+	    serializeDate: function serializeDate(date) { // eslint-disable-line func-name-matching
+	        return toISO.call(date);
+	    },
+	    skipNulls: false,
+	    strictNullHandling: false
+	};
+	
+	var stringify = function stringify( // eslint-disable-line func-name-matching
+	    object,
+	    prefix,
+	    generateArrayPrefix,
+	    strictNullHandling,
+	    skipNulls,
+	    encoder,
+	    filter,
+	    sort,
+	    allowDots,
+	    serializeDate,
+	    formatter,
+	    encodeValuesOnly
+	) {
+	    var obj = object;
+	    if (typeof filter === 'function') {
+	        obj = filter(prefix, obj);
+	    } else if (obj instanceof Date) {
+	        obj = serializeDate(obj);
+	    } else if (obj === null) {
+	        if (strictNullHandling) {
+	            return encoder && !encodeValuesOnly ? encoder(prefix) : prefix;
+	        }
+	
+	        obj = '';
+	    }
+	
+	    if (typeof obj === 'string' || typeof obj === 'number' || typeof obj === 'boolean' || utils.isBuffer(obj)) {
+	        if (encoder) {
+	            var keyValue = encodeValuesOnly ? prefix : encoder(prefix);
+	            return [formatter(keyValue) + '=' + formatter(encoder(obj))];
+	        }
+	        return [formatter(prefix) + '=' + formatter(String(obj))];
+	    }
+	
+	    var values = [];
+	
+	    if (typeof obj === 'undefined') {
+	        return values;
+	    }
+	
+	    var objKeys;
+	    if (Array.isArray(filter)) {
+	        objKeys = filter;
+	    } else {
+	        var keys = Object.keys(obj);
+	        objKeys = sort ? keys.sort(sort) : keys;
+	    }
+	
+	    for (var i = 0; i < objKeys.length; ++i) {
+	        var key = objKeys[i];
+	
+	        if (skipNulls && obj[key] === null) {
+	            continue;
+	        }
+	
+	        if (Array.isArray(obj)) {
+	            values = values.concat(stringify(
+	                obj[key],
+	                generateArrayPrefix(prefix, key),
+	                generateArrayPrefix,
+	                strictNullHandling,
+	                skipNulls,
+	                encoder,
+	                filter,
+	                sort,
+	                allowDots,
+	                serializeDate,
+	                formatter,
+	                encodeValuesOnly
+	            ));
+	        } else {
+	            values = values.concat(stringify(
+	                obj[key],
+	                prefix + (allowDots ? '.' + key : '[' + key + ']'),
+	                generateArrayPrefix,
+	                strictNullHandling,
+	                skipNulls,
+	                encoder,
+	                filter,
+	                sort,
+	                allowDots,
+	                serializeDate,
+	                formatter,
+	                encodeValuesOnly
+	            ));
+	        }
+	    }
+	
+	    return values;
+	};
+	
+	module.exports = function (object, opts) {
+	    var obj = object;
+	    var options = opts || {};
+	
+	    if (options.encoder !== null && options.encoder !== undefined && typeof options.encoder !== 'function') {
+	        throw new TypeError('Encoder has to be a function.');
+	    }
+	
+	    var delimiter = typeof options.delimiter === 'undefined' ? defaults.delimiter : options.delimiter;
+	    var strictNullHandling = typeof options.strictNullHandling === 'boolean' ? options.strictNullHandling : defaults.strictNullHandling;
+	    var skipNulls = typeof options.skipNulls === 'boolean' ? options.skipNulls : defaults.skipNulls;
+	    var encode = typeof options.encode === 'boolean' ? options.encode : defaults.encode;
+	    var encoder = typeof options.encoder === 'function' ? options.encoder : defaults.encoder;
+	    var sort = typeof options.sort === 'function' ? options.sort : null;
+	    var allowDots = typeof options.allowDots === 'undefined' ? false : options.allowDots;
+	    var serializeDate = typeof options.serializeDate === 'function' ? options.serializeDate : defaults.serializeDate;
+	    var encodeValuesOnly = typeof options.encodeValuesOnly === 'boolean' ? options.encodeValuesOnly : defaults.encodeValuesOnly;
+	    if (typeof options.format === 'undefined') {
+	        options.format = formats.default;
+	    } else if (!Object.prototype.hasOwnProperty.call(formats.formatters, options.format)) {
+	        throw new TypeError('Unknown format option provided.');
+	    }
+	    var formatter = formats.formatters[options.format];
+	    var objKeys;
+	    var filter;
+	
+	    if (typeof options.filter === 'function') {
+	        filter = options.filter;
+	        obj = filter('', obj);
+	    } else if (Array.isArray(options.filter)) {
+	        filter = options.filter;
+	        objKeys = filter;
+	    }
+	
+	    var keys = [];
+	
+	    if (typeof obj !== 'object' || obj === null) {
+	        return '';
+	    }
+	
+	    var arrayFormat;
+	    if (options.arrayFormat in arrayPrefixGenerators) {
+	        arrayFormat = options.arrayFormat;
+	    } else if ('indices' in options) {
+	        arrayFormat = options.indices ? 'indices' : 'repeat';
+	    } else {
+	        arrayFormat = 'indices';
+	    }
+	
+	    var generateArrayPrefix = arrayPrefixGenerators[arrayFormat];
+	
+	    if (!objKeys) {
+	        objKeys = Object.keys(obj);
+	    }
+	
+	    if (sort) {
+	        objKeys.sort(sort);
+	    }
+	
+	    for (var i = 0; i < objKeys.length; ++i) {
+	        var key = objKeys[i];
+	
+	        if (skipNulls && obj[key] === null) {
+	            continue;
+	        }
+	
+	        keys = keys.concat(stringify(
+	            obj[key],
+	            key,
+	            generateArrayPrefix,
+	            strictNullHandling,
+	            skipNulls,
+	            encode ? encoder : null,
+	            filter,
+	            sort,
+	            allowDots,
+	            serializeDate,
+	            formatter,
+	            encodeValuesOnly
+	        ));
+	    }
+	
+	    return keys.join(delimiter);
+	};
+
+
+/***/ },
+/* 15 */
+/***/ function(module, exports) {
+
+	/* eslint-disable no-continue */
+	
+	function get() {
+	  if (!Object.assign) {
+	    return objectAssignPolyfill;
+	  }
+	
+	  return Object.assign;
+	}
+	
+	function objectAssignPolyfill(target) {
+	  'use strict';
+	  if (target === undefined || target === null) {
+	    throw new TypeError('Cannot convert first argument to object');
+	  }
+	
+	  var to = Object(target);
+	  for (var i = 1; i < arguments.length; i++) {
+	    var nextSource = arguments[i];
+	    if (nextSource === undefined || nextSource === null) {
+	      continue;
+	    }
+	
+	    var keysArray = Object.keys(Object(nextSource));
+	    for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
+	      var nextKey = keysArray[nextIndex];
+	      var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
+	      if (desc !== undefined && desc.enumerable) {
+	        to[nextKey] = nextSource[nextKey];
+	      }
+	    }
+	  }
+	  return to;
+	}
+	
+	module.exports = {
+	  get: get,
+	  objectAssignPolyfill: objectAssignPolyfill
+	};
+
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var urljoin = __webpack_require__(3);
+	
+	var windowHelper = __webpack_require__(2);
+	var objectHelper = __webpack_require__(1);
+	var RequestBuilder = __webpack_require__(11);
+	var WebMessageHandler = __webpack_require__(31);
+	var responseHandler = __webpack_require__(5);
+	
+	function CrossOriginAuthentication(webAuth, options) {
+	  this.webAuth = webAuth;
+	  this.baseOptions = options;
+	  this.request = new RequestBuilder(options);
+	  this.webMessageHandler = new WebMessageHandler(webAuth);
+	}
+	
+	function getFragment(name) {
+	  var theWindow = windowHelper.getWindow();
+	  var value = '&' + theWindow.location.hash.substring(1);
+	  var parts = value.split('&' + name + '=');
+	  if (parts.length === 2) {
+	    return parts.pop().split('&').shift();
+	  }
+	}
+	
+	function createKey(origin, coId) {
+	  return ['co/verifier', encodeURIComponent(origin), encodeURIComponent(coId)].join('/');
+	}
+	
+	/**
+	 * Logs in the user with username and password using the cross origin authentication (/co/authenticate) flow. You can use either `username` or `email` to identify the user, but `username` will take precedence over `email`.
+	 * Some browsers might not be able to successfully authenticate if 3rd party cookies are disabled in your browser. [See here for more information.]{@link https://auth0.com/docs/cross-origin-authentication}.
+	 * After the /co/authenticate call, you'll have to use the {@link parseHash} function at the `redirectUri` specified in the constructor.
+	 *
+	 * @method login
+	 * @param {Object} options options used in the {@link authorize} call after the login_ticket is acquired
+	 * @param {String} [options.username] Username (mutually exclusive with email)
+	 * @param {String} [options.email] Email  (mutually exclusive with username)
+	 * @param {String} options.password Password
+	 * @param {String} [options.realm] Realm used to authenticate the user, it can be a realm name or a database connection name
+	 * @param {crossOriginLoginCallback} cb Callback function called only when an authentication error, like invalid username or password, occurs. For other types of errors, there will be a redirect to the `redirectUri`.
+	 */
+	CrossOriginAuthentication.prototype.login = function(options, cb) {
+	  var _this = this;
+	  var theWindow = windowHelper.getWindow();
+	  var url = urljoin(this.baseOptions.rootUrl, '/co/authenticate');
+	  options.username = options.username || options.email;
+	  delete options.email;
+	
+	  var authenticateBody = {
+	    client_id: options.clientID || this.baseOptions.clientID,
+	    username: options.username
+	  };
+	  if (options.password) {
+	    authenticateBody.password = options.password;
+	  }
+	  if (options.otp) {
+	    authenticateBody.otp = options.otp;
+	  }
+	  var realm = options.realm || this.baseOptions.realm;
+	
+	  if (realm) {
+	    var credentialType =
+	      options.credentialType ||
+	      this.baseOptions.credentialType ||
+	      'http://auth0.com/oauth/grant-type/password-realm';
+	    authenticateBody.realm = realm;
+	    authenticateBody.credential_type = credentialType;
+	  } else {
+	    authenticateBody.credential_type = 'password';
+	  }
+	  this.request.post(url).withCredentials().send(authenticateBody).end(function(err, data) {
+	    if (err) {
+	      var errorObject = (err.response && err.response.body) || {
+	        error: 'request_error',
+	        error_description: JSON.stringify(err)
+	      };
+	      return responseHandler(cb, { forceLegacyError: true })(errorObject);
+	    }
+	    var popupMode = options.popup === true;
+	    options = objectHelper.blacklist(options, ['password', 'credentialType', 'otp', 'popup']);
+	    var authorizeOptions = objectHelper
+	      .merge(options)
+	      .with({ loginTicket: data.body.login_ticket });
+	    var key = createKey(_this.baseOptions.rootUrl, data.body.co_id);
+	    theWindow.sessionStorage[key] = data.body.co_verifier;
+	    if (popupMode) {
+	      _this.webMessageHandler.run(
+	        authorizeOptions,
+	        responseHandler(cb, { forceLegacyError: true })
+	      );
+	    } else {
+	      _this.webAuth.authorize(authorizeOptions);
+	    }
+	  });
+	};
+	
+	function tryGetVerifier(theWindow, key) {
+	  try {
+	    var verifier = theWindow.sessionStorage[key];
+	    theWindow.sessionStorage.removeItem(key);
+	    return verifier;
+	  } catch (e) {
+	    return '';
+	  }
+	}
+	
+	/**
+	 * Runs the callback code for the cross origin authentication call. This method is meant to be called by the cross origin authentication callback url.
+	 *
+	 * @method callback
+	 */
+	CrossOriginAuthentication.prototype.callback = function() {
+	  var targetOrigin = decodeURIComponent(getFragment('origin'));
+	  var theWindow = windowHelper.getWindow();
+	
+	  theWindow.addEventListener('message', function(evt) {
+	    if (evt.data.type !== 'co_verifier_request') {
+	      return;
+	    }
+	    var key = createKey(evt.origin, evt.data.request.id);
+	    var verifier = tryGetVerifier(theWindow, key);
+	
+	    evt.source.postMessage(
+	      {
+	        type: 'co_verifier_response',
+	        response: {
+	          verifier: verifier
+	        }
+	      },
+	      evt.origin
+	    );
+	  });
+	
+	  theWindow.parent.postMessage({ type: 'ready' }, targetOrigin);
+	};
+	
+	module.exports = CrossOriginAuthentication;
+
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var random = __webpack_require__(54);
+	var storage = __webpack_require__(29);
+	
+	var DEFAULT_NAMESPACE = 'com.auth0.auth.';
+	
+	function TransactionManager(options) {
+	  options = options || {};
+	  this.namespace = options.namespace || DEFAULT_NAMESPACE;
+	  this.keyLength = options.keyLength || 32;
+	}
+	
+	TransactionManager.prototype.process = function(options) {
+	  if (!options.responseType) {
+	    throw new Error('responseType is required');
+	  }
+	  var lastUsedConnection = options.realm || options.connection;
+	  var responseTypeIncludesIdToken = options.responseType.indexOf('id_token') !== -1;
+	
+	  var transaction = this.generateTransaction(
+	    options.appState,
+	    options.state,
+	    options.nonce,
+	    lastUsedConnection,
+	    responseTypeIncludesIdToken
+	  );
+	  if (!options.state) {
+	    options.state = transaction.state;
+	  }
+	
+	  if (responseTypeIncludesIdToken && !options.nonce) {
+	    options.nonce = transaction.nonce;
+	  }
+	
+	  return options;
+	};
+	
+	TransactionManager.prototype.generateTransaction = function(
+	  appState,
+	  state,
+	  nonce,
+	  lastUsedConnection,
+	  generateNonce
+	) {
+	  state = state || random.randomString(this.keyLength);
+	  nonce = nonce || (generateNonce ? random.randomString(this.keyLength) : null);
+	
+	  storage.setItem(this.namespace + state, {
+	    nonce: nonce,
+	    appState: appState,
+	    state: state,
+	    lastUsedConnection: lastUsedConnection
+	  });
+	  return {
+	    state: state,
+	    nonce: nonce
+	  };
+	};
+	
+	TransactionManager.prototype.getStoredTransaction = function(state) {
+	  var transactionData;
+	
+	  transactionData = storage.getItem(this.namespace + state);
+	  storage.removeItem(this.namespace + state);
+	  return transactionData;
+	};
+	
+	module.exports = TransactionManager;
+
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	'use strict'
+	
+	exports.byteLength = byteLength
+	exports.toByteArray = toByteArray
+	exports.fromByteArray = fromByteArray
+	
+	var lookup = []
+	var revLookup = []
+	var Arr = typeof Uint8Array !== 'undefined' ? Uint8Array : Array
+	
+	var code = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+	for (var i = 0, len = code.length; i < len; ++i) {
+	  lookup[i] = code[i]
+	  revLookup[code.charCodeAt(i)] = i
+	}
+	
+	revLookup['-'.charCodeAt(0)] = 62
+	revLookup['_'.charCodeAt(0)] = 63
+	
+	function placeHoldersCount (b64) {
+	  var len = b64.length
+	  if (len % 4 > 0) {
+	    throw new Error('Invalid string. Length must be a multiple of 4')
+	  }
+	
+	  // the number of equal signs (place holders)
+	  // if there are two placeholders, than the two characters before it
+	  // represent one byte
+	  // if there is only one, then the three characters before it represent 2 bytes
+	  // this is just a cheap hack to not do indexOf twice
+	  return b64[len - 2] === '=' ? 2 : b64[len - 1] === '=' ? 1 : 0
+	}
+	
+	function byteLength (b64) {
+	  // base64 is 4/3 + up to two characters of the original data
+	  return b64.length * 3 / 4 - placeHoldersCount(b64)
+	}
+	
+	function toByteArray (b64) {
+	  var i, j, l, tmp, placeHolders, arr
+	  var len = b64.length
+	  placeHolders = placeHoldersCount(b64)
+	
+	  arr = new Arr(len * 3 / 4 - placeHolders)
+	
+	  // if there are placeholders, only get up to the last complete 4 chars
+	  l = placeHolders > 0 ? len - 4 : len
+	
+	  var L = 0
+	
+	  for (i = 0, j = 0; i < l; i += 4, j += 3) {
+	    tmp = (revLookup[b64.charCodeAt(i)] << 18) | (revLookup[b64.charCodeAt(i + 1)] << 12) | (revLookup[b64.charCodeAt(i + 2)] << 6) | revLookup[b64.charCodeAt(i + 3)]
+	    arr[L++] = (tmp >> 16) & 0xFF
+	    arr[L++] = (tmp >> 8) & 0xFF
+	    arr[L++] = tmp & 0xFF
+	  }
+	
+	  if (placeHolders === 2) {
+	    tmp = (revLookup[b64.charCodeAt(i)] << 2) | (revLookup[b64.charCodeAt(i + 1)] >> 4)
+	    arr[L++] = tmp & 0xFF
+	  } else if (placeHolders === 1) {
+	    tmp = (revLookup[b64.charCodeAt(i)] << 10) | (revLookup[b64.charCodeAt(i + 1)] << 4) | (revLookup[b64.charCodeAt(i + 2)] >> 2)
+	    arr[L++] = (tmp >> 8) & 0xFF
+	    arr[L++] = tmp & 0xFF
+	  }
+	
+	  return arr
+	}
+	
+	function tripletToBase64 (num) {
+	  return lookup[num >> 18 & 0x3F] + lookup[num >> 12 & 0x3F] + lookup[num >> 6 & 0x3F] + lookup[num & 0x3F]
+	}
+	
+	function encodeChunk (uint8, start, end) {
+	  var tmp
+	  var output = []
+	  for (var i = start; i < end; i += 3) {
+	    tmp = (uint8[i] << 16) + (uint8[i + 1] << 8) + (uint8[i + 2])
+	    output.push(tripletToBase64(tmp))
+	  }
+	  return output.join('')
+	}
+	
+	function fromByteArray (uint8) {
+	  var tmp
+	  var len = uint8.length
+	  var extraBytes = len % 3 // if we have 1 byte left, pad 2 bytes
+	  var output = ''
+	  var parts = []
+	  var maxChunkLength = 16383 // must be multiple of 3
+	
+	  // go through the array every three bytes, we'll deal with trailing stuff later
+	  for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
+	    parts.push(encodeChunk(uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)))
+	  }
+	
+	  // pad the end with zeros, but make sure to not forget the extra bytes
+	  if (extraBytes === 1) {
+	    tmp = uint8[len - 1]
+	    output += lookup[tmp >> 2]
+	    output += lookup[(tmp << 4) & 0x3F]
+	    output += '=='
+	  } else if (extraBytes === 2) {
+	    tmp = (uint8[len - 2] << 8) + (uint8[len - 1])
+	    output += lookup[tmp >> 10]
+	    output += lookup[(tmp >> 4) & 0x3F]
+	    output += lookup[(tmp << 2) & 0x3F]
+	    output += '='
+	  }
+	
+	  parts.push(output)
+	
+	  return parts.join('')
+	}
+
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	;(function (root, factory) {
+		if (true) {
+			// CommonJS
+			module.exports = exports = factory(__webpack_require__(12));
+		}
+		else if (typeof define === "function" && define.amd) {
+			// AMD
+			define(["./core"], factory);
+		}
+		else {
+			// Global (browser)
+			factory(root.CryptoJS);
+		}
+	}(this, function (CryptoJS) {
+	
+		(function (Math) {
+		    // Shortcuts
+		    var C = CryptoJS;
+		    var C_lib = C.lib;
+		    var WordArray = C_lib.WordArray;
+		    var Hasher = C_lib.Hasher;
+		    var C_algo = C.algo;
+	
+		    // Initialization and round constants tables
+		    var H = [];
+		    var K = [];
+	
+		    // Compute constants
+		    (function () {
+		        function isPrime(n) {
+		            var sqrtN = Math.sqrt(n);
+		            for (var factor = 2; factor <= sqrtN; factor++) {
+		                if (!(n % factor)) {
+		                    return false;
+		                }
+		            }
+	
+		            return true;
+		        }
+	
+		        function getFractionalBits(n) {
+		            return ((n - (n | 0)) * 0x100000000) | 0;
+		        }
+	
+		        var n = 2;
+		        var nPrime = 0;
+		        while (nPrime < 64) {
+		            if (isPrime(n)) {
+		                if (nPrime < 8) {
+		                    H[nPrime] = getFractionalBits(Math.pow(n, 1 / 2));
+		                }
+		                K[nPrime] = getFractionalBits(Math.pow(n, 1 / 3));
+	
+		                nPrime++;
+		            }
+	
+		            n++;
+		        }
+		    }());
+	
+		    // Reusable object
+		    var W = [];
+	
+		    /**
+		     * SHA-256 hash algorithm.
+		     */
+		    var SHA256 = C_algo.SHA256 = Hasher.extend({
+		        _doReset: function () {
+		            this._hash = new WordArray.init(H.slice(0));
+		        },
+	
+		        _doProcessBlock: function (M, offset) {
+		            // Shortcut
+		            var H = this._hash.words;
+	
+		            // Working variables
+		            var a = H[0];
+		            var b = H[1];
+		            var c = H[2];
+		            var d = H[3];
+		            var e = H[4];
+		            var f = H[5];
+		            var g = H[6];
+		            var h = H[7];
+	
+		            // Computation
+		            for (var i = 0; i < 64; i++) {
+		                if (i < 16) {
+		                    W[i] = M[offset + i] | 0;
+		                } else {
+		                    var gamma0x = W[i - 15];
+		                    var gamma0  = ((gamma0x << 25) | (gamma0x >>> 7))  ^
+		                                  ((gamma0x << 14) | (gamma0x >>> 18)) ^
+		                                   (gamma0x >>> 3);
+	
+		                    var gamma1x = W[i - 2];
+		                    var gamma1  = ((gamma1x << 15) | (gamma1x >>> 17)) ^
+		                                  ((gamma1x << 13) | (gamma1x >>> 19)) ^
+		                                   (gamma1x >>> 10);
+	
+		                    W[i] = gamma0 + W[i - 7] + gamma1 + W[i - 16];
+		                }
+	
+		                var ch  = (e & f) ^ (~e & g);
+		                var maj = (a & b) ^ (a & c) ^ (b & c);
+	
+		                var sigma0 = ((a << 30) | (a >>> 2)) ^ ((a << 19) | (a >>> 13)) ^ ((a << 10) | (a >>> 22));
+		                var sigma1 = ((e << 26) | (e >>> 6)) ^ ((e << 21) | (e >>> 11)) ^ ((e << 7)  | (e >>> 25));
+	
+		                var t1 = h + sigma1 + ch + K[i] + W[i];
+		                var t2 = sigma0 + maj;
+	
+		                h = g;
+		                g = f;
+		                f = e;
+		                e = (d + t1) | 0;
+		                d = c;
+		                c = b;
+		                b = a;
+		                a = (t1 + t2) | 0;
+		            }
+	
+		            // Intermediate hash value
+		            H[0] = (H[0] + a) | 0;
+		            H[1] = (H[1] + b) | 0;
+		            H[2] = (H[2] + c) | 0;
+		            H[3] = (H[3] + d) | 0;
+		            H[4] = (H[4] + e) | 0;
+		            H[5] = (H[5] + f) | 0;
+		            H[6] = (H[6] + g) | 0;
+		            H[7] = (H[7] + h) | 0;
+		        },
+	
+		        _doFinalize: function () {
+		            // Shortcuts
+		            var data = this._data;
+		            var dataWords = data.words;
+	
+		            var nBitsTotal = this._nDataBytes * 8;
+		            var nBitsLeft = data.sigBytes * 8;
+	
+		            // Add padding
+		            dataWords[nBitsLeft >>> 5] |= 0x80 << (24 - nBitsLeft % 32);
+		            dataWords[(((nBitsLeft + 64) >>> 9) << 4) + 14] = Math.floor(nBitsTotal / 0x100000000);
+		            dataWords[(((nBitsLeft + 64) >>> 9) << 4) + 15] = nBitsTotal;
+		            data.sigBytes = dataWords.length * 4;
+	
+		            // Hash final blocks
+		            this._process();
+	
+		            // Return final computed hash
+		            return this._hash;
+		        },
+	
+		        clone: function () {
+		            var clone = Hasher.clone.call(this);
+		            clone._hash = this._hash.clone();
+	
+		            return clone;
+		        }
+		    });
+	
+		    /**
+		     * Shortcut function to the hasher's object interface.
+		     *
+		     * @param {WordArray|string} message The message to hash.
+		     *
+		     * @return {WordArray} The hash.
+		     *
+		     * @static
+		     *
+		     * @example
+		     *
+		     *     var hash = CryptoJS.SHA256('message');
+		     *     var hash = CryptoJS.SHA256(wordArray);
+		     */
+		    C.SHA256 = Hasher._createHelper(SHA256);
+	
+		    /**
+		     * Shortcut function to the HMAC's object interface.
+		     *
+		     * @param {WordArray|string} message The message to hash.
+		     * @param {WordArray|string} key The secret key.
+		     *
+		     * @return {WordArray} The HMAC.
+		     *
+		     * @static
+		     *
+		     * @example
+		     *
+		     *     var hmac = CryptoJS.HmacSHA256(message, key);
+		     */
+		    C.HmacSHA256 = Hasher._createHmacHelper(SHA256);
+		}(Math));
+	
+	
+		return CryptoJS.SHA256;
+	
+	}));
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var base64 = __webpack_require__(18);
+	
+	function padding(str) {
+	  var mod = (str.length % 4);
+	  var pad = 4 - mod;
+	
+	  if (mod === 0) {
+	    return str;
+	  }
+	
+	  return str + (new Array(1 + pad)).join('=');
+	}
+	
+	function byteArrayToString(array) {
+	  var result = "";
+	  for (var i = 0; i < array.length; i++) {
+	    result += String.fromCharCode(array[i]);
+	  }
+	  return result;
+	}
+	
+	function stringToByteArray(str) {
+	  var arr = new Array(str.length);
+	  for (var a = 0; a < str.length; a++) {
+	    arr[a] = str.charCodeAt(a);
+	  }
+	  return arr;
+	}
+	
+	function byteArrayToHex(raw) {
+	  var HEX = '';
+	
+	  for (var i = 0; i < raw.length; i++) {
+	    var _hex = raw[i].toString(16);
+	    HEX += (_hex.length === 2 ? _hex : '0' + _hex);
+	  }
+	
+	  return HEX;
+	}
+	
+	function encodeString(str) {
+	  return base64.fromByteArray(stringToByteArray(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+	    return String.fromCharCode('0x' + p1);
+	  })))
+	  .replace(/\+/g, '-') // Convert '+' to '-'
+	  .replace(/\//g, '_'); // Convert '/' to '_';
+	}
+	
+	function decodeToString(str) {
+	  str = padding(str)
+	    .replace(/\-/g, '+') // Convert '-' to '+'
+	    .replace(/_/g, '/'); // Convert '_' to '/'
+	
+	  return decodeURIComponent(byteArrayToString(base64.toByteArray(str)).split('').map(function (c) {
+	    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+	  }).join(''));
+	}
+	
+	function decodeToHEX(str) {
+	  return byteArrayToHex(base64.toByteArray(padding(str)));
+	}
+	
+	function base64ToBase64Url(base64String) {
+	  var SAFE_URL_ENCODING_MAPPING = {
+	    "+": "-",
+	    "/": "_",
+	    "=": ""
+	  };
+	
+	  return base64String.replace(/[+/=]/g, function(m) {
+	    return SAFE_URL_ENCODING_MAPPING[m];
+	  });
+	}
+	
+	module.exports = {
+	  encodeString: encodeString,
+	  decodeToString: decodeToString,
+	  byteArrayToString: byteArrayToString,
+	  stringToByteArray: stringToByteArray,
+	  padding: padding,
+	  byteArrayToHex: byteArrayToHex,
+	  decodeToHEX: decodeToHEX,
+	  base64ToBase64Url: base64ToBase64Url
+	};
+
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Root reference for iframes.
+	 */
+	
+	var root;
+	if (typeof window !== 'undefined') { // Browser window
+	  root = window;
+	} else if (typeof self !== 'undefined') { // Web Worker
+	  root = self;
+	} else { // Other environments
+	  console.warn("Using browser-only version of superagent in non-browser environment");
+	  root = this;
+	}
+	
+	var Emitter = __webpack_require__(32);
+	var RequestBase = __webpack_require__(42);
+	var isObject = __webpack_require__(22);
+	var ResponseBase = __webpack_require__(43);
+	var Agent = __webpack_require__(41);
+	
+	/**
+	 * Noop.
+	 */
+	
+	function noop(){};
+	
+	/**
+	 * Expose `request`.
+	 */
+	
+	var request = exports = module.exports = function(method, url) {
+	  // callback
+	  if ('function' == typeof url) {
+	    return new exports.Request('GET', method).end(url);
+	  }
+	
+	  // url first
+	  if (1 == arguments.length) {
+	    return new exports.Request('GET', method);
+	  }
+	
+	  return new exports.Request(method, url);
+	}
+	
+	exports.Request = Request;
+	
+	/**
+	 * Determine XHR.
+	 */
+	
+	request.getXHR = function () {
+	  if (root.XMLHttpRequest
+	      && (!root.location || 'file:' != root.location.protocol
+	          || !root.ActiveXObject)) {
+	    return new XMLHttpRequest;
+	  } else {
+	    try { return new ActiveXObject('Microsoft.XMLHTTP'); } catch(e) {}
+	    try { return new ActiveXObject('Msxml2.XMLHTTP.6.0'); } catch(e) {}
+	    try { return new ActiveXObject('Msxml2.XMLHTTP.3.0'); } catch(e) {}
+	    try { return new ActiveXObject('Msxml2.XMLHTTP'); } catch(e) {}
+	  }
+	  throw Error("Browser-only version of superagent could not find XHR");
+	};
+	
+	/**
+	 * Removes leading and trailing whitespace, added to support IE.
+	 *
+	 * @param {String} s
+	 * @return {String}
+	 * @api private
+	 */
+	
+	var trim = ''.trim
+	  ? function(s) { return s.trim(); }
+	  : function(s) { return s.replace(/(^\s*|\s*$)/g, ''); };
+	
+	/**
+	 * Serialize the given `obj`.
+	 *
+	 * @param {Object} obj
+	 * @return {String}
+	 * @api private
+	 */
+	
+	function serialize(obj) {
+	  if (!isObject(obj)) return obj;
+	  var pairs = [];
+	  for (var key in obj) {
+	    pushEncodedKeyValuePair(pairs, key, obj[key]);
+	  }
+	  return pairs.join('&');
+	}
+	
+	/**
+	 * Helps 'serialize' with serializing arrays.
+	 * Mutates the pairs array.
+	 *
+	 * @param {Array} pairs
+	 * @param {String} key
+	 * @param {Mixed} val
+	 */
+	
+	function pushEncodedKeyValuePair(pairs, key, val) {
+	  if (val != null) {
+	    if (Array.isArray(val)) {
+	      val.forEach(function(v) {
+	        pushEncodedKeyValuePair(pairs, key, v);
+	      });
+	    } else if (isObject(val)) {
+	      for(var subkey in val) {
+	        pushEncodedKeyValuePair(pairs, key + '[' + subkey + ']', val[subkey]);
+	      }
+	    } else {
+	      pairs.push(encodeURIComponent(key)
+	        + '=' + encodeURIComponent(val));
+	    }
+	  } else if (val === null) {
+	    pairs.push(encodeURIComponent(key));
+	  }
+	}
+	
+	/**
+	 * Expose serialization method.
+	 */
+	
+	request.serializeObject = serialize;
+	
+	/**
+	  * Parse the given x-www-form-urlencoded `str`.
+	  *
+	  * @param {String} str
+	  * @return {Object}
+	  * @api private
+	  */
+	
+	function parseString(str) {
+	  var obj = {};
+	  var pairs = str.split('&');
+	  var pair;
+	  var pos;
+	
+	  for (var i = 0, len = pairs.length; i < len; ++i) {
+	    pair = pairs[i];
+	    pos = pair.indexOf('=');
+	    if (pos == -1) {
+	      obj[decodeURIComponent(pair)] = '';
+	    } else {
+	      obj[decodeURIComponent(pair.slice(0, pos))] =
+	        decodeURIComponent(pair.slice(pos + 1));
+	    }
+	  }
+	
+	  return obj;
+	}
+	
+	/**
+	 * Expose parser.
+	 */
+	
+	request.parseString = parseString;
+	
+	/**
+	 * Default MIME type map.
+	 *
+	 *     superagent.types.xml = 'application/xml';
+	 *
+	 */
+	
+	request.types = {
+	  html: 'text/html',
+	  json: 'application/json',
+	  xml: 'text/xml',
+	  urlencoded: 'application/x-www-form-urlencoded',
+	  'form': 'application/x-www-form-urlencoded',
+	  'form-data': 'application/x-www-form-urlencoded'
+	};
+	
+	/**
+	 * Default serialization map.
+	 *
+	 *     superagent.serialize['application/xml'] = function(obj){
+	 *       return 'generated xml here';
+	 *     };
+	 *
+	 */
+	
+	request.serialize = {
+	  'application/x-www-form-urlencoded': serialize,
+	  'application/json': JSON.stringify,
+	};
+	
+	/**
+	  * Default parsers.
+	  *
+	  *     superagent.parse['application/xml'] = function(str){
+	  *       return { object parsed from str };
+	  *     };
+	  *
+	  */
+	
+	request.parse = {
+	  'application/x-www-form-urlencoded': parseString,
+	  'application/json': JSON.parse,
+	};
+	
+	/**
+	 * Parse the given header `str` into
+	 * an object containing the mapped fields.
+	 *
+	 * @param {String} str
+	 * @return {Object}
+	 * @api private
+	 */
+	
+	function parseHeader(str) {
+	  var lines = str.split(/\r?\n/);
+	  var fields = {};
+	  var index;
+	  var line;
+	  var field;
+	  var val;
+	
+	  for (var i = 0, len = lines.length; i < len; ++i) {
+	    line = lines[i];
+	    index = line.indexOf(':');
+	    if (index === -1) { // could be empty line, just skip it
+	      continue;
+	    }
+	    field = line.slice(0, index).toLowerCase();
+	    val = trim(line.slice(index + 1));
+	    fields[field] = val;
+	  }
+	
+	  return fields;
+	}
+	
+	/**
+	 * Check if `mime` is json or has +json structured syntax suffix.
+	 *
+	 * @param {String} mime
+	 * @return {Boolean}
+	 * @api private
+	 */
+	
+	function isJSON(mime) {
+	  // should match /json or +json
+	  // but not /json-seq
+	  return /[\/+]json($|[^-\w])/.test(mime);
+	}
+	
+	/**
+	 * Initialize a new `Response` with the given `xhr`.
+	 *
+	 *  - set flags (.ok, .error, etc)
+	 *  - parse header
+	 *
+	 * Examples:
+	 *
+	 *  Aliasing `superagent` as `request` is nice:
+	 *
+	 *      request = superagent;
+	 *
+	 *  We can use the promise-like API, or pass callbacks:
+	 *
+	 *      request.get('/').end(function(res){});
+	 *      request.get('/', function(res){});
+	 *
+	 *  Sending data can be chained:
+	 *
+	 *      request
+	 *        .post('/user')
+	 *        .send({ name: 'tj' })
+	 *        .end(function(res){});
+	 *
+	 *  Or passed to `.send()`:
+	 *
+	 *      request
+	 *        .post('/user')
+	 *        .send({ name: 'tj' }, function(res){});
+	 *
+	 *  Or passed to `.post()`:
+	 *
+	 *      request
+	 *        .post('/user', { name: 'tj' })
+	 *        .end(function(res){});
+	 *
+	 * Or further reduced to a single call for simple cases:
+	 *
+	 *      request
+	 *        .post('/user', { name: 'tj' }, function(res){});
+	 *
+	 * @param {XMLHTTPRequest} xhr
+	 * @param {Object} options
+	 * @api private
+	 */
+	
+	function Response(req) {
+	  this.req = req;
+	  this.xhr = this.req.xhr;
+	  // responseText is accessible only if responseType is '' or 'text' and on older browsers
+	  this.text = ((this.req.method !='HEAD' && (this.xhr.responseType === '' || this.xhr.responseType === 'text')) || typeof this.xhr.responseType === 'undefined')
+	     ? this.xhr.responseText
+	     : null;
+	  this.statusText = this.req.xhr.statusText;
+	  var status = this.xhr.status;
+	  // handle IE9 bug: http://stackoverflow.com/questions/10046972/msie-returns-status-code-of-1223-for-ajax-request
+	  if (status === 1223) {
+	    status = 204;
+	  }
+	  this._setStatusProperties(status);
+	  this.header = this.headers = parseHeader(this.xhr.getAllResponseHeaders());
+	  // getAllResponseHeaders sometimes falsely returns "" for CORS requests, but
+	  // getResponseHeader still works. so we get content-type even if getting
+	  // other headers fails.
+	  this.header['content-type'] = this.xhr.getResponseHeader('content-type');
+	  this._setHeaderProperties(this.header);
+	
+	  if (null === this.text && req._responseType) {
+	    this.body = this.xhr.response;
+	  } else {
+	    this.body = this.req.method != 'HEAD'
+	      ? this._parseBody(this.text ? this.text : this.xhr.response)
+	      : null;
+	  }
+	}
+	
+	ResponseBase(Response.prototype);
+	
+	/**
+	 * Parse the given body `str`.
+	 *
+	 * Used for auto-parsing of bodies. Parsers
+	 * are defined on the `superagent.parse` object.
+	 *
+	 * @param {String} str
+	 * @return {Mixed}
+	 * @api private
+	 */
+	
+	Response.prototype._parseBody = function(str) {
+	  var parse = request.parse[this.type];
+	  if (this.req._parser) {
+	    return this.req._parser(this, str);
+	  }
+	  if (!parse && isJSON(this.type)) {
+	    parse = request.parse['application/json'];
+	  }
+	  return parse && str && (str.length || str instanceof Object)
+	    ? parse(str)
+	    : null;
+	};
+	
+	/**
+	 * Return an `Error` representative of this response.
+	 *
+	 * @return {Error}
+	 * @api public
+	 */
+	
+	Response.prototype.toError = function(){
+	  var req = this.req;
+	  var method = req.method;
+	  var url = req.url;
+	
+	  var msg = 'cannot ' + method + ' ' + url + ' (' + this.status + ')';
+	  var err = new Error(msg);
+	  err.status = this.status;
+	  err.method = method;
+	  err.url = url;
+	
+	  return err;
+	};
+	
+	/**
+	 * Expose `Response`.
+	 */
+	
+	request.Response = Response;
+	
+	/**
+	 * Initialize a new `Request` with the given `method` and `url`.
+	 *
+	 * @param {String} method
+	 * @param {String} url
+	 * @api public
+	 */
+	
+	function Request(method, url) {
+	  var self = this;
+	  this._query = this._query || [];
+	  this.method = method;
+	  this.url = url;
+	  this.header = {}; // preserves header name case
+	  this._header = {}; // coerces header names to lowercase
+	  this.on('end', function(){
+	    var err = null;
+	    var res = null;
+	
+	    try {
+	      res = new Response(self);
+	    } catch(e) {
+	      err = new Error('Parser is unable to parse the response');
+	      err.parse = true;
+	      err.original = e;
+	      // issue #675: return the raw response if the response parsing fails
+	      if (self.xhr) {
+	        // ie9 doesn't have 'response' property
+	        err.rawResponse = typeof self.xhr.responseType == 'undefined' ? self.xhr.responseText : self.xhr.response;
+	        // issue #876: return the http status code if the response parsing fails
+	        err.status = self.xhr.status ? self.xhr.status : null;
+	        err.statusCode = err.status; // backwards-compat only
+	      } else {
+	        err.rawResponse = null;
+	        err.status = null;
+	      }
+	
+	      return self.callback(err);
+	    }
+	
+	    self.emit('response', res);
+	
+	    var new_err;
+	    try {
+	      if (!self._isResponseOK(res)) {
+	        new_err = new Error(res.statusText || 'Unsuccessful HTTP response');
+	      }
+	    } catch(custom_err) {
+	      new_err = custom_err; // ok() callback can throw
+	    }
+	
+	    // #1000 don't catch errors from the callback to avoid double calling it
+	    if (new_err) {
+	      new_err.original = err;
+	      new_err.response = res;
+	      new_err.status = res.status;
+	      self.callback(new_err, res);
+	    } else {
+	      self.callback(null, res);
+	    }
+	  });
+	}
+	
+	/**
+	 * Mixin `Emitter` and `RequestBase`.
+	 */
+	
+	Emitter(Request.prototype);
+	RequestBase(Request.prototype);
+	
+	/**
+	 * Set Content-Type to `type`, mapping values from `request.types`.
+	 *
+	 * Examples:
+	 *
+	 *      superagent.types.xml = 'application/xml';
+	 *
+	 *      request.post('/')
+	 *        .type('xml')
+	 *        .send(xmlstring)
+	 *        .end(callback);
+	 *
+	 *      request.post('/')
+	 *        .type('application/xml')
+	 *        .send(xmlstring)
+	 *        .end(callback);
+	 *
+	 * @param {String} type
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+	
+	Request.prototype.type = function(type){
+	  this.set('Content-Type', request.types[type] || type);
+	  return this;
+	};
+	
+	/**
+	 * Set Accept to `type`, mapping values from `request.types`.
+	 *
+	 * Examples:
+	 *
+	 *      superagent.types.json = 'application/json';
+	 *
+	 *      request.get('/agent')
+	 *        .accept('json')
+	 *        .end(callback);
+	 *
+	 *      request.get('/agent')
+	 *        .accept('application/json')
+	 *        .end(callback);
+	 *
+	 * @param {String} accept
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+	
+	Request.prototype.accept = function(type){
+	  this.set('Accept', request.types[type] || type);
+	  return this;
+	};
+	
+	/**
+	 * Set Authorization field value with `user` and `pass`.
+	 *
+	 * @param {String} user
+	 * @param {String} [pass] optional in case of using 'bearer' as type
+	 * @param {Object} options with 'type' property 'auto', 'basic' or 'bearer' (default 'basic')
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+	
+	Request.prototype.auth = function(user, pass, options){
+	  if (1 === arguments.length) pass = '';
+	  if (typeof pass === 'object' && pass !== null) { // pass is optional and can be replaced with options
+	    options = pass;
+	    pass = '';
+	  }
+	  if (!options) {
+	    options = {
+	      type: 'function' === typeof btoa ? 'basic' : 'auto',
+	    };
+	  }
+	
+	  var encoder = function(string) {
+	    if ('function' === typeof btoa) {
+	      return btoa(string);
+	    }
+	    throw new Error('Cannot use basic auth, btoa is not a function');
+	  };
+	
+	  return this._auth(user, pass, options, encoder);
+	};
+	
+	/**
+	 * Add query-string `val`.
+	 *
+	 * Examples:
+	 *
+	 *   request.get('/shoes')
+	 *     .query('size=10')
+	 *     .query({ color: 'blue' })
+	 *
+	 * @param {Object|String} val
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+	
+	Request.prototype.query = function(val){
+	  if ('string' != typeof val) val = serialize(val);
+	  if (val) this._query.push(val);
+	  return this;
+	};
+	
+	/**
+	 * Queue the given `file` as an attachment to the specified `field`,
+	 * with optional `options` (or filename).
+	 *
+	 * ``` js
+	 * request.post('/upload')
+	 *   .attach('content', new Blob(['<a id="a"><b id="b">hey!</b></a>'], { type: "text/html"}))
+	 *   .end(callback);
+	 * ```
+	 *
+	 * @param {String} field
+	 * @param {Blob|File} file
+	 * @param {String|Object} options
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+	
+	Request.prototype.attach = function(field, file, options){
+	  if (file) {
+	    if (this._data) {
+	      throw Error("superagent can't mix .send() and .attach()");
+	    }
+	
+	    this._getFormData().append(field, file, options || file.name);
+	  }
+	  return this;
+	};
+	
+	Request.prototype._getFormData = function(){
+	  if (!this._formData) {
+	    this._formData = new root.FormData();
+	  }
+	  return this._formData;
+	};
+	
+	/**
+	 * Invoke the callback with `err` and `res`
+	 * and handle arity check.
+	 *
+	 * @param {Error} err
+	 * @param {Response} res
+	 * @api private
+	 */
+	
+	Request.prototype.callback = function(err, res){
+	  if (this._shouldRetry(err, res)) {
+	    return this._retry();
+	  }
+	
+	  var fn = this._callback;
+	  this.clearTimeout();
+	
+	  if (err) {
+	    if (this._maxRetries) err.retries = this._retries - 1;
+	    this.emit('error', err);
+	  }
+	
+	  fn(err, res);
+	};
+	
+	/**
+	 * Invoke callback with x-domain error.
+	 *
+	 * @api private
+	 */
+	
+	Request.prototype.crossDomainError = function(){
+	  var err = new Error('Request has been terminated\nPossible causes: the network is offline, Origin is not allowed by Access-Control-Allow-Origin, the page is being unloaded, etc.');
+	  err.crossDomain = true;
+	
+	  err.status = this.status;
+	  err.method = this.method;
+	  err.url = this.url;
+	
+	  this.callback(err);
+	};
+	
+	// This only warns, because the request is still likely to work
+	Request.prototype.buffer = Request.prototype.ca = Request.prototype.agent = function(){
+	  console.warn("This is not supported in browser version of superagent");
+	  return this;
+	};
+	
+	// This throws, because it can't send/receive data as expected
+	Request.prototype.pipe = Request.prototype.write = function(){
+	  throw Error("Streaming is not supported in browser version of superagent");
+	};
+	
+	/**
+	 * Check if `obj` is a host object,
+	 * we don't want to serialize these :)
+	 *
+	 * @param {Object} obj
+	 * @return {Boolean}
+	 * @api private
+	 */
+	Request.prototype._isHost = function _isHost(obj) {
+	  // Native objects stringify to [object File], [object Blob], [object FormData], etc.
+	  return obj && 'object' === typeof obj && !Array.isArray(obj) && Object.prototype.toString.call(obj) !== '[object Object]';
+	}
+	
+	/**
+	 * Initiate request, invoking callback `fn(res)`
+	 * with an instanceof `Response`.
+	 *
+	 * @param {Function} fn
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+	
+	Request.prototype.end = function(fn){
+	  if (this._endCalled) {
+	    console.warn("Warning: .end() was called twice. This is not supported in superagent");
+	  }
+	  this._endCalled = true;
+	
+	  // store callback
+	  this._callback = fn || noop;
+	
+	  // querystring
+	  this._finalizeQueryString();
+	
+	  return this._end();
+	};
+	
+	Request.prototype._end = function() {
+	  var self = this;
+	  var xhr = (this.xhr = request.getXHR());
+	  var data = this._formData || this._data;
+	
+	  this._setTimeouts();
+	
+	  // state change
+	  xhr.onreadystatechange = function(){
+	    var readyState = xhr.readyState;
+	    if (readyState >= 2 && self._responseTimeoutTimer) {
+	      clearTimeout(self._responseTimeoutTimer);
+	    }
+	    if (4 != readyState) {
+	      return;
+	    }
+	
+	    // In IE9, reads to any property (e.g. status) off of an aborted XHR will
+	    // result in the error "Could not complete the operation due to error c00c023f"
+	    var status;
+	    try { status = xhr.status } catch(e) { status = 0; }
+	
+	    if (!status) {
+	      if (self.timedout || self._aborted) return;
+	      return self.crossDomainError();
+	    }
+	    self.emit('end');
+	  };
+	
+	  // progress
+	  var handleProgress = function(direction, e) {
+	    if (e.total > 0) {
+	      e.percent = e.loaded / e.total * 100;
+	    }
+	    e.direction = direction;
+	    self.emit('progress', e);
+	  };
+	  if (this.hasListeners('progress')) {
+	    try {
+	      xhr.onprogress = handleProgress.bind(null, 'download');
+	      if (xhr.upload) {
+	        xhr.upload.onprogress = handleProgress.bind(null, 'upload');
+	      }
+	    } catch(e) {
+	      // Accessing xhr.upload fails in IE from a web worker, so just pretend it doesn't exist.
+	      // Reported here:
+	      // https://connect.microsoft.com/IE/feedback/details/837245/xmlhttprequest-upload-throws-invalid-argument-when-used-from-web-worker-context
+	    }
+	  }
+	
+	  // initiate request
+	  try {
+	    if (this.username && this.password) {
+	      xhr.open(this.method, this.url, true, this.username, this.password);
+	    } else {
+	      xhr.open(this.method, this.url, true);
+	    }
+	  } catch (err) {
+	    // see #1149
+	    return this.callback(err);
+	  }
+	
+	  // CORS
+	  if (this._withCredentials) xhr.withCredentials = true;
+	
+	  // body
+	  if (!this._formData && 'GET' != this.method && 'HEAD' != this.method && 'string' != typeof data && !this._isHost(data)) {
+	    // serialize stuff
+	    var contentType = this._header['content-type'];
+	    var serialize = this._serializer || request.serialize[contentType ? contentType.split(';')[0] : ''];
+	    if (!serialize && isJSON(contentType)) {
+	      serialize = request.serialize['application/json'];
+	    }
+	    if (serialize) data = serialize(data);
+	  }
+	
+	  // set header fields
+	  for (var field in this.header) {
+	    if (null == this.header[field]) continue;
+	
+	    if (this.header.hasOwnProperty(field))
+	      xhr.setRequestHeader(field, this.header[field]);
+	  }
+	
+	  if (this._responseType) {
+	    xhr.responseType = this._responseType;
+	  }
+	
+	  // send stuff
+	  this.emit('request', this);
+	
+	  // IE11 xhr.send(undefined) sends 'undefined' string as POST payload (instead of nothing)
+	  // We need null here if data is undefined
+	  xhr.send(typeof data !== 'undefined' ? data : null);
+	  return this;
+	};
+	
+	request.agent = function() {
+	  return new Agent();
+	};
+	
+	["GET", "POST", "OPTIONS", "PATCH", "PUT", "DELETE"].forEach(function(method) {
+	  Agent.prototype[method.toLowerCase()] = function(url, fn) {
+	    var req = new request.Request(method, url);
+	    this._setDefaults(req);
+	    if (fn) {
+	      req.end(fn);
+	    }
+	    return req;
+	  };
+	});
+	
+	Agent.prototype.del = Agent.prototype['delete'];
+	
+	/**
+	 * GET `url` with optional callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed|Function} [data] or fn
+	 * @param {Function} [fn]
+	 * @return {Request}
+	 * @api public
+	 */
+	
+	request.get = function(url, data, fn) {
+	  var req = request('GET', url);
+	  if ('function' == typeof data) (fn = data), (data = null);
+	  if (data) req.query(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+	
+	/**
+	 * HEAD `url` with optional callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed|Function} [data] or fn
+	 * @param {Function} [fn]
+	 * @return {Request}
+	 * @api public
+	 */
+	
+	request.head = function(url, data, fn) {
+	  var req = request('HEAD', url);
+	  if ('function' == typeof data) (fn = data), (data = null);
+	  if (data) req.query(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+	
+	/**
+	 * OPTIONS query to `url` with optional callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed|Function} [data] or fn
+	 * @param {Function} [fn]
+	 * @return {Request}
+	 * @api public
+	 */
+	
+	request.options = function(url, data, fn) {
+	  var req = request('OPTIONS', url);
+	  if ('function' == typeof data) (fn = data), (data = null);
+	  if (data) req.send(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+	
+	/**
+	 * DELETE `url` with optional `data` and callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed} [data]
+	 * @param {Function} [fn]
+	 * @return {Request}
+	 * @api public
+	 */
+	
+	function del(url, data, fn) {
+	  var req = request('DELETE', url);
+	  if ('function' == typeof data) (fn = data), (data = null);
+	  if (data) req.send(data);
+	  if (fn) req.end(fn);
+	  return req;
+	}
+	
+	request['del'] = del;
+	request['delete'] = del;
+	
+	/**
+	 * PATCH `url` with optional `data` and callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed} [data]
+	 * @param {Function} [fn]
+	 * @return {Request}
+	 * @api public
+	 */
+	
+	request.patch = function(url, data, fn) {
+	  var req = request('PATCH', url);
+	  if ('function' == typeof data) (fn = data), (data = null);
+	  if (data) req.send(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+	
+	/**
+	 * POST `url` with optional `data` and callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed} [data]
+	 * @param {Function} [fn]
+	 * @return {Request}
+	 * @api public
+	 */
+	
+	request.post = function(url, data, fn) {
+	  var req = request('POST', url);
+	  if ('function' == typeof data) (fn = data), (data = null);
+	  if (data) req.send(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+	
+	/**
+	 * PUT `url` with optional `data` and callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed|Function} [data] or fn
+	 * @param {Function} [fn]
+	 * @return {Request}
+	 * @api public
+	 */
+	
+	request.put = function(url, data, fn) {
+	  var req = request('PUT', url);
+	  if ('function' == typeof data) (fn = data), (data = null);
+	  if (data) req.send(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+
+
+/***/ },
+/* 22 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	/**
+	 * Check if `obj` is an object.
+	 *
+	 * @param {Object} obj
+	 * @return {Boolean}
+	 * @api private
+	 */
+	
+	function isObject(obj) {
+	  return null !== obj && 'object' === typeof obj;
+	}
+	
+	module.exports = isObject;
+
+
+/***/ },
+/* 23 */
+/***/ function(module, exports) {
+
+	var WinChan = (function() {
+	  var RELAY_FRAME_NAME = "__winchan_relay_frame";
+	  var CLOSE_CMD = "die";
+	
+	  // a portable addListener implementation
+	  function addListener(w, event, cb) {
+	    if(w.attachEvent) w.attachEvent('on' + event, cb);
+	    else if (w.addEventListener) w.addEventListener(event, cb, false);
+	  }
+	
+	  // a portable removeListener implementation
+	  function removeListener(w, event, cb) {
+	    if(w.detachEvent) w.detachEvent('on' + event, cb);
+	    else if (w.removeEventListener) w.removeEventListener(event, cb, false);
+	  }
+	
+	
+	  // checking for IE8 or above
+	  function isInternetExplorer() {
+	    if (typeof navigator === 'undefined') {
+	      return false;
+	    }
+	
+	    var rv = -1; // Return value assumes failure.
+	    var ua = navigator.userAgent;
+	    if (navigator.appName === 'Microsoft Internet Explorer') {
+	      var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+	      if (re.exec(ua) != null)
+	        rv = parseFloat(RegExp.$1);
+	    }
+	    // IE > 11
+	    else if (ua.indexOf("Trident") > -1) {
+	      var re = new RegExp("rv:([0-9]{2,2}[\.0-9]{0,})");
+	      if (re.exec(ua) !== null) {
+	        rv = parseFloat(RegExp.$1);
+	      }
+	    }
+	
+	    return rv >= 8;
+	  }
+	
+	  // checking Mobile Firefox (Fennec)
+	  function isFennec() {
+	    try {
+	      // We must check for both XUL and Java versions of Fennec.  Both have
+	      // distinct UA strings.
+	      var userAgent = navigator.userAgent;
+	      return (userAgent.indexOf('Fennec/') != -1) ||  // XUL
+	             (userAgent.indexOf('Firefox/') != -1 && userAgent.indexOf('Android') != -1);   // Java
+	    } catch(e) {}
+	    return false;
+	  }
+	
+	  // feature checking to see if this platform is supported at all
+	  function isSupported() {
+	    return (typeof window !== 'undefined' && window.JSON && window.JSON.stringify &&
+	            window.JSON.parse && window.postMessage);
+	  }
+	
+	  // given a URL, extract the origin. Taken from: https://github.com/firebase/firebase-simple-login/blob/d2cb95b9f812d8488bdbfba51c3a7c153ba1a074/js/src/simple-login/transports/WinChan.js#L25-L30
+	  function extractOrigin(url) {
+	    if (!/^https?:\/\//.test(url)) url = window.location.href;
+	    var m = /^(https?:\/\/[\-_a-zA-Z\.0-9:]+)/.exec(url);
+	    if (m) return m[1];
+	    return url;
+	  }
+	
+	  // find the relay iframe in the opener
+	  function findRelay() {
+	    var loc = window.location;
+	    var frames = window.opener.frames;
+	    for (var i = frames.length - 1; i >= 0; i--) {
+	      try {
+	        if (frames[i].location.protocol === window.location.protocol &&
+	            frames[i].location.host === window.location.host &&
+	            frames[i].name === RELAY_FRAME_NAME)
+	        {
+	          return frames[i];
+	        }
+	      } catch(e) { }
+	    }
+	    return;
+	  }
+	
+	  var isIE = isInternetExplorer();
+	
+	  if (isSupported()) {
+	    /*  General flow:
+	     *                  0. user clicks
+	     *  (IE SPECIFIC)   1. caller adds relay iframe (served from trusted domain) to DOM
+	     *                  2. caller opens window (with content from trusted domain)
+	     *                  3. window on opening adds a listener to 'message'
+	     *  (IE SPECIFIC)   4. window on opening finds iframe
+	     *                  5. window checks if iframe is "loaded" - has a 'doPost' function yet
+	     *  (IE SPECIFIC5)  5a. if iframe.doPost exists, window uses it to send ready event to caller
+	     *  (IE SPECIFIC5)  5b. if iframe.doPost doesn't exist, window waits for frame ready
+	     *  (IE SPECIFIC5)  5bi. once ready, window calls iframe.doPost to send ready event
+	     *                  6. caller upon reciept of 'ready', sends args
+	     */
+	    return {
+	      open: function(opts, cb) {
+	        if (!cb) throw "missing required callback argument";
+	
+	        // test required options
+	        var err;
+	        if (!opts.url) err = "missing required 'url' parameter";
+	        if (!opts.relay_url) err = "missing required 'relay_url' parameter";
+	        if (err) setTimeout(function() { cb(err); }, 0);
+	
+	        // supply default options
+	        if (!opts.window_name) opts.window_name = null;
+	        if (!opts.window_features || isFennec()) opts.window_features = undefined;
+	
+	        // opts.params may be undefined
+	
+	        var iframe;
+	
+	        // sanity check, are url and relay_url the same origin?
+	        var origin = opts.origin || extractOrigin(opts.url);
+	        if (origin !== extractOrigin(opts.relay_url)) {
+	          return setTimeout(function() {
+	            cb('invalid arguments: origin of url and relay_url must match');
+	          }, 0);
+	        }
+	
+	        var messageTarget;
+	
+	        if (isIE) {
+	          // first we need to add a "relay" iframe to the document that's served
+	          // from the target domain.  We can postmessage into a iframe, but not a
+	          // window
+	          iframe = document.createElement("iframe");
+	          // iframe.setAttribute('name', framename);
+	          iframe.setAttribute('src', opts.relay_url);
+	          iframe.style.display = "none";
+	          iframe.setAttribute('name', RELAY_FRAME_NAME);
+	          document.body.appendChild(iframe);
+	          messageTarget = iframe.contentWindow;
+	        }
+	
+	        var w = opts.popup || window.open(opts.url, opts.window_name, opts.window_features);
+	        if (opts.popup) {
+	          w.location.href = opts.url;
+	        }
+	
+	        if (!messageTarget) messageTarget = w;
+	
+	        // lets listen in case the window blows up before telling us
+	        var closeInterval = setInterval(function() {
+	          if (w && w.closed) {
+	            cleanup();
+	            if (cb) {
+	              cb('User closed the popup window');
+	              cb = null;
+	            }
+	          }
+	        }, 500);
+	
+	        var req = JSON.stringify({a: 'request', d: opts.params});
+	
+	        // cleanup on unload
+	        function cleanup() {
+	          if (iframe) document.body.removeChild(iframe);
+	          iframe = undefined;
+	          if (closeInterval) closeInterval = clearInterval(closeInterval);
+	          removeListener(window, 'message', onMessage);
+	          removeListener(window, 'unload', cleanup);
+	          if (w) {
+	            try {
+	              w.close();
+	            } catch (securityViolation) {
+	              // This happens in Opera 12 sometimes
+	              // see https://github.com/mozilla/browserid/issues/1844
+	              messageTarget.postMessage(CLOSE_CMD, origin);
+	            }
+	          }
+	          w = messageTarget = undefined;
+	        }
+	
+	        addListener(window, 'unload', cleanup);
+	
+	        function onMessage(e) {
+	          if (e.origin !== origin) { return; }
+	          try {
+	            var d = JSON.parse(e.data);
+	          } catch(err) {
+	            if (cb) {
+	              cb(err);
+	            } else {
+	              throw err;
+	            }
+	          }
+	
+	          if (d.a === 'ready') {
+	            messageTarget.postMessage(req, origin);
+	          } else if (d.a === 'error') {
+	            cleanup();
+	            if (cb) {
+	              cb(d.d);
+	              cb = null;
+	            }
+	          } else if (d.a === 'response') {
+	            cleanup();
+	            if (cb) {
+	              cb(null, d.d);
+	              cb = null;
+	            }
+	          }
+	        }
+	
+	        addListener(window, 'message', onMessage);
+	
+	        return {
+	          close: cleanup,
+	          focus: function() {
+	            if (w) {
+	              try {
+	                w.focus();
+	              } catch (e) {
+	                // IE7 blows up here, do nothing
+	              }
+	            }
+	          }
+	        };
+	      },
+	      onOpen: function(cb) {
+	        var o = "*";
+	        var msgTarget = isIE ? findRelay() : window.opener;
+	        if (!msgTarget) throw "can't find relay frame";
+	        function doPost(msg) {
+	          msg = JSON.stringify(msg);
+	          if (isIE) msgTarget.doPost(msg, o);
+	          else msgTarget.postMessage(msg, o);
+	        }
+	
+	        function onMessage(e) {
+	          // only one message gets through, but let's make sure it's actually
+	          // the message we're looking for (other code may be using
+	          // postmessage) - we do this by ensuring the payload can
+	          // be parsed, and it's got an 'a' (action) value of 'request'.
+	          var d;
+	          try {
+	            d = JSON.parse(e.data);
+	          } catch(err) { }
+	          if (!d || d.a !== 'request') return;
+	          removeListener(window, 'message', onMessage);
+	          o = e.origin;
+	          if (cb) {
+	            // this setTimeout is critically important for IE8 -
+	            // in ie8 sometimes addListener for 'message' can synchronously
+	            // cause your callback to be invoked.  awesome.
+	            setTimeout(function() {
+	              cb(o, d.d, function(r) {
+	                cb = undefined;
+	                doPost({a: 'response', d: r});
+	              });
+	            }, 0);
+	          }
+	        }
+	
+	        function onDie(e) {
+	          if (e.data === CLOSE_CMD) {
+	            try { window.close(); } catch (o_O) {}
+	          }
+	        }
+	        addListener(isIE ? msgTarget : window, 'message', onMessage);
+	        addListener(isIE ? msgTarget : window, 'message', onDie);
+	
+	        // we cannot post to our parent that we're ready before the iframe
+	        // is loaded. (IE specific possible failure)
+	        try {
+	          doPost({a: "ready"});
+	        } catch(e) {
+	          // this code should never be exectued outside IE
+	          addListener(msgTarget, 'load', function(e) {
+	            doPost({a: "ready"});
+	          });
+	        }
+	
+	        // if window is unloaded and the client hasn't called cb, it's an error
+	        var onUnload = function() {
+	          try {
+	            // IE8 doesn't like this...
+	            removeListener(isIE ? msgTarget : window, 'message', onDie);
+	          } catch (ohWell) { }
+	          if (cb) doPost({ a: 'error', d: 'client closed window' });
+	          cb = undefined;
+	          // explicitly close the window, in case the client is trying to reload or nav
+	          try { window.close(); } catch (e) { }
+	        };
+	        addListener(window, 'unload', onUnload);
+	        return {
+	          detach: function() {
+	            removeListener(window, 'unload', onUnload);
+	          }
+	        };
+	      }
+	    };
+	  } else {
+	    return {
+	      open: function(url, winopts, arg, cb) {
+	        setTimeout(function() { cb("unsupported browser"); }, 0);
+	      },
+	      onOpen: function(cb) {
+	        setTimeout(function() { cb("unsupported browser"); }, 0);
+	      }
+	    };
+	  }
+	})();
+	
+	if (typeof module !== 'undefined' && module.exports) {
+	  module.exports = WinChan;
+	}
+
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var urljoin = __webpack_require__(3);
+	
+	var RequestBuilder = __webpack_require__(11);
+	var qs = __webpack_require__(6);
+	var objectHelper = __webpack_require__(1);
+	var assert = __webpack_require__(4);
+	var ssodata = __webpack_require__(28);
+	var responseHandler = __webpack_require__(5);
+	var parametersWhitelist = __webpack_require__(51);
+	var Warn = __webpack_require__(7);
+	
+	var PasswordlessAuthentication = __webpack_require__(49);
+	var DBConnection = __webpack_require__(48);
+	
+	/**
+	 * Creates a new Auth0 Authentication API client
+	 * @constructor
+	 * @param {Object} options
+	 * @param {String} options.domain your Auth0 domain
+	 * @param {String} options.clientID your Auth0 client identifier obtained when creating the client in the Auth0 Dashboard
+	 * @param {String} [options.redirectUri] url that the Auth0 will redirect after Auth with the Authorization Response
+	 * @param {String} [options.responseType] type of the response used by OAuth 2.0 flow. It can be any space separated list of the values `code`, `token`, `id_token`. {@link https://openid.net/specs/oauth-v2-multiple-response-types-1_0}
+	 * @param {String} [options.responseMode] how the Auth response is encoded and redirected back to the client. Supported values are `query`, `fragment` and `form_post`. {@link https://openid.net/specs/oauth-v2-multiple-response-types-1_0.html#ResponseModes}
+	 * @param {String} [options.scope] scopes to be requested during Auth. e.g. `openid email`
+	 * @param {String} [options.audience] identifier of the resource server who will consume the access token issued after Auth
+	 * @see {@link https://auth0.com/docs/api/authentication}
+	 */
+	function Authentication(auth0, options) {
+	  // If we have two arguments, the first one is a WebAuth instance, so we assign that
+	  // if not, it's an options object and then we should use that as options instead
+	  // this is here because we don't want to break people coming from v8
+	  if (arguments.length === 2) {
+	    this.auth0 = auth0;
+	  } else {
+	    options = auth0;
+	  }
+	
+	  /* eslint-disable */
+	  assert.check(
+	    options,
+	    { type: 'object', message: 'options parameter is not valid' },
+	    {
+	      domain: { type: 'string', message: 'domain option is required' },
+	      clientID: { type: 'string', message: 'clientID option is required' },
+	      responseType: { optional: true, type: 'string', message: 'responseType is not valid' },
+	      responseMode: { optional: true, type: 'string', message: 'responseMode is not valid' },
+	      redirectUri: { optional: true, type: 'string', message: 'redirectUri is not valid' },
+	      scope: { optional: true, type: 'string', message: 'scope is not valid' },
+	      audience: { optional: true, type: 'string', message: 'audience is not valid' },
+	      _disableDeprecationWarnings: {
+	        optional: true,
+	        type: 'boolean',
+	        message: '_disableDeprecationWarnings option is not valid'
+	      },
+	      _sendTelemetry: {
+	        optional: true,
+	        type: 'boolean',
+	        message: '_sendTelemetry option is not valid'
+	      },
+	      _telemetryInfo: {
+	        optional: true,
+	        type: 'object',
+	        message: '_telemetryInfo option is not valid'
+	      }
+	    }
+	  );
+	  /* eslint-enable */
+	
+	  this.baseOptions = options;
+	  this.baseOptions._sendTelemetry = this.baseOptions._sendTelemetry === false
+	    ? this.baseOptions._sendTelemetry
+	    : true;
+	
+	  this.baseOptions.rootUrl = 'https://' + this.baseOptions.domain;
+	
+	  this.request = new RequestBuilder(this.baseOptions);
+	
+	  this.passwordless = new PasswordlessAuthentication(this.request, this.baseOptions);
+	  this.dbConnection = new DBConnection(this.request, this.baseOptions);
+	
+	  this.warn = new Warn({
+	    disableWarnings: !!options._disableDeprecationWarnings
+	  });
+	}
+	
+	/**
+	 * Builds and returns the `/authorize` url in order to initialize a new authN/authZ transaction
+	 *
+	 * @method buildAuthorizeUrl
+	 * @param {Object} options
+	 * @param {String} [options.domain] your Auth0 domain
+	 * @param {String} [options.clientID] your Auth0 client identifier obtained when creating the client in the Auth0 Dashboard
+	 * @param {String} options.redirectUri url that the Auth0 will redirect after Auth with the Authorization Response
+	 * @param {String} options.responseType type of the response used by OAuth 2.0 flow. It can be any space separated list of the values `code`, `token`, `id_token`. {@link https://openid.net/specs/oauth-v2-multiple-response-types-1_0}
+	 * @param {String} [options.responseMode] how the Auth response is encoded and redirected back to the client. Supported values are `query`, `fragment` and `form_post`. {@link https://openid.net/specs/oauth-v2-multiple-response-types-1_0.html#ResponseModes}
+	 * @param {String} [options.state] value used to mitigate XSRF attacks. {@link https://auth0.com/docs/protocols/oauth2/oauth-state}
+	 * @param {String} [options.nonce] value used to mitigate replay attacks when using Implicit Grant. {@link https://auth0.com/docs/api-auth/tutorials/nonce}
+	 * @param {String} [options.scope] scopes to be requested during Auth. e.g. `openid email`
+	 * @param {String} [options.audience] identifier of the resource server who will consume the access token issued after Auth
+	 * @see {@link https://auth0.com/docs/api/authentication#authorize-client}
+	 * @see {@link https://auth0.com/docs/api/authentication#social}
+	 */
+	Authentication.prototype.buildAuthorizeUrl = function(options) {
+	  var params;
+	  var qString;
+	
+	  assert.check(options, { type: 'object', message: 'options parameter is not valid' });
+	
+	  params = objectHelper
+	    .merge(this.baseOptions, [
+	      'clientID',
+	      'responseType',
+	      'responseMode',
+	      'redirectUri',
+	      'scope',
+	      'audience'
+	    ])
+	    .with(options);
+	
+	  /* eslint-disable */
+	  assert.check(
+	    params,
+	    { type: 'object', message: 'options parameter is not valid' },
+	    {
+	      clientID: { type: 'string', message: 'clientID option is required' },
+	      redirectUri: { optional: true, type: 'string', message: 'redirectUri option is required' },
+	      responseType: { type: 'string', message: 'responseType option is required' },
+	      nonce: {
+	        type: 'string',
+	        message: 'nonce option is required',
+	        condition: function(o) {
+	          return o.responseType.indexOf('code') === -1 && o.responseType.indexOf('id_token') !== -1;
+	        }
+	      },
+	      scope: { optional: true, type: 'string', message: 'scope option is required' },
+	      audience: { optional: true, type: 'string', message: 'audience option is required' }
+	    }
+	  );
+	  /* eslint-enable */
+	
+	  // eslint-disable-next-line
+	  if (this.baseOptions._sendTelemetry) {
+	    params.auth0Client = this.request.getTelemetryData();
+	  }
+	
+	  if (params.connection_scope && assert.isArray(params.connection_scope)) {
+	    params.connection_scope = params.connection_scope.join(',');
+	  }
+	
+	  params = objectHelper.blacklist(params, [
+	    'username',
+	    'popupOptions',
+	    'domain',
+	    'tenant',
+	    'timeout'
+	  ]);
+	  params = objectHelper.toSnakeCase(params, ['auth0Client']);
+	  params = parametersWhitelist.oauthAuthorizeParams(this.warn, params);
+	
+	  qString = qs.stringify(params);
+	
+	  return urljoin(this.baseOptions.rootUrl, 'authorize', '?' + qString);
+	};
+	
+	/**
+	 * Builds and returns the Logout url in order to initialize a new authN/authZ transaction
+	 *
+	 * If you want to navigate the user to a specific URL after the logout, set that URL at the returnTo parameter. The URL should be included in any the appropriate Allowed Logout URLs list:
+	 *
+	 * - If the client_id parameter is included, the returnTo URL must be listed in the Allowed Logout URLs set at the client level (see Setting Allowed Logout URLs at the App Level).
+	 * - If the client_id parameter is NOT included, the returnTo URL must be listed in the Allowed Logout URLs set at the account level (see Setting Allowed Logout URLs at the Account Level).
+	 * @method buildLogoutUrl
+	 * @param {Object} options
+	 * @param {String} [options.clientID] identifier of your client
+	 * @param {String} [options.returnTo] URL to be redirected after the logout
+	 * @param {Boolean} [options.federated] tells Auth0 if it should logout the user also from the IdP.
+	 * @see {@link https://auth0.com/docs/api/authentication#logout}
+	 */
+	Authentication.prototype.buildLogoutUrl = function(options) {
+	  var params;
+	  var qString;
+	
+	  assert.check(options, {
+	    optional: true,
+	    type: 'object',
+	    message: 'options parameter is not valid'
+	  });
+	
+	  params = objectHelper.merge(this.baseOptions, ['clientID']).with(options || {});
+	
+	  // eslint-disable-next-line
+	  if (this.baseOptions._sendTelemetry) {
+	    params.auth0Client = this.request.getTelemetryData();
+	  }
+	
+	  params = objectHelper.toSnakeCase(params, ['auth0Client', 'returnTo']);
+	
+	  qString = qs.stringify(objectHelper.blacklist(params, ['federated']));
+	  if (
+	    options &&
+	    options.federated !== undefined &&
+	    options.federated !== false &&
+	    options.federated !== 'false'
+	  ) {
+	    qString += '&federated';
+	  }
+	
+	  return urljoin(this.baseOptions.rootUrl, 'v2', 'logout', '?' + qString);
+	};
+	
+	/**
+	 * @callback authorizeCallback
+	 * @param {Error} [err] error returned by Auth0 with the reason of the Auth failure
+	 * @param {Object} [result] result of the Auth request
+	 * @param {String} [result.accessToken] token that allows access to the specified resource server (identified by the audience parameter or by default Auth0's /userinfo endpoint)
+	 * @param {Number} [result.expiresIn] number of seconds until the access token expires
+	 * @param {String} [result.idToken] token that identifies the user
+	 * @param {String} [result.refreshToken] token that can be used to get new access tokens from Auth0. Note that not all clients can request them or the resource server might not allow them.
+	 */
+	
+	/**
+	 * @callback tokenCallback
+	 * @param {Error} [err] error returned by Auth0 with the reason of the Auth failure
+	 * @param {Object} [result] result of the Auth request
+	 * @param {String} result.accessToken token that allows access to the specified resource server (identified by the audience parameter or by default Auth0's /userinfo endpoint)
+	 * @param {Number} result.expiresIn number of seconds until the access token expires
+	 * @param {String} [result.idToken] token that identifies the user
+	 * @param {String} [result.refreshToken] token that can be used to get new access tokens from Auth0. Note that not all clients can request them or the resource server might not allow them.
+	 */
+	
+	/**
+	 * Makes a call to the `oauth/token` endpoint with `password` grant type to login to the default directory.
+	 *
+	 * @method loginWithDefaultDirectory
+	 * @param {Object} options
+	 * @param {String} options.username email or username of the user that will perform Auth
+	 * @param {String} options.password the password of the user that will perform Auth
+	 * @param {String} [options.scope] scopes to be requested during Auth. e.g. `openid email`
+	 * @param {String} [options.audience] identifier of the resource server who will consume the access token issued after Auth
+	 * @param {tokenCallback} cb function called with the result of the request
+	 * @see Requires [`password` grant]{@link https://auth0.com/docs/api-auth/grant/password}. For more information, read {@link https://auth0.com/docs/clients/client-grant-types}.
+	 */
+	Authentication.prototype.loginWithDefaultDirectory = function(options, cb) {
+	  assert.check(
+	    options,
+	    { type: 'object', message: 'options parameter is not valid' },
+	    {
+	      username: { type: 'string', message: 'username option is required' },
+	      password: { type: 'string', message: 'password option is required' },
+	      scope: { optional: true, type: 'string', message: 'scope option is required' },
+	      audience: { optional: true, type: 'string', message: 'audience option is required' }
+	    }
+	  );
+	
+	  options.grantType = 'password';
+	
+	  return this.oauthToken(options, cb);
+	};
+	
+	/**
+	 * Makes a call to the `oauth/token` endpoint with `password-realm` grant type
+	 *
+	 * @method login
+	 * @param {Object} options
+	 * @param {String} options.username email or username of the user that will perform Auth
+	 * @param {String} options.password the password of the user that will perform Auth
+	 * @param {String} [options.scope] scopes to be requested during Auth. e.g. `openid email`
+	 * @param {String} [options.audience] identifier of the resource server who will consume the access token issued after Auth
+	 * @param {Object} options.realm the HRD domain or the connection name where the user belongs to. e.g. `Username-Password-Authentication`
+	 * @param {tokenCallback} cb function called with the result of the request
+	 * @see Requires [`http://auth0.com/oauth/grant-type/password-realm` grant]{@link https://auth0.com/docs/api-auth/grant/password#realm-support}. For more information, read {@link https://auth0.com/docs/clients/client-grant-types}.
+	 */
+	Authentication.prototype.login = function(options, cb) {
+	  assert.check(
+	    options,
+	    { type: 'object', message: 'options parameter is not valid' },
+	    {
+	      username: { type: 'string', message: 'username option is required' },
+	      password: { type: 'string', message: 'password option is required' },
+	      realm: { type: 'string', message: 'realm option is required' },
+	      scope: { optional: true, type: 'string', message: 'scope option is required' },
+	      audience: { optional: true, type: 'string', message: 'audience option is required' }
+	    }
+	  );
+	
+	  options.grantType = 'http://auth0.com/oauth/grant-type/password-realm';
+	
+	  return this.oauthToken(options, cb);
+	};
+	
+	/**
+	 * Makes a call to the `oauth/token` endpoint
+	 *
+	 * @method oauthToken
+	 * @private
+	 */
+	Authentication.prototype.oauthToken = function(options, cb) {
+	  var url;
+	  var body;
+	
+	  assert.check(options, { type: 'object', message: 'options parameter is not valid' });
+	  assert.check(cb, { type: 'function', message: 'cb parameter is not valid' });
+	
+	  url = urljoin(this.baseOptions.rootUrl, 'oauth', 'token');
+	
+	  body = objectHelper.merge(this.baseOptions, ['clientID', 'scope', 'audience']).with(options);
+	
+	  assert.check(
+	    body,
+	    { type: 'object', message: 'options parameter is not valid' },
+	    {
+	      clientID: { type: 'string', message: 'clientID option is required' },
+	      grantType: { type: 'string', message: 'grantType option is required' },
+	      scope: { optional: true, type: 'string', message: 'scope option is required' },
+	      audience: { optional: true, type: 'string', message: 'audience option is required' }
+	    }
+	  );
+	
+	  body = objectHelper.toSnakeCase(body, ['auth0Client']);
+	  body = parametersWhitelist.oauthTokenParams(this.warn, body);
+	
+	  return this.request.post(url).send(body).end(responseHandler(cb));
+	};
+	
+	/**
+	 * Performs authentication calling `/oauth/ro` endpoint with username
+	 * and password for a given connection name.
+	 *
+	 * This method is not compatible with API Auth so if you need to fetch API tokens with audience
+	 * you should use {@link login} or {@link loginWithDefaultDirectory}.
+	 *
+	 * @method loginWithResourceOwner
+	 * @param {Object} options
+	 * @param {String} options.username email or username of the user that will perform Auth
+	 * @param {String} options.password the password of the user that will perform Auth
+	 * @param {Object} options.connection the connection name where the user belongs to. e.g. `Username-Password-Authentication`
+	 * @param {String} [options.scope] scopes to be requested during Auth. e.g. `openid email`
+	 * @param {String} [options.device] name of the device/browser where the Auth was requested
+	 * @param {tokenCallback} cb function called with the result of the request
+	 */
+	Authentication.prototype.loginWithResourceOwner = function(options, cb) {
+	  var url;
+	  var body;
+	
+	  assert.check(
+	    options,
+	    { type: 'object', message: 'options parameter is not valid' },
+	    {
+	      username: { type: 'string', message: 'username option is required' },
+	      password: { type: 'string', message: 'password option is required' },
+	      connection: { type: 'string', message: 'connection option is required' },
+	      scope: { optional: true, type: 'string', message: 'scope option is required' }
+	    }
+	  );
+	  assert.check(cb, { type: 'function', message: 'cb parameter is not valid' });
+	
+	  url = urljoin(this.baseOptions.rootUrl, 'oauth', 'ro');
+	
+	  body = objectHelper
+	    .merge(this.baseOptions, ['clientID', 'scope'])
+	    .with(options, ['username', 'password', 'scope', 'connection', 'device']);
+	
+	  body = objectHelper.toSnakeCase(body, ['auth0Client']);
+	
+	  body.grant_type = body.grant_type || 'password';
+	
+	  return this.request.post(url).send(body).end(responseHandler(cb));
+	};
+	
+	/**
+	 * Uses {@link checkSession} and localStorage to return data from the last successful authentication request.
+	 *
+	 * @method getSSOData
+	 * @param {Boolean} withActiveDirectories this parameter is not used anymore. It's here to be backward compatible
+	 * @param {Function} cb
+	 */
+	Authentication.prototype.getSSOData = function(withActiveDirectories, cb) {
+	  /* istanbul ignore if  */
+	  if (!this.auth0) {
+	    // we can't import this in the constructor because it'd be a ciclic dependency
+	    var WebAuth = __webpack_require__(30); // eslint-disable-line
+	    this.auth0 = new WebAuth(this.baseOptions);
+	  }
+	  if (typeof withActiveDirectories === 'function') {
+	    cb = withActiveDirectories;
+	  }
+	  assert.check(cb, { type: 'function', message: 'cb parameter is not valid' });
+	  var clientId = this.baseOptions.clientID;
+	  var ssodataInformation = ssodata.get() || {};
+	
+	  this.auth0.checkSession(
+	    {
+	      responseType: 'token id_token',
+	      scope: 'openid profile email',
+	      connection: ssodataInformation.lastUsedConnection,
+	      timeout: 5000
+	    },
+	    function(err, result) {
+	      if (err) {
+	        if (err.error === 'login_required') {
+	          return cb(null, { sso: false });
+	        }
+	        if (err.error === 'consent_required') {
+	          err.error_description =
+	            'Consent required. When using `getSSOData`, the user has to be authenticated with the following scope: `openid profile email`.';
+	        }
+	        return cb(err, { sso: false });
+	      }
+	      if (
+	        ssodataInformation.lastUsedSub &&
+	        ssodataInformation.lastUsedSub !== result.idTokenPayload.sub
+	      ) {
+	        return cb(err, { sso: false });
+	      }
+	      return cb(null, {
+	        lastUsedConnection: {
+	          name: ssodataInformation.lastUsedConnection
+	        },
+	        lastUsedUserID: result.idTokenPayload.sub,
+	        lastUsedUsername: result.idTokenPayload.email || result.idTokenPayload.name,
+	        lastUsedClientID: clientId,
+	        sessionClients: [clientId],
+	        sso: true
+	      });
+	    }
+	  );
+	};
+	
+	/**
+	 * @callback userInfoCallback
+	 * @param {Error} [err] error returned by Auth0
+	 * @param {Object} [userInfo] user information
+	 */
+	
+	/**
+	 * Makes a call to the `/userinfo` endpoint and returns the user profile
+	 *
+	 * @method userInfo
+	 * @param {String} accessToken token issued to a user after Auth
+	 * @param {userInfoCallback} cb
+	 * @see   {@link https://auth0.com/docs/api/authentication#get-user-info}
+	 */
+	Authentication.prototype.userInfo = function(accessToken, cb) {
+	  var url;
+	
+	  assert.check(accessToken, { type: 'string', message: 'accessToken parameter is not valid' });
+	  assert.check(cb, { type: 'function', message: 'cb parameter is not valid' });
+	
+	  url = urljoin(this.baseOptions.rootUrl, 'userinfo');
+	
+	  return this.request
+	    .get(url)
+	    .set('Authorization', 'Bearer ' + accessToken)
+	    .end(responseHandler(cb, { ignoreCasing: true }));
+	};
+	
+	/**
+	 * @callback delegationCallback
+	 * @param {Error} [err] error returned by Auth0 with the reason why the delegation failed
+	 * @param {Object} [result] result of the delegation request. The payload depends on what ai type was used
+	 */
+	
+	/**
+	 * Makes a call to the `/delegation` endpoint with either an `id_token` or `refresh_token`
+	 *
+	 * @method delegation
+	 * @param {Object} options
+	 * @param {String} [options.clientID] client identifier
+	 * @param {String} options.grantType  grant type used for delegation. The only valid value is `urn:ietf:params:oauth:grant-type:jwt-bearer`
+	 * @param {String} [options.idToken] valid token of the user issued after Auth. If no `refresh_token` is provided this parameter is required
+	 * @param {String} [options.refreshToken] valid refresh token of the user issued after Auth. If no `id_token` is provided this parameter is required
+	 * @param {String} [options.target] the target client id of the delegation
+	 * @param {String} [options.scope] either `openid` or `openid profile email`
+	 * @param {String} [options.apiType] the api to be called
+	 * @param {delegationCallback} cb
+	 * @see   {@link https://auth0.com/docs/api/authentication#delegation}
+	 * @see Requires [http://auth0.com/oauth/grant-type/password-realm]{@link https://auth0.com/docs/api-auth/grant/password#realm-support}. For more information, read {@link https://auth0.com/docs/clients/client-grant-types}.
+	 */
+	Authentication.prototype.delegation = function(options, cb) {
+	  var url;
+	  var body;
+	
+	  assert.check(
+	    options,
+	    { type: 'object', message: 'options parameter is not valid' },
+	    {
+	      grant_type: { type: 'string', message: 'grant_type option is required' }
+	    }
+	  );
+	  assert.check(cb, { type: 'function', message: 'cb parameter is not valid' });
+	
+	  url = urljoin(this.baseOptions.rootUrl, 'delegation');
+	
+	  body = objectHelper.merge(this.baseOptions, ['clientID']).with(options);
+	
+	  body = objectHelper.toSnakeCase(body, ['auth0Client']);
+	
+	  return this.request.post(url).send(body).end(responseHandler(cb));
+	};
+	
+	/**
+	 * Fetches the user country based on the ip.
+	 *
+	 * @method getUserCountry
+	 * @private
+	 * @param {Function} cb
+	 */
+	Authentication.prototype.getUserCountry = function(cb) {
+	  var url;
+	
+	  assert.check(cb, { type: 'function', message: 'cb parameter is not valid' });
+	
+	  url = urljoin(this.baseOptions.rootUrl, 'user', 'geoloc', 'country');
+	
+	  return this.request.get(url).end(responseHandler(cb));
+	};
+	
+	module.exports = Authentication;
+
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var base64 = __webpack_require__(18);
+	
+	function padding(str) {
+	  var mod = str.length % 4;
+	  var pad = 4 - mod;
+	
+	  if (mod === 0) {
+	    return str;
+	  }
+	
+	  return str + new Array(1 + pad).join('=');
+	}
+	
+	function stringToByteArray(str) {
+	  var arr = new Array(str.length);
+	  for (var a = 0; a < str.length; a++) {
+	    arr[a] = str.charCodeAt(a);
+	  }
+	  return arr;
+	}
+	
+	function byteArrayToString(array) {
+	  var result = '';
+	  for (var i = 0; i < array.length; i++) {
+	    result += String.fromCharCode(array[i]);
+	  }
+	  return result;
+	}
+	
+	function encode(str) {
+	  return base64
+	    .fromByteArray(stringToByteArray(str))
+	    .replace(/\+/g, '-') // Convert '+' to '-'
+	    .replace(/\//g, '_'); // Convert '/' to '_'
+	}
+	
+	function decode(str) {
+	  str = padding(str)
+	    .replace(/-/g, '+') // Convert '-' to '+'
+	    .replace(/_/g, '/'); // Convert '_' to '/'
+	
+	  return byteArrayToString(base64.toByteArray(str));
+	}
+	
+	module.exports = {
+	  encode: encode,
+	  decode: decode
+	};
+
+
+/***/ },
+/* 26 */
+/***/ function(module, exports) {
+
+	function buildResponse(error, description) {
+	  return {
+	    error: error,
+	    errorDescription: description
+	  };
+	}
+	
+	function invalidToken(description) {
+	  return buildResponse('invalid_token', description);
+	}
+	
+	module.exports = {
+	  buildResponse: buildResponse,
+	  invalidToken: invalidToken
+	};
+
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var windowHelper = __webpack_require__(2);
+	
+	function IframeHandler(options) {
+	  this.url = options.url;
+	  this.callback = options.callback;
+	  this.timeout = options.timeout || 60 * 1000;
+	  this.timeoutCallback = options.timeoutCallback || null;
+	  this.eventListenerType = options.eventListenerType || 'message';
+	  this.iframe = null;
+	  this.timeoutHandle = null;
+	  this._destroyTimeout = null;
+	  this.transientMessageEventListener = null;
+	  this.proxyEventListener = null;
+	  // If no event identifier specified, set default
+	  this.eventValidator = options.eventValidator || {
+	    isValid: function() {
+	      return true;
+	    }
+	  };
+	
+	  if (typeof this.callback !== 'function') {
+	    throw new Error('options.callback must be a function');
+	  }
+	}
+	
+	IframeHandler.prototype.init = function() {
+	  var _this = this;
+	  var _window = windowHelper.getWindow();
+	
+	  this.iframe = _window.document.createElement('iframe');
+	  this.iframe.style.display = 'none';
+	
+	  // Workaround to avoid using bind that does not work in IE8
+	  this.proxyEventListener = function(e) {
+	    _this.eventListener(e);
+	  };
+	
+	  switch (this.eventListenerType) {
+	    case 'message':
+	      this.eventSourceObject = _window;
+	      break;
+	    case 'load':
+	      this.eventSourceObject = this.iframe;
+	      break;
+	    default:
+	      throw new Error('Unsupported event listener type: ' + this.eventListenerType);
+	  }
+	
+	  this.eventSourceObject.addEventListener(this.eventListenerType, this.proxyEventListener, false);
+	
+	  _window.document.body.appendChild(this.iframe);
+	  
+	  this.iframe.src = this.url;
+	  
+	  this.timeoutHandle = setTimeout(function() {
+	    _this.timeoutHandler();
+	  }, this.timeout);
+	};
+	
+	IframeHandler.prototype.eventListener = function(event) {
+	  var eventData = { event: event, sourceObject: this.eventSourceObject };
+	
+	  if (!this.eventValidator.isValid(eventData)) {
+	    return;
+	  }
+	
+	  this.destroy();
+	  this.callback(eventData);
+	};
+	
+	IframeHandler.prototype.timeoutHandler = function() {
+	  this.destroy();
+	  if (this.timeoutCallback) {
+	    this.timeoutCallback();
+	  }
+	};
+	
+	IframeHandler.prototype.destroy = function() {
+	  var _this = this;
+	  var _window = windowHelper.getWindow();
+	
+	  clearTimeout(this.timeoutHandle);
+	
+	  this._destroyTimeout = setTimeout(function() {
+	    _this.eventSourceObject.removeEventListener(
+	      _this.eventListenerType,
+	      _this.proxyEventListener,
+	      false
+	    );
+	    _window.document.body.removeChild(_this.iframe);
+	  }, 0);
+	};
+	
+	module.exports = IframeHandler;
+
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var storage = __webpack_require__(29);
+	
+	module.exports = {
+	  set: function(connection, sub) {
+	    var ssodata = {
+	      lastUsedConnection: connection,
+	      lastUsedSub: sub
+	    };
+	    storage.setItem('auth0.ssodata', JSON.stringify(ssodata));
+	  },
+	  get: function() {
+	    var ssodata = storage.getItem('auth0.ssodata');
+	    if (!ssodata) {
+	      return;
+	    }
+	    return JSON.parse(ssodata);
+	  }
+	};
+
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var StorageHandler = __webpack_require__(57);
+	var storage;
+	
+	function getStorage(force) {
+	  if (!storage || force) {
+	    storage = new StorageHandler();
+	  }
+	  return storage;
+	}
+	
+	module.exports = {
+	  getItem: function(key) {
+	    var value = getStorage().getItem(key);
+	    return value ? JSON.parse(value) : value;
+	  },
+	  removeItem: function(key) {
+	    return getStorage().removeItem(key);
+	  },
+	  setItem: function(key, value) {
+	    var json = JSON.stringify(value);
+	    return getStorage().setItem(key, json);
+	  },
+	  reload: function() {
+	    getStorage(true);
+	  }
+	};
+
+
+/***/ },
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var IdTokenVerifier = __webpack_require__(39);
+	
+	var assert = __webpack_require__(4);
+	var error = __webpack_require__(26);
+	var qs = __webpack_require__(6);
+	var PluginHandler = __webpack_require__(52);
+	var windowHelper = __webpack_require__(2);
+	var objectHelper = __webpack_require__(1);
+	var ssodata = __webpack_require__(28);
+	var TransactionManager = __webpack_require__(17);
+	var Authentication = __webpack_require__(24);
+	var Redirect = __webpack_require__(63);
+	var Popup = __webpack_require__(62);
+	var SilentAuthenticationHandler = __webpack_require__(64);
+	var CrossOriginAuthentication = __webpack_require__(16);
+	var WebMessageHandler = __webpack_require__(31);
+	var HostedPages = __webpack_require__(61);
+	
+	/**
+	 * Handles all the browser's AuthN/AuthZ flows
+	 * @constructor
+	 * @param {Object} options
+	 * @param {String} options.domain your Auth0 domain
+	 * @param {String} options.clientID your Auth0 client identifier obtained when creating the client in the Auth0 Dashboard
+	 * @param {String} [options.redirectUri] url that the Auth0 will redirect after Auth with the Authorization Response
+	 * @param {String} [options.responseType] type of the response used by OAuth 2.0 flow. It can be any space separated list of the values `code`, `token`, `id_token`. {@link https://openid.net/specs/oauth-v2-multiple-response-types-1_0}
+	 * @param {String} [options.responseMode] how the Auth response is encoded and redirected back to the client. Supported values are `query`, `fragment` and `form_post`. The `query` value is only supported when `responseType` is `code`. {@link https://openid.net/specs/oauth-v2-multiple-response-types-1_0.html#ResponseModes}
+	 * @param {String} [options.scope] scopes to be requested during Auth. e.g. `openid email`
+	 * @param {String} [options.audience] identifier of the resource server who will consume the access token issued after Auth
+	 * @param {Array} [options.plugins]
+	 * @param {Number} [options._timesToRetryFailedRequests] Number of times to retry a failed request, according to {@link https://github.com/visionmedia/superagent/blob/master/lib/should-retry.js}
+	 * @see {@link https://auth0.com/docs/api/authentication}
+	 */
+	function WebAuth(options) {
+	  /* eslint-disable */
+	  assert.check(
+	    options,
+	    { type: 'object', message: 'options parameter is not valid' },
+	    {
+	      domain: { type: 'string', message: 'domain option is required' },
+	      clientID: { type: 'string', message: 'clientID option is required' },
+	      responseType: { optional: true, type: 'string', message: 'responseType is not valid' },
+	      responseMode: { optional: true, type: 'string', message: 'responseMode is not valid' },
+	      redirectUri: { optional: true, type: 'string', message: 'redirectUri is not valid' },
+	      scope: { optional: true, type: 'string', message: 'scope is not valid' },
+	      audience: { optional: true, type: 'string', message: 'audience is not valid' },
+	      popupOrigin: { optional: true, type: 'string', message: 'popupOrigin is not valid' },
+	      leeway: { optional: true, type: 'number', message: 'leeway is not valid' },
+	      plugins: { optional: true, type: 'array', message: 'plugins is not valid' },
+	      _disableDeprecationWarnings: {
+	        optional: true,
+	        type: 'boolean',
+	        message: '_disableDeprecationWarnings option is not valid'
+	      },
+	      _sendTelemetry: {
+	        optional: true,
+	        type: 'boolean',
+	        message: '_sendTelemetry option is not valid'
+	      },
+	      _telemetryInfo: {
+	        optional: true,
+	        type: 'object',
+	        message: '_telemetryInfo option is not valid'
+	      },
+	      _timesToRetryFailedRequests: {
+	        optional: true,
+	        type: 'number',
+	        message: '_timesToRetryFailedRequests option is not valid'
+	      }
+	    }
+	  );
+	
+	  if (options.overrides) {
+	    assert.check(
+	      options.overrides,
+	      { type: 'object', message: 'overrides option is not valid' },
+	      {
+	        __tenant: { type: 'string', message: '__tenant option is required' },
+	        __token_issuer: { type: 'string', message: '__token_issuer option is required' }
+	      }
+	    );
+	  }
+	  /* eslint-enable */
+	
+	  this.baseOptions = options;
+	  this.baseOptions.plugins = new PluginHandler(this, this.baseOptions.plugins || []);
+	
+	  this.baseOptions._sendTelemetry = this.baseOptions._sendTelemetry === false
+	    ? this.baseOptions._sendTelemetry
+	    : true;
+	
+	  this.baseOptions._timesToRetryFailedRequests = options._timesToRetryFailedRequests
+	    ? parseInt(options._timesToRetryFailedRequests, 0)
+	    : 0;
+	
+	  this.baseOptions.tenant =
+	    (this.baseOptions.overrides && this.baseOptions.overrides.__tenant) ||
+	    this.baseOptions.domain.split('.')[0];
+	
+	  this.baseOptions.token_issuer =
+	    (this.baseOptions.overrides && this.baseOptions.overrides.__token_issuer) ||
+	    'https://' + this.baseOptions.domain + '/';
+	
+	  this.transactionManager = new TransactionManager(this.baseOptions.transaction);
+	
+	  this.client = new Authentication(this.baseOptions);
+	  this.redirect = new Redirect(this, this.baseOptions);
+	  this.popup = new Popup(this, this.baseOptions);
+	  this.crossOriginAuthentication = new CrossOriginAuthentication(this, this.baseOptions);
+	  this.webMessageHandler = new WebMessageHandler(this);
+	  this._universalLogin = new HostedPages(this, this.baseOptions);
+	}
+	
+	/**
+	 * Parse the url hash and extract the Auth response from a Auth flow started with {@link authorize}
+	 *
+	 * Only validates id_tokens signed by Auth0 using the RS256 algorithm using the public key exposed
+	 * by the `/.well-known/jwks.json` endpoint of your account.
+	 * Tokens signed with other algorithms, e.g. HS256 will not be accepted.
+	 *
+	 * @method parseHash
+	 * @param {Object} options
+	 * @param {String} options.hash the url hash. If not provided it will extract from window.location.hash
+	 * @param {String} [options.state] value originally sent in `state` parameter to {@link authorize} to mitigate XSRF
+	 * @param {String} [options.nonce] value originally sent in `nonce` parameter to {@link authorize} to prevent replay attacks
+	 * @param {String} [options.responseType] type of the response used by OAuth 2.0 flow. It can be any space separated list of the values `token`, `id_token`. For this specific method, we'll only use this value to check if the hash contains the tokens requested in the responseType.
+	 * @param {authorizeCallback} cb
+	 */
+	WebAuth.prototype.parseHash = function(options, cb) {
+	  var parsedQs;
+	  var err;
+	
+	  if (!cb && typeof options === 'function') {
+	    cb = options;
+	    options = {};
+	  } else {
+	    options = options || {};
+	  }
+	
+	  var _window = windowHelper.getWindow();
+	
+	  var hashStr = options.hash === undefined ? _window.location.hash : options.hash;
+	  hashStr = hashStr.replace(/^#?\/?/, '');
+	
+	  parsedQs = qs.parse(hashStr);
+	
+	  if (parsedQs.hasOwnProperty('error')) {
+	    err = error.buildResponse(parsedQs.error, parsedQs.error_description);
+	
+	    if (parsedQs.state) {
+	      err.state = parsedQs.state;
+	    }
+	
+	    return cb(err);
+	  }
+	
+	  if (
+	    !parsedQs.hasOwnProperty('access_token') &&
+	    !parsedQs.hasOwnProperty('id_token') &&
+	    !parsedQs.hasOwnProperty('refresh_token')
+	  ) {
+	    return cb(null, null);
+	  }
+	  var responseTypes = (this.baseOptions.responseType || options.responseType || '').split(' ');
+	  if (
+	    responseTypes.length > 0 &&
+	    responseTypes.indexOf('token') !== -1 &&
+	    !parsedQs.hasOwnProperty('access_token')
+	  ) {
+	    return cb(
+	      error.buildResponse(
+	        'invalid_hash',
+	        'response_type contains `token`, but the parsed hash does not contain an `access_token` property'
+	      )
+	    );
+	  }
+	  if (
+	    responseTypes.length > 0 &&
+	    responseTypes.indexOf('id_token') !== -1 &&
+	    !parsedQs.hasOwnProperty('id_token')
+	  ) {
+	    return cb(
+	      error.buildResponse(
+	        'invalid_hash',
+	        'response_type contains `id_token`, but the parsed hash does not contain an `id_token` property'
+	      )
+	    );
+	  }
+	  return this.validateAuthenticationResponse(options, parsedQs, cb);
+	};
+	
+	/**
+	 * Validates an Auth response from a Auth flow started with {@link authorize}
+	 *
+	 * Only validates id_tokens signed by Auth0 using the RS256 algorithm using the public key exposed
+	 * by the `/.well-known/jwks.json` endpoint of your account.
+	 * Tokens signed with other algorithms, e.g. HS256 will not be accepted.
+	 *
+	 * @method validateAuthenticationResponse
+	 * @param {Object} options
+	 * @param {String} options.hash the url hash. If not provided it will extract from window.location.hash
+	 * @param {String} [options.state] value originally sent in `state` parameter to {@link authorize} to mitigate XSRF
+	 * @param {String} [options.nonce] value originally sent in `nonce` parameter to {@link authorize} to prevent replay attacks
+	 * @param {authorizeCallback} cb
+	 */
+	WebAuth.prototype.validateAuthenticationResponse = function(options, parsedHash, cb) {
+	  var _this = this;
+	  options.__enableIdPInitiatedLogin =
+	    options.__enableIdPInitiatedLogin || options.__enableImpersonation;
+	  var state = parsedHash.state;
+	  var transaction = this.transactionManager.getStoredTransaction(state);
+	  var transactionState = options.state || (transaction && transaction.state) || null;
+	
+	  var transactionStateMatchesState = transactionState === state;
+	  var shouldBypassStateChecking = !state && !transactionState && options.__enableIdPInitiatedLogin;
+	
+	  if (!shouldBypassStateChecking && !transactionStateMatchesState) {
+	    return cb({
+	      error: 'invalid_token',
+	      errorDescription: '`state` does not match.'
+	    });
+	  }
+	  var transactionNonce = options.nonce || (transaction && transaction.nonce) || null;
+	
+	  var appState = options.state || (transaction && transaction.appState) || null;
+	
+	  var callback = function(err, payload) {
+	    if (err) {
+	      return cb(err);
+	    }
+	    if (transaction && transaction.lastUsedConnection) {
+	      var sub;
+	      if (payload) {
+	        sub = payload.sub;
+	      }
+	      ssodata.set(transaction.lastUsedConnection, sub);
+	    }
+	    return cb(null, buildParseHashResponse(parsedHash, appState, payload));
+	  };
+	
+	  if (!parsedHash.id_token) {
+	    return callback(null, null);
+	  }
+	  return this.validateToken(parsedHash.id_token, transactionNonce, function(
+	    validationError,
+	    payload
+	  ) {
+	    if (!validationError) {
+	      if (!parsedHash.access_token) {
+	        return callback(null, payload);
+	      }
+	      // id_token's generated by non-oidc clients don't have at_hash
+	      if (!payload.at_hash) {
+	        return callback(null, payload);
+	      }
+	      // here we're absolutely sure that the id_token's alg is RS256
+	      // and that the id_token is valid, so we can check the access_token
+	      return new IdTokenVerifier().validateAccessToken(
+	        parsedHash.access_token,
+	        'RS256',
+	        payload.at_hash,
+	        function(err) {
+	          if (err) {
+	            return callback(error.invalidToken(err.message));
+	          }
+	          return callback(null, payload);
+	        }
+	      );
+	    }
+	    if (validationError.error !== 'invalid_token') {
+	      return callback(validationError);
+	    }
+	    // if it's an invalid_token error, decode the token
+	    var decodedToken = new IdTokenVerifier().decode(parsedHash.id_token);
+	    // if the alg is not HS256, return the raw error
+	    if (decodedToken.header.alg !== 'HS256') {
+	      return callback(validationError);
+	    }
+	    // if the alg is HS256, use the /userinfo endpoint to build the payload
+	    return _this.client.userInfo(parsedHash.access_token, function(errUserInfo, profile) {
+	      // if the /userinfo request fails, use the validationError instead
+	      if (errUserInfo) {
+	        return callback(validationError);
+	      }
+	      return callback(null, profile);
+	    });
+	  });
+	};
+	
+	function buildParseHashResponse(qsParams, appState, token) {
+	  return {
+	    accessToken: qsParams.access_token || null,
+	    idToken: qsParams.id_token || null,
+	    idTokenPayload: token || null,
+	    appState: appState || null,
+	    refreshToken: qsParams.refresh_token || null,
+	    state: qsParams.state || null,
+	    expiresIn: qsParams.expires_in ? parseInt(qsParams.expires_in, 10) : null,
+	    tokenType: qsParams.token_type || null,
+	    scope: qsParams.scope || null
+	  };
+	}
+	
+	/**
+	 * @callback validateTokenCallback
+	 * @param {Error} [err] error returned by while validating the token
+	 * @param {Object} [payload] claims stored in the token
+	 */
+	
+	/**
+	 * Decodes the a JWT and verifies its nonce value
+	 *
+	 * @method validateToken
+	 * @private
+	 * @param {String} token
+	 * @param {String} nonce
+	 * @param {validateTokenCallback} cb
+	 */
+	WebAuth.prototype.validateToken = function(token, nonce, cb) {
+	  var verifier = new IdTokenVerifier({
+	    issuer: this.baseOptions.token_issuer,
+	    audience: this.baseOptions.clientID,
+	    leeway: this.baseOptions.leeway || 0,
+	    __disableExpirationCheck: this.baseOptions.__disableExpirationCheck
+	  });
+	
+	  verifier.verify(token, nonce, function(err, payload) {
+	    if (err) {
+	      return cb(error.invalidToken(err.message));
+	    }
+	
+	    cb(null, payload);
+	  });
+	};
+	
+	/**
+	 * Executes a silent authentication transaction under the hood in order to fetch a new tokens for the current session.
+	 * This method requires that all Auth is performed with {@link authorize}
+	 * Watch out! If you're not using the hosted login page to do social logins, you have to use your own [social connection keys](https://manage.auth0.com/#/connections/social). If you use Auth0's dev keys, you'll always get `login_required` as an error when calling this method.
+	 *
+	 * @method renewAuth
+	 * @param {Object} options
+	 * @param {String} [options.domain] your Auth0 domain
+	 * @param {String} [options.clientID] your Auth0 client identifier obtained when creating the client in the Auth0 Dashboard
+	 * @param {String} [options.redirectUri] url that the Auth0 will redirect after Auth with the Authorization Response
+	 * @param {String} [options.responseType] type of the response used by OAuth 2.0 flow. It can be any space separated list of the values `code`, `token`, `id_token`. {@link https://openid.net/specs/oauth-v2-multiple-response-types-1_0}
+	 * @param {String} [options.responseMode] how the Auth response is encoded and redirected back to the client. Supported values are `query`, `fragment` and `form_post`. The `query` value is only supported when `responseType` is `code`. {@link https://openid.net/specs/oauth-v2-multiple-response-types-1_0.html#ResponseModes}
+	 * @param {String} [options.state] value used to mitigate XSRF attacks. {@link https://auth0.com/docs/protocols/oauth2/oauth-state}
+	 * @param {String} [options.nonce] value used to mitigate replay attacks when using Implicit Grant. {@link https://auth0.com/docs/api-auth/tutorials/nonce}
+	 * @param {String} [options.scope] scopes to be requested during Auth. e.g. `openid email`
+	 * @param {String} [options.audience] identifier of the resource server who will consume the access token issued after Auth
+	 * @param {String} [options.postMessageDataType] identifier data type to look for in postMessage event data, where events are initiated from silent callback urls, before accepting a message event is the event expected. A value of false means any postMessage event will trigger a callback.
+	 * @param {String} [options.postMessageOrigin] origin of redirectUri to expect postMessage response from.  Defaults to the origin of the receiving window. Only used if usePostMessage is truthy.
+	 * @param {String} [options.timeout] value in milliseconds used to timeout when the `/authorize` call is failing as part of the silent authentication with postmessage enabled due to a configuration.
+	 * @param {Boolean} [options.usePostMessage] use postMessage to comunicate between the silent callback and the SPA. When false the SDK will attempt to parse the url hash should ignore the url hash and no extra behaviour is needed
+	 * @param {authorizeCallback} cb
+	 * @see {@link https://auth0.com/docs/api/authentication#authorize-client}
+	 */
+	WebAuth.prototype.renewAuth = function(options, cb) {
+	  var handler;
+	  var usePostMessage = !!options.usePostMessage;
+	  var postMessageDataType = options.postMessageDataType || false;
+	  var postMessageOrigin = options.postMessageOrigin || windowHelper.getWindow().origin;
+	  var timeout = options.timeout;
+	  var _this = this;
+	
+	  var params = objectHelper
+	    .merge(this.baseOptions, [
+	      'clientID',
+	      'redirectUri',
+	      'responseType',
+	      'scope',
+	      'audience',
+	      '_csrf',
+	      'state',
+	      '_intstate',
+	      'nonce'
+	    ])
+	    .with(options);
+	
+	  params.responseType = params.responseType || 'token';
+	  params.responseMode = params.responseMode || 'fragment';
+	  params = this.transactionManager.process(params);
+	
+	  assert.check(params, { type: 'object', message: 'options parameter is not valid' });
+	  assert.check(cb, { type: 'function', message: 'cb parameter is not valid' });
+	
+	  params.prompt = 'none';
+	
+	  params = objectHelper.blacklist(params, [
+	    'usePostMessage',
+	    'tenant',
+	    'postMessageDataType',
+	    'postMessageOrigin'
+	  ]);
+	
+	  handler = SilentAuthenticationHandler.create({
+	    authenticationUrl: this.client.buildAuthorizeUrl(params),
+	    postMessageDataType: postMessageDataType,
+	    postMessageOrigin: postMessageOrigin,
+	    timeout: timeout
+	  });
+	
+	  handler.login(usePostMessage, function(err, hash) {
+	    if (typeof hash === 'object') {
+	      // hash was already parsed, so we just return it.
+	      // it's here to be backwards compatible and should be removed in the next major version.
+	      return cb(err, hash);
+	    }
+	    _this.parseHash({ hash: hash }, cb);
+	  });
+	};
+	
+	/**
+	 * Renews an existing session on Auth0's servers using `response_mode=web_message`
+	 *
+	 * @method checkSession
+	 * @param {Object} options
+	 * @param {String} [options.domain] your Auth0 domain
+	 * @param {String} [options.clientID] your Auth0 client identifier obtained when creating the client in the Auth0 Dashboard
+	 * @param {String} [options.responseType] type of the response used by OAuth 2.0 flow. It can be any space separated list of the values `code`, `token`, `id_token`. {@link https://openid.net/specs/oauth-v2-multiple-response-types-1_0}
+	 * @param {String} [options.state] value used to mitigate XSRF attacks. {@link https://auth0.com/docs/protocols/oauth2/oauth-state}
+	 * @param {String} [options.nonce] value used to mitigate replay attacks when using Implicit Grant. {@link https://auth0.com/docs/api-auth/tutorials/nonce}
+	 * @param {String} [options.scope] scopes to be requested during Auth. e.g. `openid email`
+	 * @param {String} [options.audience] identifier of the resource server who will consume the access token issued after Auth
+	 * @param {String} [options.timeout] value in milliseconds used to timeout when the `/authorize` call is failing as part of the silent authentication with postmessage enabled due to a configuration.
+	 */
+	WebAuth.prototype.checkSession = function(options, cb) {
+	  var params = objectHelper
+	    .merge(this.baseOptions, [
+	      'clientID',
+	      'responseType',
+	      'redirectUri',
+	      'scope',
+	      'audience',
+	      '_csrf',
+	      'state',
+	      '_intstate',
+	      'nonce'
+	    ])
+	    .with(options);
+	
+	  if (params.responseType === 'code') {
+	    return cb({ error: 'error', error_description: "responseType can't be `code`" });
+	  }
+	
+	  if (!options.nonce) {
+	    params = this.transactionManager.process(params);
+	  }
+	
+	  assert.check(params, { type: 'object', message: 'options parameter is not valid' });
+	  assert.check(cb, { type: 'function', message: 'cb parameter is not valid' });
+	
+	  params = objectHelper.blacklist(params, ['usePostMessage', 'tenant', 'postMessageDataType']);
+	  this.webMessageHandler.run(params, cb);
+	};
+	
+	/**
+	 * Request an email with instruction to change a user's password
+	 *
+	 * @method changePassword
+	 * @param {Object} options
+	 * @param {String} options.email address where the user will receive the change password email. It should match the user's email in Auth0
+	 * @param {String} options.connection name of the connection where the user was created
+	 * @param {changePasswordCallback} cb
+	 * @see   {@link https://auth0.com/docs/api/authentication#change-password}
+	 */
+	WebAuth.prototype.changePassword = function(options, cb) {
+	  return this.client.dbConnection.changePassword(options, cb);
+	};
+	
+	/**
+	 * Starts a passwordless authentication transaction.
+	 *
+	 * @method passwordlessStart
+	 * @param {Object} options
+	 * @param {String} options.send what will be sent via email which could be `link` or `code`. For SMS `code` is the only one valud
+	 * @param {String} [options.phoneNumber] phone number where to send the `code`. This parameter is mutually exclusive with `email`
+	 * @param {String} [options.email] email where to send the `code` or `link`. This parameter is mutually exclusive with `phoneNumber`
+	 * @param {String} options.connection name of the passwordless connection
+	 * @param {Object} [options.authParams] additional Auth parameters when using `link`
+	 * @param {Function} cb
+	 * @see   {@link https://auth0.com/docs/api/authentication#passwordless}
+	 */
+	WebAuth.prototype.passwordlessStart = function(options, cb) {
+	  var authParams = objectHelper
+	    .merge(this.baseOptions, [
+	      'responseType',
+	      'responseMode',
+	      'redirectUri',
+	      'scope',
+	      'audience',
+	      '_csrf',
+	      'state',
+	      '_intstate',
+	      'nonce'
+	    ])
+	    .with(options.authParams);
+	
+	  options.authParams = this.transactionManager.process(authParams);
+	  return this.client.passwordless.start(options, cb);
+	};
+	
+	/**
+	 * Creates a new user in a Auth0 Database connection
+	 *
+	 * @method signup
+	 * @param {Object} options
+	 * @param {String} options.email user email address
+	 * @param {String} options.password user password
+	 * @param {String} options.connection name of the connection where the user will be created
+	 * @param {signUpCallback} cb
+	 * @see   {@link https://auth0.com/docs/api/authentication#signup}
+	 */
+	WebAuth.prototype.signup = function(options, cb) {
+	  return this.client.dbConnection.signup(options, cb);
+	};
+	
+	/**
+	 * Redirects to the hosted login page (`/authorize`) in order to start a new authN/authZ transaction.
+	 * After that, you'll have to use the {@link parseHash} function at the specified `redirectUri`.
+	 *
+	 * @method authorize
+	 * @param {Object} options
+	 * @param {String} [options.domain] your Auth0 domain
+	 * @param {String} [options.clientID] your Auth0 client identifier obtained when creating the client in the Auth0 Dashboard
+	 * @param {String} options.redirectUri url that the Auth0 will redirect after Auth with the Authorization Response
+	 * @param {String} options.responseType type of the response used by OAuth 2.0 flow. It can be any space separated list of the values `code`, `token`, `id_token`. {@link https://openid.net/specs/oauth-v2-multiple-response-types-1_0}
+	 * @param {String} [options.responseMode] how the Auth response is encoded and redirected back to the client. Supported values are `query`, `fragment` and `form_post`. The `query` value is only supported when `responseType` is `code`. {@link https://openid.net/specs/oauth-v2-multiple-response-types-1_0.html#ResponseModes}
+	 * @param {String} [options.state] value used to mitigate XSRF attacks. {@link https://auth0.com/docs/protocols/oauth2/oauth-state}
+	 * @param {String} [options.nonce] value used to mitigate replay attacks when using Implicit Grant. {@link https://auth0.com/docs/api-auth/tutorials/nonce}
+	 * @param {String} [options.scope] scopes to be requested during Auth. e.g. `openid email`
+	 * @param {String} [options.audience] identifier of the resource server who will consume the access token issued after Auth
+	 * @see {@link https://auth0.com/docs/api/authentication#authorize-client}
+	 */
+	WebAuth.prototype.authorize = function(options) {
+	  var params = objectHelper
+	    .merge(this.baseOptions, [
+	      'clientID',
+	      'responseType',
+	      'responseMode',
+	      'redirectUri',
+	      'scope',
+	      'audience',
+	      '_csrf',
+	      'state',
+	      '_intstate',
+	      'nonce'
+	    ])
+	    .with(options);
+	
+	  assert.check(
+	    params,
+	    { type: 'object', message: 'options parameter is not valid' },
+	    {
+	      responseType: { type: 'string', message: 'responseType option is required' }
+	    }
+	  );
+	
+	  params = this.transactionManager.process(params);
+	  params.scope = params.scope || 'openid profile email';
+	
+	  windowHelper.redirect(this.client.buildAuthorizeUrl(params));
+	};
+	
+	/**
+	 * Signs up a new user, automatically logs the user in after the signup and returns the user token.
+	 * The login will be done using /oauth/token with password-realm grant type.
+	 *
+	 * @method signupAndAuthorize
+	 * @param {Object} options
+	 * @param {String} options.email user email address
+	 * @param {String} options.password user password
+	 * @param {String} options.connection name of the connection where the user will be created
+	 * @param {tokenCallback} cb
+	 * @see   {@link https://auth0.com/docs/api/authentication#signup}
+	 * @see   {@link https://auth0.com/docs/api-auth/grant/password}
+	 */
+	WebAuth.prototype.signupAndAuthorize = function(options, cb) {
+	  var _this = this;
+	
+	  return this.client.dbConnection.signup(
+	    objectHelper.blacklist(options, ['popupHandler']),
+	    function(err) {
+	      if (err) {
+	        return cb(err);
+	      }
+	      options.realm = options.connection;
+	      if (!options.username) {
+	        options.username = options.email;
+	      }
+	      _this.client.login(options, cb);
+	    }
+	  );
+	};
+	
+	/**
+	 * @callback crossOriginLoginCallback
+	 * @param {Error} [err] Authentication error returned by Auth0 with the reason why the request failed
+	 */
+	
+	/**
+	 * Logs in the user with username and password using the cross origin authentication (/co/authenticate) flow. You can use either `username` or `email` to identify the user, but `username` will take precedence over `email`.
+	 * Some browsers might not be able to successfully authenticate if 3rd party cookies are disabled in your browser. [See here for more information.]{@link https://auth0.com/docs/cross-origin-authentication}.
+	 * After the /co/authenticate call, you'll have to use the {@link parseHash} function at the `redirectUri` specified in the constructor.
+	 * 
+	 * @method login
+	 * @see Requires [`Implicit` grant]{@link https://auth0.com/docs/api-auth/grant/implicit}. For more information, read {@link https://auth0.com/docs/clients/client-grant-types}.
+	 * @param {Object} options options used in the {@link authorize} call after the login_ticket is acquired
+	 * @param {String} [options.username] Username (mutually exclusive with email)
+	 * @param {String} [options.email] Email (mutually exclusive with username)
+	 * @param {String} options.password Password
+	 * @param {String} [options.realm] Realm used to authenticate the user, it can be a realm name or a database connection name
+	 * @param {crossOriginLoginCallback} cb Callback function called only when an authentication error, like invalid username or password, occurs. For other types of errors, there will be a redirect to the `redirectUri`.
+	 */
+	WebAuth.prototype.login = function(options, cb) {
+	  var isHostedLoginPage = windowHelper.getWindow().location.host === this.baseOptions.domain;
+	  if (isHostedLoginPage) {
+	    options.connection = options.realm;
+	    delete options.realm;
+	    this._universalLogin.login(options, cb);
+	  } else {
+	    this.crossOriginAuthentication.login(options, cb);
+	  }
+	};
+	
+	/**
+	 * Logs in the user by verifying the verification code (OTP) using the cross origin authentication (/co/authenticate) flow. You can use either `phoneNumber` or `email` to identify the user.
+	 * This only works when 3rd party cookies are enabled in the browser. After the /co/authenticate call, you'll have to use the {@link parseHash} function at the `redirectUri` specified in the constructor.
+	 *
+	 * @method login
+	 * @param {Object} options options used in the {@link authorize} call after the login_ticket is acquired
+	 * @param {String} [options.phoneNumber] Phone Number (mutually exclusive with email)
+	 * @param {String} [options.email] Email (mutually exclusive with username)
+	 * @param {String} options.verificationCode Verification Code (OTP)
+	 * @param {String} options.connection Passwordless connection to use. It can either be 'sms' or 'email'.
+	 * @param {crossOriginLoginCallback} cb Callback function called only when an authentication error, like invalid username or password, occurs. For other types of errors, there will be a redirect to the `redirectUri`.
+	 */
+	WebAuth.prototype.passwordlessLogin = function(options, cb) {
+	  var isHostedLoginPage = windowHelper.getWindow().location.host === this.baseOptions.domain;
+	  if (isHostedLoginPage) {
+	    this.passwordlessVerify(options, cb);
+	  } else {
+	    var crossOriginOptions = objectHelper.extend(
+	      {
+	        credentialType: 'http://auth0.com/oauth/grant-type/passwordless/otp',
+	        realm: options.connection,
+	        username: options.email || options.phoneNumber,
+	        otp: options.verificationCode
+	      },
+	      objectHelper.blacklist(options, ['connection', 'email', 'phoneNumber', 'verificationCode'])
+	    );
+	    this.crossOriginAuthentication.login(crossOriginOptions, cb);
+	  }
+	};
+	
+	/**
+	 * Runs the callback code for the cross origin authentication call. This method is meant to be called by the cross origin authentication callback url.
+	 *
+	 * @method crossOriginAuthenticationCallback
+	 * @deprecated Use {@link crossOriginVerification} instead.
+	 */
+	WebAuth.prototype.crossOriginAuthenticationCallback = function() {
+	  this.crossOriginVerification();
+	};
+	
+	/**
+	 * Runs the callback code for the cross origin authentication call. This method is meant to be called by the cross origin authentication callback url.
+	 *
+	 * @method crossOriginVerification
+	 */
+	WebAuth.prototype.crossOriginVerification = function() {
+	  this.crossOriginAuthentication.callback();
+	};
+	
+	/**
+	 * Redirects to the auth0 logout endpoint
+	 *
+	 * If you want to navigate the user to a specific URL after the logout, set that URL at the returnTo parameter. The URL should be included in any the appropriate Allowed Logout URLs list:
+	 *
+	 * - If the client_id parameter is included, the returnTo URL must be listed in the Allowed Logout URLs set at the client level (see Setting Allowed Logout URLs at the App Level).
+	 * - If the client_id parameter is NOT included, the returnTo URL must be listed in the Allowed Logout URLs set at the account level (see Setting Allowed Logout URLs at the Account Level).
+	 *
+	 * @method logout
+	 * @param {Object} options
+	 * @param {String} [options.clientID] identifier of your client
+	 * @param {String} [options.returnTo] URL to be redirected after the logout
+	 * @param {Boolean} [options.federated] tells Auth0 if it should logout the user also from the IdP.
+	 * @see   {@link https://auth0.com/docs/api/authentication#logout}
+	 */
+	WebAuth.prototype.logout = function(options) {
+	  windowHelper.redirect(this.client.buildLogoutUrl(options));
+	};
+	
+	/**
+	 * Verifies the passwordless TOTP and redirects to finish the passwordless transaction
+	 *
+	 * @method passwordlessVerify
+	 * @param {Object} options
+	 * @param {String} options.type `sms` or `email`
+	 * @param {String} options.phoneNumber only if type = sms
+	 * @param {String} options.email only if type = email
+	 * @param {String} options.connection the connection name
+	 * @param {String} options.verificationCode the TOTP code
+	 * @param {Function} cb
+	 */
+	WebAuth.prototype.passwordlessVerify = function(options, cb) {
+	  var _this = this;
+	  var params = objectHelper
+	    .merge(this.baseOptions, [
+	      'clientID',
+	      'responseType',
+	      'responseMode',
+	      'redirectUri',
+	      'scope',
+	      'audience',
+	      '_csrf',
+	      'state',
+	      '_intstate',
+	      'nonce'
+	    ])
+	    .with(options);
+	
+	  assert.check(
+	    params,
+	    { type: 'object', message: 'options parameter is not valid' },
+	    {
+	      responseType: { type: 'string', message: 'responseType option is required' }
+	    }
+	  );
+	
+	  params = this.transactionManager.process(params);
+	  return this.client.passwordless.verify(params, function(err) {
+	    if (err) {
+	      return cb(err);
+	    }
+	    return windowHelper.redirect(_this.client.passwordless.buildVerifyUrl(params));
+	  });
+	};
+	
+	module.exports = WebAuth;
+
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var IframeHandler = __webpack_require__(27);
+	var objectHelper = __webpack_require__(1);
+	var windowHelper = __webpack_require__(2);
+	var Warn = __webpack_require__(7);
+	
+	function runWebMessageFlow(authorizeUrl, options, callback) {
+	  var handler = new IframeHandler({
+	    url: authorizeUrl,
+	    eventListenerType: 'message',
+	    callback: function(eventData) {
+	      callback(null, eventData);
+	    },
+	    timeout: options.timeout,
+	    eventValidator: {
+	      isValid: function(eventData) {
+	        return (
+	          eventData.event.data.type === 'authorization_response' &&
+	          options.state === eventData.event.data.response.state
+	        );
+	      }
+	    },
+	    timeoutCallback: function() {
+	      callback({
+	        error: 'timeout',
+	        error_description: 'Timeout during executing web_message communication'
+	      });
+	    }
+	  });
+	  handler.init();
+	}
+	
+	function WebMessageHandler(webAuth) {
+	  this.webAuth = webAuth;
+	  this.warn = new Warn(webAuth.baseOptions);
+	}
+	
+	WebMessageHandler.prototype.run = function(options, cb) {
+	  var _this = this;
+	  options.responseMode = 'web_message';
+	  options.prompt = 'none';
+	
+	  var currentOrigin = windowHelper.getOrigin();
+	  var redirectUriOrigin = objectHelper.getOriginFromUrl(options.redirectUri);
+	  if (redirectUriOrigin && currentOrigin !== redirectUriOrigin) {
+	    return cb({
+	      error: 'origin_mismatch',
+	      error_description: "The redirectUri's origin (" +
+	        redirectUriOrigin +
+	        ") should match the window's origin (" +
+	        currentOrigin +
+	        ').'
+	    });
+	  }
+	
+	  runWebMessageFlow(this.webAuth.client.buildAuthorizeUrl(options), options, function(
+	    err,
+	    eventData
+	  ) {
+	    var error = err;
+	    if (!err && eventData.event.data.response.error) {
+	      error = objectHelper.pick(eventData.event.data.response, ['error', 'error_description']);
+	    }
+	    if (
+	      error &&
+	      error.error === 'consent_required' &&
+	      windowHelper.getWindow().location.hostname === 'localhost'
+	    ) {
+	      _this.warn.warning(
+	        "Consent Required. Consent can't be skipped on localhost. Read more here: https://auth0.com/docs/api-auth/user-consent#skipping-consent-for-first-party-clients"
+	      );
+	    }
+	    if (error) {
+	      return cb(error);
+	    }
+	    var parsedHash = eventData.event.data.response;
+	    _this.webAuth.validateAuthenticationResponse(options, parsedHash, cb);
+	  });
+	};
+	
+	module.exports = WebMessageHandler;
+
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	/**
+	 * Expose `Emitter`.
+	 */
+	
+	if (true) {
+	  module.exports = Emitter;
+	}
+	
+	/**
+	 * Initialize a new `Emitter`.
+	 *
+	 * @api public
+	 */
+	
+	function Emitter(obj) {
+	  if (obj) return mixin(obj);
+	};
+	
+	/**
+	 * Mixin the emitter properties.
+	 *
+	 * @param {Object} obj
+	 * @return {Object}
+	 * @api private
+	 */
+	
+	function mixin(obj) {
+	  for (var key in Emitter.prototype) {
+	    obj[key] = Emitter.prototype[key];
+	  }
+	  return obj;
+	}
+	
+	/**
+	 * Listen on the given `event` with `fn`.
+	 *
+	 * @param {String} event
+	 * @param {Function} fn
+	 * @return {Emitter}
+	 * @api public
+	 */
+	
+	Emitter.prototype.on =
+	Emitter.prototype.addEventListener = function(event, fn){
+	  this._callbacks = this._callbacks || {};
+	  (this._callbacks['$' + event] = this._callbacks['$' + event] || [])
+	    .push(fn);
+	  return this;
+	};
+	
+	/**
+	 * Adds an `event` listener that will be invoked a single
+	 * time then automatically removed.
+	 *
+	 * @param {String} event
+	 * @param {Function} fn
+	 * @return {Emitter}
+	 * @api public
+	 */
+	
+	Emitter.prototype.once = function(event, fn){
+	  function on() {
+	    this.off(event, on);
+	    fn.apply(this, arguments);
+	  }
+	
+	  on.fn = fn;
+	  this.on(event, on);
+	  return this;
+	};
+	
+	/**
+	 * Remove the given callback for `event` or all
+	 * registered callbacks.
+	 *
+	 * @param {String} event
+	 * @param {Function} fn
+	 * @return {Emitter}
+	 * @api public
+	 */
+	
+	Emitter.prototype.off =
+	Emitter.prototype.removeListener =
+	Emitter.prototype.removeAllListeners =
+	Emitter.prototype.removeEventListener = function(event, fn){
+	  this._callbacks = this._callbacks || {};
+	
+	  // all
+	  if (0 == arguments.length) {
+	    this._callbacks = {};
+	    return this;
+	  }
+	
+	  // specific event
+	  var callbacks = this._callbacks['$' + event];
+	  if (!callbacks) return this;
+	
+	  // remove all handlers
+	  if (1 == arguments.length) {
+	    delete this._callbacks['$' + event];
+	    return this;
+	  }
+	
+	  // remove specific handler
+	  var cb;
+	  for (var i = 0; i < callbacks.length; i++) {
+	    cb = callbacks[i];
+	    if (cb === fn || cb.fn === fn) {
+	      callbacks.splice(i, 1);
+	      break;
+	    }
+	  }
+	  return this;
+	};
+	
+	/**
+	 * Emit `event` with the given args.
+	 *
+	 * @param {String} event
+	 * @param {Mixed} ...
+	 * @return {Emitter}
+	 */
+	
+	Emitter.prototype.emit = function(event){
+	  this._callbacks = this._callbacks || {};
+	  var args = [].slice.call(arguments, 1)
+	    , callbacks = this._callbacks['$' + event];
+	
+	  if (callbacks) {
+	    callbacks = callbacks.slice(0);
+	    for (var i = 0, len = callbacks.length; i < len; ++i) {
+	      callbacks[i].apply(this, args);
+	    }
+	  }
+	
+	  return this;
+	};
+	
+	/**
+	 * Return array of callbacks for `event`.
+	 *
+	 * @param {String} event
+	 * @return {Array}
+	 * @api public
+	 */
+	
+	Emitter.prototype.listeners = function(event){
+	  this._callbacks = this._callbacks || {};
+	  return this._callbacks['$' + event] || [];
+	};
+	
+	/**
+	 * Check if this emitter has `event` handlers.
+	 *
+	 * @param {String} event
+	 * @return {Boolean}
+	 * @api public
+	 */
+	
+	Emitter.prototype.hasListeners = function(event){
+	  return !! this.listeners(event).length;
+	};
+
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
+	;(function (root, factory) {
+		if (true) {
+			// CommonJS
+			module.exports = exports = factory(__webpack_require__(12));
+		}
+		else if (typeof define === "function" && define.amd) {
+			// AMD
+			define(["./core"], factory);
+		}
+		else {
+			// Global (browser)
+			factory(root.CryptoJS);
+		}
+	}(this, function (CryptoJS) {
+	
+		(function () {
+		    // Shortcuts
+		    var C = CryptoJS;
+		    var C_lib = C.lib;
+		    var WordArray = C_lib.WordArray;
+		    var C_enc = C.enc;
+	
+		    /**
+		     * Base64 encoding strategy.
+		     */
+		    var Base64 = C_enc.Base64 = {
+		        /**
+		         * Converts a word array to a Base64 string.
+		         *
+		         * @param {WordArray} wordArray The word array.
+		         *
+		         * @return {string} The Base64 string.
+		         *
+		         * @static
+		         *
+		         * @example
+		         *
+		         *     var base64String = CryptoJS.enc.Base64.stringify(wordArray);
+		         */
+		        stringify: function (wordArray) {
+		            // Shortcuts
+		            var words = wordArray.words;
+		            var sigBytes = wordArray.sigBytes;
+		            var map = this._map;
+	
+		            // Clamp excess bits
+		            wordArray.clamp();
+	
+		            // Convert
+		            var base64Chars = [];
+		            for (var i = 0; i < sigBytes; i += 3) {
+		                var byte1 = (words[i >>> 2]       >>> (24 - (i % 4) * 8))       & 0xff;
+		                var byte2 = (words[(i + 1) >>> 2] >>> (24 - ((i + 1) % 4) * 8)) & 0xff;
+		                var byte3 = (words[(i + 2) >>> 2] >>> (24 - ((i + 2) % 4) * 8)) & 0xff;
+	
+		                var triplet = (byte1 << 16) | (byte2 << 8) | byte3;
+	
+		                for (var j = 0; (j < 4) && (i + j * 0.75 < sigBytes); j++) {
+		                    base64Chars.push(map.charAt((triplet >>> (6 * (3 - j))) & 0x3f));
+		                }
+		            }
+	
+		            // Add padding
+		            var paddingChar = map.charAt(64);
+		            if (paddingChar) {
+		                while (base64Chars.length % 4) {
+		                    base64Chars.push(paddingChar);
+		                }
+		            }
+	
+		            return base64Chars.join('');
+		        },
+	
+		        /**
+		         * Converts a Base64 string to a word array.
+		         *
+		         * @param {string} base64Str The Base64 string.
+		         *
+		         * @return {WordArray} The word array.
+		         *
+		         * @static
+		         *
+		         * @example
+		         *
+		         *     var wordArray = CryptoJS.enc.Base64.parse(base64String);
+		         */
+		        parse: function (base64Str) {
+		            // Shortcuts
+		            var base64StrLength = base64Str.length;
+		            var map = this._map;
+		            var reverseMap = this._reverseMap;
+	
+		            if (!reverseMap) {
+		                    reverseMap = this._reverseMap = [];
+		                    for (var j = 0; j < map.length; j++) {
+		                        reverseMap[map.charCodeAt(j)] = j;
+		                    }
+		            }
+	
+		            // Ignore padding
+		            var paddingChar = map.charAt(64);
+		            if (paddingChar) {
+		                var paddingIndex = base64Str.indexOf(paddingChar);
+		                if (paddingIndex !== -1) {
+		                    base64StrLength = paddingIndex;
+		                }
+		            }
+	
+		            // Convert
+		            return parseLoop(base64Str, base64StrLength, reverseMap);
+	
+		        },
+	
+		        _map: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
+		    };
+	
+		    function parseLoop(base64Str, base64StrLength, reverseMap) {
+		      var words = [];
+		      var nBytes = 0;
+		      for (var i = 0; i < base64StrLength; i++) {
+		          if (i % 4) {
+		              var bits1 = reverseMap[base64Str.charCodeAt(i - 1)] << ((i % 4) * 2);
+		              var bits2 = reverseMap[base64Str.charCodeAt(i)] >>> (6 - (i % 4) * 2);
+		              words[nBytes >>> 2] |= (bits1 | bits2) << (24 - (nBytes % 4) * 8);
+		              nBytes++;
+		          }
+		      }
+		      return WordArray.create(words, nBytes);
+		    }
+		}());
+	
+	
+		return CryptoJS.enc.Base64;
+	
+	}));
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
+	;(function (root, factory) {
+		if (true) {
+			// CommonJS
+			module.exports = exports = factory(__webpack_require__(12));
+		}
+		else if (typeof define === "function" && define.amd) {
+			// AMD
+			define(["./core"], factory);
+		}
+		else {
+			// Global (browser)
+			factory(root.CryptoJS);
+		}
+	}(this, function (CryptoJS) {
+	
+		return CryptoJS.enc.Hex;
+	
+	}));
+
+/***/ },
+/* 35 */
+/***/ function(module, exports) {
+
+	function DummyCache() {}
+	
+	DummyCache.prototype.get = function () {
+	  return null;
+	};
+	
+	DummyCache.prototype.has = function () {
+	  return false;
+	};
+	
+	DummyCache.prototype.set = function () {
+	};
+	
+	module.exports = DummyCache;
+
+
+/***/ },
+/* 36 */
+/***/ function(module, exports) {
+
+	function ConfigurationError(message) {
+	  this.name = 'ConfigurationError';
+	  this.message = (message || '');
+	}
+	ConfigurationError.prototype = Error.prototype;
+	
+	function TokenValidationError(message) {
+	  this.name = 'TokenValidationError';
+	  this.message = (message || '');
+	}
+	TokenValidationError.prototype = Error.prototype;
+	
+	module.exports = {
+	  ConfigurationError: ConfigurationError,
+	  TokenValidationError: TokenValidationError
+	};
+
+
+/***/ },
+/* 37 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var urljoin = __webpack_require__(3);
+	var base64 = __webpack_require__(20);
+	var request = __webpack_require__(21);
+	
+	function process(jwks) {
+	  var modulus = base64.decodeToHEX(jwks.n);
+	  var exp = base64.decodeToHEX(jwks.e);
+	
+	  return {
+	    modulus: modulus,
+	    exp: exp
+	  };
+	}
+	
+	function getJWKS(options, cb) {
+	  var url = options.jwksURI || urljoin(options.iss, '.well-known', 'jwks.json');
+	
+	  return request
+	    .get(url)
+	    .end(function (err, data) {
+	      var matchingKey = null;
+	      var a;
+	      var key;
+	
+	      if (err) {
+	        return cb(err);
+	      }
+	
+	      // eslint-disable-next-line no-plusplus
+	      for (a = 0; a < data.body.keys.length && matchingKey === null; a++) {
+	        key = data.body.keys[a];
+	        if (key.kid === options.kid) {
+	          matchingKey = key;
+	        }
+	      }
+	
+	      return cb(null, process(matchingKey));
+	    });
+	}
+	
+	module.exports = {
+	  process: process,
+	  getJWKS: getJWKS
+	};
+
+
+/***/ },
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	Based on the work of Tom Wu
+	http://www-cs-students.stanford.edu/~tjw/jsbn/
+	http://www-cs-students.stanford.edu/~tjw/jsbn/LICENSE
+	*/
+	
+	var BigInteger = __webpack_require__(40).BigInteger;
+	var SHA256 = __webpack_require__(19);
+	
+	var DigestInfoHead = {
+	  sha1: '3021300906052b0e03021a05000414',
+	  sha224: '302d300d06096086480165030402040500041c',
+	  sha256: '3031300d060960864801650304020105000420',
+	  sha384: '3041300d060960864801650304020205000430',
+	  sha512: '3051300d060960864801650304020305000440',
+	  md2: '3020300c06082a864886f70d020205000410',
+	  md5: '3020300c06082a864886f70d020505000410',
+	  ripemd160: '3021300906052b2403020105000414'
+	};
+	
+	var DigestAlgs = {
+	  sha256: SHA256
+	};
+	
+	function RSAVerifier(modulus, exp) {
+	  this.n = null;
+	  this.e = 0;
+	
+	  if (modulus != null && exp != null && modulus.length > 0 && exp.length > 0) {
+	    this.n = new BigInteger(modulus, 16);
+	    this.e = parseInt(exp, 16);
+	  } else {
+	    throw new Error('Invalid key data');
+	  }
+	}
+	
+	function getAlgorithmFromDigest(hDigestInfo) {
+	  for (var algName in DigestInfoHead) {
+	    var head = DigestInfoHead[algName];
+	    var len = head.length;
+	
+	    if (hDigestInfo.substring(0, len) === head) {
+	      return {
+	        alg: algName,
+	        hash: hDigestInfo.substring(len)
+	      };
+	    }
+	  }
+	  return [];
+	}
+	
+	
+	RSAVerifier.prototype.verify = function (msg, encsig) {
+	  encsig = encsig.replace(/[^0-9a-f]|[\s\n]]/ig, '');
+	
+	  var sig = new BigInteger(encsig, 16);
+	  if (sig.bitLength() > this.n.bitLength()) {
+	    throw new Error('Signature does not match with the key modulus.');
+	  }
+	
+	  var decryptedSig = sig.modPowInt(this.e, this.n);
+	  var digest = decryptedSig.toString(16).replace(/^1f+00/, '');
+	
+	  var digestInfo = getAlgorithmFromDigest(digest);
+	  if (digestInfo.length === 0) {
+	    return false;
+	  }
+	
+	  if (!DigestAlgs.hasOwnProperty(digestInfo.alg)) {
+	    throw new Error('Hashing algorithm is not supported.');
+	  }
+	
+	  var msgHash = DigestAlgs[digestInfo.alg](msg).toString();
+	  return (digestInfo.hash === msgHash);
+	};
+	
+	module.exports = RSAVerifier;
+
+
+/***/ },
+/* 39 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var sha256 = __webpack_require__(19);
+	var cryptoBase64 = __webpack_require__(33);
+	var cryptoHex = __webpack_require__(34);
+	
+	var RSAVerifier = __webpack_require__(38);
+	var base64 = __webpack_require__(20);
+	var jwks = __webpack_require__(37);
+	var error = __webpack_require__(36);
+	var DummyCache = __webpack_require__(35);
+	var supportedAlgs = ['RS256'];
+	
+	/**
+	 * Creates a new id_token verifier
+	 * @constructor
+	 * @param {Object} parameters
+	 * @param {String} parameters.issuer name of the issuer of the token
+	 * that should match the `iss` claim in the id_token
+	 * @param {String} parameters.audience identifies the recipients that the JWT is intended for
+	 * and should match the `aud` claim
+	 * @param {Object} [parameters.jwksCache] cache for JSON Web Token Keys. By default it has no cache
+	 * @param {String} [parameters.jwksURI] A valid, direct URI to fetch the JSON Web Key Set (JWKS).
+	 * @param {String} [parameters.expectedAlg='RS256'] algorithm in which the id_token was signed
+	 * and will be used to validate
+	 * @param {number} [parameters.leeway=0] number of seconds that the clock can be out of sync
+	 * while validating expiration of the id_token
+	 */
+	function IdTokenVerifier(parameters) {
+	  var options = parameters || {};
+	
+	  this.jwksCache = options.jwksCache || new DummyCache();
+	  this.expectedAlg = options.expectedAlg || 'RS256';
+	  this.issuer = options.issuer;
+	  this.audience = options.audience;
+	  this.leeway = options.leeway || 0;
+	  this.__disableExpirationCheck = options.__disableExpirationCheck || false;
+	  this.jwksURI = options.jwksURI;
+	
+	  if (this.leeway < 0 || this.leeway > 60) {
+	    throw new error.ConfigurationError('The leeway should be positive and lower than a minute.');
+	  }
+	
+	  if (supportedAlgs.indexOf(this.expectedAlg) === -1) {
+	    throw new error.ConfigurationError('Algorithm ' + this.expectedAlg +
+	      ' is not supported. (Expected algs: [' + supportedAlgs.join(',') + '])');
+	  }
+	}
+	
+	/**
+	 * @callback verifyCallback
+	 * @param {Error} [err] error returned if the verify cannot be performed
+	 * @param {boolean} [status] if the token is valid or not
+	 */
+	
+	/**
+	 * Verifies an id_token
+	 *
+	 * It will validate:
+	 * - signature according to the algorithm configured in the verifier.
+	 * - if nonce is present and matches the one provided
+	 * - if `iss` and `aud` claims matches the configured issuer and audience
+	 * - if token is not expired and valid (if the `nbf` claim is in the past)
+	 *
+	 * @method verify
+	 * @param {String} token id_token to verify
+	 * @param {String} [nonce] nonce value that should match the one in the id_token claims
+	 * @param {verifyCallback} cb callback used to notify the results of the validation
+	 */
+	IdTokenVerifier.prototype.verify = function (token, nonce, cb) {
+	  var jwt = this.decode(token);
+	
+	  if (jwt instanceof Error) {
+	    return cb(jwt, false);
+	  }
+	
+	  /* eslint-disable vars-on-top */
+	  var headAndPayload = jwt.encoded.header + '.' + jwt.encoded.payload;
+	  var signature = base64.decodeToHEX(jwt.encoded.signature);
+	
+	  var alg = jwt.header.alg;
+	  var kid = jwt.header.kid;
+	
+	  var aud = jwt.payload.aud;
+	  var iss = jwt.payload.iss;
+	  var exp = jwt.payload.exp;
+	  var nbf = jwt.payload.nbf;
+	  var tnonce = jwt.payload.nonce || null;
+	  /* eslint-enable vars-on-top */
+	
+	  if (this.issuer !== iss) {
+	    return cb(new error.TokenValidationError('Issuer ' + iss + ' is not valid.'), false);
+	  }
+	
+	  if (this.audience !== aud) {
+	    return cb(new error.TokenValidationError('Audience ' + aud + ' is not valid.'), false);
+	  }
+	
+	  if (this.expectedAlg !== alg) {
+	    return cb(new error.TokenValidationError('Algorithm ' + alg +
+	      ' is not supported. (Expected algs: [' + supportedAlgs.join(',') + '])'), false);
+	  }
+	
+	  if (tnonce !== nonce) {
+	    return cb(new error.TokenValidationError('Nonce does not match.'), false);
+	  }
+	
+	  var expirationError = this.verifyExpAndNbf(exp, nbf); // eslint-disable-line vars-on-top
+	
+	  if (expirationError) {
+	    return cb(expirationError, false);
+	  }
+	
+	  return this.getRsaVerifier(iss, kid, function (err, rsaVerifier) {
+	    if (err) {
+	      return cb(err);
+	    }
+	    if (rsaVerifier.verify(headAndPayload, signature)) {
+	      return cb(null, jwt.payload);
+	    }
+	    return cb(new error.TokenValidationError('Invalid signature.'));
+	  });
+	};
+	
+	/**
+	 * Verifies that the `exp` and `nbf` claims are valid in the current moment.
+	 *
+	 * @method verifyExpAndNbf
+	 * @param {String} exp value of `exp` claim
+	 * @param {String} nbf value of `nbf` claim
+	 * @return {boolean} if token is valid according to `exp` and `nbf`
+	 */
+	IdTokenVerifier.prototype.verifyExpAndNbf = function (exp, nbf) {
+	  var now = new Date();
+	  var expDate = new Date(0);
+	  var nbfDate = new Date(0);
+	
+	  if (this.__disableExpirationCheck) {
+	    return null;
+	  }
+	
+	  expDate.setUTCSeconds(exp + this.leeway);
+	
+	  if (now > expDate) {
+	    return new error.TokenValidationError('Expired token.');
+	  }
+	
+	  if (typeof nbf === 'undefined') {
+	    return null;
+	  }
+	  nbfDate.setUTCSeconds(nbf - this.leeway);
+	  if (now < nbfDate) {
+	    return new error.TokenValidationError('The token is not valid until later in the future. ' +
+	      'Please check your computed clock.');
+	  }
+	
+	  return null;
+	};
+	
+	/**
+	 * Verifies that the `exp` and `iat` claims are valid in the current moment.
+	 *
+	 * @method verifyExpAndIat
+	 * @param {String} exp value of `exp` claim
+	 * @param {String} iat value of `iat` claim
+	 * @return {boolean} if token is valid according to `exp` and `iat`
+	 */
+	IdTokenVerifier.prototype.verifyExpAndIat = function (exp, iat) {
+	  var now = new Date();
+	  var expDate = new Date(0);
+	  var iatDate = new Date(0);
+	
+	  if (this.__disableExpirationCheck) {
+	    return null;
+	  }
+	
+	  expDate.setUTCSeconds(exp + this.leeway);
+	
+	  if (now > expDate) {
+	    return new error.TokenValidationError('Expired token.');
+	  }
+	
+	  iatDate.setUTCSeconds(iat - this.leeway);
+	
+	  if (now < iatDate) {
+	    return new error.TokenValidationError('The token was issued in the future. ' +
+	      'Please check your computed clock.');
+	  }
+	  return null;
+	};
+	
+	IdTokenVerifier.prototype.getRsaVerifier = function (iss, kid, cb) {
+	  var _this = this;
+	  var cachekey = iss + kid;
+	
+	  if (!this.jwksCache.has(cachekey)) {
+	    jwks.getJWKS({
+	      jwksURI: this.jwksURI,
+	      iss: iss,
+	      kid: kid
+	    }, function (err, keyInfo) {
+	      if (err) {
+	        return cb(err);
+	      }
+	      _this.jwksCache.set(cachekey, keyInfo);
+	      return cb(null, new RSAVerifier(keyInfo.modulus, keyInfo.exp));
+	    });
+	  } else {
+	    var keyInfo = this.jwksCache.get(cachekey); // eslint-disable-line vars-on-top
+	    cb(null, new RSAVerifier(keyInfo.modulus, keyInfo.exp));
+	  }
+	};
+	
+	
+	/**
+	 * @typedef DecodedToken
+	 * @type {Object}
+	 * @property {Object} header - content of the JWT header.
+	 * @property {Object} payload - token claims.
+	 * @property {Object} encoded - encoded parts of the token.
+	 */
+	
+	/**
+	 * Decodes a well formed JWT without any verification
+	 *
+	 * @method decode
+	 * @param {String} token decodes the token
+	 * @return {DecodedToken} if token is valid according to `exp` and `nbf`
+	 */
+	IdTokenVerifier.prototype.decode = function (token) {
+	  var parts = token.split('.');
+	  var header;
+	  var payload;
+	
+	  if (parts.length !== 3) {
+	    return new error.TokenValidationError('Cannot decode a malformed JWT');
+	  }
+	
+	  try {
+	    header = JSON.parse(base64.decodeToString(parts[0]));
+	    payload = JSON.parse(base64.decodeToString(parts[1]));
+	  } catch (e) {
+	    return new error.TokenValidationError('Token header or payload is not valid JSON');
+	  }
+	
+	  return {
+	    header: header,
+	    payload: payload,
+	    encoded: {
+	      header: parts[0],
+	      payload: parts[1],
+	      signature: parts[2]
+	    }
+	  };
+	};
+	
+	/**
+	 * @callback validateAccessTokenCallback
+	 * @param {Error} [err] error returned if the validation cannot be performed
+	 * or the token is invalid. If there is no error, then the access_token is valid.
+	 */
+	
+	/**
+	 * Validates an access_token based on {@link http://openid.net/specs/openid-connect-core-1_0.html#ImplicitTokenValidation}.
+	 * The id_token from where the alg and atHash parameters are taken,
+	 * should be decoded and verified before using thisfunction
+	 *
+	 * @method validateAccessToken
+	 * @param {String} access_token the access_token
+	 * @param {String} alg The algorithm defined in the header of the
+	 * previously verified id_token under the "alg" claim.
+	 * @param {String} atHash The "at_hash" value included in the payload
+	 * of the previously verified id_token.
+	 * @param {validateAccessTokenCallback} cb callback used to notify the results of the validation.
+	 */
+	IdTokenVerifier.prototype.validateAccessToken = function (accessToken, alg, atHash, cb) {
+	  if (this.expectedAlg !== alg) {
+	    return cb(new error.TokenValidationError('Algorithm ' + alg +
+	      ' is not supported. (Expected alg: ' + this.expectedAlg + ')'));
+	  }
+	  var sha256AccessToken = sha256(accessToken);
+	  var hashToHex = cryptoHex.stringify(sha256AccessToken);
+	  var hashToHexFirstHalf = hashToHex.substring(0, hashToHex.length / 2);
+	  var hashFirstHalfWordArray = cryptoHex.parse(hashToHexFirstHalf);
+	  var hashFirstHalfBase64 = cryptoBase64.stringify(hashFirstHalfWordArray);
+	  var hashFirstHalfBase64SafeUrl = base64.base64ToBase64Url(hashFirstHalfBase64);
+	  if (hashFirstHalfBase64SafeUrl !== atHash) {
+	    return cb(new error.TokenValidationError('Invalid access_token'));
+	  }
+	  return cb(null);
+	};
+	
+	module.exports = IdTokenVerifier;
+
+
+/***/ },
+/* 40 */
+/***/ function(module, exports, __webpack_require__) {
+
+	(function(){
+	
+	    // Copyright (c) 2005  Tom Wu
+	    // All Rights Reserved.
+	    // See "LICENSE" for details.
+	
+	    // Basic JavaScript BN library - subset useful for RSA encryption.
+	
+	    // Bits per digit
+	    var dbits;
+	
+	    // JavaScript engine analysis
+	    var canary = 0xdeadbeefcafe;
+	    var j_lm = ((canary&0xffffff)==0xefcafe);
+	
+	    // (public) Constructor
+	    function BigInteger(a,b,c) {
+	      if(a != null)
+	        if("number" == typeof a) this.fromNumber(a,b,c);
+	        else if(b == null && "string" != typeof a) this.fromString(a,256);
+	        else this.fromString(a,b);
+	    }
+	
+	    // return new, unset BigInteger
+	    function nbi() { return new BigInteger(null); }
+	
+	    // am: Compute w_j += (x*this_i), propagate carries,
+	    // c is initial carry, returns final carry.
+	    // c < 3*dvalue, x < 2*dvalue, this_i < dvalue
+	    // We need to select the fastest one that works in this environment.
+	
+	    // am1: use a single mult and divide to get the high bits,
+	    // max digit bits should be 26 because
+	    // max internal value = 2*dvalue^2-2*dvalue (< 2^53)
+	    function am1(i,x,w,j,c,n) {
+	      while(--n >= 0) {
+	        var v = x*this[i++]+w[j]+c;
+	        c = Math.floor(v/0x4000000);
+	        w[j++] = v&0x3ffffff;
+	      }
+	      return c;
+	    }
+	    // am2 avoids a big mult-and-extract completely.
+	    // Max digit bits should be <= 30 because we do bitwise ops
+	    // on values up to 2*hdvalue^2-hdvalue-1 (< 2^31)
+	    function am2(i,x,w,j,c,n) {
+	      var xl = x&0x7fff, xh = x>>15;
+	      while(--n >= 0) {
+	        var l = this[i]&0x7fff;
+	        var h = this[i++]>>15;
+	        var m = xh*l+h*xl;
+	        l = xl*l+((m&0x7fff)<<15)+w[j]+(c&0x3fffffff);
+	        c = (l>>>30)+(m>>>15)+xh*h+(c>>>30);
+	        w[j++] = l&0x3fffffff;
+	      }
+	      return c;
+	    }
+	    // Alternately, set max digit bits to 28 since some
+	    // browsers slow down when dealing with 32-bit numbers.
+	    function am3(i,x,w,j,c,n) {
+	      var xl = x&0x3fff, xh = x>>14;
+	      while(--n >= 0) {
+	        var l = this[i]&0x3fff;
+	        var h = this[i++]>>14;
+	        var m = xh*l+h*xl;
+	        l = xl*l+((m&0x3fff)<<14)+w[j]+c;
+	        c = (l>>28)+(m>>14)+xh*h;
+	        w[j++] = l&0xfffffff;
+	      }
+	      return c;
+	    }
+	    var inBrowser = typeof navigator !== "undefined";
+	    if(inBrowser && j_lm && (navigator.appName == "Microsoft Internet Explorer")) {
+	      BigInteger.prototype.am = am2;
+	      dbits = 30;
+	    }
+	    else if(inBrowser && j_lm && (navigator.appName != "Netscape")) {
+	      BigInteger.prototype.am = am1;
+	      dbits = 26;
+	    }
+	    else { // Mozilla/Netscape seems to prefer am3
+	      BigInteger.prototype.am = am3;
+	      dbits = 28;
+	    }
+	
+	    BigInteger.prototype.DB = dbits;
+	    BigInteger.prototype.DM = ((1<<dbits)-1);
+	    BigInteger.prototype.DV = (1<<dbits);
+	
+	    var BI_FP = 52;
+	    BigInteger.prototype.FV = Math.pow(2,BI_FP);
+	    BigInteger.prototype.F1 = BI_FP-dbits;
+	    BigInteger.prototype.F2 = 2*dbits-BI_FP;
+	
+	    // Digit conversions
+	    var BI_RM = "0123456789abcdefghijklmnopqrstuvwxyz";
+	    var BI_RC = new Array();
+	    var rr,vv;
+	    rr = "0".charCodeAt(0);
+	    for(vv = 0; vv <= 9; ++vv) BI_RC[rr++] = vv;
+	    rr = "a".charCodeAt(0);
+	    for(vv = 10; vv < 36; ++vv) BI_RC[rr++] = vv;
+	    rr = "A".charCodeAt(0);
+	    for(vv = 10; vv < 36; ++vv) BI_RC[rr++] = vv;
+	
+	    function int2char(n) { return BI_RM.charAt(n); }
+	    function intAt(s,i) {
+	      var c = BI_RC[s.charCodeAt(i)];
+	      return (c==null)?-1:c;
+	    }
+	
+	    // (protected) copy this to r
+	    function bnpCopyTo(r) {
+	      for(var i = this.t-1; i >= 0; --i) r[i] = this[i];
+	      r.t = this.t;
+	      r.s = this.s;
+	    }
+	
+	    // (protected) set from integer value x, -DV <= x < DV
+	    function bnpFromInt(x) {
+	      this.t = 1;
+	      this.s = (x<0)?-1:0;
+	      if(x > 0) this[0] = x;
+	      else if(x < -1) this[0] = x+this.DV;
+	      else this.t = 0;
+	    }
+	
+	    // return bigint initialized to value
+	    function nbv(i) { var r = nbi(); r.fromInt(i); return r; }
+	
+	    // (protected) set from string and radix
+	    function bnpFromString(s,b) {
+	      var k;
+	      if(b == 16) k = 4;
+	      else if(b == 8) k = 3;
+	      else if(b == 256) k = 8; // byte array
+	      else if(b == 2) k = 1;
+	      else if(b == 32) k = 5;
+	      else if(b == 4) k = 2;
+	      else { this.fromRadix(s,b); return; }
+	      this.t = 0;
+	      this.s = 0;
+	      var i = s.length, mi = false, sh = 0;
+	      while(--i >= 0) {
+	        var x = (k==8)?s[i]&0xff:intAt(s,i);
+	        if(x < 0) {
+	          if(s.charAt(i) == "-") mi = true;
+	          continue;
+	        }
+	        mi = false;
+	        if(sh == 0)
+	          this[this.t++] = x;
+	        else if(sh+k > this.DB) {
+	          this[this.t-1] |= (x&((1<<(this.DB-sh))-1))<<sh;
+	          this[this.t++] = (x>>(this.DB-sh));
+	        }
+	        else
+	          this[this.t-1] |= x<<sh;
+	        sh += k;
+	        if(sh >= this.DB) sh -= this.DB;
+	      }
+	      if(k == 8 && (s[0]&0x80) != 0) {
+	        this.s = -1;
+	        if(sh > 0) this[this.t-1] |= ((1<<(this.DB-sh))-1)<<sh;
+	      }
+	      this.clamp();
+	      if(mi) BigInteger.ZERO.subTo(this,this);
+	    }
+	
+	    // (protected) clamp off excess high words
+	    function bnpClamp() {
+	      var c = this.s&this.DM;
+	      while(this.t > 0 && this[this.t-1] == c) --this.t;
+	    }
+	
+	    // (public) return string representation in given radix
+	    function bnToString(b) {
+	      if(this.s < 0) return "-"+this.negate().toString(b);
+	      var k;
+	      if(b == 16) k = 4;
+	      else if(b == 8) k = 3;
+	      else if(b == 2) k = 1;
+	      else if(b == 32) k = 5;
+	      else if(b == 4) k = 2;
+	      else return this.toRadix(b);
+	      var km = (1<<k)-1, d, m = false, r = "", i = this.t;
+	      var p = this.DB-(i*this.DB)%k;
+	      if(i-- > 0) {
+	        if(p < this.DB && (d = this[i]>>p) > 0) { m = true; r = int2char(d); }
+	        while(i >= 0) {
+	          if(p < k) {
+	            d = (this[i]&((1<<p)-1))<<(k-p);
+	            d |= this[--i]>>(p+=this.DB-k);
+	          }
+	          else {
+	            d = (this[i]>>(p-=k))&km;
+	            if(p <= 0) { p += this.DB; --i; }
+	          }
+	          if(d > 0) m = true;
+	          if(m) r += int2char(d);
+	        }
+	      }
+	      return m?r:"0";
+	    }
+	
+	    // (public) -this
+	    function bnNegate() { var r = nbi(); BigInteger.ZERO.subTo(this,r); return r; }
+	
+	    // (public) |this|
+	    function bnAbs() { return (this.s<0)?this.negate():this; }
+	
+	    // (public) return + if this > a, - if this < a, 0 if equal
+	    function bnCompareTo(a) {
+	      var r = this.s-a.s;
+	      if(r != 0) return r;
+	      var i = this.t;
+	      r = i-a.t;
+	      if(r != 0) return (this.s<0)?-r:r;
+	      while(--i >= 0) if((r=this[i]-a[i]) != 0) return r;
+	      return 0;
+	    }
+	
+	    // returns bit length of the integer x
+	    function nbits(x) {
+	      var r = 1, t;
+	      if((t=x>>>16) != 0) { x = t; r += 16; }
+	      if((t=x>>8) != 0) { x = t; r += 8; }
+	      if((t=x>>4) != 0) { x = t; r += 4; }
+	      if((t=x>>2) != 0) { x = t; r += 2; }
+	      if((t=x>>1) != 0) { x = t; r += 1; }
+	      return r;
+	    }
+	
+	    // (public) return the number of bits in "this"
+	    function bnBitLength() {
+	      if(this.t <= 0) return 0;
+	      return this.DB*(this.t-1)+nbits(this[this.t-1]^(this.s&this.DM));
+	    }
+	
+	    // (protected) r = this << n*DB
+	    function bnpDLShiftTo(n,r) {
+	      var i;
+	      for(i = this.t-1; i >= 0; --i) r[i+n] = this[i];
+	      for(i = n-1; i >= 0; --i) r[i] = 0;
+	      r.t = this.t+n;
+	      r.s = this.s;
+	    }
+	
+	    // (protected) r = this >> n*DB
+	    function bnpDRShiftTo(n,r) {
+	      for(var i = n; i < this.t; ++i) r[i-n] = this[i];
+	      r.t = Math.max(this.t-n,0);
+	      r.s = this.s;
+	    }
+	
+	    // (protected) r = this << n
+	    function bnpLShiftTo(n,r) {
+	      var bs = n%this.DB;
+	      var cbs = this.DB-bs;
+	      var bm = (1<<cbs)-1;
+	      var ds = Math.floor(n/this.DB), c = (this.s<<bs)&this.DM, i;
+	      for(i = this.t-1; i >= 0; --i) {
+	        r[i+ds+1] = (this[i]>>cbs)|c;
+	        c = (this[i]&bm)<<bs;
+	      }
+	      for(i = ds-1; i >= 0; --i) r[i] = 0;
+	      r[ds] = c;
+	      r.t = this.t+ds+1;
+	      r.s = this.s;
+	      r.clamp();
+	    }
+	
+	    // (protected) r = this >> n
+	    function bnpRShiftTo(n,r) {
+	      r.s = this.s;
+	      var ds = Math.floor(n/this.DB);
+	      if(ds >= this.t) { r.t = 0; return; }
+	      var bs = n%this.DB;
+	      var cbs = this.DB-bs;
+	      var bm = (1<<bs)-1;
+	      r[0] = this[ds]>>bs;
+	      for(var i = ds+1; i < this.t; ++i) {
+	        r[i-ds-1] |= (this[i]&bm)<<cbs;
+	        r[i-ds] = this[i]>>bs;
+	      }
+	      if(bs > 0) r[this.t-ds-1] |= (this.s&bm)<<cbs;
+	      r.t = this.t-ds;
+	      r.clamp();
+	    }
+	
+	    // (protected) r = this - a
+	    function bnpSubTo(a,r) {
+	      var i = 0, c = 0, m = Math.min(a.t,this.t);
+	      while(i < m) {
+	        c += this[i]-a[i];
+	        r[i++] = c&this.DM;
+	        c >>= this.DB;
+	      }
+	      if(a.t < this.t) {
+	        c -= a.s;
+	        while(i < this.t) {
+	          c += this[i];
+	          r[i++] = c&this.DM;
+	          c >>= this.DB;
+	        }
+	        c += this.s;
+	      }
+	      else {
+	        c += this.s;
+	        while(i < a.t) {
+	          c -= a[i];
+	          r[i++] = c&this.DM;
+	          c >>= this.DB;
+	        }
+	        c -= a.s;
+	      }
+	      r.s = (c<0)?-1:0;
+	      if(c < -1) r[i++] = this.DV+c;
+	      else if(c > 0) r[i++] = c;
+	      r.t = i;
+	      r.clamp();
+	    }
+	
+	    // (protected) r = this * a, r != this,a (HAC 14.12)
+	    // "this" should be the larger one if appropriate.
+	    function bnpMultiplyTo(a,r) {
+	      var x = this.abs(), y = a.abs();
+	      var i = x.t;
+	      r.t = i+y.t;
+	      while(--i >= 0) r[i] = 0;
+	      for(i = 0; i < y.t; ++i) r[i+x.t] = x.am(0,y[i],r,i,0,x.t);
+	      r.s = 0;
+	      r.clamp();
+	      if(this.s != a.s) BigInteger.ZERO.subTo(r,r);
+	    }
+	
+	    // (protected) r = this^2, r != this (HAC 14.16)
+	    function bnpSquareTo(r) {
+	      var x = this.abs();
+	      var i = r.t = 2*x.t;
+	      while(--i >= 0) r[i] = 0;
+	      for(i = 0; i < x.t-1; ++i) {
+	        var c = x.am(i,x[i],r,2*i,0,1);
+	        if((r[i+x.t]+=x.am(i+1,2*x[i],r,2*i+1,c,x.t-i-1)) >= x.DV) {
+	          r[i+x.t] -= x.DV;
+	          r[i+x.t+1] = 1;
+	        }
+	      }
+	      if(r.t > 0) r[r.t-1] += x.am(i,x[i],r,2*i,0,1);
+	      r.s = 0;
+	      r.clamp();
+	    }
+	
+	    // (protected) divide this by m, quotient and remainder to q, r (HAC 14.20)
+	    // r != q, this != m.  q or r may be null.
+	    function bnpDivRemTo(m,q,r) {
+	      var pm = m.abs();
+	      if(pm.t <= 0) return;
+	      var pt = this.abs();
+	      if(pt.t < pm.t) {
+	        if(q != null) q.fromInt(0);
+	        if(r != null) this.copyTo(r);
+	        return;
+	      }
+	      if(r == null) r = nbi();
+	      var y = nbi(), ts = this.s, ms = m.s;
+	      var nsh = this.DB-nbits(pm[pm.t-1]);   // normalize modulus
+	      if(nsh > 0) { pm.lShiftTo(nsh,y); pt.lShiftTo(nsh,r); }
+	      else { pm.copyTo(y); pt.copyTo(r); }
+	      var ys = y.t;
+	      var y0 = y[ys-1];
+	      if(y0 == 0) return;
+	      var yt = y0*(1<<this.F1)+((ys>1)?y[ys-2]>>this.F2:0);
+	      var d1 = this.FV/yt, d2 = (1<<this.F1)/yt, e = 1<<this.F2;
+	      var i = r.t, j = i-ys, t = (q==null)?nbi():q;
+	      y.dlShiftTo(j,t);
+	      if(r.compareTo(t) >= 0) {
+	        r[r.t++] = 1;
+	        r.subTo(t,r);
+	      }
+	      BigInteger.ONE.dlShiftTo(ys,t);
+	      t.subTo(y,y);  // "negative" y so we can replace sub with am later
+	      while(y.t < ys) y[y.t++] = 0;
+	      while(--j >= 0) {
+	        // Estimate quotient digit
+	        var qd = (r[--i]==y0)?this.DM:Math.floor(r[i]*d1+(r[i-1]+e)*d2);
+	        if((r[i]+=y.am(0,qd,r,j,0,ys)) < qd) {   // Try it out
+	          y.dlShiftTo(j,t);
+	          r.subTo(t,r);
+	          while(r[i] < --qd) r.subTo(t,r);
+	        }
+	      }
+	      if(q != null) {
+	        r.drShiftTo(ys,q);
+	        if(ts != ms) BigInteger.ZERO.subTo(q,q);
+	      }
+	      r.t = ys;
+	      r.clamp();
+	      if(nsh > 0) r.rShiftTo(nsh,r); // Denormalize remainder
+	      if(ts < 0) BigInteger.ZERO.subTo(r,r);
+	    }
+	
+	    // (public) this mod a
+	    function bnMod(a) {
+	      var r = nbi();
+	      this.abs().divRemTo(a,null,r);
+	      if(this.s < 0 && r.compareTo(BigInteger.ZERO) > 0) a.subTo(r,r);
+	      return r;
+	    }
+	
+	    // Modular reduction using "classic" algorithm
+	    function Classic(m) { this.m = m; }
+	    function cConvert(x) {
+	      if(x.s < 0 || x.compareTo(this.m) >= 0) return x.mod(this.m);
+	      else return x;
+	    }
+	    function cRevert(x) { return x; }
+	    function cReduce(x) { x.divRemTo(this.m,null,x); }
+	    function cMulTo(x,y,r) { x.multiplyTo(y,r); this.reduce(r); }
+	    function cSqrTo(x,r) { x.squareTo(r); this.reduce(r); }
+	
+	    Classic.prototype.convert = cConvert;
+	    Classic.prototype.revert = cRevert;
+	    Classic.prototype.reduce = cReduce;
+	    Classic.prototype.mulTo = cMulTo;
+	    Classic.prototype.sqrTo = cSqrTo;
+	
+	    // (protected) return "-1/this % 2^DB"; useful for Mont. reduction
+	    // justification:
+	    //         xy == 1 (mod m)
+	    //         xy =  1+km
+	    //   xy(2-xy) = (1+km)(1-km)
+	    // x[y(2-xy)] = 1-k^2m^2
+	    // x[y(2-xy)] == 1 (mod m^2)
+	    // if y is 1/x mod m, then y(2-xy) is 1/x mod m^2
+	    // should reduce x and y(2-xy) by m^2 at each step to keep size bounded.
+	    // JS multiply "overflows" differently from C/C++, so care is needed here.
+	    function bnpInvDigit() {
+	      if(this.t < 1) return 0;
+	      var x = this[0];
+	      if((x&1) == 0) return 0;
+	      var y = x&3;       // y == 1/x mod 2^2
+	      y = (y*(2-(x&0xf)*y))&0xf; // y == 1/x mod 2^4
+	      y = (y*(2-(x&0xff)*y))&0xff;   // y == 1/x mod 2^8
+	      y = (y*(2-(((x&0xffff)*y)&0xffff)))&0xffff;    // y == 1/x mod 2^16
+	      // last step - calculate inverse mod DV directly;
+	      // assumes 16 < DB <= 32 and assumes ability to handle 48-bit ints
+	      y = (y*(2-x*y%this.DV))%this.DV;       // y == 1/x mod 2^dbits
+	      // we really want the negative inverse, and -DV < y < DV
+	      return (y>0)?this.DV-y:-y;
+	    }
+	
+	    // Montgomery reduction
+	    function Montgomery(m) {
+	      this.m = m;
+	      this.mp = m.invDigit();
+	      this.mpl = this.mp&0x7fff;
+	      this.mph = this.mp>>15;
+	      this.um = (1<<(m.DB-15))-1;
+	      this.mt2 = 2*m.t;
+	    }
+	
+	    // xR mod m
+	    function montConvert(x) {
+	      var r = nbi();
+	      x.abs().dlShiftTo(this.m.t,r);
+	      r.divRemTo(this.m,null,r);
+	      if(x.s < 0 && r.compareTo(BigInteger.ZERO) > 0) this.m.subTo(r,r);
+	      return r;
+	    }
+	
+	    // x/R mod m
+	    function montRevert(x) {
+	      var r = nbi();
+	      x.copyTo(r);
+	      this.reduce(r);
+	      return r;
+	    }
+	
+	    // x = x/R mod m (HAC 14.32)
+	    function montReduce(x) {
+	      while(x.t <= this.mt2) // pad x so am has enough room later
+	        x[x.t++] = 0;
+	      for(var i = 0; i < this.m.t; ++i) {
+	        // faster way of calculating u0 = x[i]*mp mod DV
+	        var j = x[i]&0x7fff;
+	        var u0 = (j*this.mpl+(((j*this.mph+(x[i]>>15)*this.mpl)&this.um)<<15))&x.DM;
+	        // use am to combine the multiply-shift-add into one call
+	        j = i+this.m.t;
+	        x[j] += this.m.am(0,u0,x,i,0,this.m.t);
+	        // propagate carry
+	        while(x[j] >= x.DV) { x[j] -= x.DV; x[++j]++; }
+	      }
+	      x.clamp();
+	      x.drShiftTo(this.m.t,x);
+	      if(x.compareTo(this.m) >= 0) x.subTo(this.m,x);
+	    }
+	
+	    // r = "x^2/R mod m"; x != r
+	    function montSqrTo(x,r) { x.squareTo(r); this.reduce(r); }
+	
+	    // r = "xy/R mod m"; x,y != r
+	    function montMulTo(x,y,r) { x.multiplyTo(y,r); this.reduce(r); }
+	
+	    Montgomery.prototype.convert = montConvert;
+	    Montgomery.prototype.revert = montRevert;
+	    Montgomery.prototype.reduce = montReduce;
+	    Montgomery.prototype.mulTo = montMulTo;
+	    Montgomery.prototype.sqrTo = montSqrTo;
+	
+	    // (protected) true iff this is even
+	    function bnpIsEven() { return ((this.t>0)?(this[0]&1):this.s) == 0; }
+	
+	    // (protected) this^e, e < 2^32, doing sqr and mul with "r" (HAC 14.79)
+	    function bnpExp(e,z) {
+	      if(e > 0xffffffff || e < 1) return BigInteger.ONE;
+	      var r = nbi(), r2 = nbi(), g = z.convert(this), i = nbits(e)-1;
+	      g.copyTo(r);
+	      while(--i >= 0) {
+	        z.sqrTo(r,r2);
+	        if((e&(1<<i)) > 0) z.mulTo(r2,g,r);
+	        else { var t = r; r = r2; r2 = t; }
+	      }
+	      return z.revert(r);
+	    }
+	
+	    // (public) this^e % m, 0 <= e < 2^32
+	    function bnModPowInt(e,m) {
+	      var z;
+	      if(e < 256 || m.isEven()) z = new Classic(m); else z = new Montgomery(m);
+	      return this.exp(e,z);
+	    }
+	
+	    // protected
+	    BigInteger.prototype.copyTo = bnpCopyTo;
+	    BigInteger.prototype.fromInt = bnpFromInt;
+	    BigInteger.prototype.fromString = bnpFromString;
+	    BigInteger.prototype.clamp = bnpClamp;
+	    BigInteger.prototype.dlShiftTo = bnpDLShiftTo;
+	    BigInteger.prototype.drShiftTo = bnpDRShiftTo;
+	    BigInteger.prototype.lShiftTo = bnpLShiftTo;
+	    BigInteger.prototype.rShiftTo = bnpRShiftTo;
+	    BigInteger.prototype.subTo = bnpSubTo;
+	    BigInteger.prototype.multiplyTo = bnpMultiplyTo;
+	    BigInteger.prototype.squareTo = bnpSquareTo;
+	    BigInteger.prototype.divRemTo = bnpDivRemTo;
+	    BigInteger.prototype.invDigit = bnpInvDigit;
+	    BigInteger.prototype.isEven = bnpIsEven;
+	    BigInteger.prototype.exp = bnpExp;
+	
+	    // public
+	    BigInteger.prototype.toString = bnToString;
+	    BigInteger.prototype.negate = bnNegate;
+	    BigInteger.prototype.abs = bnAbs;
+	    BigInteger.prototype.compareTo = bnCompareTo;
+	    BigInteger.prototype.bitLength = bnBitLength;
+	    BigInteger.prototype.mod = bnMod;
+	    BigInteger.prototype.modPowInt = bnModPowInt;
+	
+	    // "constants"
+	    BigInteger.ZERO = nbv(0);
+	    BigInteger.ONE = nbv(1);
+	
+	    // Copyright (c) 2005-2009  Tom Wu
+	    // All Rights Reserved.
+	    // See "LICENSE" for details.
+	
+	    // Extended JavaScript BN functions, required for RSA private ops.
+	
+	    // Version 1.1: new BigInteger("0", 10) returns "proper" zero
+	    // Version 1.2: square() API, isProbablePrime fix
+	
+	    // (public)
+	    function bnClone() { var r = nbi(); this.copyTo(r); return r; }
+	
+	    // (public) return value as integer
+	    function bnIntValue() {
+	      if(this.s < 0) {
+	        if(this.t == 1) return this[0]-this.DV;
+	        else if(this.t == 0) return -1;
+	      }
+	      else if(this.t == 1) return this[0];
+	      else if(this.t == 0) return 0;
+	      // assumes 16 < DB < 32
+	      return ((this[1]&((1<<(32-this.DB))-1))<<this.DB)|this[0];
+	    }
+	
+	    // (public) return value as byte
+	    function bnByteValue() { return (this.t==0)?this.s:(this[0]<<24)>>24; }
+	
+	    // (public) return value as short (assumes DB>=16)
+	    function bnShortValue() { return (this.t==0)?this.s:(this[0]<<16)>>16; }
+	
+	    // (protected) return x s.t. r^x < DV
+	    function bnpChunkSize(r) { return Math.floor(Math.LN2*this.DB/Math.log(r)); }
+	
+	    // (public) 0 if this == 0, 1 if this > 0
+	    function bnSigNum() {
+	      if(this.s < 0) return -1;
+	      else if(this.t <= 0 || (this.t == 1 && this[0] <= 0)) return 0;
+	      else return 1;
+	    }
+	
+	    // (protected) convert to radix string
+	    function bnpToRadix(b) {
+	      if(b == null) b = 10;
+	      if(this.signum() == 0 || b < 2 || b > 36) return "0";
+	      var cs = this.chunkSize(b);
+	      var a = Math.pow(b,cs);
+	      var d = nbv(a), y = nbi(), z = nbi(), r = "";
+	      this.divRemTo(d,y,z);
+	      while(y.signum() > 0) {
+	        r = (a+z.intValue()).toString(b).substr(1) + r;
+	        y.divRemTo(d,y,z);
+	      }
+	      return z.intValue().toString(b) + r;
+	    }
+	
+	    // (protected) convert from radix string
+	    function bnpFromRadix(s,b) {
+	      this.fromInt(0);
+	      if(b == null) b = 10;
+	      var cs = this.chunkSize(b);
+	      var d = Math.pow(b,cs), mi = false, j = 0, w = 0;
+	      for(var i = 0; i < s.length; ++i) {
+	        var x = intAt(s,i);
+	        if(x < 0) {
+	          if(s.charAt(i) == "-" && this.signum() == 0) mi = true;
+	          continue;
+	        }
+	        w = b*w+x;
+	        if(++j >= cs) {
+	          this.dMultiply(d);
+	          this.dAddOffset(w,0);
+	          j = 0;
+	          w = 0;
+	        }
+	      }
+	      if(j > 0) {
+	        this.dMultiply(Math.pow(b,j));
+	        this.dAddOffset(w,0);
+	      }
+	      if(mi) BigInteger.ZERO.subTo(this,this);
+	    }
+	
+	    // (protected) alternate constructor
+	    function bnpFromNumber(a,b,c) {
+	      if("number" == typeof b) {
+	        // new BigInteger(int,int,RNG)
+	        if(a < 2) this.fromInt(1);
+	        else {
+	          this.fromNumber(a,c);
+	          if(!this.testBit(a-1))	// force MSB set
+	            this.bitwiseTo(BigInteger.ONE.shiftLeft(a-1),op_or,this);
+	          if(this.isEven()) this.dAddOffset(1,0); // force odd
+	          while(!this.isProbablePrime(b)) {
+	            this.dAddOffset(2,0);
+	            if(this.bitLength() > a) this.subTo(BigInteger.ONE.shiftLeft(a-1),this);
+	          }
+	        }
+	      }
+	      else {
+	        // new BigInteger(int,RNG)
+	        var x = new Array(), t = a&7;
+	        x.length = (a>>3)+1;
+	        b.nextBytes(x);
+	        if(t > 0) x[0] &= ((1<<t)-1); else x[0] = 0;
+	        this.fromString(x,256);
+	      }
+	    }
+	
+	    // (public) convert to bigendian byte array
+	    function bnToByteArray() {
+	      var i = this.t, r = new Array();
+	      r[0] = this.s;
+	      var p = this.DB-(i*this.DB)%8, d, k = 0;
+	      if(i-- > 0) {
+	        if(p < this.DB && (d = this[i]>>p) != (this.s&this.DM)>>p)
+	          r[k++] = d|(this.s<<(this.DB-p));
+	        while(i >= 0) {
+	          if(p < 8) {
+	            d = (this[i]&((1<<p)-1))<<(8-p);
+	            d |= this[--i]>>(p+=this.DB-8);
+	          }
+	          else {
+	            d = (this[i]>>(p-=8))&0xff;
+	            if(p <= 0) { p += this.DB; --i; }
+	          }
+	          if((d&0x80) != 0) d |= -256;
+	          if(k == 0 && (this.s&0x80) != (d&0x80)) ++k;
+	          if(k > 0 || d != this.s) r[k++] = d;
+	        }
+	      }
+	      return r;
+	    }
+	
+	    function bnEquals(a) { return(this.compareTo(a)==0); }
+	    function bnMin(a) { return(this.compareTo(a)<0)?this:a; }
+	    function bnMax(a) { return(this.compareTo(a)>0)?this:a; }
+	
+	    // (protected) r = this op a (bitwise)
+	    function bnpBitwiseTo(a,op,r) {
+	      var i, f, m = Math.min(a.t,this.t);
+	      for(i = 0; i < m; ++i) r[i] = op(this[i],a[i]);
+	      if(a.t < this.t) {
+	        f = a.s&this.DM;
+	        for(i = m; i < this.t; ++i) r[i] = op(this[i],f);
+	        r.t = this.t;
+	      }
+	      else {
+	        f = this.s&this.DM;
+	        for(i = m; i < a.t; ++i) r[i] = op(f,a[i]);
+	        r.t = a.t;
+	      }
+	      r.s = op(this.s,a.s);
+	      r.clamp();
+	    }
+	
+	    // (public) this & a
+	    function op_and(x,y) { return x&y; }
+	    function bnAnd(a) { var r = nbi(); this.bitwiseTo(a,op_and,r); return r; }
+	
+	    // (public) this | a
+	    function op_or(x,y) { return x|y; }
+	    function bnOr(a) { var r = nbi(); this.bitwiseTo(a,op_or,r); return r; }
+	
+	    // (public) this ^ a
+	    function op_xor(x,y) { return x^y; }
+	    function bnXor(a) { var r = nbi(); this.bitwiseTo(a,op_xor,r); return r; }
+	
+	    // (public) this & ~a
+	    function op_andnot(x,y) { return x&~y; }
+	    function bnAndNot(a) { var r = nbi(); this.bitwiseTo(a,op_andnot,r); return r; }
+	
+	    // (public) ~this
+	    function bnNot() {
+	      var r = nbi();
+	      for(var i = 0; i < this.t; ++i) r[i] = this.DM&~this[i];
+	      r.t = this.t;
+	      r.s = ~this.s;
+	      return r;
+	    }
+	
+	    // (public) this << n
+	    function bnShiftLeft(n) {
+	      var r = nbi();
+	      if(n < 0) this.rShiftTo(-n,r); else this.lShiftTo(n,r);
+	      return r;
+	    }
+	
+	    // (public) this >> n
+	    function bnShiftRight(n) {
+	      var r = nbi();
+	      if(n < 0) this.lShiftTo(-n,r); else this.rShiftTo(n,r);
+	      return r;
+	    }
+	
+	    // return index of lowest 1-bit in x, x < 2^31
+	    function lbit(x) {
+	      if(x == 0) return -1;
+	      var r = 0;
+	      if((x&0xffff) == 0) { x >>= 16; r += 16; }
+	      if((x&0xff) == 0) { x >>= 8; r += 8; }
+	      if((x&0xf) == 0) { x >>= 4; r += 4; }
+	      if((x&3) == 0) { x >>= 2; r += 2; }
+	      if((x&1) == 0) ++r;
+	      return r;
+	    }
+	
+	    // (public) returns index of lowest 1-bit (or -1 if none)
+	    function bnGetLowestSetBit() {
+	      for(var i = 0; i < this.t; ++i)
+	        if(this[i] != 0) return i*this.DB+lbit(this[i]);
+	      if(this.s < 0) return this.t*this.DB;
+	      return -1;
+	    }
+	
+	    // return number of 1 bits in x
+	    function cbit(x) {
+	      var r = 0;
+	      while(x != 0) { x &= x-1; ++r; }
+	      return r;
+	    }
+	
+	    // (public) return number of set bits
+	    function bnBitCount() {
+	      var r = 0, x = this.s&this.DM;
+	      for(var i = 0; i < this.t; ++i) r += cbit(this[i]^x);
+	      return r;
+	    }
+	
+	    // (public) true iff nth bit is set
+	    function bnTestBit(n) {
+	      var j = Math.floor(n/this.DB);
+	      if(j >= this.t) return(this.s!=0);
+	      return((this[j]&(1<<(n%this.DB)))!=0);
+	    }
+	
+	    // (protected) this op (1<<n)
+	    function bnpChangeBit(n,op) {
+	      var r = BigInteger.ONE.shiftLeft(n);
+	      this.bitwiseTo(r,op,r);
+	      return r;
+	    }
+	
+	    // (public) this | (1<<n)
+	    function bnSetBit(n) { return this.changeBit(n,op_or); }
+	
+	    // (public) this & ~(1<<n)
+	    function bnClearBit(n) { return this.changeBit(n,op_andnot); }
+	
+	    // (public) this ^ (1<<n)
+	    function bnFlipBit(n) { return this.changeBit(n,op_xor); }
+	
+	    // (protected) r = this + a
+	    function bnpAddTo(a,r) {
+	      var i = 0, c = 0, m = Math.min(a.t,this.t);
+	      while(i < m) {
+	        c += this[i]+a[i];
+	        r[i++] = c&this.DM;
+	        c >>= this.DB;
+	      }
+	      if(a.t < this.t) {
+	        c += a.s;
+	        while(i < this.t) {
+	          c += this[i];
+	          r[i++] = c&this.DM;
+	          c >>= this.DB;
+	        }
+	        c += this.s;
+	      }
+	      else {
+	        c += this.s;
+	        while(i < a.t) {
+	          c += a[i];
+	          r[i++] = c&this.DM;
+	          c >>= this.DB;
+	        }
+	        c += a.s;
+	      }
+	      r.s = (c<0)?-1:0;
+	      if(c > 0) r[i++] = c;
+	      else if(c < -1) r[i++] = this.DV+c;
+	      r.t = i;
+	      r.clamp();
+	    }
+	
+	    // (public) this + a
+	    function bnAdd(a) { var r = nbi(); this.addTo(a,r); return r; }
+	
+	    // (public) this - a
+	    function bnSubtract(a) { var r = nbi(); this.subTo(a,r); return r; }
+	
+	    // (public) this * a
+	    function bnMultiply(a) { var r = nbi(); this.multiplyTo(a,r); return r; }
+	
+	    // (public) this^2
+	    function bnSquare() { var r = nbi(); this.squareTo(r); return r; }
+	
+	    // (public) this / a
+	    function bnDivide(a) { var r = nbi(); this.divRemTo(a,r,null); return r; }
+	
+	    // (public) this % a
+	    function bnRemainder(a) { var r = nbi(); this.divRemTo(a,null,r); return r; }
+	
+	    // (public) [this/a,this%a]
+	    function bnDivideAndRemainder(a) {
+	      var q = nbi(), r = nbi();
+	      this.divRemTo(a,q,r);
+	      return new Array(q,r);
+	    }
+	
+	    // (protected) this *= n, this >= 0, 1 < n < DV
+	    function bnpDMultiply(n) {
+	      this[this.t] = this.am(0,n-1,this,0,0,this.t);
+	      ++this.t;
+	      this.clamp();
+	    }
+	
+	    // (protected) this += n << w words, this >= 0
+	    function bnpDAddOffset(n,w) {
+	      if(n == 0) return;
+	      while(this.t <= w) this[this.t++] = 0;
+	      this[w] += n;
+	      while(this[w] >= this.DV) {
+	        this[w] -= this.DV;
+	        if(++w >= this.t) this[this.t++] = 0;
+	        ++this[w];
+	      }
+	    }
+	
+	    // A "null" reducer
+	    function NullExp() {}
+	    function nNop(x) { return x; }
+	    function nMulTo(x,y,r) { x.multiplyTo(y,r); }
+	    function nSqrTo(x,r) { x.squareTo(r); }
+	
+	    NullExp.prototype.convert = nNop;
+	    NullExp.prototype.revert = nNop;
+	    NullExp.prototype.mulTo = nMulTo;
+	    NullExp.prototype.sqrTo = nSqrTo;
+	
+	    // (public) this^e
+	    function bnPow(e) { return this.exp(e,new NullExp()); }
+	
+	    // (protected) r = lower n words of "this * a", a.t <= n
+	    // "this" should be the larger one if appropriate.
+	    function bnpMultiplyLowerTo(a,n,r) {
+	      var i = Math.min(this.t+a.t,n);
+	      r.s = 0; // assumes a,this >= 0
+	      r.t = i;
+	      while(i > 0) r[--i] = 0;
+	      var j;
+	      for(j = r.t-this.t; i < j; ++i) r[i+this.t] = this.am(0,a[i],r,i,0,this.t);
+	      for(j = Math.min(a.t,n); i < j; ++i) this.am(0,a[i],r,i,0,n-i);
+	      r.clamp();
+	    }
+	
+	    // (protected) r = "this * a" without lower n words, n > 0
+	    // "this" should be the larger one if appropriate.
+	    function bnpMultiplyUpperTo(a,n,r) {
+	      --n;
+	      var i = r.t = this.t+a.t-n;
+	      r.s = 0; // assumes a,this >= 0
+	      while(--i >= 0) r[i] = 0;
+	      for(i = Math.max(n-this.t,0); i < a.t; ++i)
+	        r[this.t+i-n] = this.am(n-i,a[i],r,0,0,this.t+i-n);
+	      r.clamp();
+	      r.drShiftTo(1,r);
+	    }
+	
+	    // Barrett modular reduction
+	    function Barrett(m) {
+	      // setup Barrett
+	      this.r2 = nbi();
+	      this.q3 = nbi();
+	      BigInteger.ONE.dlShiftTo(2*m.t,this.r2);
+	      this.mu = this.r2.divide(m);
+	      this.m = m;
+	    }
+	
+	    function barrettConvert(x) {
+	      if(x.s < 0 || x.t > 2*this.m.t) return x.mod(this.m);
+	      else if(x.compareTo(this.m) < 0) return x;
+	      else { var r = nbi(); x.copyTo(r); this.reduce(r); return r; }
+	    }
+	
+	    function barrettRevert(x) { return x; }
+	
+	    // x = x mod m (HAC 14.42)
+	    function barrettReduce(x) {
+	      x.drShiftTo(this.m.t-1,this.r2);
+	      if(x.t > this.m.t+1) { x.t = this.m.t+1; x.clamp(); }
+	      this.mu.multiplyUpperTo(this.r2,this.m.t+1,this.q3);
+	      this.m.multiplyLowerTo(this.q3,this.m.t+1,this.r2);
+	      while(x.compareTo(this.r2) < 0) x.dAddOffset(1,this.m.t+1);
+	      x.subTo(this.r2,x);
+	      while(x.compareTo(this.m) >= 0) x.subTo(this.m,x);
+	    }
+	
+	    // r = x^2 mod m; x != r
+	    function barrettSqrTo(x,r) { x.squareTo(r); this.reduce(r); }
+	
+	    // r = x*y mod m; x,y != r
+	    function barrettMulTo(x,y,r) { x.multiplyTo(y,r); this.reduce(r); }
+	
+	    Barrett.prototype.convert = barrettConvert;
+	    Barrett.prototype.revert = barrettRevert;
+	    Barrett.prototype.reduce = barrettReduce;
+	    Barrett.prototype.mulTo = barrettMulTo;
+	    Barrett.prototype.sqrTo = barrettSqrTo;
+	
+	    // (public) this^e % m (HAC 14.85)
+	    function bnModPow(e,m) {
+	      var i = e.bitLength(), k, r = nbv(1), z;
+	      if(i <= 0) return r;
+	      else if(i < 18) k = 1;
+	      else if(i < 48) k = 3;
+	      else if(i < 144) k = 4;
+	      else if(i < 768) k = 5;
+	      else k = 6;
+	      if(i < 8)
+	        z = new Classic(m);
+	      else if(m.isEven())
+	        z = new Barrett(m);
+	      else
+	        z = new Montgomery(m);
+	
+	      // precomputation
+	      var g = new Array(), n = 3, k1 = k-1, km = (1<<k)-1;
+	      g[1] = z.convert(this);
+	      if(k > 1) {
+	        var g2 = nbi();
+	        z.sqrTo(g[1],g2);
+	        while(n <= km) {
+	          g[n] = nbi();
+	          z.mulTo(g2,g[n-2],g[n]);
+	          n += 2;
+	        }
+	      }
+	
+	      var j = e.t-1, w, is1 = true, r2 = nbi(), t;
+	      i = nbits(e[j])-1;
+	      while(j >= 0) {
+	        if(i >= k1) w = (e[j]>>(i-k1))&km;
+	        else {
+	          w = (e[j]&((1<<(i+1))-1))<<(k1-i);
+	          if(j > 0) w |= e[j-1]>>(this.DB+i-k1);
+	        }
+	
+	        n = k;
+	        while((w&1) == 0) { w >>= 1; --n; }
+	        if((i -= n) < 0) { i += this.DB; --j; }
+	        if(is1) {	// ret == 1, don't bother squaring or multiplying it
+	          g[w].copyTo(r);
+	          is1 = false;
+	        }
+	        else {
+	          while(n > 1) { z.sqrTo(r,r2); z.sqrTo(r2,r); n -= 2; }
+	          if(n > 0) z.sqrTo(r,r2); else { t = r; r = r2; r2 = t; }
+	          z.mulTo(r2,g[w],r);
+	        }
+	
+	        while(j >= 0 && (e[j]&(1<<i)) == 0) {
+	          z.sqrTo(r,r2); t = r; r = r2; r2 = t;
+	          if(--i < 0) { i = this.DB-1; --j; }
+	        }
+	      }
+	      return z.revert(r);
+	    }
+	
+	    // (public) gcd(this,a) (HAC 14.54)
+	    function bnGCD(a) {
+	      var x = (this.s<0)?this.negate():this.clone();
+	      var y = (a.s<0)?a.negate():a.clone();
+	      if(x.compareTo(y) < 0) { var t = x; x = y; y = t; }
+	      var i = x.getLowestSetBit(), g = y.getLowestSetBit();
+	      if(g < 0) return x;
+	      if(i < g) g = i;
+	      if(g > 0) {
+	        x.rShiftTo(g,x);
+	        y.rShiftTo(g,y);
+	      }
+	      while(x.signum() > 0) {
+	        if((i = x.getLowestSetBit()) > 0) x.rShiftTo(i,x);
+	        if((i = y.getLowestSetBit()) > 0) y.rShiftTo(i,y);
+	        if(x.compareTo(y) >= 0) {
+	          x.subTo(y,x);
+	          x.rShiftTo(1,x);
+	        }
+	        else {
+	          y.subTo(x,y);
+	          y.rShiftTo(1,y);
+	        }
+	      }
+	      if(g > 0) y.lShiftTo(g,y);
+	      return y;
+	    }
+	
+	    // (protected) this % n, n < 2^26
+	    function bnpModInt(n) {
+	      if(n <= 0) return 0;
+	      var d = this.DV%n, r = (this.s<0)?n-1:0;
+	      if(this.t > 0)
+	        if(d == 0) r = this[0]%n;
+	        else for(var i = this.t-1; i >= 0; --i) r = (d*r+this[i])%n;
+	      return r;
+	    }
+	
+	    // (public) 1/this % m (HAC 14.61)
+	    function bnModInverse(m) {
+	      var ac = m.isEven();
+	      if((this.isEven() && ac) || m.signum() == 0) return BigInteger.ZERO;
+	      var u = m.clone(), v = this.clone();
+	      var a = nbv(1), b = nbv(0), c = nbv(0), d = nbv(1);
+	      while(u.signum() != 0) {
+	        while(u.isEven()) {
+	          u.rShiftTo(1,u);
+	          if(ac) {
+	            if(!a.isEven() || !b.isEven()) { a.addTo(this,a); b.subTo(m,b); }
+	            a.rShiftTo(1,a);
+	          }
+	          else if(!b.isEven()) b.subTo(m,b);
+	          b.rShiftTo(1,b);
+	        }
+	        while(v.isEven()) {
+	          v.rShiftTo(1,v);
+	          if(ac) {
+	            if(!c.isEven() || !d.isEven()) { c.addTo(this,c); d.subTo(m,d); }
+	            c.rShiftTo(1,c);
+	          }
+	          else if(!d.isEven()) d.subTo(m,d);
+	          d.rShiftTo(1,d);
+	        }
+	        if(u.compareTo(v) >= 0) {
+	          u.subTo(v,u);
+	          if(ac) a.subTo(c,a);
+	          b.subTo(d,b);
+	        }
+	        else {
+	          v.subTo(u,v);
+	          if(ac) c.subTo(a,c);
+	          d.subTo(b,d);
+	        }
+	      }
+	      if(v.compareTo(BigInteger.ONE) != 0) return BigInteger.ZERO;
+	      if(d.compareTo(m) >= 0) return d.subtract(m);
+	      if(d.signum() < 0) d.addTo(m,d); else return d;
+	      if(d.signum() < 0) return d.add(m); else return d;
+	    }
+	
+	    var lowprimes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,293,307,311,313,317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461,463,467,479,487,491,499,503,509,521,523,541,547,557,563,569,571,577,587,593,599,601,607,613,617,619,631,641,643,647,653,659,661,673,677,683,691,701,709,719,727,733,739,743,751,757,761,769,773,787,797,809,811,821,823,827,829,839,853,857,859,863,877,881,883,887,907,911,919,929,937,941,947,953,967,971,977,983,991,997];
+	    var lplim = (1<<26)/lowprimes[lowprimes.length-1];
+	
+	    // (public) test primality with certainty >= 1-.5^t
+	    function bnIsProbablePrime(t) {
+	      var i, x = this.abs();
+	      if(x.t == 1 && x[0] <= lowprimes[lowprimes.length-1]) {
+	        for(i = 0; i < lowprimes.length; ++i)
+	          if(x[0] == lowprimes[i]) return true;
+	        return false;
+	      }
+	      if(x.isEven()) return false;
+	      i = 1;
+	      while(i < lowprimes.length) {
+	        var m = lowprimes[i], j = i+1;
+	        while(j < lowprimes.length && m < lplim) m *= lowprimes[j++];
+	        m = x.modInt(m);
+	        while(i < j) if(m%lowprimes[i++] == 0) return false;
+	      }
+	      return x.millerRabin(t);
+	    }
+	
+	    // (protected) true if probably prime (HAC 4.24, Miller-Rabin)
+	    function bnpMillerRabin(t) {
+	      var n1 = this.subtract(BigInteger.ONE);
+	      var k = n1.getLowestSetBit();
+	      if(k <= 0) return false;
+	      var r = n1.shiftRight(k);
+	      t = (t+1)>>1;
+	      if(t > lowprimes.length) t = lowprimes.length;
+	      var a = nbi();
+	      for(var i = 0; i < t; ++i) {
+	        //Pick bases at random, instead of starting at 2
+	        a.fromInt(lowprimes[Math.floor(Math.random()*lowprimes.length)]);
+	        var y = a.modPow(r,this);
+	        if(y.compareTo(BigInteger.ONE) != 0 && y.compareTo(n1) != 0) {
+	          var j = 1;
+	          while(j++ < k && y.compareTo(n1) != 0) {
+	            y = y.modPowInt(2,this);
+	            if(y.compareTo(BigInteger.ONE) == 0) return false;
+	          }
+	          if(y.compareTo(n1) != 0) return false;
+	        }
+	      }
+	      return true;
+	    }
+	
+	    // protected
+	    BigInteger.prototype.chunkSize = bnpChunkSize;
+	    BigInteger.prototype.toRadix = bnpToRadix;
+	    BigInteger.prototype.fromRadix = bnpFromRadix;
+	    BigInteger.prototype.fromNumber = bnpFromNumber;
+	    BigInteger.prototype.bitwiseTo = bnpBitwiseTo;
+	    BigInteger.prototype.changeBit = bnpChangeBit;
+	    BigInteger.prototype.addTo = bnpAddTo;
+	    BigInteger.prototype.dMultiply = bnpDMultiply;
+	    BigInteger.prototype.dAddOffset = bnpDAddOffset;
+	    BigInteger.prototype.multiplyLowerTo = bnpMultiplyLowerTo;
+	    BigInteger.prototype.multiplyUpperTo = bnpMultiplyUpperTo;
+	    BigInteger.prototype.modInt = bnpModInt;
+	    BigInteger.prototype.millerRabin = bnpMillerRabin;
+	
+	    // public
+	    BigInteger.prototype.clone = bnClone;
+	    BigInteger.prototype.intValue = bnIntValue;
+	    BigInteger.prototype.byteValue = bnByteValue;
+	    BigInteger.prototype.shortValue = bnShortValue;
+	    BigInteger.prototype.signum = bnSigNum;
+	    BigInteger.prototype.toByteArray = bnToByteArray;
+	    BigInteger.prototype.equals = bnEquals;
+	    BigInteger.prototype.min = bnMin;
+	    BigInteger.prototype.max = bnMax;
+	    BigInteger.prototype.and = bnAnd;
+	    BigInteger.prototype.or = bnOr;
+	    BigInteger.prototype.xor = bnXor;
+	    BigInteger.prototype.andNot = bnAndNot;
+	    BigInteger.prototype.not = bnNot;
+	    BigInteger.prototype.shiftLeft = bnShiftLeft;
+	    BigInteger.prototype.shiftRight = bnShiftRight;
+	    BigInteger.prototype.getLowestSetBit = bnGetLowestSetBit;
+	    BigInteger.prototype.bitCount = bnBitCount;
+	    BigInteger.prototype.testBit = bnTestBit;
+	    BigInteger.prototype.setBit = bnSetBit;
+	    BigInteger.prototype.clearBit = bnClearBit;
+	    BigInteger.prototype.flipBit = bnFlipBit;
+	    BigInteger.prototype.add = bnAdd;
+	    BigInteger.prototype.subtract = bnSubtract;
+	    BigInteger.prototype.multiply = bnMultiply;
+	    BigInteger.prototype.divide = bnDivide;
+	    BigInteger.prototype.remainder = bnRemainder;
+	    BigInteger.prototype.divideAndRemainder = bnDivideAndRemainder;
+	    BigInteger.prototype.modPow = bnModPow;
+	    BigInteger.prototype.modInverse = bnModInverse;
+	    BigInteger.prototype.pow = bnPow;
+	    BigInteger.prototype.gcd = bnGCD;
+	    BigInteger.prototype.isProbablePrime = bnIsProbablePrime;
+	
+	    // JSBN-specific extension
+	    BigInteger.prototype.square = bnSquare;
+	
+	    // Expose the Barrett function
+	    BigInteger.prototype.Barrett = Barrett
+	
+	    // BigInteger interfaces not implemented in jsbn:
+	
+	    // BigInteger(int signum, byte[] magnitude)
+	    // double doubleValue()
+	    // float floatValue()
+	    // int hashCode()
+	    // long longValue()
+	    // static BigInteger valueOf(long val)
+	
+		// Random number generator - requires a PRNG backend, e.g. prng4.js
+	
+		// For best results, put code like
+		// <body onClick='rng_seed_time();' onKeyPress='rng_seed_time();'>
+		// in your main HTML document.
+	
+		var rng_state;
+		var rng_pool;
+		var rng_pptr;
+	
+		// Mix in a 32-bit integer into the pool
+		function rng_seed_int(x) {
+		  rng_pool[rng_pptr++] ^= x & 255;
+		  rng_pool[rng_pptr++] ^= (x >> 8) & 255;
+		  rng_pool[rng_pptr++] ^= (x >> 16) & 255;
+		  rng_pool[rng_pptr++] ^= (x >> 24) & 255;
+		  if(rng_pptr >= rng_psize) rng_pptr -= rng_psize;
+		}
+	
+		// Mix in the current time (w/milliseconds) into the pool
+		function rng_seed_time() {
+		  rng_seed_int(new Date().getTime());
+		}
+	
+		// Initialize the pool with junk if needed.
+		if(rng_pool == null) {
+		  rng_pool = new Array();
+		  rng_pptr = 0;
+		  var t;
+		  if(typeof window !== "undefined" && window.crypto) {
+			if (window.crypto.getRandomValues) {
+			  // Use webcrypto if available
+			  var ua = new Uint8Array(32);
+			  window.crypto.getRandomValues(ua);
+			  for(t = 0; t < 32; ++t)
+				rng_pool[rng_pptr++] = ua[t];
+			}
+			else if(navigator.appName == "Netscape" && navigator.appVersion < "5") {
+			  // Extract entropy (256 bits) from NS4 RNG if available
+			  var z = window.crypto.random(32);
+			  for(t = 0; t < z.length; ++t)
+				rng_pool[rng_pptr++] = z.charCodeAt(t) & 255;
+			}
+		  }
+		  while(rng_pptr < rng_psize) {  // extract some randomness from Math.random()
+			t = Math.floor(65536 * Math.random());
+			rng_pool[rng_pptr++] = t >>> 8;
+			rng_pool[rng_pptr++] = t & 255;
+		  }
+		  rng_pptr = 0;
+		  rng_seed_time();
+		  //rng_seed_int(window.screenX);
+		  //rng_seed_int(window.screenY);
+		}
+	
+		function rng_get_byte() {
+		  if(rng_state == null) {
+			rng_seed_time();
+			rng_state = prng_newstate();
+			rng_state.init(rng_pool);
+			for(rng_pptr = 0; rng_pptr < rng_pool.length; ++rng_pptr)
+			  rng_pool[rng_pptr] = 0;
+			rng_pptr = 0;
+			//rng_pool = null;
+		  }
+		  // TODO: allow reseeding after first request
+		  return rng_state.next();
+		}
+	
+		function rng_get_bytes(ba) {
+		  var i;
+		  for(i = 0; i < ba.length; ++i) ba[i] = rng_get_byte();
+		}
+	
+		function SecureRandom() {}
+	
+		SecureRandom.prototype.nextBytes = rng_get_bytes;
+	
+		// prng4.js - uses Arcfour as a PRNG
+	
+		function Arcfour() {
+		  this.i = 0;
+		  this.j = 0;
+		  this.S = new Array();
+		}
+	
+		// Initialize arcfour context from key, an array of ints, each from [0..255]
+		function ARC4init(key) {
+		  var i, j, t;
+		  for(i = 0; i < 256; ++i)
+			this.S[i] = i;
+		  j = 0;
+		  for(i = 0; i < 256; ++i) {
+			j = (j + this.S[i] + key[i % key.length]) & 255;
+			t = this.S[i];
+			this.S[i] = this.S[j];
+			this.S[j] = t;
+		  }
+		  this.i = 0;
+		  this.j = 0;
+		}
+	
+		function ARC4next() {
+		  var t;
+		  this.i = (this.i + 1) & 255;
+		  this.j = (this.j + this.S[this.i]) & 255;
+		  t = this.S[this.i];
+		  this.S[this.i] = this.S[this.j];
+		  this.S[this.j] = t;
+		  return this.S[(t + this.S[this.i]) & 255];
+		}
+	
+		Arcfour.prototype.init = ARC4init;
+		Arcfour.prototype.next = ARC4next;
+	
+		// Plug in your RNG constructor here
+		function prng_newstate() {
+		  return new Arcfour();
+		}
+	
+		// Pool size must be a multiple of 4 and greater than 32.
+		// An array of bytes the size of the pool will be passed to init()
+		var rng_psize = 256;
+	
+	  BigInteger.SecureRandom = SecureRandom;
+	  BigInteger.BigInteger = BigInteger;
+	  if (true) {
+	    exports = module.exports = BigInteger;
+	  } else {
+	    this.BigInteger = BigInteger;
+	    this.SecureRandom = SecureRandom;
+	  }
+	
+	}).call(this);
+
+
+/***/ },
+/* 41 */
+/***/ function(module, exports) {
+
+	function Agent() {
+	  this._defaults = [];
+	}
+	
+	["use", "on", "once", "set", "query", "type", "accept", "auth", "withCredentials", "sortQuery", "retry", "ok", "redirects",
+	 "timeout", "buffer", "serialize", "parse", "ca", "key", "pfx", "cert"].forEach(function(fn) {
+	  /** Default setting for all requests from this agent */
+	  Agent.prototype[fn] = function(/*varargs*/) {
+	    this._defaults.push({fn:fn, arguments:arguments});
+	    return this;
+	  }
+	});
+	
+	Agent.prototype._setDefaults = function(req) {
+	    this._defaults.forEach(function(def) {
+	      req[def.fn].apply(req, def.arguments);
+	    });
+	};
+	
+	module.exports = Agent;
+
+
+/***/ },
+/* 42 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	/**
+	 * Module of mixed-in functions shared between node and client code
+	 */
+	var isObject = __webpack_require__(22);
+	
+	/**
+	 * Expose `RequestBase`.
+	 */
+	
+	module.exports = RequestBase;
+	
+	/**
+	 * Initialize a new `RequestBase`.
+	 *
+	 * @api public
+	 */
+	
+	function RequestBase(obj) {
+	  if (obj) return mixin(obj);
+	}
+	
+	/**
+	 * Mixin the prototype properties.
+	 *
+	 * @param {Object} obj
+	 * @return {Object}
+	 * @api private
+	 */
+	
+	function mixin(obj) {
+	  for (var key in RequestBase.prototype) {
+	    obj[key] = RequestBase.prototype[key];
+	  }
+	  return obj;
+	}
+	
+	/**
+	 * Clear previous timeout.
+	 *
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+	
+	RequestBase.prototype.clearTimeout = function _clearTimeout(){
+	  clearTimeout(this._timer);
+	  clearTimeout(this._responseTimeoutTimer);
+	  delete this._timer;
+	  delete this._responseTimeoutTimer;
+	  return this;
+	};
+	
+	/**
+	 * Override default response body parser
+	 *
+	 * This function will be called to convert incoming data into request.body
+	 *
+	 * @param {Function}
+	 * @api public
+	 */
+	
+	RequestBase.prototype.parse = function parse(fn){
+	  this._parser = fn;
+	  return this;
+	};
+	
+	/**
+	 * Set format of binary response body.
+	 * In browser valid formats are 'blob' and 'arraybuffer',
+	 * which return Blob and ArrayBuffer, respectively.
+	 *
+	 * In Node all values result in Buffer.
+	 *
+	 * Examples:
+	 *
+	 *      req.get('/')
+	 *        .responseType('blob')
+	 *        .end(callback);
+	 *
+	 * @param {String} val
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+	
+	RequestBase.prototype.responseType = function(val){
+	  this._responseType = val;
+	  return this;
+	};
+	
+	/**
+	 * Override default request body serializer
+	 *
+	 * This function will be called to convert data set via .send or .attach into payload to send
+	 *
+	 * @param {Function}
+	 * @api public
+	 */
+	
+	RequestBase.prototype.serialize = function serialize(fn){
+	  this._serializer = fn;
+	  return this;
+	};
+	
+	/**
+	 * Set timeouts.
+	 *
+	 * - response timeout is time between sending request and receiving the first byte of the response. Includes DNS and connection time.
+	 * - deadline is the time from start of the request to receiving response body in full. If the deadline is too short large files may not load at all on slow connections.
+	 *
+	 * Value of 0 or false means no timeout.
+	 *
+	 * @param {Number|Object} ms or {response, deadline}
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+	
+	RequestBase.prototype.timeout = function timeout(options){
+	  if (!options || 'object' !== typeof options) {
+	    this._timeout = options;
+	    this._responseTimeout = 0;
+	    return this;
+	  }
+	
+	  for(var option in options) {
+	    switch(option) {
+	      case 'deadline':
+	        this._timeout = options.deadline;
+	        break;
+	      case 'response':
+	        this._responseTimeout = options.response;
+	        break;
+	      default:
+	        console.warn("Unknown timeout option", option);
+	    }
+	  }
+	  return this;
+	};
+	
+	/**
+	 * Set number of retry attempts on error.
+	 *
+	 * Failed requests will be retried 'count' times if timeout or err.code >= 500.
+	 *
+	 * @param {Number} count
+	 * @param {Function} [fn]
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+	
+	RequestBase.prototype.retry = function retry(count, fn){
+	  // Default to 1 if no count passed or true
+	  if (arguments.length === 0 || count === true) count = 1;
+	  if (count <= 0) count = 0;
+	  this._maxRetries = count;
+	  this._retries = 0;
+	  this._retryCallback = fn;
+	  return this;
+	};
+	
+	var ERROR_CODES = [
+	  'ECONNRESET',
+	  'ETIMEDOUT',
+	  'EADDRINFO',
+	  'ESOCKETTIMEDOUT'
+	];
+	
+	/**
+	 * Determine if a request should be retried.
+	 * (Borrowed from segmentio/superagent-retry)
+	 *
+	 * @param {Error} err
+	 * @param {Response} [res]
+	 * @returns {Boolean}
+	 */
+	RequestBase.prototype._shouldRetry = function(err, res) {
+	  if (!this._maxRetries || this._retries++ >= this._maxRetries) {
+	    return false;
+	  }
+	  if (this._retryCallback) {
+	    try {
+	      var override = this._retryCallback(err, res);
+	      if (override === true) return true;
+	      if (override === false) return false;
+	      // undefined falls back to defaults
+	    } catch(e) {
+	      console.error(e);
+	    }
+	  }
+	  if (res && res.status && res.status >= 500 && res.status != 501) return true;
+	  if (err) {
+	    if (err.code && ~ERROR_CODES.indexOf(err.code)) return true;
+	    // Superagent timeout
+	    if (err.timeout && err.code == 'ECONNABORTED') return true;
+	    if (err.crossDomain) return true;
+	  }
+	  return false;
+	};
+	
+	/**
+	 * Retry request
+	 *
+	 * @return {Request} for chaining
+	 * @api private
+	 */
+	
+	RequestBase.prototype._retry = function() {
+	
+	  this.clearTimeout();
+	
+	  // node
+	  if (this.req) {
+	    this.req = null;
+	    this.req = this.request();
+	  }
+	
+	  this._aborted = false;
+	  this.timedout = false;
+	
+	  return this._end();
+	};
+	
+	/**
+	 * Promise support
+	 *
+	 * @param {Function} resolve
+	 * @param {Function} [reject]
+	 * @return {Request}
+	 */
+	
+	RequestBase.prototype.then = function then(resolve, reject) {
+	  if (!this._fullfilledPromise) {
+	    var self = this;
+	    if (this._endCalled) {
+	      console.warn("Warning: superagent request was sent twice, because both .end() and .then() were called. Never call .end() if you use promises");
+	    }
+	    this._fullfilledPromise = new Promise(function(innerResolve, innerReject) {
+	      self.end(function(err, res) {
+	        if (err) innerReject(err);
+	        else innerResolve(res);
+	      });
+	    });
+	  }
+	  return this._fullfilledPromise.then(resolve, reject);
+	};
+	
+	RequestBase.prototype.catch = function(cb) {
+	  return this.then(undefined, cb);
+	};
+	
+	/**
+	 * Allow for extension
+	 */
+	
+	RequestBase.prototype.use = function use(fn) {
+	  fn(this);
+	  return this;
+	};
+	
+	RequestBase.prototype.ok = function(cb) {
+	  if ('function' !== typeof cb) throw Error("Callback required");
+	  this._okCallback = cb;
+	  return this;
+	};
+	
+	RequestBase.prototype._isResponseOK = function(res) {
+	  if (!res) {
+	    return false;
+	  }
+	
+	  if (this._okCallback) {
+	    return this._okCallback(res);
+	  }
+	
+	  return res.status >= 200 && res.status < 300;
+	};
+	
+	/**
+	 * Get request header `field`.
+	 * Case-insensitive.
+	 *
+	 * @param {String} field
+	 * @return {String}
+	 * @api public
+	 */
+	
+	RequestBase.prototype.get = function(field){
+	  return this._header[field.toLowerCase()];
+	};
+	
+	/**
+	 * Get case-insensitive header `field` value.
+	 * This is a deprecated internal API. Use `.get(field)` instead.
+	 *
+	 * (getHeader is no longer used internally by the superagent code base)
+	 *
+	 * @param {String} field
+	 * @return {String}
+	 * @api private
+	 * @deprecated
+	 */
+	
+	RequestBase.prototype.getHeader = RequestBase.prototype.get;
+	
+	/**
+	 * Set header `field` to `val`, or multiple fields with one object.
+	 * Case-insensitive.
+	 *
+	 * Examples:
+	 *
+	 *      req.get('/')
+	 *        .set('Accept', 'application/json')
+	 *        .set('X-API-Key', 'foobar')
+	 *        .end(callback);
+	 *
+	 *      req.get('/')
+	 *        .set({ Accept: 'application/json', 'X-API-Key': 'foobar' })
+	 *        .end(callback);
+	 *
+	 * @param {String|Object} field
+	 * @param {String} val
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+	
+	RequestBase.prototype.set = function(field, val){
+	  if (isObject(field)) {
+	    for (var key in field) {
+	      this.set(key, field[key]);
+	    }
+	    return this;
+	  }
+	  this._header[field.toLowerCase()] = val;
+	  this.header[field] = val;
+	  return this;
+	};
+	
+	/**
+	 * Remove header `field`.
+	 * Case-insensitive.
+	 *
+	 * Example:
+	 *
+	 *      req.get('/')
+	 *        .unset('User-Agent')
+	 *        .end(callback);
+	 *
+	 * @param {String} field
+	 */
+	RequestBase.prototype.unset = function(field){
+	  delete this._header[field.toLowerCase()];
+	  delete this.header[field];
+	  return this;
+	};
+	
+	/**
+	 * Write the field `name` and `val`, or multiple fields with one object
+	 * for "multipart/form-data" request bodies.
+	 *
+	 * ``` js
+	 * request.post('/upload')
+	 *   .field('foo', 'bar')
+	 *   .end(callback);
+	 *
+	 * request.post('/upload')
+	 *   .field({ foo: 'bar', baz: 'qux' })
+	 *   .end(callback);
+	 * ```
+	 *
+	 * @param {String|Object} name
+	 * @param {String|Blob|File|Buffer|fs.ReadStream} val
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+	RequestBase.prototype.field = function(name, val) {
+	  // name should be either a string or an object.
+	  if (null === name || undefined === name) {
+	    throw new Error('.field(name, val) name can not be empty');
+	  }
+	
+	  if (this._data) {
+	    console.error(".field() can't be used if .send() is used. Please use only .send() or only .field() & .attach()");
+	  }
+	
+	  if (isObject(name)) {
+	    for (var key in name) {
+	      this.field(key, name[key]);
+	    }
+	    return this;
+	  }
+	
+	  if (Array.isArray(val)) {
+	    for (var i in val) {
+	      this.field(name, val[i]);
+	    }
+	    return this;
+	  }
+	
+	  // val should be defined now
+	  if (null === val || undefined === val) {
+	    throw new Error('.field(name, val) val can not be empty');
+	  }
+	  if ('boolean' === typeof val) {
+	    val = '' + val;
+	  }
+	  this._getFormData().append(name, val);
+	  return this;
+	};
+	
+	/**
+	 * Abort the request, and clear potential timeout.
+	 *
+	 * @return {Request}
+	 * @api public
+	 */
+	RequestBase.prototype.abort = function(){
+	  if (this._aborted) {
+	    return this;
+	  }
+	  this._aborted = true;
+	  this.xhr && this.xhr.abort(); // browser
+	  this.req && this.req.abort(); // node
+	  this.clearTimeout();
+	  this.emit('abort');
+	  return this;
+	};
+	
+	RequestBase.prototype._auth = function(user, pass, options, base64Encoder) {
+	  switch (options.type) {
+	    case 'basic':
+	      this.set('Authorization', 'Basic ' + base64Encoder(user + ':' + pass));
+	      break;
+	
+	    case 'auto':
+	      this.username = user;
+	      this.password = pass;
+	      break;
+	
+	    case 'bearer': // usage would be .auth(accessToken, { type: 'bearer' })
+	      this.set('Authorization', 'Bearer ' + user);
+	      break;
+	  }
+	  return this;
+	};
+	
+	/**
+	 * Enable transmission of cookies with x-domain requests.
+	 *
+	 * Note that for this to work the origin must not be
+	 * using "Access-Control-Allow-Origin" with a wildcard,
+	 * and also must set "Access-Control-Allow-Credentials"
+	 * to "true".
+	 *
+	 * @api public
+	 */
+	
+	RequestBase.prototype.withCredentials = function(on) {
+	  // This is browser-only functionality. Node side is no-op.
+	  if (on == undefined) on = true;
+	  this._withCredentials = on;
+	  return this;
+	};
+	
+	/**
+	 * Set the max redirects to `n`. Does noting in browser XHR implementation.
+	 *
+	 * @param {Number} n
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+	
+	RequestBase.prototype.redirects = function(n){
+	  this._maxRedirects = n;
+	  return this;
+	};
+	
+	/**
+	 * Maximum size of buffered response body, in bytes. Counts uncompressed size.
+	 * Default 200MB.
+	 *
+	 * @param {Number} n
+	 * @return {Request} for chaining
+	 */
+	RequestBase.prototype.maxResponseSize = function(n){
+	  if ('number' !== typeof n) {
+	    throw TypeError("Invalid argument");
+	  }
+	  this._maxResponseSize = n;
+	  return this;
+	};
+	
+	/**
+	 * Convert to a plain javascript object (not JSON string) of scalar properties.
+	 * Note as this method is designed to return a useful non-this value,
+	 * it cannot be chained.
+	 *
+	 * @return {Object} describing method, url, and data of this request
+	 * @api public
+	 */
+	
+	RequestBase.prototype.toJSON = function() {
+	  return {
+	    method: this.method,
+	    url: this.url,
+	    data: this._data,
+	    headers: this._header,
+	  };
+	};
+	
+	/**
+	 * Send `data` as the request body, defaulting the `.type()` to "json" when
+	 * an object is given.
+	 *
+	 * Examples:
+	 *
+	 *       // manual json
+	 *       request.post('/user')
+	 *         .type('json')
+	 *         .send('{"name":"tj"}')
+	 *         .end(callback)
+	 *
+	 *       // auto json
+	 *       request.post('/user')
+	 *         .send({ name: 'tj' })
+	 *         .end(callback)
+	 *
+	 *       // manual x-www-form-urlencoded
+	 *       request.post('/user')
+	 *         .type('form')
+	 *         .send('name=tj')
+	 *         .end(callback)
+	 *
+	 *       // auto x-www-form-urlencoded
+	 *       request.post('/user')
+	 *         .type('form')
+	 *         .send({ name: 'tj' })
+	 *         .end(callback)
+	 *
+	 *       // defaults to x-www-form-urlencoded
+	 *      request.post('/user')
+	 *        .send('name=tobi')
+	 *        .send('species=ferret')
+	 *        .end(callback)
+	 *
+	 * @param {String|Object} data
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+	
+	RequestBase.prototype.send = function(data){
+	  var isObj = isObject(data);
+	  var type = this._header['content-type'];
+	
+	  if (this._formData) {
+	    console.error(".send() can't be used if .attach() or .field() is used. Please use only .send() or only .field() & .attach()");
+	  }
+	
+	  if (isObj && !this._data) {
+	    if (Array.isArray(data)) {
+	      this._data = [];
+	    } else if (!this._isHost(data)) {
+	      this._data = {};
+	    }
+	  } else if (data && this._data && this._isHost(this._data)) {
+	    throw Error("Can't merge these send calls");
+	  }
+	
+	  // merge
+	  if (isObj && isObject(this._data)) {
+	    for (var key in data) {
+	      this._data[key] = data[key];
+	    }
+	  } else if ('string' == typeof data) {
+	    // default to x-www-form-urlencoded
+	    if (!type) this.type('form');
+	    type = this._header['content-type'];
+	    if ('application/x-www-form-urlencoded' == type) {
+	      this._data = this._data
+	        ? this._data + '&' + data
+	        : data;
+	    } else {
+	      this._data = (this._data || '') + data;
+	    }
+	  } else {
+	    this._data = data;
+	  }
+	
+	  if (!isObj || this._isHost(data)) {
+	    return this;
+	  }
+	
+	  // default to json
+	  if (!type) this.type('json');
+	  return this;
+	};
+	
+	/**
+	 * Sort `querystring` by the sort function
+	 *
+	 *
+	 * Examples:
+	 *
+	 *       // default order
+	 *       request.get('/user')
+	 *         .query('name=Nick')
+	 *         .query('search=Manny')
+	 *         .sortQuery()
+	 *         .end(callback)
+	 *
+	 *       // customized sort function
+	 *       request.get('/user')
+	 *         .query('name=Nick')
+	 *         .query('search=Manny')
+	 *         .sortQuery(function(a, b){
+	 *           return a.length - b.length;
+	 *         })
+	 *         .end(callback)
+	 *
+	 *
+	 * @param {Function} sort
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+	
+	RequestBase.prototype.sortQuery = function(sort) {
+	  // _sort default to true but otherwise can be a function or boolean
+	  this._sort = typeof sort === 'undefined' ? true : sort;
+	  return this;
+	};
+	
+	/**
+	 * Compose querystring to append to req.url
+	 *
+	 * @api private
+	 */
+	RequestBase.prototype._finalizeQueryString = function(){
+	  var query = this._query.join('&');
+	  if (query) {
+	    this.url += (this.url.indexOf('?') >= 0 ? '&' : '?') + query;
+	  }
+	  this._query.length = 0; // Makes the call idempotent
+	
+	  if (this._sort) {
+	    var index = this.url.indexOf('?');
+	    if (index >= 0) {
+	      var queryArr = this.url.substring(index + 1).split('&');
+	      if ('function' === typeof this._sort) {
+	        queryArr.sort(this._sort);
+	      } else {
+	        queryArr.sort();
+	      }
+	      this.url = this.url.substring(0, index) + '?' + queryArr.join('&');
+	    }
+	  }
+	};
+	
+	// For backwards compat only
+	RequestBase.prototype._appendQueryString = function() {console.trace("Unsupported");}
+	
+	/**
+	 * Invoke callback with timeout error.
+	 *
+	 * @api private
+	 */
+	
+	RequestBase.prototype._timeoutError = function(reason, timeout, errno){
+	  if (this._aborted) {
+	    return;
+	  }
+	  var err = new Error(reason + timeout + 'ms exceeded');
+	  err.timeout = timeout;
+	  err.code = 'ECONNABORTED';
+	  err.errno = errno;
+	  this.timedout = true;
+	  this.abort();
+	  this.callback(err);
+	};
+	
+	RequestBase.prototype._setTimeouts = function() {
+	  var self = this;
+	
+	  // deadline
+	  if (this._timeout && !this._timer) {
+	    this._timer = setTimeout(function(){
+	      self._timeoutError('Timeout of ', self._timeout, 'ETIME');
+	    }, this._timeout);
+	  }
+	  // response timeout
+	  if (this._responseTimeout && !this._responseTimeoutTimer) {
+	    this._responseTimeoutTimer = setTimeout(function(){
+	      self._timeoutError('Response timeout of ', self._responseTimeout, 'ETIMEDOUT');
+	    }, this._responseTimeout);
+	  }
+	};
+
+
+/***/ },
+/* 43 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	/**
+	 * Module dependencies.
+	 */
+	
+	var utils = __webpack_require__(44);
+	
+	/**
+	 * Expose `ResponseBase`.
+	 */
+	
+	module.exports = ResponseBase;
+	
+	/**
+	 * Initialize a new `ResponseBase`.
+	 *
+	 * @api public
+	 */
+	
+	function ResponseBase(obj) {
+	  if (obj) return mixin(obj);
+	}
+	
+	/**
+	 * Mixin the prototype properties.
+	 *
+	 * @param {Object} obj
+	 * @return {Object}
+	 * @api private
+	 */
+	
+	function mixin(obj) {
+	  for (var key in ResponseBase.prototype) {
+	    obj[key] = ResponseBase.prototype[key];
+	  }
+	  return obj;
+	}
+	
+	/**
+	 * Get case-insensitive `field` value.
+	 *
+	 * @param {String} field
+	 * @return {String}
+	 * @api public
+	 */
+	
+	ResponseBase.prototype.get = function(field) {
+	  return this.header[field.toLowerCase()];
+	};
+	
+	/**
+	 * Set header related properties:
+	 *
+	 *   - `.type` the content type without params
+	 *
+	 * A response of "Content-Type: text/plain; charset=utf-8"
+	 * will provide you with a `.type` of "text/plain".
+	 *
+	 * @param {Object} header
+	 * @api private
+	 */
+	
+	ResponseBase.prototype._setHeaderProperties = function(header){
+	    // TODO: moar!
+	    // TODO: make this a util
+	
+	    // content-type
+	    var ct = header['content-type'] || '';
+	    this.type = utils.type(ct);
+	
+	    // params
+	    var params = utils.params(ct);
+	    for (var key in params) this[key] = params[key];
+	
+	    this.links = {};
+	
+	    // links
+	    try {
+	        if (header.link) {
+	            this.links = utils.parseLinks(header.link);
+	        }
+	    } catch (err) {
+	        // ignore
+	    }
+	};
+	
+	/**
+	 * Set flags such as `.ok` based on `status`.
+	 *
+	 * For example a 2xx response will give you a `.ok` of __true__
+	 * whereas 5xx will be __false__ and `.error` will be __true__. The
+	 * `.clientError` and `.serverError` are also available to be more
+	 * specific, and `.statusType` is the class of error ranging from 1..5
+	 * sometimes useful for mapping respond colors etc.
+	 *
+	 * "sugar" properties are also defined for common cases. Currently providing:
+	 *
+	 *   - .noContent
+	 *   - .badRequest
+	 *   - .unauthorized
+	 *   - .notAcceptable
+	 *   - .notFound
+	 *
+	 * @param {Number} status
+	 * @api private
+	 */
+	
+	ResponseBase.prototype._setStatusProperties = function(status){
+	    var type = status / 100 | 0;
+	
+	    // status / class
+	    this.status = this.statusCode = status;
+	    this.statusType = type;
+	
+	    // basics
+	    this.info = 1 == type;
+	    this.ok = 2 == type;
+	    this.redirect = 3 == type;
+	    this.clientError = 4 == type;
+	    this.serverError = 5 == type;
+	    this.error = (4 == type || 5 == type)
+	        ? this.toError()
+	        : false;
+	
+	    // sugar
+	    this.accepted = 202 == status;
+	    this.noContent = 204 == status;
+	    this.badRequest = 400 == status;
+	    this.unauthorized = 401 == status;
+	    this.notAcceptable = 406 == status;
+	    this.forbidden = 403 == status;
+	    this.notFound = 404 == status;
+	};
+
+
+/***/ },
+/* 44 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	/**
+	 * Return the mime type for the given `str`.
+	 *
+	 * @param {String} str
+	 * @return {String}
+	 * @api private
+	 */
+	
+	exports.type = function(str){
+	  return str.split(/ *; */).shift();
+	};
+	
+	/**
+	 * Return header field parameters.
+	 *
+	 * @param {String} str
+	 * @return {Object}
+	 * @api private
+	 */
+	
+	exports.params = function(str){
+	  return str.split(/ *; */).reduce(function(obj, str){
+	    var parts = str.split(/ *= */);
+	    var key = parts.shift();
+	    var val = parts.shift();
+	
+	    if (key && val) obj[key] = val;
+	    return obj;
+	  }, {});
+	};
+	
+	/**
+	 * Parse Link header fields.
+	 *
+	 * @param {String} str
+	 * @return {Object}
+	 * @api private
+	 */
+	
+	exports.parseLinks = function(str){
+	  return str.split(/ *, */).reduce(function(obj, str){
+	    var parts = str.split(/ *; */);
+	    var url = parts[0].slice(1, -1);
+	    var rel = parts[1].split(/ *= */)[1].slice(1, -1);
+	    obj[rel] = url;
+	    return obj;
+	  }, {});
+	};
+	
+	/**
+	 * Strip content related fields from `header`.
+	 *
+	 * @param {Object} header
+	 * @return {Object} header
+	 * @api private
+	 */
+	
+	exports.cleanHeader = function(header, changesOrigin){
+	  delete header['content-type'];
+	  delete header['content-length'];
+	  delete header['transfer-encoding'];
+	  delete header['host'];
+	  // secuirty
+	  if (changesOrigin) {
+	    delete header['authorization'];
+	    delete header['cookie'];
+	  }
+	  return header;
+	};
+
+
+/***/ },
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var urljoin = __webpack_require__(3);
+	
+	var objectHelper = __webpack_require__(1);
+	var assert = __webpack_require__(4);
+	var responseHandler = __webpack_require__(5);
+	
+	function DBConnection(request, options) {
+	  this.baseOptions = options;
+	  this.request = request;
+	}
+	
+	/**
+	 * @callback signUpCallback
+	 * @param {Error} [err] error returned by Auth0 with the reason why the signup failed
+	 * @param {Object} [result] result of the signup request
+	 * @param {Object} result.email user's email
+	 * @param {Object} result.emailVerified if the user's email was verified
+	 */
+	
+	/**
+	 * Creates a new user in a Auth0 Database connection
+	 *
+	 * @method signup
+	 * @param {Object} options
+	 * @param {String} options.email user email address
+	 * @param {String} options.password user password
+	 * @param {String} options.connection name of the connection where the user will be created
+	 * @param {Object} [options.userMetadata] additional signup attributes used for creating the user. Will be stored in `user_metadata`
+	 * @param {signUpCallback} cb
+	 * @see   {@link https://auth0.com/docs/api/authentication#signup}
+	 */
+	DBConnection.prototype.signup = function(options, cb) {
+	  var url;
+	  var body;
+	  var metadata;
+	
+	  assert.check(
+	    options,
+	    { type: 'object', message: 'options parameter is not valid' },
+	    {
+	      connection: { type: 'string', message: 'connection option is required' },
+	      email: { type: 'string', message: 'email option is required' },
+	      password: { type: 'string', message: 'password option is required' }
+	    }
+	  );
+	  assert.check(cb, { type: 'function', message: 'cb parameter is not valid' });
+	
+	  url = urljoin(this.baseOptions.rootUrl, 'dbconnections', 'signup');
+	
+	  body = objectHelper.merge(this.baseOptions, ['clientID']).with(options);
+	
+	  metadata = body.user_metadata || body.userMetadata;
+	
+	  body = objectHelper.blacklist(body, ['scope', 'userMetadata', 'user_metadata']);
+	
+	  body = objectHelper.toSnakeCase(body, ['auth0Client']);
+	
+	  if (metadata) {
+	    body.user_metadata = metadata;
+	  }
+	
+	  return this.request.post(url).send(body).end(responseHandler(cb));
+	};
+	
+	/**
+	 * @callback changePasswordCallback
+	 * @param {Error} [err] error returned by Auth0 with the reason why the request failed
+	 */
+	
+	/**
+	 * Request an email with instruction to change a user's password
+	 *
+	 * @method changePassword
+	 * @param {Object} options
+	 * @param {String} options.email address where the user will receive the change password email. It should match the user's email in Auth0
+	 * @param {String} options.connection name of the connection where the user was created
+	 * @param {changePasswordCallback} cb
+	 * @see   {@link https://auth0.com/docs/api/authentication#change-password}
+	 */
+	DBConnection.prototype.changePassword = function(options, cb) {
+	  var url;
+	  var body;
+	
+	  assert.check(
+	    options,
+	    { type: 'object', message: 'options parameter is not valid' },
+	    {
+	      connection: { type: 'string', message: 'connection option is required' },
+	      email: { type: 'string', message: 'email option is required' }
+	    }
+	  );
+	  assert.check(cb, { type: 'function', message: 'cb parameter is not valid' });
+	
+	  url = urljoin(this.baseOptions.rootUrl, 'dbconnections', 'change_password');
+	
+	  body = objectHelper.merge(this.baseOptions, ['clientID']).with(options, ['email', 'connection']);
+	
+	  body = objectHelper.toSnakeCase(body, ['auth0Client']);
+	
+	  return this.request.post(url).send(body).end(responseHandler(cb));
+	};
+	
+	module.exports = DBConnection;
+
+
+/***/ },
+/* 49 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var urljoin = __webpack_require__(3);
+	
+	var objectHelper = __webpack_require__(1);
+	var assert = __webpack_require__(4);
+	var qs = __webpack_require__(6);
+	var responseHandler = __webpack_require__(5);
+	
+	function PasswordlessAuthentication(request, options) {
+	  this.baseOptions = options;
+	  this.request = request;
+	}
+	
+	PasswordlessAuthentication.prototype.buildVerifyUrl = function(options) {
+	  var params;
+	  var qString;
+	
+	  /* eslint-disable */
+	  assert.check(
+	    options,
+	    { type: 'object', message: 'options parameter is not valid' },
+	    {
+	      connection: { type: 'string', message: 'connection option is required' },
+	      verificationCode: { type: 'string', message: 'verificationCode option is required' },
+	      phoneNumber: {
+	        optional: false,
+	        type: 'string',
+	        message: 'phoneNumber option is required',
+	        condition: function(o) {
+	          return !o.email;
+	        }
+	      },
+	      email: {
+	        optional: false,
+	        type: 'string',
+	        message: 'email option is required',
+	        condition: function(o) {
+	          return !o.phoneNumber;
+	        }
+	      }
+	    }
+	  );
+	  /* eslint-enable */
+	
+	  params = objectHelper
+	    .merge(this.baseOptions, [
+	      'clientID',
+	      'responseType',
+	      'responseMode',
+	      'redirectUri',
+	      'scope',
+	      'audience',
+	      '_csrf',
+	      'state',
+	      '_intstate',
+	      'protocol',
+	      'nonce'
+	    ])
+	    .with(options);
+	
+	  // eslint-disable-next-line
+	  if (this.baseOptions._sendTelemetry) {
+	    params.auth0Client = this.request.getTelemetryData();
+	  }
+	
+	  params = objectHelper.toSnakeCase(params, ['auth0Client']);
+	
+	  qString = qs.stringify(params);
+	
+	  return urljoin(this.baseOptions.rootUrl, 'passwordless', 'verify_redirect', '?' + qString);
+	};
+	
+	PasswordlessAuthentication.prototype.start = function(options, cb) {
+	  var url;
+	  var body;
+	
+	  /* eslint-disable */
+	  assert.check(
+	    options,
+	    { type: 'object', message: 'options parameter is not valid' },
+	    {
+	      connection: { type: 'string', message: 'connection option is required' },
+	      send: {
+	        type: 'string',
+	        message: 'send option is required',
+	        values: ['link', 'code'],
+	        value_message: 'send is not valid ([link, code])'
+	      },
+	      phoneNumber: {
+	        optional: true,
+	        type: 'string',
+	        message: 'phoneNumber option is required',
+	        condition: function(o) {
+	          return o.send === 'code' || !o.email;
+	        }
+	      },
+	      email: {
+	        optional: true,
+	        type: 'string',
+	        message: 'email option is required',
+	        condition: function(o) {
+	          return o.send === 'link' || !o.phoneNumber;
+	        }
+	      },
+	      authParams: { optional: true, type: 'object', message: 'authParams option is required' }
+	    }
+	  );
+	  /* eslint-enable */
+	
+	  assert.check(cb, { type: 'function', message: 'cb parameter is not valid' });
+	
+	  url = urljoin(this.baseOptions.rootUrl, 'passwordless', 'start');
+	
+	  body = objectHelper
+	    .merge(this.baseOptions, ['clientID', 'responseType', 'redirectUri', 'scope'])
+	    .with(options);
+	
+	  if (body.scope) {
+	    body.authParams = body.authParams || {};
+	    body.authParams.scope = body.scope;
+	  }
+	
+	  if (body.redirectUri) {
+	    body.authParams = body.authParams || {};
+	    body.authParams.redirect_uri = body.redirectUri;
+	  }
+	
+	  if (body.responseType) {
+	    body.authParams = body.authParams || {};
+	    body.authParams.response_type = body.responseType;
+	  }
+	
+	  delete body.redirectUri;
+	  delete body.responseType;
+	  delete body.scope;
+	
+	  body = objectHelper.toSnakeCase(body, ['auth0Client', 'authParams']);
+	
+	  return this.request.post(url).send(body).end(responseHandler(cb));
+	};
+	
+	PasswordlessAuthentication.prototype.verify = function(options, cb) {
+	  var url;
+	  var cleanOption;
+	
+	  /* eslint-disable */
+	  assert.check(
+	    options,
+	    { type: 'object', message: 'options parameter is not valid' },
+	    {
+	      connection: { type: 'string', message: 'connection option is required' },
+	      verificationCode: { type: 'string', message: 'verificationCode option is required' },
+	      phoneNumber: {
+	        optional: false,
+	        type: 'string',
+	        message: 'phoneNumber option is required',
+	        condition: function(o) {
+	          return !o.email;
+	        }
+	      },
+	      email: {
+	        optional: false,
+	        type: 'string',
+	        message: 'email option is required',
+	        condition: function(o) {
+	          return !o.phoneNumber;
+	        }
+	      }
+	    }
+	  );
+	  /* eslint-enable */
+	
+	  assert.check(cb, { type: 'function', message: 'cb parameter is not valid' });
+	
+	  cleanOption = objectHelper.pick(options, [
+	    'connection',
+	    'verificationCode',
+	    'phoneNumber',
+	    'email',
+	    'auth0Client'
+	  ]);
+	  cleanOption = objectHelper.toSnakeCase(cleanOption, ['auth0Client']);
+	
+	  url = urljoin(this.baseOptions.rootUrl, 'passwordless', 'verify');
+	
+	  return this.request.post(url).send(cleanOption).end(responseHandler(cb));
+	};
+	
+	module.exports = PasswordlessAuthentication;
+
+
+/***/ },
+/* 50 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var windowHandler = __webpack_require__(2);
+	var base64Url = __webpack_require__(25);
+	
+	function create(name, value, days) {
+	  var date;
+	  var expires;
+	
+	  if (
+	    windowHandler.getDocument().cookie === undefined ||
+	    windowHandler.getDocument().cookie === null
+	  ) {
+	    throw new Error('cookie storage not available');
+	  }
+	
+	  if (days) {
+	    var timeToExpire = days * 24 * 60 * 60 * 1000;
+	    date = new Date();
+	    date.setTime(date.getTime() + timeToExpire);
+	    expires = '; expires=' + date.toGMTString();
+	  } else {
+	    expires = '';
+	  }
+	
+	  windowHandler.getDocument().cookie = name + '=' + base64Url.encode(value) + expires + '; path=/';
+	}
+	
+	function read(name) {
+	  var i;
+	  var cookie;
+	  var cookies;
+	  var nameEQ = name + '=';
+	
+	  if (
+	    windowHandler.getDocument().cookie === undefined ||
+	    windowHandler.getDocument().cookie === null
+	  ) {
+	    throw new Error('cookie storage not available');
+	  }
+	
+	  cookies = windowHandler.getDocument().cookie.split(';');
+	
+	  for (i = 0; i < cookies.length; i++) {
+	    cookie = cookies[i];
+	    while (cookie.charAt(0) === ' ') {
+	      cookie = cookie.substring(1, cookie.length);
+	    }
+	    if (cookie.indexOf(nameEQ) === 0) {
+	      return base64Url.decode(cookie.substring(nameEQ.length, cookie.length));
+	    }
+	  }
+	
+	  return null;
+	}
+	
+	function erase(name) {
+	  create(name, '', -1);
+	}
+	
+	module.exports = {
+	  create: create,
+	  read: read,
+	  erase: erase
+	};
+
+
+/***/ },
+/* 51 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var objectHelper = __webpack_require__(1);
+	
+	var tokenParams = [
+	  // auth0
+	  'realm',
+	  'audience',
+	  // oauth2
+	  'client_id',
+	  'client_secret',
+	  'redirect_uri',
+	  'scope',
+	  'code',
+	  'grant_type',
+	  'username',
+	  'password',
+	  'refresh_token',
+	  'assertion',
+	  'client_assertion',
+	  'client_assertion_type',
+	  'code_verifier'
+	];
+	
+	var authorizeParams = [
+	  // auth0
+	  'connection',
+	  'connection_scope',
+	  'auth0Client',
+	  'owp',
+	  'device',
+	  'realm',
+	
+	  'protocol',
+	  '_csrf',
+	  '_intstate',
+	  'login_ticket',
+	
+	  // oauth2
+	  'client_id',
+	  'response_type',
+	  'response_mode',
+	  'redirect_uri',
+	  'audience',
+	  'scope',
+	  'state',
+	  'nonce',
+	  'display',
+	  'prompt',
+	  'max_age',
+	  'ui_locales',
+	  'claims_locales',
+	  'id_token_hint',
+	  'login_hint',
+	  'acr_values',
+	  'claims',
+	  'registration',
+	  'request',
+	  'request_uri',
+	  'code_challenge',
+	  'code_challenge_method'
+	];
+	
+	function oauthAuthorizeParams(warn, params) {
+	  var notAllowed = objectHelper.getKeysNotIn(params, authorizeParams);
+	
+	  if (notAllowed.length > 0) {
+	    warn.warning(
+	      'Following parameters are not allowed on the `/authorize` endpoint: [' +
+	        notAllowed.join(',') +
+	        ']'
+	    );
+	  }
+	
+	  return params;
+	}
+	
+	function oauthTokenParams(warn, params) {
+	  return objectHelper.pick(params, tokenParams);
+	}
+	
+	module.exports = {
+	  oauthTokenParams: oauthTokenParams,
+	  oauthAuthorizeParams: oauthAuthorizeParams
+	};
+
+
+/***/ },
+/* 52 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var version = __webpack_require__(10);
+	
+	function PluginHandler(webAuth, plugins) {
+	  this.plugins = plugins;
+	
+	  for (var a = 0; a < this.plugins.length; a++) {
+	    if (this.plugins[a].version !== version.raw) {
+	      var pluginName = '';
+	
+	      if (this.plugins[a].constructor && this.plugins[a].constructor.name) {
+	        pluginName = this.plugins[a].constructor.name;
+	      }
+	
+	      throw new Error(
+	        'Plugin ' +
+	          pluginName +
+	          ' version (' +
+	          this.plugins[a].version +
+	          ') ' +
+	          'is not compatible with the SDK version (' +
+	          version.raw +
+	          ')'
+	      );
+	    }
+	
+	    this.plugins[a].setWebAuth(webAuth);
+	  }
+	}
+	
+	PluginHandler.prototype.get = function(extensibilityPoint) {
+	  for (var a = 0; a < this.plugins.length; a++) {
+	    if (this.plugins[a].supports(extensibilityPoint)) {
+	      return this.plugins[a].init();
+	    }
+	  }
+	
+	  return null;
+	};
+	
+	module.exports = PluginHandler;
+
+
+/***/ },
+/* 53 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* eslint-disable no-restricted-syntax */
+	/* eslint-disable guard-for-in */
+	var WinChan = __webpack_require__(23);
+	
+	var windowHandler = __webpack_require__(2);
+	var objectHelper = __webpack_require__(1);
+	var qs = __webpack_require__(6);
+	
+	function PopupHandler() {
+	  this._current_popup = null;
+	}
+	
+	PopupHandler.prototype.calculatePosition = function(options) {
+	  var width = options.width || 500;
+	  var height = options.height || 600;
+	  var _window = windowHandler.getWindow();
+	
+	  var screenX = typeof _window.screenX !== 'undefined' ? _window.screenX : _window.screenLeft;
+	  var screenY = typeof _window.screenY !== 'undefined' ? _window.screenY : _window.screenTop;
+	
+	  var outerWidth = typeof _window.outerWidth !== 'undefined'
+	    ? _window.outerWidth
+	    : _window.document.body.clientWidth;
+	
+	  var outerHeight = typeof _window.outerHeight !== 'undefined'
+	    ? _window.outerHeight
+	    : _window.document.body.clientHeight;
+	
+	  var left = (outerWidth - width) / 2;
+	  var top = (outerHeight - height) / 2;
+	
+	  return { width: width, height: height, left: screenX + left, top: screenY + top };
+	};
+	
+	PopupHandler.prototype.preload = function(options) {
+	  var _this = this;
+	  var _window = windowHandler.getWindow();
+	  var popupPosition = this.calculatePosition(options.popupOptions || {});
+	  var popupOptions = objectHelper.merge(popupPosition).with(options.popupOptions);
+	  var url = options.url || 'about:blank';
+	  var windowFeatures = qs.stringify(popupOptions, {
+	    encode: false,
+	    delimiter: ','
+	  });
+	
+	  if (this._current_popup && !this._current_popup.closed) {
+	    return this._current_popup;
+	  }
+	
+	  this._current_popup = _window.open(url, 'auth0_signup_popup', windowFeatures);
+	
+	  this._current_popup.kill = function() {
+	    this.close();
+	    _this._current_popup = null;
+	  };
+	
+	  return this._current_popup;
+	};
+	
+	PopupHandler.prototype.load = function(url, relayUrl, options, cb) {
+	  var _this = this;
+	  var popupPosition = this.calculatePosition(options.popupOptions || {});
+	  var popupOptions = objectHelper.merge(popupPosition).with(options.popupOptions);
+	
+	  var winchanOptions = objectHelper
+	    .merge({
+	      url: url,
+	      relay_url: relayUrl,
+	      window_features: qs.stringify(popupOptions, {
+	        delimiter: ',',
+	        encode: false
+	      }),
+	      popup: this._current_popup
+	    })
+	    .with(options);
+	
+	  var popup = WinChan.open(winchanOptions, function(err, data) {
+	    _this._current_popup = null;
+	    return cb(err, data);
+	  });
+	
+	  popup.focus();
+	
+	  return popup;
+	};
+	
+	module.exports = PopupHandler;
+
+
+/***/ },
+/* 54 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var windowHelper = __webpack_require__(2);
+	
+	function randomString(length) {
+	  // eslint-disable-next-line
+	  var bytes = new Uint8Array(length);
+	  var result = [];
+	  var charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._~';
+	
+	  var cryptoObj = windowHelper.getWindow().crypto || windowHelper.getWindow().msCrypto;
+	  if (!cryptoObj) {
+	    return null;
+	  }
+	
+	  var random = cryptoObj.getRandomValues(bytes);
+	
+	  for (var a = 0; a < random.length; a++) {
+	    result.push(charset[random[a] % charset.length]);
+	  }
+	
+	  return result.join('');
+	}
+	
+	module.exports = {
+	  randomString: randomString
+	};
+
+
+/***/ },
+/* 55 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var cookies = __webpack_require__(50);
+	
+	function CookieStorage() {}
+	
+	CookieStorage.prototype.getItem = function(key) {
+	  return cookies.read(key);
+	};
+	
+	CookieStorage.prototype.removeItem = function(key) {
+	  cookies.erase(key);
+	};
+	
+	CookieStorage.prototype.setItem = function(key, value) {
+	  cookies.create(key, value, 1);
+	};
+	
+	module.exports = CookieStorage;
+
+
+/***/ },
+/* 56 */
+/***/ function(module, exports) {
+
+	function DummyStorage() {}
+	
+	DummyStorage.prototype.getItem = function() {
+	  return null;
+	};
+	
+	DummyStorage.prototype.removeItem = function() {};
+	
+	DummyStorage.prototype.setItem = function() {};
+	
+	module.exports = DummyStorage;
+
+
+/***/ },
+/* 57 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var windowHandler = __webpack_require__(2);
+	var DummyStorage = __webpack_require__(56);
+	var CookieStorage = __webpack_require__(55);
+	var Warn = __webpack_require__(7);
+	
+	function StorageHandler() {
+	  this.warn = new Warn({});
+	  this.storage = new CookieStorage();
+	  try {
+	    // some browsers throw an error when trying to access localStorage
+	    // when localStorage is disabled.
+	    this.storage = windowHandler.getWindow().localStorage;
+	  } catch (e) {
+	    this.warn.warning(e);
+	    this.warn.warning("Can't use localStorage. Using CookieStorage instead.");
+	  }
+	}
+	
+	StorageHandler.prototype.failover = function() {
+	  if (this.storage instanceof DummyStorage) {
+	    this.warn.warning('DummyStorage: ignore failover');
+	    return;
+	  } else if (this.storage instanceof CookieStorage) {
+	    this.warn.warning('CookieStorage: failing over DummyStorage');
+	    this.storage = new DummyStorage();
+	  } else {
+	    this.warn.warning('LocalStorage: failing over CookieStorage');
+	    this.storage = new CookieStorage();
+	  }
+	};
+	
+	StorageHandler.prototype.getItem = function(key) {
+	  try {
+	    return this.storage.getItem(key);
+	  } catch (e) {
+	    this.warn.warning(e);
+	    this.failover();
+	    return this.getItem(key);
+	  }
+	};
+	
+	StorageHandler.prototype.removeItem = function(key) {
+	  try {
+	    return this.storage.removeItem(key);
+	  } catch (e) {
+	    this.warn.warning(e);
+	    this.failover();
+	    return this.removeItem(key);
+	  }
+	};
+	
+	StorageHandler.prototype.setItem = function(key, value) {
+	  try {
+	    return this.storage.setItem(key, value);
+	  } catch (e) {
+	    this.warn.warning(e);
+	    this.failover();
+	    return this.setItem(key, value);
+	  }
+	};
+	
+	module.exports = StorageHandler;
+
+
+/***/ },
+/* 58 */
+/***/ function(module, exports) {
+
+	// given a URL, extract the origin. Taken from: https://github.com/firebase/firebase-simple-login/blob/d2cb95b9f812d8488bdbfba51c3a7c153ba1a074/js/src/simple-login/transports/WinChan.js#L25-L30
+	function extractOrigin(url) {
+	  if (!/^https?:\/\//.test(url)) url = window.location.href;
+	  var m = /^(https?:\/\/[-_a-zA-Z.0-9:]+)/.exec(url);
+	  if (m) return m[1];
+	  return url;
+	}
+	
+	module.exports = {
+	  extractOrigin: extractOrigin
+	};
+
+
+/***/ },
+/* 59 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Authentication = __webpack_require__(24);
+	var Management = __webpack_require__(60);
+	var WebAuth = __webpack_require__(30);
+	var version = __webpack_require__(10);
+	
+	module.exports = {
+	  Authentication: Authentication,
+	  Management: Management,
+	  WebAuth: WebAuth,
+	  version: version.raw
+	};
+
+
+/***/ },
+/* 60 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var urljoin = __webpack_require__(3);
+	
+	var RequestBuilder = __webpack_require__(11);
+	var assert = __webpack_require__(4);
+	var responseHandler = __webpack_require__(5);
+	
+	/**
+	 * Auth0 Management API Client (methods allowed to be called from the browser only)
+	 * @constructor
+	 * @param {Object} options
+	 * @param {Object} options.domain your Auth0 acount domain
+	 * @param {Object} options.token a valid API token
+	 */
+	function Management(options) {
+	  /* eslint-disable */
+	  assert.check(
+	    options,
+	    { type: 'object', message: 'options parameter is not valid' },
+	    {
+	      domain: { type: 'string', message: 'domain option is required' },
+	      token: { type: 'string', message: 'token option is required' },
+	      _sendTelemetry: {
+	        optional: true,
+	        type: 'boolean',
+	        message: '_sendTelemetry option is not valid'
+	      },
+	      _telemetryInfo: {
+	        optional: true,
+	        type: 'object',
+	        message: '_telemetryInfo option is not valid'
+	      }
+	    }
+	  );
+	  /* eslint-enable */
+	
+	  this.baseOptions = options;
+	
+	  this.baseOptions.headers = { Authorization: 'Bearer ' + this.baseOptions.token };
+	
+	  this.request = new RequestBuilder(this.baseOptions);
+	  this.baseOptions.rootUrl = urljoin('https://' + this.baseOptions.domain, 'api', 'v2');
+	}
+	
+	/**
+	 * @callback userCallback
+	 * @param {Error} [err] failure reason for the failed request to Management API
+	 * @param {Object} [result] user profile
+	 */
+	
+	/**
+	 * Returns the user profile
+	 *
+	 * @method getUser
+	 * @param {String} userId identifier of the user to retrieve
+	 * @param {userCallback} cb
+	 * @see https://auth0.com/docs/api/management/v2#!/Users/get_users_by_id
+	 */
+	Management.prototype.getUser = function(userId, cb) {
+	  var url;
+	
+	  assert.check(userId, { type: 'string', message: 'userId parameter is not valid' });
+	  assert.check(cb, { type: 'function', message: 'cb parameter is not valid' });
+	
+	  url = urljoin(this.baseOptions.rootUrl, 'users', userId);
+	
+	  return this.request.get(url).end(responseHandler(cb, { ignoreCasing: true }));
+	};
+	
+	/**
+	 * Updates the user metdata. It will patch the user metdata with the attributes sent.
+	 *
+	 *
+	 * @method patchUserMetadata
+	 * @param {String} userId
+	 * @param {Object} userMetadata
+	 * @param {userCallback} cb
+	 * @see   {@link https://auth0.com/docs/api/management/v2#!/Users/patch_users_by_id}
+	 */
+	Management.prototype.patchUserMetadata = function(userId, userMetadata, cb) {
+	  var url;
+	
+	  assert.check(userId, { type: 'string', message: 'userId parameter is not valid' });
+	  assert.check(userMetadata, { type: 'object', message: 'userMetadata parameter is not valid' });
+	  assert.check(cb, { type: 'function', message: 'cb parameter is not valid' });
+	
+	  url = urljoin(this.baseOptions.rootUrl, 'users', userId);
+	
+	  return this.request
+	    .patch(url)
+	    .send({ user_metadata: userMetadata })
+	    .end(responseHandler(cb, { ignoreCasing: true }));
+	};
+	
+	/**
+	 * Link two users
+	 *
+	 * @method linkUser
+	 * @param {String} userId
+	 * @param {String} secondaryUserToken
+	 * @param {userCallback} cb
+	 * @see   {@link https://auth0.com/docs/api/management/v2#!/Users/post_identities}
+	 */
+	Management.prototype.linkUser = function(userId, secondaryUserToken, cb) {
+	  var url;
+	  /* eslint-disable */
+	  assert.check(userId, { type: 'string', message: 'userId parameter is not valid' });
+	  assert.check(secondaryUserToken, {
+	    type: 'string',
+	    message: 'secondaryUserToken parameter is not valid'
+	  });
+	  assert.check(cb, { type: 'function', message: 'cb parameter is not valid' });
+	  /* eslint-enable */
+	
+	  url = urljoin(this.baseOptions.rootUrl, 'users', userId, 'identities');
+	
+	  return this.request
+	    .post(url)
+	    .send({ link_with: secondaryUserToken })
+	    .end(responseHandler(cb, { ignoreCasing: true }));
+	};
+	
+	module.exports = Management;
+
+
+/***/ },
+/* 61 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var UsernamePassword = __webpack_require__(65);
+	var objectHelper = __webpack_require__(1);
+	var windowHelper = __webpack_require__(2);
+	var Warn = __webpack_require__(7);
+	var assert = __webpack_require__(4);
+	
+	function HostedPages(client, options) {
+	  this.baseOptions = options;
+	  this.client = client;
+	
+	  this.warn = new Warn({
+	    disableWarnings: !!options._disableDeprecationWarnings
+	  });
+	}
+	
+	/**
+	 * @callback credentialsCallback
+	 * @param {Error} [err] error returned by Auth0 with the reason of the Auth failure
+	 * @param {Object} [result] result of the AuthN request
+	 * @param {String} result.accessToken token that can be used with {@link userinfo}
+	 * @param {String} [result.idToken] token that identifies the user
+	 * @param {String} [result.refreshToken] token that can be used to get new access tokens from Auth0. Note that not all clients can request them or the resource server might not allow them.
+	 */
+	
+	/**
+	 * Performs authentication with username/email and password with a database connection
+	 *
+	 * This method is not compatible with API Auth so if you need to fetch API tokens with audience
+	 * you should use {@link authorize} or {@link login}.
+	 *
+	 * @method loginWithCredentials
+	 * @param {Object} options
+	 * @param {String} [options.redirectUri] url that the Auth0 will redirect after Auth with the Authorization Response
+	 * @param {String} [options.responseType] type of the response used. It can be any of the values `code` and `token`
+	 * @param {String} [options.responseMode] how the AuthN response is encoded and redirected back to the client. Supported values are `query` and `fragment`
+	 * @param {String} [options.scope] scopes to be requested during AuthN. e.g. `openid email`
+	 * @param {credentialsCallback} cb
+	 */
+	HostedPages.prototype.login = function(options, cb) {
+	  if (windowHelper.getWindow().location.host !== this.baseOptions.domain) {
+	    throw new Error('This method is meant to be used only inside the Universal Login Page.');
+	  }
+	  var usernamePassword;
+	
+	  var params = objectHelper
+	    .merge(this.baseOptions, [
+	      'clientID',
+	      'redirectUri',
+	      'tenant',
+	      'responseType',
+	      'responseMode',
+	      'scope',
+	      'audience',
+	      '_csrf',
+	      'state',
+	      '_intstate',
+	      'nonce'
+	    ])
+	    .with(options);
+	
+	  assert.check(
+	    params,
+	    { type: 'object', message: 'options parameter is not valid' },
+	    {
+	      responseType: { type: 'string', message: 'responseType option is required' }
+	    }
+	  );
+	
+	  usernamePassword = new UsernamePassword(this.baseOptions);
+	  return usernamePassword.login(params, function(err, data) {
+	    if (err) {
+	      return cb(err);
+	    }
+	    return usernamePassword.callback(data);
+	  });
+	};
+	
+	/**
+	 * Signs up a new user and automatically logs the user in after the signup.
+	 *
+	 * @method signupAndLogin
+	 * @param {Object} options
+	 * @param {String} options.email user email address
+	 * @param {String} options.password user password
+	 * @param {String} options.connection name of the connection where the user will be created
+	 * @param {credentialsCallback} cb
+	 */
+	HostedPages.prototype.signupAndLogin = function(options, cb) {
+	  var _this = this;
+	  return _this.client.client.dbConnection.signup(options, function(err) {
+	    if (err) {
+	      return cb(err);
+	    }
+	    return _this.login(options, cb);
+	  });
+	};
+	
+	module.exports = HostedPages;
+
+
+/***/ },
+/* 62 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var urljoin = __webpack_require__(3);
+	var WinChan = __webpack_require__(23);
+	
+	var urlHelper = __webpack_require__(58);
+	var assert = __webpack_require__(4);
+	var responseHandler = __webpack_require__(5);
+	var PopupHandler = __webpack_require__(53);
+	var objectHelper = __webpack_require__(1);
+	var windowHelper = __webpack_require__(2);
+	var Warn = __webpack_require__(7);
+	var TransactionManager = __webpack_require__(17);
+	var CrossOriginAuthentication = __webpack_require__(16);
+	
+	function Popup(webAuth, options) {
+	  this.baseOptions = options;
+	  this.baseOptions.popupOrigin = options.popupOrigin;
+	  this.client = webAuth.client;
+	  this.webAuth = webAuth;
+	
+	  this.transactionManager = new TransactionManager(this.baseOptions.transaction);
+	  this.crossOriginAuthentication = new CrossOriginAuthentication(webAuth, this.baseOptions);
+	  this.warn = new Warn({
+	    disableWarnings: !!options._disableDeprecationWarnings
+	  });
+	}
+	
+	/**
+	 * Returns a new instance of the popup handler
+	 *
+	 * @method buildPopupHandler
+	 * @private
+	 */
+	Popup.prototype.buildPopupHandler = function() {
+	  var pluginHandler = this.baseOptions.plugins.get('popup.getPopupHandler');
+	
+	  if (pluginHandler) {
+	    return pluginHandler.getPopupHandler();
+	  }
+	
+	  return new PopupHandler();
+	};
+	
+	/**
+	 * Initializes the popup window and returns the instance to be used later in order to avoid being blocked by the browser.
+	 *
+	 * @method preload
+	 * @param {Object} options receives the window height and width and any other window feature to be sent to window.open
+	 */
+	Popup.prototype.preload = function(options) {
+	  options = options || {};
+	
+	  var popup = this.buildPopupHandler();
+	
+	  popup.preload(options);
+	  return popup;
+	};
+	
+	/**
+	 * Internal use.
+	 *
+	 * @method getPopupHandler
+	 * @private
+	 */
+	Popup.prototype.getPopupHandler = function(options, preload) {
+	  if (options.popupHandler) {
+	    return options.popupHandler;
+	  }
+	
+	  if (preload) {
+	    return this.preload(options);
+	  }
+	
+	  return this.buildPopupHandler();
+	};
+	
+	/**
+	 * Handles the popup logic for the callback page.
+	 *
+	 * @method callback
+	 * @param {Object} options
+	 * @param {String} options.hash the url hash. If not provided it will extract from window.location.hash
+	 * @param {String} [options.state] value originally sent in `state` parameter to {@link authorize} to mitigate XSRF
+	 * @param {String} [options.nonce] value originally sent in `nonce` parameter to {@link authorize} to prevent replay attacks
+	 * @see   {@link parseHash}
+	 */
+	Popup.prototype.callback = function(options) {
+	  var _this = this;
+	  var theWindow = windowHelper.getWindow();
+	  options = options || {};
+	  var originUrl = options.popupOrigin || this.baseOptions.popupOrigin || windowHelper.getOrigin();
+	
+	  /*
+	    in IE 11, there's a bug that makes window.opener return undefined.
+	    The callback page will still call `popup.callback()` which will run this method
+	    in the relay page. WinChan expects the relay page to have a global `doPost` function,
+	    which will be called with the response.
+	
+	    IE11 Bug: https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/110920/
+	   */
+	  if (!theWindow.opener) {
+	    theWindow.doPost = function(msg) {
+	      if (theWindow.parent) {
+	        theWindow.parent.postMessage(msg, originUrl);
+	      }
+	    };
+	    return;
+	  }
+	
+	  WinChan.onOpen(function(popupOrigin, r, cb) {
+	    if (popupOrigin !== originUrl) {
+	      return cb({
+	        error: 'origin_mismatch',
+	        error_description: "The popup's origin (" +
+	          popupOrigin +
+	          ') should match the `popupOrigin` parameter (' +
+	          originUrl +
+	          ').'
+	      });
+	    }
+	    _this.webAuth.parseHash(options || {}, function(err, data) {
+	      return cb(err || data);
+	    });
+	  });
+	};
+	
+	/**
+	 * Shows inside a new window the hosted login page (`/authorize`) in order to start a new authN/authZ transaction and post its result using `postMessage`.
+	 *
+	 * @method authorize
+	 * @param {Object} options
+	 * @param {String} [options.domain] your Auth0 domain
+	 * @param {String} [options.clientID] your Auth0 client identifier obtained when creating the client in the Auth0 Dashboard
+	 * @param {String} options.redirectUri url that the Auth0 will redirect after Auth with the Authorization Response
+	 * @param {String} options.responseType type of the response used by OAuth 2.0 flow. It can be any space separated list of the values `code`, `token`, `id_token`. {@link https://openid.net/specs/oauth-v2-multiple-response-types-1_0}
+	 * @param {String} [options.responseMode] how the Auth response is encoded and redirected back to the client. Supported values are `query`, `fragment` and `form_post`. The `query` value is only supported when `responseType` is `code`. {@link https://openid.net/specs/oauth-v2-multiple-response-types-1_0.html#ResponseModes}
+	 * @param {String} [options.state] value used to mitigate XSRF attacks. {@link https://auth0.com/docs/protocols/oauth2/oauth-state}
+	 * @param {String} [options.nonce] value used to mitigate replay attacks when using Implicit Grant. {@link https://auth0.com/docs/api-auth/tutorials/nonce}
+	 * @param {String} [options.scope] scopes to be requested during Auth. e.g. `openid email`
+	 * @param {String} [options.audience] identifier of the resource server who will consume the access token issued after Auth
+	 * @param {Boolean} [options.owp] determines if Auth0 should render the relay page or not and the caller is responsible of handling the response.
+	 * @param {authorizeCallback} cb
+	 * @see {@link https://auth0.com/docs/api/authentication#authorize-client}
+	 */
+	Popup.prototype.authorize = function(options, cb) {
+	  var popup;
+	  var url;
+	  var relayUrl;
+	  var popOpts = {};
+	
+	  var pluginHandler = this.baseOptions.plugins.get('popup.authorize');
+	
+	  var params = objectHelper
+	    .merge(this.baseOptions, [
+	      'clientID',
+	      'scope',
+	      'domain',
+	      'audience',
+	      'tenant',
+	      'responseType',
+	      'redirectUri',
+	      '_csrf',
+	      'state',
+	      '_intstate',
+	      'nonce'
+	    ])
+	    .with(objectHelper.blacklist(options, ['popupHandler']));
+	
+	  assert.check(
+	    params,
+	    { type: 'object', message: 'options parameter is not valid' },
+	    {
+	      responseType: { type: 'string', message: 'responseType option is required' }
+	    }
+	  );
+	
+	  // the relay page should not be necessary as long it happens in the same domain
+	  // (a redirectUri shoul be provided). It is necessary when using OWP
+	  relayUrl = urljoin(this.baseOptions.rootUrl, 'relay.html');
+	
+	  // if a owp is enabled, it should use the owp flag
+	  if (options.owp) {
+	    // used by server to render the relay page instead of sending the chunk in the
+	    // url to the callback
+	    params.owp = true;
+	  } else {
+	    popOpts.origin = urlHelper.extractOrigin(params.redirectUri);
+	    relayUrl = params.redirectUri;
+	  }
+	
+	  if (options.popupOptions) {
+	    popOpts.popupOptions = objectHelper.pick(options.popupOptions, ['width', 'height']);
+	  }
+	
+	  if (pluginHandler) {
+	    params = pluginHandler.processParams(params);
+	  }
+	
+	  params = this.transactionManager.process(params);
+	  params.scope = params.scope || 'openid profile email';
+	  delete params.domain;
+	
+	  url = this.client.buildAuthorizeUrl(params);
+	
+	  popup = this.getPopupHandler(options);
+	
+	  return popup.load(url, relayUrl, popOpts, responseHandler(cb));
+	};
+	
+	/**
+	 * Performs authentication with username/email and password with a database connection inside a new window
+	 *
+	 * This method is not compatible with API Auth so if you need to fetch API tokens with audience
+	 * you should use {@link authorize} or {@link login}.
+	 *
+	 * @method loginWithCredentials
+	 * @param {Object} options
+	 * @param {String} [options.redirectUri] url that the Auth0 will redirect after Auth with the Authorization Response
+	 * @param {String} [options.responseType] type of the response used. It can be any of the values `code` and `token`
+	 * @param {String} [options.responseMode] how the AuthN response is encoded and redirected back to the client. Supported values are `query` and `fragment`. The `query` value is only supported when `responseType` is `code`.
+	 * @param {String} [options.scope] scopes to be requested during AuthN. e.g. `openid email`
+	 * @param {credentialsCallback} cb
+	 */
+	Popup.prototype.loginWithCredentials = function(options, cb) {
+	  options.realm = options.realm || options.connection;
+	  options.popup = true;
+	  options = objectHelper
+	    .merge(this.baseOptions, ['redirectUri', 'responseType', 'state', 'nonce'])
+	    .with(objectHelper.blacklist(options, ['popupHandler', 'connection']));
+	  options = this.transactionManager.process(options);
+	  this.crossOriginAuthentication.login(options, cb);
+	};
+	
+	/**
+	 * Verifies the passwordless TOTP and redirects to finish the passwordless transaction
+	 *
+	 * @method passwordlessVerify
+	 * @param {Object} options
+	 * @param {String} options.type `sms` or `email`
+	 * @param {String} options.phoneNumber only if type = sms
+	 * @param {String} options.email only if type = email
+	 * @param {String} options.connection the connection name
+	 * @param {String} options.verificationCode the TOTP code
+	 * @param {Function} cb
+	 */
+	Popup.prototype.passwordlessVerify = function(options, cb) {
+	  var _this = this;
+	  return this.client.passwordless.verify(
+	    objectHelper.blacklist(options, ['popupHandler']),
+	    function(err) {
+	      if (err) {
+	        return cb(err);
+	      }
+	
+	      options.username = options.phoneNumber || options.email;
+	      options.password = options.verificationCode;
+	
+	      delete options.email;
+	      delete options.phoneNumber;
+	      delete options.verificationCode;
+	      delete options.type;
+	
+	      _this.client.loginWithResourceOwner(options, cb);
+	    }
+	  );
+	};
+	
+	/**
+	 * Signs up a new user and automatically logs the user in after the signup.
+	 *
+	 * This method is not compatible with API Auth so if you need to fetch API tokens with audience
+	 * you should use {@link authorize} or {@link signupAndAuthorize}.
+	 *
+	 * @method signupAndLogin
+	 * @param {Object} options
+	 * @param {String} options.email user email address
+	 * @param {String} options.password user password
+	 * @param {String} options.connection name of the connection where the user will be created
+	 * @param {credentialsCallback} cb
+	 */
+	Popup.prototype.signupAndLogin = function(options, cb) {
+	  var _this = this;
+	
+	  // Preload popup to avoid the browser to block it since the login happens later
+	  var popupHandler = this.getPopupHandler(options, true);
+	  options.popupHandler = popupHandler;
+	
+	  return this.client.dbConnection.signup(
+	    objectHelper.blacklist(options, ['popupHandler']),
+	    function(err) {
+	      if (err) {
+	        if (popupHandler._current_popup) {
+	          popupHandler._current_popup.kill();
+	        }
+	        return cb(err);
+	      }
+	      _this.loginWithCredentials(options, cb);
+	    }
+	  );
+	};
+	
+	module.exports = Popup;
+
+
+/***/ },
+/* 63 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var CrossOriginAuthentication = __webpack_require__(16);
+	var Warn = __webpack_require__(7);
+	
+	function Redirect(auth0, options) {
+	  this.webAuth = auth0;
+	  this.baseOptions = options;
+	  this.crossOriginAuthentication = new CrossOriginAuthentication(auth0, this.baseOptions);
+	
+	  this.warn = new Warn({
+	    disableWarnings: !!options._disableDeprecationWarnings
+	  });
+	}
+	
+	/**
+	 * Logs in the user with username and password using the cross origin authentication (/co/authenticate) flow. You can use either `username` or `email` to identify the user, but `username` will take precedence over `email`.
+	 * Some browsers might not be able to successfully authenticate if 3rd party cookies are disabled in your browser. [See here for more information.]{@link https://auth0.com/docs/cross-origin-authentication}.
+	 * After the /co/authenticate call, you'll have to use the {@link parseHash} function at the `redirectUri` specified in the constructor.
+	 *
+	 * @method loginWithCredentials
+	 * @deprecated This method will be released in the next major version. Use `webAuth.login` instead.
+	 * @param {Object} options options used in the {@link authorize} call after the login_ticket is acquired
+	 * @param {String} [options.username] Username (mutually exclusive with email)
+	 * @param {String} [options.email] Email (mutually exclusive with username)
+	 * @param {String} options.password Password
+	 * @param {String} [options.connection] Connection used to authenticate the user, it can be a realm name or a database connection name
+	 * @param {crossOriginLoginCallback} cb Callback function called only when an authentication error, like invalid username or password, occurs. For other types of errors, there will be a redirect to the `redirectUri`.
+	 */
+	Redirect.prototype.loginWithCredentials = function(options, cb) {
+	  options.realm = options.realm || options.connection;
+	  delete options.connection;
+	  this.crossOriginAuthentication.login(options, cb);
+	};
+	
+	/**
+	 * Signs up a new user and automatically logs the user in after the signup.
+	 *
+	 * @method signupAndLogin
+	 * @param {Object} options
+	 * @param {String} options.email user email address
+	 * @param {String} options.password user password
+	 * @param {String} options.connection name of the connection where the user will be created
+	 * @param {crossOriginLoginCallback} cb
+	 */
+	Redirect.prototype.signupAndLogin = function(options, cb) {
+	  var _this = this;
+	  return this.webAuth.client.dbConnection.signup(options, function(err) {
+	    if (err) {
+	      return cb(err);
+	    }
+	    options.realm = options.realm || options.connection;
+	    delete options.connection;
+	    return _this.webAuth.login(options, cb);
+	  });
+	};
+	
+	module.exports = Redirect;
+
+
+/***/ },
+/* 64 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var IframeHandler = __webpack_require__(27);
+	var windowHelper = __webpack_require__(2);
+	
+	function SilentAuthenticationHandler(options) {
+	  this.authenticationUrl = options.authenticationUrl;
+	  this.timeout = options.timeout || 60 * 1000;
+	  this.handler = null;
+	  this.postMessageDataType = options.postMessageDataType || false;
+	
+	  // prefer origin from options, fallback to origin from browser, and some browsers (for example MS Edge) don't support origin; fallback to construct origin manually
+	  this.postMessageOrigin =
+	    options.postMessageOrigin ||
+	    windowHelper.getWindow().location.origin ||
+	    windowHelper.getWindow().location.protocol + '//' + windowHelper.getWindow().location.hostname
+	      + (windowHelper.getWindow().location.port ? ':' + windowHelper.getWindow().location.port : '');
+	}
+	
+	SilentAuthenticationHandler.create = function(options) {
+	  return new SilentAuthenticationHandler(options);
+	};
+	
+	SilentAuthenticationHandler.prototype.login = function(usePostMessage, callback) {
+	  this.handler = new IframeHandler({
+	    auth0: this.auth0,
+	    url: this.authenticationUrl,
+	    eventListenerType: usePostMessage ? 'message' : 'load',
+	    callback: this.getCallbackHandler(callback, usePostMessage),
+	    timeout: this.timeout,
+	    eventValidator: this.getEventValidator(),
+	    timeoutCallback: function() {
+	      callback(null, '#error=timeout&error_description=Timeout+during+authentication+renew.');
+	    },
+	    usePostMessage: usePostMessage || false
+	  });
+	
+	  this.handler.init();
+	};
+	
+	SilentAuthenticationHandler.prototype.getEventValidator = function() {
+	  var _this = this;
+	  return {
+	    isValid: function(eventData) {
+	      switch (eventData.event.type) {
+	        case 'message':
+	          // Message must come from the expected origin and iframe window.
+	          if (
+	            eventData.event.origin !== _this.postMessageOrigin ||
+	            eventData.event.source !== _this.handler.iframe.contentWindow
+	          ) {
+	            return false;
+	          }
+	
+	          // Default behaviour, return all message events from the iframe.
+	          if (_this.postMessageDataType === false) {
+	            return true;
+	          }
+	
+	          return (
+	            eventData.event.data.type && eventData.event.data.type === _this.postMessageDataType
+	          );
+	
+	        case 'load':
+	          if (eventData.sourceObject.contentWindow.location.protocol === 'about:') {
+	            // Chrome is automatically loading the about:blank page, we ignore this.
+	            return false;
+	          }
+	        // Fall through to default
+	        default:
+	          return true;
+	      }
+	    }
+	  };
+	};
+	
+	SilentAuthenticationHandler.prototype.getCallbackHandler = function(callback, usePostMessage) {
+	  return function(eventData) {
+	    var callbackValue;
+	    if (!usePostMessage) {
+	      callbackValue = eventData.sourceObject.contentWindow.location.hash;
+	    } else if (typeof eventData.event.data === 'object' && eventData.event.data.hash) {
+	      callbackValue = eventData.event.data.hash;
+	    } else {
+	      callbackValue = eventData.event.data;
+	    }
+	    callback(null, callbackValue);
+	  };
+	};
+	
+	module.exports = SilentAuthenticationHandler;
+
+
+/***/ },
+/* 65 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var urljoin = __webpack_require__(3);
+	
+	var objectHelper = __webpack_require__(1);
+	var RequestBuilder = __webpack_require__(11);
+	var responseHandler = __webpack_require__(5);
+	var windowHelper = __webpack_require__(2);
+	var TransactionManager = __webpack_require__(17);
+	
+	function UsernamePassword(options) {
+	  this.baseOptions = options;
+	  this.request = new RequestBuilder(options);
+	  this.transactionManager = new TransactionManager(this.baseOptions.transaction);
+	}
+	
+	UsernamePassword.prototype.login = function(options, cb) {
+	  var url;
+	  var body;
+	
+	  url = urljoin(this.baseOptions.rootUrl, 'usernamepassword', 'login');
+	
+	  options.username = options.username || options.email; // eslint-disable-line
+	
+	  options = objectHelper.blacklist(options, ['email']); // eslint-disable-line
+	
+	  body = objectHelper
+	    .merge(this.baseOptions, [
+	      'clientID',
+	      'redirectUri',
+	      'tenant',
+	      'responseType',
+	      'responseMode',
+	      'scope',
+	      'audience'
+	    ])
+	    .with(options);
+	  body = this.transactionManager.process(body);
+	
+	  body = objectHelper.toSnakeCase(body, ['auth0Client']);
+	
+	  return this.request.post(url).send(body).end(responseHandler(cb));
+	};
+	
+	UsernamePassword.prototype.callback = function(formHtml) {
+	  var div;
+	  var form;
+	  var _document = windowHelper.getDocument();
+	
+	  div = _document.createElement('div');
+	  div.innerHTML = formHtml;
+	  form = _document.body.appendChild(div).children[0];
+	
+	  form.submit();
+	};
+	
+	module.exports = UsernamePassword;
+
+
+/***/ }
+/******/ ])
+});
+;
+;"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var http_1 = require("@angular/http");
+var core_1 = require("@angular/core");
+var Observable_1 = require("rxjs/Observable");
+require("rxjs/add/observable/fromPromise");
+require("rxjs/add/observable/defer");
+require("rxjs/add/operator/mergeMap");
+var AuthConfigConsts = (function () {
+    function AuthConfigConsts() {
+    }
+    return AuthConfigConsts;
+}());
+AuthConfigConsts.DEFAULT_TOKEN_NAME = 'token';
+AuthConfigConsts.DEFAULT_HEADER_NAME = 'Authorization';
+AuthConfigConsts.HEADER_PREFIX_BEARER = 'Bearer ';
+exports.AuthConfigConsts = AuthConfigConsts;
+var AuthConfigDefaults = {
+    headerName: AuthConfigConsts.DEFAULT_HEADER_NAME,
+    headerPrefix: null,
+    tokenName: AuthConfigConsts.DEFAULT_TOKEN_NAME,
+    tokenGetter: function () { return localStorage.getItem(AuthConfigDefaults.tokenName); },
+    noJwtError: false,
+    noClientCheck: false,
+    globalHeaders: [],
+    noTokenScheme: false
+};
+/**
+ * Sets up the authentication configuration.
+ */
+var AuthConfig = (function () {
+    function AuthConfig(config) {
+        config = config || {};
+        this._config = objectAssign({}, AuthConfigDefaults, config);
+        if (this._config.headerPrefix) {
+            this._config.headerPrefix += ' ';
+        }
+        else if (this._config.noTokenScheme) {
+            this._config.headerPrefix = '';
+        }
+        else {
+            this._config.headerPrefix = AuthConfigConsts.HEADER_PREFIX_BEARER;
+        }
+        if (config.tokenName && !config.tokenGetter) {
+            this._config.tokenGetter = function () { return localStorage.getItem(config.tokenName); };
+        }
+    }
+    AuthConfig.prototype.getConfig = function () {
+        return this._config;
+    };
+    return AuthConfig;
+}());
+exports.AuthConfig = AuthConfig;
+var AuthHttpError = (function (_super) {
+    __extends(AuthHttpError, _super);
+    function AuthHttpError() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return AuthHttpError;
+}(Error));
+exports.AuthHttpError = AuthHttpError;
+/**
+ * Allows for explicit authenticated HTTP requests.
+ */
+var AuthHttp = (function () {
+    function AuthHttp(options, http, defOpts) {
+        var _this = this;
+        this.http = http;
+        this.defOpts = defOpts;
+        this.config = options.getConfig();
+        this.tokenStream = new Observable_1.Observable(function (obs) {
+            obs.next(_this.config.tokenGetter());
+        });
+    }
+    AuthHttp.prototype.mergeOptions = function (providedOpts, defaultOpts) {
+        var newOptions = defaultOpts || new http_1.RequestOptions();
+        if (this.config.globalHeaders) {
+            this.setGlobalHeaders(this.config.globalHeaders, providedOpts);
+        }
+        newOptions = newOptions.merge(new http_1.RequestOptions(providedOpts));
+        return newOptions;
+    };
+    AuthHttp.prototype.requestHelper = function (requestArgs, additionalOptions) {
+        var options = new http_1.RequestOptions(requestArgs);
+        if (additionalOptions) {
+            options = options.merge(additionalOptions);
+        }
+        return this.request(new http_1.Request(this.mergeOptions(options, this.defOpts)));
+    };
+    AuthHttp.prototype.requestWithToken = function (req, token) {
+        if (!this.config.noClientCheck && !tokenNotExpired(undefined, token)) {
+            if (!this.config.noJwtError) {
+                return new Observable_1.Observable(function (obs) {
+                    obs.error(new AuthHttpError('No JWT present or has expired'));
+                });
+            }
+        }
+        else {
+            req.headers.set(this.config.headerName, this.config.headerPrefix + token);
+        }
+        return this.http.request(req);
+    };
+    AuthHttp.prototype.setGlobalHeaders = function (headers, request) {
+        if (!request.headers) {
+            request.headers = new http_1.Headers();
+        }
+        headers.forEach(function (header) {
+            var key = Object.keys(header)[0];
+            var headerValue = header[key];
+            request.headers.set(key, headerValue);
+        });
+    };
+    AuthHttp.prototype.request = function (url, options) {
+        var _this = this;
+        if (typeof url === 'string') {
+            return this.get(url, options); // Recursion: transform url from String to Request
+        }
+        // else if ( ! url instanceof Request ) {
+        //   throw new Error('First argument must be a url string or Request instance.');
+        // }
+        // from this point url is always an instance of Request;
+        var req = url;
+        // Create a cold observable and load the token just in time
+        return Observable_1.Observable.defer(function () {
+            var token = _this.config.tokenGetter();
+            if (token instanceof Promise) {
+                return Observable_1.Observable.fromPromise(token).mergeMap(function (jwtToken) { return _this.requestWithToken(req, jwtToken); });
+            }
+            else {
+                return _this.requestWithToken(req, token);
+            }
+        });
+    };
+    AuthHttp.prototype.get = function (url, options) {
+        return this.requestHelper({ body: '', method: http_1.RequestMethod.Get, url: url }, options);
+    };
+    AuthHttp.prototype.post = function (url, body, options) {
+        return this.requestHelper({ body: body, method: http_1.RequestMethod.Post, url: url }, options);
+    };
+    AuthHttp.prototype.put = function (url, body, options) {
+        return this.requestHelper({ body: body, method: http_1.RequestMethod.Put, url: url }, options);
+    };
+    AuthHttp.prototype.delete = function (url, options) {
+        return this.requestHelper({ body: '', method: http_1.RequestMethod.Delete, url: url }, options);
+    };
+    AuthHttp.prototype.patch = function (url, body, options) {
+        return this.requestHelper({ body: body, method: http_1.RequestMethod.Patch, url: url }, options);
+    };
+    AuthHttp.prototype.head = function (url, options) {
+        return this.requestHelper({ body: '', method: http_1.RequestMethod.Head, url: url }, options);
+    };
+    AuthHttp.prototype.options = function (url, options) {
+        return this.requestHelper({ body: '', method: http_1.RequestMethod.Options, url: url }, options);
+    };
+    return AuthHttp;
+}());
+AuthHttp = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [AuthConfig, http_1.Http, http_1.RequestOptions])
+], AuthHttp);
+exports.AuthHttp = AuthHttp;
+/**
+ * Helper class to decode and find JWT expiration.
+ */
+var JwtHelper = (function () {
+    function JwtHelper() {
+    }
+    JwtHelper.prototype.urlBase64Decode = function (str) {
+        var output = str.replace(/-/g, '+').replace(/_/g, '/');
+        switch (output.length % 4) {
+            case 0: {
+                break;
+            }
+            case 2: {
+                output += '==';
+                break;
+            }
+            case 3: {
+                output += '=';
+                break;
+            }
+            default: {
+                throw 'Illegal base64url string!';
+            }
+        }
+        return this.b64DecodeUnicode(output);
+    };
+    // credits for decoder goes to https://github.com/atk
+    JwtHelper.prototype.b64decode = function (str) {
+        var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+        var output = '';
+        str = String(str).replace(/=+$/, '');
+        if (str.length % 4 == 1) {
+            throw new Error("'atob' failed: The string to be decoded is not correctly encoded.");
+        }
+        for (
+        // initialize result and counters
+        var bc = 0, bs = void 0, buffer = void 0, idx = 0; 
+        // get next character
+        buffer = str.charAt(idx++); 
+        // character found in table? initialize bit storage and add its ascii value;
+        ~buffer && (bs = bc % 4 ? bs * 64 + buffer : buffer,
+            // and if not first of each 4 characters,
+            // convert the first 8 bits to one ascii character
+            bc++ % 4) ? output += String.fromCharCode(255 & bs >> (-2 * bc & 6)) : 0) {
+            // try to find character in table (0-63, not found => -1)
+            buffer = chars.indexOf(buffer);
+        }
+        return output;
+    };
+    // https://developer.mozilla.org/en/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#The_Unicode_Problem
+    JwtHelper.prototype.b64DecodeUnicode = function (str) {
+        return decodeURIComponent(Array.prototype.map.call(this.b64decode(str), function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+    };
+    JwtHelper.prototype.decodeToken = function (token) {
+        var parts = token.split('.');
+        if (parts.length !== 3) {
+            throw new Error('JWT must have 3 parts');
+        }
+        var decoded = this.urlBase64Decode(parts[1]);
+        if (!decoded) {
+            throw new Error('Cannot decode the token');
+        }
+        return JSON.parse(decoded);
+    };
+    JwtHelper.prototype.getTokenExpirationDate = function (token) {
+        var decoded;
+        decoded = this.decodeToken(token);
+        if (!decoded.hasOwnProperty('exp')) {
+            return null;
+        }
+        var date = new Date(0); // The 0 here is the key, which sets the date to the epoch
+        date.setUTCSeconds(decoded.exp);
+        return date;
+    };
+    JwtHelper.prototype.isTokenExpired = function (token, offsetSeconds) {
+        var date = this.getTokenExpirationDate(token);
+        offsetSeconds = offsetSeconds || 0;
+        if (date == null) {
+            return false;
+        }
+        // Token expired?
+        return !(date.valueOf() > (new Date().valueOf() + (offsetSeconds * 1000)));
+    };
+    return JwtHelper;
+}());
+exports.JwtHelper = JwtHelper;
+/**
+ * Checks for presence of token and that token hasn't expired.
+ * For use with the @CanActivate router decorator and NgIf
+ */
+function tokenNotExpired(tokenName, jwt) {
+    if (tokenName === void 0) { tokenName = AuthConfigConsts.DEFAULT_TOKEN_NAME; }
+    var token = jwt || localStorage.getItem(tokenName);
+    var jwtHelper = new JwtHelper();
+    return token != null && !jwtHelper.isTokenExpired(token);
+}
+exports.tokenNotExpired = tokenNotExpired;
+exports.AUTH_PROVIDERS = [
+    {
+        provide: AuthHttp,
+        deps: [http_1.Http, http_1.RequestOptions],
+        useFactory: function (http, options) {
+            return new AuthHttp(new AuthConfig(), http, options);
+        }
+    }
+];
+function provideAuth(config) {
+    return [
+        {
+            provide: AuthHttp,
+            deps: [http_1.Http, http_1.RequestOptions],
+            useFactory: function (http, options) {
+                return new AuthHttp(new AuthConfig(config), http, options);
+            }
+        }
+    ];
+}
+exports.provideAuth = provideAuth;
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+function toObject(val) {
+    if (val === null || val === undefined) {
+        throw new TypeError('Object.assign cannot be called with null or undefined');
+    }
+    return Object(val);
+}
+function objectAssign(target) {
+    var source = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        source[_i - 1] = arguments[_i];
+    }
+    var from;
+    var to = toObject(target);
+    var symbols;
+    for (var s = 1; s < arguments.length; s++) {
+        from = Object(arguments[s]);
+        for (var key in from) {
+            if (hasOwnProperty.call(from, key)) {
+                to[key] = from[key];
+            }
+        }
+        if (Object.getOwnPropertySymbols) {
+            symbols = Object.getOwnPropertySymbols(from);
+            for (var i = 0; i < symbols.length; i++) {
+                if (propIsEnumerable.call(from, symbols[i])) {
+                    to[symbols[i]] = from[symbols[i]];
+                }
+            }
+        }
+    }
+    return to;
+}
+/**
+ * Module for angular2-jwt
+ * @experimental
+ */
+var AuthModule = AuthModule_1 = (function () {
+    function AuthModule(parentModule) {
+        if (parentModule) {
+            throw new Error('AuthModule is already loaded. Import it in the AppModule only');
+        }
+    }
+    AuthModule.forRoot = function (config) {
+        return {
+            ngModule: AuthModule_1,
+            providers: [
+                { provide: AuthConfig, useValue: config }
+            ]
+        };
+    };
+    return AuthModule;
+}());
+AuthModule = AuthModule_1 = __decorate([
+    core_1.NgModule({
+        imports: [http_1.HttpModule],
+        providers: [AuthHttp, JwtHelper]
+    }),
+    __param(0, core_1.Optional()), __param(0, core_1.SkipSelf()),
+    __metadata("design:paramtypes", [AuthModule])
+], AuthModule);
+exports.AuthModule = AuthModule;
+var AuthModule_1;
+//# sourceMappingURL=angular2-jwt.js.map
 ; /*
  * # Semantic UI - 2.3.0
  * https://github.com/Semantic-Org/Semantic-UI
@@ -6749,5 +17285,13 @@ $p.libs = {
  *
  */
 !function(e,t,n,i){e.site=e.fn.site=function(o){var a,r,s=(new Date).getTime(),l=[],c=arguments[0],u="string"==typeof c,d=[].slice.call(arguments,1),f=e.isPlainObject(o)?e.extend(!0,{},e.site.settings,o):e.extend({},e.site.settings),m=f.namespace,g=f.error,p="module-"+m,h=e(n),v=this,b=h.data(p);return a={initialize:function(){a.instantiate()},instantiate:function(){a.verbose("Storing instance of site",a),b=a,h.data(p,a)},normalize:function(){a.fix.console(),a.fix.requestAnimationFrame()},fix:{console:function(){a.debug("Normalizing window.console"),console!==i&&console.log!==i||(a.verbose("Console not available, normalizing events"),a.disable.console()),void 0!==console.group&&void 0!==console.groupEnd&&void 0!==console.groupCollapsed||(a.verbose("Console group not available, normalizing events"),t.console.group=function(){},t.console.groupEnd=function(){},t.console.groupCollapsed=function(){}),void 0===console.markTimeline&&(a.verbose("Mark timeline not available, normalizing events"),t.console.markTimeline=function(){})},consoleClear:function(){a.debug("Disabling programmatic console clearing"),t.console.clear=function(){}},requestAnimationFrame:function(){a.debug("Normalizing requestAnimationFrame"),t.requestAnimationFrame===i&&(a.debug("RequestAnimationFrame not available, normalizing event"),t.requestAnimationFrame=t.requestAnimationFrame||t.mozRequestAnimationFrame||t.webkitRequestAnimationFrame||t.msRequestAnimationFrame||function(e){setTimeout(e,0)})}},moduleExists:function(t){return e.fn[t]!==i&&e.fn[t].settings!==i},enabled:{modules:function(t){var n=[];return t=t||f.modules,e.each(t,function(e,t){a.moduleExists(t)&&n.push(t)}),n}},disabled:{modules:function(t){var n=[];return t=t||f.modules,e.each(t,function(e,t){a.moduleExists(t)||n.push(t)}),n}},change:{setting:function(t,n,o,r){o="string"==typeof o?"all"===o?f.modules:[o]:o||f.modules,r=r===i||r,e.each(o,function(i,o){var s,l=!a.moduleExists(o)||(e.fn[o].settings.namespace||!1);a.moduleExists(o)&&(a.verbose("Changing default setting",t,n,o),e.fn[o].settings[t]=n,r&&l&&(s=e(":data(module-"+l+")")).length>0&&(a.verbose("Modifying existing settings",s),s[o]("setting",t,n)))})},settings:function(t,n,o){n="string"==typeof n?[n]:n||f.modules,o=o===i||o,e.each(n,function(n,i){var r;a.moduleExists(i)&&(a.verbose("Changing default setting",t,i),e.extend(!0,e.fn[i].settings,t),o&&m&&(r=e(":data(module-"+m+")")).length>0&&(a.verbose("Modifying existing settings",r),r[i]("setting",t)))})}},enable:{console:function(){a.console(!0)},debug:function(e,t){e=e||f.modules,a.debug("Enabling debug for modules",e),a.change.setting("debug",!0,e,t)},verbose:function(e,t){e=e||f.modules,a.debug("Enabling verbose debug for modules",e),a.change.setting("verbose",!0,e,t)}},disable:{console:function(){a.console(!1)},debug:function(e,t){e=e||f.modules,a.debug("Disabling debug for modules",e),a.change.setting("debug",!1,e,t)},verbose:function(e,t){e=e||f.modules,a.debug("Disabling verbose debug for modules",e),a.change.setting("verbose",!1,e,t)}},console:function(e){if(e){if(b.cache.console===i)return void a.error(g.console);a.debug("Restoring console function"),t.console=b.cache.console}else a.debug("Disabling console function"),b.cache.console=t.console,t.console={clear:function(){},error:function(){},group:function(){},groupCollapsed:function(){},groupEnd:function(){},info:function(){},log:function(){},markTimeline:function(){},warn:function(){}}},destroy:function(){a.verbose("Destroying previous site for",h),h.removeData(p)},cache:{},setting:function(t,n){if(e.isPlainObject(t))e.extend(!0,f,t);else{if(n===i)return f[t];f[t]=n}},internal:function(t,n){if(e.isPlainObject(t))e.extend(!0,a,t);else{if(n===i)return a[t];a[t]=n}},debug:function(){f.debug&&(f.performance?a.performance.log(arguments):(a.debug=Function.prototype.bind.call(console.info,console,f.name+":"),a.debug.apply(console,arguments)))},verbose:function(){f.verbose&&f.debug&&(f.performance?a.performance.log(arguments):(a.verbose=Function.prototype.bind.call(console.info,console,f.name+":"),a.verbose.apply(console,arguments)))},error:function(){a.error=Function.prototype.bind.call(console.error,console,f.name+":"),a.error.apply(console,arguments)},performance:{log:function(e){var t,n;f.performance&&(n=(t=(new Date).getTime())-(s||t),s=t,l.push({Element:v,Name:e[0],Arguments:[].slice.call(e,1)||"","Execution Time":n})),clearTimeout(a.performance.timer),a.performance.timer=setTimeout(a.performance.display,500)},display:function(){var t=f.name+":",n=0;s=!1,clearTimeout(a.performance.timer),e.each(l,function(e,t){n+=t["Execution Time"]}),t+=" "+n+"ms",(console.group!==i||console.table!==i)&&l.length>0&&(console.groupCollapsed(t),console.table?console.table(l):e.each(l,function(e,t){console.log(t.Name+": "+t["Execution Time"]+"ms")}),console.groupEnd()),l=[]}},invoke:function(t,n,o){var s,l,c,u=b;return n=n||d,o=v||o,"string"==typeof t&&u!==i&&(t=t.split(/[\. ]/),s=t.length-1,e.each(t,function(n,o){var r=n!=s?o+t[n+1].charAt(0).toUpperCase()+t[n+1].slice(1):t;if(e.isPlainObject(u[r])&&n!=s)u=u[r];else{if(u[r]!==i)return l=u[r],!1;if(!e.isPlainObject(u[o])||n==s)return u[o]!==i?(l=u[o],!1):(a.error(g.method,t),!1);u=u[o]}})),e.isFunction(l)?c=l.apply(o,n):l!==i&&(c=l),e.isArray(r)?r.push(c):r!==i?r=[r,c]:c!==i&&(r=c),l}},u?(b===i&&a.initialize(),a.invoke(c)):(b!==i&&a.destroy(),a.initialize()),r!==i?r:this},e.site.settings={name:"Site",namespace:"site",error:{console:"Console cannot be restored, most likely it was overwritten outside of module",method:"The method you called is not defined."},debug:!1,verbose:!1,performance:!0,modules:["accordion","api","checkbox","dimmer","dropdown","embed","form","modal","nag","popup","rating","shape","sidebar","state","sticky","tab","transition","visit","visibility"],siteNamespace:"site",namespaceStub:{cache:{},config:{},sections:{},section:{},utilities:{}}},e.extend(e.expr[":"],{data:e.expr.createPseudo?e.expr.createPseudo(function(t){return function(n){return!!e.data(n,t)}}):function(t,n,i){return!!e.data(t,i[3])}})}(jQuery,window,document),function(e,t,n,i){"use strict";t=void 0!==t&&t.Math==Math?t:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")(),e.fn.form=function(t){var o,a=e(this),r=a.selector||"",s=(new Date).getTime(),l=[],c=arguments[0],u=arguments[1],d="string"==typeof c,f=[].slice.call(arguments,1);return a.each(function(){var m,g,p,h,v,b,y,x,C,w,S,k,T,A,R,P,E=e(this),F=this,O=[],D=!1;(P={initialize:function(){P.get.settings(),d?(R===i&&P.instantiate(),P.invoke(c)):(R!==i&&R.invoke("destroy"),P.verbose("Initializing form validation",E,v),P.bindEvents(),P.set.defaults(),P.instantiate())},instantiate:function(){P.verbose("Storing instance of module",P),R=P,E.data(T,P)},destroy:function(){P.verbose("Destroying previous module",R),P.removeEvents(),E.removeData(T)},refresh:function(){P.verbose("Refreshing selector cache"),m=E.find(x.field),g=E.find(x.group),p=E.find(x.message),E.find(x.prompt),h=E.find(x.submit),E.find(x.clear),E.find(x.reset)},submit:function(){P.verbose("Submitting form",E),E.submit()},attachEvents:function(t,n){n=n||"submit",e(t).on("click"+A,function(e){P[n](),e.preventDefault()})},bindEvents:function(){P.verbose("Attaching form events"),E.on("submit"+A,P.validate.form).on("blur"+A,x.field,P.event.field.blur).on("click"+A,x.submit,P.submit).on("click"+A,x.reset,P.reset).on("click"+A,x.clear,P.clear),v.keyboardShortcuts&&E.on("keydown"+A,x.field,P.event.field.keydown),m.each(function(){var t=e(this),n=t.prop("type"),i=P.get.changeEvent(n,t);e(this).on(i+A,P.event.field.change)})},clear:function(){m.each(function(){var t=e(this),n=t.parent(),i=t.closest(g),o=i.find(x.prompt),a=t.data(y.defaultValue)||"",r=n.is(x.uiCheckbox),s=n.is(x.uiDropdown);i.hasClass(C.error)&&(P.verbose("Resetting error on field",i),i.removeClass(C.error),o.remove()),s?(P.verbose("Resetting dropdown value",n,a),n.dropdown("clear")):r?t.prop("checked",!1):(P.verbose("Resetting field value",t,a),t.val(""))})},reset:function(){m.each(function(){var t=e(this),n=t.parent(),o=t.closest(g),a=o.find(x.prompt),r=t.data(y.defaultValue),s=n.is(x.uiCheckbox),l=n.is(x.uiDropdown),c=o.hasClass(C.error);r!==i&&(c&&(P.verbose("Resetting error on field",o),o.removeClass(C.error),a.remove()),l?(P.verbose("Resetting dropdown value",n,r),n.dropdown("restore defaults")):s?(P.verbose("Resetting checkbox value",n,r),t.prop("checked",r)):(P.verbose("Resetting field value",t,r),t.val(r)))})},determine:{isValid:function(){var t=!0;return e.each(b,function(e,n){P.validate.field(n,e,!0)||(t=!1)}),t}},is:{bracketedRule:function(e){return e.type&&e.type.match(v.regExp.bracket)},shorthandFields:function(e){var t=e[Object.keys(e)[0]];return P.is.shorthandRules(t)},shorthandRules:function(t){return"string"==typeof t||e.isArray(t)},empty:function(e){return!e||0===e.length||(e.is('input[type="checkbox"]')?!e.is(":checked"):P.is.blank(e))},blank:function(t){return""===e.trim(t.val())},valid:function(t){var n=!0;return t?(P.verbose("Checking if field is valid",t),P.validate.field(b[t],t,!1)):(P.verbose("Checking if form is valid"),e.each(b,function(e,t){P.is.valid(e)||(n=!1)}),n)}},removeEvents:function(){E.off(A),m.off(A),h.off(A),m.off(A)},event:{field:{keydown:function(t){var n=e(this),i=t.which,o=n.is(x.input),a=n.is(x.checkbox),r=n.closest(x.uiDropdown).length>0,s=13;i==27&&(P.verbose("Escape key pressed blurring field"),n.blur()),t.ctrlKey||i!=s||!o||r||a||(D||(n.one("keyup"+A,P.event.field.keyup),P.submit(),P.debug("Enter pressed on input submitting form")),D=!0)},keyup:function(){D=!1},blur:function(t){var n=e(this),i=n.closest(g),o=P.get.validation(n);i.hasClass(C.error)?(P.debug("Revalidating field",n,o),o&&P.validate.field(o)):"blur"==v.on&&o&&P.validate.field(o)},change:function(t){var n=e(this),i=n.closest(g),o=P.get.validation(n);o&&("change"==v.on||i.hasClass(C.error)&&v.revalidate)&&(clearTimeout(P.timer),P.timer=setTimeout(function(){P.debug("Revalidating field",n,P.get.validation(n)),P.validate.field(o)},v.delay))}}},get:{ancillaryValue:function(e){return!(!e.type||!e.value&&!P.is.bracketedRule(e))&&(e.value!==i?e.value:e.type.match(v.regExp.bracket)[1]+"")},ruleName:function(e){return P.is.bracketedRule(e)?e.type.replace(e.type.match(v.regExp.bracket)[0],""):e.type},changeEvent:function(e,t){return"checkbox"==e||"radio"==e||"hidden"==e||t.is("select")?"change":P.get.inputEvent()},inputEvent:function(){return n.createElement("input").oninput!==i?"input":n.createElement("input").onpropertychange!==i?"propertychange":"keyup"},fieldsFromShorthand:function(t){var n={};return e.each(t,function(t,i){"string"==typeof i&&(i=[i]),n[t]={rules:[]},e.each(i,function(e,i){n[t].rules.push({type:i})})}),n},prompt:function(e,t){var n,i,o,a=P.get.ruleName(e),r=P.get.ancillaryValue(e),s=e.prompt||v.prompt[a]||v.text.unspecifiedRule,l=-1!==s.search("{value}"),c=-1!==s.search("{name}");return(c||l)&&(i=P.get.field(t.identifier)),l&&(s=s.replace("{value}",i.val())),c&&(o=1==(n=i.closest(x.group).find("label").eq(0)).length?n.text():i.prop("placeholder")||v.text.unspecifiedField,s=s.replace("{name}",o)),s=(s=s.replace("{identifier}",t.identifier)).replace("{ruleValue}",r),e.prompt||P.verbose("Using default validation prompt for type",s,a),s},settings:function(){if(e.isPlainObject(t)){var n=Object.keys(t);n.length>0&&(t[n[0]].identifier!==i&&t[n[0]].rules!==i)?(v=e.extend(!0,{},e.fn.form.settings,u),b=e.extend({},e.fn.form.settings.defaults,t),P.error(v.error.oldSyntax,F),P.verbose("Extending settings from legacy parameters",b,v)):(t.fields&&P.is.shorthandFields(t.fields)&&(t.fields=P.get.fieldsFromShorthand(t.fields)),v=e.extend(!0,{},e.fn.form.settings,t),b=e.extend({},e.fn.form.settings.defaults,v.fields),P.verbose("Extending settings",b,v))}else v=e.fn.form.settings,b=e.fn.form.settings.defaults,P.verbose("Using default form validation",b,v);k=v.namespace,y=v.metadata,x=v.selector,C=v.className,w=v.regExp,S=v.error,T="module-"+k,A="."+k,R=E.data(T),P.refresh()},field:function(t){return P.verbose("Finding field with identifier",t),t=P.escape.string(t),m.filter("#"+t).length>0?m.filter("#"+t):m.filter('[name="'+t+'"]').length>0?m.filter('[name="'+t+'"]'):m.filter('[name="'+t+'[]"]').length>0?m.filter('[name="'+t+'[]"]'):m.filter("[data-"+y.validate+'="'+t+'"]').length>0?m.filter("[data-"+y.validate+'="'+t+'"]'):e("<input/>")},fields:function(t){var n=e();return e.each(t,function(e,t){n=n.add(P.get.field(t))}),n},validation:function(t){var n,i;return!!b&&(e.each(b,function(e,o){i=o.identifier||e,P.get.field(i)[0]==t[0]&&(o.identifier=i,n=o)}),n||!1)},value:function(e){var t=[];return t.push(e),P.get.values.call(F,t)[e]},values:function(t){var n=e.isArray(t)?P.get.fields(t):m,o={};return n.each(function(t,n){var a=e(n),r=(a.prop("type"),a.prop("name")),s=a.val(),l=a.is(x.checkbox),c=a.is(x.radio),u=-1!==r.indexOf("[]"),d=!!l&&a.is(":checked");r&&(u?(r=r.replace("[]",""),o[r]||(o[r]=[]),l?d?o[r].push(s||!0):o[r].push(!1):o[r].push(s)):c?o[r]!==i&&0!=o[r]||(o[r]=!!d&&(s||!0)):o[r]=l?!!d&&(s||!0):s)}),o}},has:{field:function(e){return P.verbose("Checking for existence of a field with identifier",e),"string"!=typeof(e=P.escape.string(e))&&P.error(S.identifier,e),m.filter("#"+e).length>0||(m.filter('[name="'+e+'"]').length>0||m.filter("[data-"+y.validate+'="'+e+'"]').length>0)}},escape:{string:function(e){return(e=String(e)).replace(w.escape,"\\$&")}},add:{rule:function(e,t){P.add.field(e,t)},field:function(t,n){var i={};P.is.shorthandRules(n)?(n=e.isArray(n)?n:[n],i[t]={rules:[]},e.each(n,function(e,n){i[t].rules.push({type:n})})):i[t]=n,b=e.extend({},b,i),P.debug("Adding rules",i,b)},fields:function(t){var n;n=t&&P.is.shorthandFields(t)?P.get.fieldsFromShorthand(t):t,b=e.extend({},b,n)},prompt:function(t,n){var o=P.get.field(t).closest(g),a=o.children(x.prompt),r=0!==a.length;n="string"==typeof n?[n]:n,P.verbose("Adding field error state",t),o.addClass(C.error),v.inline&&(r||(a=v.templates.prompt(n)).appendTo(o),a.html(n[0]),r?P.verbose("Inline errors are disabled, no inline error added",t):v.transition&&e.fn.transition!==i&&E.transition("is supported")?(P.verbose("Displaying error with css transition",v.transition),a.transition(v.transition+" in",v.duration)):(P.verbose("Displaying error with fallback javascript animation"),a.fadeIn(v.duration)))},errors:function(e){P.debug("Adding form error messages",e),P.set.error(),p.html(v.templates.error(e))}},remove:{rule:function(t,n){var o=e.isArray(n)?n:[n];if(n==i)return P.debug("Removed all rules"),void(b[t].rules=[]);b[t]!=i&&e.isArray(b[t].rules)&&e.each(b[t].rules,function(e,n){-1!==o.indexOf(n.type)&&(P.debug("Removed rule",n.type),b[t].rules.splice(e,1))})},field:function(t){var n=e.isArray(t)?t:[t];e.each(n,function(e,t){P.remove.rule(t)})},rules:function(t,n){e.isArray(t)?e.each(fields,function(e,t){P.remove.rule(t,n)}):P.remove.rule(t,n)},fields:function(e){P.remove.field(e)},prompt:function(t){var n=P.get.field(t).closest(g),o=n.children(x.prompt);n.removeClass(C.error),v.inline&&o.is(":visible")&&(P.verbose("Removing prompt for field",t),v.transition&&e.fn.transition!==i&&E.transition("is supported")?o.transition(v.transition+" out",v.duration,function(){o.remove()}):o.fadeOut(v.duration,function(){o.remove()}))}},set:{success:function(){E.removeClass(C.error).addClass(C.success)},defaults:function(){m.each(function(){var t=e(this),n=t.filter(x.checkbox).length>0?t.is(":checked"):t.val();t.data(y.defaultValue,n)})},error:function(){E.removeClass(C.success).addClass(C.error)},value:function(e,t){var n={};return n[e]=t,P.set.values.call(F,n)},values:function(t){e.isEmptyObject(t)||e.each(t,function(t,n){var i,o=P.get.field(t),a=o.parent(),r=e.isArray(n),s=a.is(x.uiCheckbox),l=a.is(x.uiDropdown),c=o.is(x.radio)&&s;o.length>0&&(r&&s?(P.verbose("Selecting multiple",n,o),a.checkbox("uncheck"),e.each(n,function(e,t){i=o.filter('[value="'+t+'"]'),a=i.parent(),i.length>0&&a.checkbox("check")})):c?(P.verbose("Selecting radio value",n,o),o.filter('[value="'+n+'"]').parent(x.uiCheckbox).checkbox("check")):s?(P.verbose("Setting checkbox value",n,a),!0===n?a.checkbox("check"):a.checkbox("uncheck")):l?(P.verbose("Setting dropdown value",n,a),a.dropdown("set selected",n)):(P.verbose("Setting field value",n,o),o.val(n)))})}},validate:{form:function(e,t){var n=P.get.values();if(D)return!1;if(O=[],P.determine.isValid()){if(P.debug("Form has no validation errors, submitting"),P.set.success(),!0!==t)return v.onSuccess.call(F,e,n)}else if(P.debug("Form has errors"),P.set.error(),v.inline||P.add.errors(O),E.data("moduleApi")!==i&&e.stopImmediatePropagation(),!0!==t)return v.onFailure.call(F,O,n)},field:function(t,n,o){o=o===i||o,"string"==typeof t&&(P.verbose("Validating field",t),n=t,t=b[t]);var a=t.identifier||n,r=P.get.field(a),s=!!t.depends&&P.get.field(t.depends),l=!0,c=[];return t.identifier||(P.debug("Using field name as identifier",a),t.identifier=a),r.prop("disabled")?(P.debug("Field is disabled. Skipping",a),l=!0):t.optional&&P.is.blank(r)?(P.debug("Field is optional and blank. Skipping",a),l=!0):t.depends&&P.is.empty(s)?(P.debug("Field depends on another value that is not present or empty. Skipping",s),l=!0):t.rules!==i&&e.each(t.rules,function(e,n){P.has.field(a)&&!P.validate.rule(t,n)&&(P.debug("Field is invalid",a,n.type),c.push(P.get.prompt(n,t)),l=!1)}),l?(o&&(P.remove.prompt(a,c),v.onValid.call(r)),!0):(o&&(O=O.concat(c),P.add.prompt(a,c),v.onInvalid.call(r,c)),!1)},rule:function(t,n){var o=P.get.field(t.identifier),a=(n.type,o.val()),r=P.get.ancillaryValue(n),s=P.get.ruleName(n),l=v.rules[s];if(e.isFunction(l))return a=a===i||""===a||null===a?"":e.trim(a+""),l.call(o,a,r);P.error(S.noRule,s)}},setting:function(t,n){if(e.isPlainObject(t))e.extend(!0,v,t);else{if(n===i)return v[t];v[t]=n}},internal:function(t,n){if(e.isPlainObject(t))e.extend(!0,P,t);else{if(n===i)return P[t];P[t]=n}},debug:function(){!v.silent&&v.debug&&(v.performance?P.performance.log(arguments):(P.debug=Function.prototype.bind.call(console.info,console,v.name+":"),P.debug.apply(console,arguments)))},verbose:function(){!v.silent&&v.verbose&&v.debug&&(v.performance?P.performance.log(arguments):(P.verbose=Function.prototype.bind.call(console.info,console,v.name+":"),P.verbose.apply(console,arguments)))},error:function(){v.silent||(P.error=Function.prototype.bind.call(console.error,console,v.name+":"),P.error.apply(console,arguments))},performance:{log:function(e){var t,n;v.performance&&(n=(t=(new Date).getTime())-(s||t),s=t,l.push({Name:e[0],Arguments:[].slice.call(e,1)||"",Element:F,"Execution Time":n})),clearTimeout(P.performance.timer),P.performance.timer=setTimeout(P.performance.display,500)},display:function(){var t=v.name+":",n=0;s=!1,clearTimeout(P.performance.timer),e.each(l,function(e,t){n+=t["Execution Time"]}),t+=" "+n+"ms",r&&(t+=" '"+r+"'"),a.length>1&&(t+=" ("+a.length+")"),(console.group!==i||console.table!==i)&&l.length>0&&(console.groupCollapsed(t),console.table?console.table(l):e.each(l,function(e,t){console.log(t.Name+": "+t["Execution Time"]+"ms")}),console.groupEnd()),l=[]}},invoke:function(t,n,a){var r,s,l,c=R;return n=n||f,a=F||a,"string"==typeof t&&c!==i&&(t=t.split(/[\. ]/),r=t.length-1,e.each(t,function(n,o){var a=n!=r?o+t[n+1].charAt(0).toUpperCase()+t[n+1].slice(1):t;if(e.isPlainObject(c[a])&&n!=r)c=c[a];else{if(c[a]!==i)return s=c[a],!1;if(!e.isPlainObject(c[o])||n==r)return c[o]!==i&&(s=c[o],!1);c=c[o]}})),e.isFunction(s)?l=s.apply(a,n):s!==i&&(l=s),e.isArray(o)?o.push(l):o!==i?o=[o,l]:l!==i&&(o=l),s}}).initialize()}),o!==i?o:this},e.fn.form.settings={name:"Form",namespace:"form",debug:!1,verbose:!1,performance:!0,fields:!1,keyboardShortcuts:!0,on:"submit",inline:!1,delay:200,revalidate:!0,transition:"scale",duration:200,onValid:function(){},onInvalid:function(){},onSuccess:function(){return!0},onFailure:function(){return!1},metadata:{defaultValue:"default",validate:"validate"},regExp:{htmlID:/^[a-zA-Z][\w:.-]*$/g,bracket:/\[(.*)\]/i,decimal:/^\d+\.?\d*$/,email:/^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i,escape:/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g,flags:/^\/(.*)\/(.*)?/,integer:/^\-?\d+$/,number:/^\-?\d*(\.\d+)?$/,url:/(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/i},text:{unspecifiedRule:"Please enter a valid value",unspecifiedField:"This field"},prompt:{empty:"{name} must have a value",checked:"{name} must be checked",email:"{name} must be a valid e-mail",url:"{name} must be a valid url",regExp:"{name} is not formatted correctly",integer:"{name} must be an integer",decimal:"{name} must be a decimal number",number:"{name} must be set to a number",is:'{name} must be "{ruleValue}"',isExactly:'{name} must be exactly "{ruleValue}"',not:'{name} cannot be set to "{ruleValue}"',notExactly:'{name} cannot be set to exactly "{ruleValue}"',contain:'{name} must contain "{ruleValue}"',containExactly:'{name} must contain exactly "{ruleValue}"',doesntContain:'{name} cannot contain  "{ruleValue}"',doesntContainExactly:'{name} cannot contain exactly "{ruleValue}"',minLength:"{name} must be at least {ruleValue} characters",length:"{name} must be at least {ruleValue} characters",exactLength:"{name} must be exactly {ruleValue} characters",maxLength:"{name} cannot be longer than {ruleValue} characters",match:"{name} must match {ruleValue} field",different:"{name} must have a different value than {ruleValue} field",creditCard:"{name} must be a valid credit card number",minCount:"{name} must have at least {ruleValue} choices",exactCount:"{name} must have exactly {ruleValue} choices",maxCount:"{name} must have {ruleValue} or less choices"},selector:{checkbox:'input[type="checkbox"], input[type="radio"]',clear:".clear",field:"input, textarea, select",group:".field",input:"input",message:".error.message",prompt:".prompt.label",radio:'input[type="radio"]',reset:'.reset:not([type="reset"])',submit:'.submit:not([type="submit"])',uiCheckbox:".ui.checkbox",uiDropdown:".ui.dropdown"},className:{error:"error",label:"ui prompt label",pressed:"down",success:"success"},error:{identifier:"You must specify a string identifier for each field",method:"The method you called is not defined.",noRule:"There is no rule matching the one you specified",oldSyntax:"Starting in 2.0 forms now only take a single settings object. Validation settings converted to new syntax automatically."},templates:{error:function(t){var n='<ul class="list">';return e.each(t,function(e,t){n+="<li>"+t+"</li>"}),e(n+="</ul>")},prompt:function(t){return e("<div/>").addClass("ui basic red pointing prompt label").html(t[0])}},rules:{empty:function(t){return!(t===i||""===t||e.isArray(t)&&0===t.length)},checked:function(){return e(this).filter(":checked").length>0},email:function(t){return e.fn.form.settings.regExp.email.test(t)},url:function(t){return e.fn.form.settings.regExp.url.test(t)},regExp:function(t,n){if(n instanceof RegExp)return t.match(n);var i,o=n.match(e.fn.form.settings.regExp.flags);return o&&(n=o.length>=2?o[1]:n,i=o.length>=3?o[2]:""),t.match(new RegExp(n,i))},integer:function(t,n){var o,a,r,s=e.fn.form.settings.regExp.integer;return n&&-1===["",".."].indexOf(n)&&(-1==n.indexOf("..")?s.test(n)&&(o=a=n-0):(r=n.split("..",2),s.test(r[0])&&(o=r[0]-0),s.test(r[1])&&(a=r[1]-0))),s.test(t)&&(o===i||t>=o)&&(a===i||t<=a)},decimal:function(t){return e.fn.form.settings.regExp.decimal.test(t)},number:function(t){return e.fn.form.settings.regExp.number.test(t)},is:function(e,t){return t="string"==typeof t?t.toLowerCase():t,(e="string"==typeof e?e.toLowerCase():e)==t},isExactly:function(e,t){return e==t},not:function(e,t){return(e="string"==typeof e?e.toLowerCase():e)!=(t="string"==typeof t?t.toLowerCase():t)},notExactly:function(e,t){return e!=t},contains:function(t,n){return n=n.replace(e.fn.form.settings.regExp.escape,"\\$&"),-1!==t.search(new RegExp(n,"i"))},containsExactly:function(t,n){return n=n.replace(e.fn.form.settings.regExp.escape,"\\$&"),-1!==t.search(new RegExp(n))},doesntContain:function(t,n){return n=n.replace(e.fn.form.settings.regExp.escape,"\\$&"),-1===t.search(new RegExp(n,"i"))},doesntContainExactly:function(t,n){return n=n.replace(e.fn.form.settings.regExp.escape,"\\$&"),-1===t.search(new RegExp(n))},minLength:function(e,t){return e!==i&&e.length>=t},length:function(e,t){return e!==i&&e.length>=t},exactLength:function(e,t){return e!==i&&e.length==t},maxLength:function(e,t){return e!==i&&e.length<=t},match:function(t,n){var o;e(this);return e('[data-validate="'+n+'"]').length>0?o=e('[data-validate="'+n+'"]').val():e("#"+n).length>0?o=e("#"+n).val():e('[name="'+n+'"]').length>0?o=e('[name="'+n+'"]').val():e('[name="'+n+'[]"]').length>0&&(o=e('[name="'+n+'[]"]')),o!==i&&t.toString()==o.toString()},different:function(t,n){var o;e(this);return e('[data-validate="'+n+'"]').length>0?o=e('[data-validate="'+n+'"]').val():e("#"+n).length>0?o=e("#"+n).val():e('[name="'+n+'"]').length>0?o=e('[name="'+n+'"]').val():e('[name="'+n+'[]"]').length>0&&(o=e('[name="'+n+'[]"]')),o!==i&&t.toString()!==o.toString()},creditCard:function(t,n){var i,o,a={visa:{pattern:/^4/,length:[16]},amex:{pattern:/^3[47]/,length:[15]},mastercard:{pattern:/^5[1-5]/,length:[16]},discover:{pattern:/^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]|64[4-9])|65)/,length:[16]},unionPay:{pattern:/^(62|88)/,length:[16,17,18,19]},jcb:{pattern:/^35(2[89]|[3-8][0-9])/,length:[16]},maestro:{pattern:/^(5018|5020|5038|6304|6759|676[1-3])/,length:[12,13,14,15,16,17,18,19]},dinersClub:{pattern:/^(30[0-5]|^36)/,length:[14]},laser:{pattern:/^(6304|670[69]|6771)/,length:[16,17,18,19]},visaElectron:{pattern:/^(4026|417500|4508|4844|491(3|7))/,length:[16]}},r={},s=!1,l="string"==typeof n&&n.split(",");if("string"==typeof t&&0!==t.length){if(t=t.replace(/[\-]/g,""),l&&(e.each(l,function(n,i){(o=a[i])&&(r={length:-1!==e.inArray(t.length,o.length),pattern:-1!==t.search(o.pattern)}).length&&r.pattern&&(s=!0)}),!s))return!1;if((i={number:-1!==e.inArray(t.length,a.unionPay.length),pattern:-1!==t.search(a.unionPay.pattern)}).number&&i.pattern)return!0;for(var c=t.length,u=0,d=[[0,1,2,3,4,5,6,7,8,9],[0,2,4,6,8,1,3,5,7,9]],f=0;c--;)f+=d[u][parseInt(t.charAt(c),10)],u^=1;return f%10==0&&f>0}},minCount:function(e,t){return 0==t||(1==t?""!==e:e.split(",").length>=t)},exactCount:function(e,t){return 0==t?""===e:1==t?""!==e&&-1===e.search(","):e.split(",").length==t},maxCount:function(e,t){return 0!=t&&(1==t?-1===e.search(","):e.split(",").length<=t)}}}}(jQuery,window,document),function(e,t,n,i){"use strict";t=void 0!==t&&t.Math==Math?t:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")(),e.fn.accordion=function(n){var o,a=e(this),r=(new Date).getTime(),s=[],l=arguments[0],c="string"==typeof l,u=[].slice.call(arguments,1);t.requestAnimationFrame||t.mozRequestAnimationFrame||t.webkitRequestAnimationFrame||t.msRequestAnimationFrame;return a.each(function(){var d,f,m=e.isPlainObject(n)?e.extend(!0,{},e.fn.accordion.settings,n):e.extend({},e.fn.accordion.settings),g=m.className,p=m.namespace,h=m.selector,v=m.error,b="."+p,y="module-"+p,x=a.selector||"",C=e(this),w=C.find(h.title),S=C.find(h.content),k=this,T=C.data(y);f={initialize:function(){f.debug("Initializing",C),f.bind.events(),m.observeChanges&&f.observeChanges(),f.instantiate()},instantiate:function(){T=f,C.data(y,f)},destroy:function(){f.debug("Destroying previous instance",C),C.off(b).removeData(y)},refresh:function(){w=C.find(h.title),S=C.find(h.content)},observeChanges:function(){"MutationObserver"in t&&((d=new MutationObserver(function(e){f.debug("DOM tree modified, updating selector cache"),f.refresh()})).observe(k,{childList:!0,subtree:!0}),f.debug("Setting up mutation observer",d))},bind:{events:function(){f.debug("Binding delegated events"),C.on(m.on+b,h.trigger,f.event.click)}},event:{click:function(){f.toggle.call(this)}},toggle:function(t){var n=t!==i?"number"==typeof t?w.eq(t):e(t).closest(h.title):e(this).closest(h.title),o=n.next(S),a=o.hasClass(g.animating),r=o.hasClass(g.active),s=r&&!a,l=!r&&a;f.debug("Toggling visibility of content",n),s||l?m.collapsible?f.close.call(n):f.debug("Cannot close accordion content collapsing is disabled"):f.open.call(n)},open:function(t){var n=t!==i?"number"==typeof t?w.eq(t):e(t).closest(h.title):e(this).closest(h.title),o=n.next(S),a=o.hasClass(g.animating);o.hasClass(g.active)||a?f.debug("Accordion already open, skipping",o):(f.debug("Opening accordion content",n),m.onOpening.call(o),m.onChanging.call(o),m.exclusive&&f.closeOthers.call(n),n.addClass(g.active),o.stop(!0,!0).addClass(g.animating),m.animateChildren&&(e.fn.transition!==i&&C.transition("is supported")?o.children().transition({animation:"fade in",queue:!1,useFailSafe:!0,debug:m.debug,verbose:m.verbose,duration:m.duration}):o.children().stop(!0,!0).animate({opacity:1},m.duration,f.resetOpacity)),o.slideDown(m.duration,m.easing,function(){o.removeClass(g.animating).addClass(g.active),f.reset.display.call(this),m.onOpen.call(this),m.onChange.call(this)}))},close:function(t){var n=t!==i?"number"==typeof t?w.eq(t):e(t).closest(h.title):e(this).closest(h.title),o=n.next(S),a=o.hasClass(g.animating),r=o.hasClass(g.active);!r&&!(!r&&a)||r&&a||(f.debug("Closing accordion content",o),m.onClosing.call(o),m.onChanging.call(o),n.removeClass(g.active),o.stop(!0,!0).addClass(g.animating),m.animateChildren&&(e.fn.transition!==i&&C.transition("is supported")?o.children().transition({animation:"fade out",queue:!1,useFailSafe:!0,debug:m.debug,verbose:m.verbose,duration:m.duration}):o.children().stop(!0,!0).animate({opacity:0},m.duration,f.resetOpacity)),o.slideUp(m.duration,m.easing,function(){o.removeClass(g.animating).removeClass(g.active),f.reset.display.call(this),m.onClose.call(this),m.onChange.call(this)}))},closeOthers:function(t){var n,o,a,r=t!==i?w.eq(t):e(this).closest(h.title),s=r.parents(h.content).prev(h.title),l=r.closest(h.accordion),c=h.title+"."+g.active+":visible",u=h.content+"."+g.active+":visible";m.closeNested?a=(n=l.find(c).not(s)).next(S):(n=l.find(c).not(s),o=l.find(u).find(c).not(s),a=(n=n.not(o)).next(S)),n.length>0&&(f.debug("Exclusive enabled, closing other content",n),n.removeClass(g.active),a.removeClass(g.animating).stop(!0,!0),m.animateChildren&&(e.fn.transition!==i&&C.transition("is supported")?a.children().transition({animation:"fade out",useFailSafe:!0,debug:m.debug,verbose:m.verbose,duration:m.duration}):a.children().stop(!0,!0).animate({opacity:0},m.duration,f.resetOpacity)),a.slideUp(m.duration,m.easing,function(){e(this).removeClass(g.active),f.reset.display.call(this)}))},reset:{display:function(){f.verbose("Removing inline display from element",this),e(this).css("display",""),""===e(this).attr("style")&&e(this).attr("style","").removeAttr("style")},opacity:function(){f.verbose("Removing inline opacity from element",this),e(this).css("opacity",""),""===e(this).attr("style")&&e(this).attr("style","").removeAttr("style")}},setting:function(t,n){if(f.debug("Changing setting",t,n),e.isPlainObject(t))e.extend(!0,m,t);else{if(n===i)return m[t];e.isPlainObject(m[t])?e.extend(!0,m[t],n):m[t]=n}},internal:function(t,n){if(f.debug("Changing internal",t,n),n===i)return f[t];e.isPlainObject(t)?e.extend(!0,f,t):f[t]=n},debug:function(){!m.silent&&m.debug&&(m.performance?f.performance.log(arguments):(f.debug=Function.prototype.bind.call(console.info,console,m.name+":"),f.debug.apply(console,arguments)))},verbose:function(){!m.silent&&m.verbose&&m.debug&&(m.performance?f.performance.log(arguments):(f.verbose=Function.prototype.bind.call(console.info,console,m.name+":"),f.verbose.apply(console,arguments)))},error:function(){m.silent||(f.error=Function.prototype.bind.call(console.error,console,m.name+":"),f.error.apply(console,arguments))},performance:{log:function(e){var t,n;m.performance&&(n=(t=(new Date).getTime())-(r||t),r=t,s.push({Name:e[0],Arguments:[].slice.call(e,1)||"",Element:k,"Execution Time":n})),clearTimeout(f.performance.timer),f.performance.timer=setTimeout(f.performance.display,500)},display:function(){var t=m.name+":",n=0;r=!1,clearTimeout(f.performance.timer),e.each(s,function(e,t){n+=t["Execution Time"]}),t+=" "+n+"ms",x&&(t+=" '"+x+"'"),(console.group!==i||console.table!==i)&&s.length>0&&(console.groupCollapsed(t),console.table?console.table(s):e.each(s,function(e,t){console.log(t.Name+": "+t["Execution Time"]+"ms")}),console.groupEnd()),s=[]}},invoke:function(t,n,a){var r,s,l,c=T;return n=n||u,a=k||a,"string"==typeof t&&c!==i&&(t=t.split(/[\. ]/),r=t.length-1,e.each(t,function(n,o){var a=n!=r?o+t[n+1].charAt(0).toUpperCase()+t[n+1].slice(1):t;if(e.isPlainObject(c[a])&&n!=r)c=c[a];else{if(c[a]!==i)return s=c[a],!1;if(!e.isPlainObject(c[o])||n==r)return c[o]!==i?(s=c[o],!1):(f.error(v.method,t),!1);c=c[o]}})),e.isFunction(s)?l=s.apply(a,n):s!==i&&(l=s),e.isArray(o)?o.push(l):o!==i?o=[o,l]:l!==i&&(o=l),s}},c?(T===i&&f.initialize(),f.invoke(l)):(T!==i&&T.invoke("destroy"),f.initialize())}),o!==i?o:this},e.fn.accordion.settings={name:"Accordion",namespace:"accordion",silent:!1,debug:!1,verbose:!1,performance:!0,on:"click",observeChanges:!0,exclusive:!0,collapsible:!0,closeNested:!1,animateChildren:!0,duration:350,easing:"easeOutQuad",onOpening:function(){},onClosing:function(){},onChanging:function(){},onOpen:function(){},onClose:function(){},onChange:function(){},error:{method:"The method you called is not defined"},className:{active:"active",animating:"animating"},selector:{accordion:".accordion",title:".title",trigger:".title",content:".content"}},e.extend(e.easing,{easeOutQuad:function(e,t,n,i,o){return-i*(t/=o)*(t-2)+n}})}(jQuery,window,document),function(e,t,n,i){"use strict";t=void 0!==t&&t.Math==Math?t:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")(),e.fn.checkbox=function(o){var a,r=e(this),s=r.selector||"",l=(new Date).getTime(),c=[],u=arguments[0],d="string"==typeof u,f=[].slice.call(arguments,1);return r.each(function(){var r,m,g=e.extend(!0,{},e.fn.checkbox.settings,o),p=g.className,h=g.namespace,v=g.selector,b=g.error,y="."+h,x="module-"+h,C=e(this),w=e(this).children(v.label),S=e(this).children(v.input),k=S[0],T=!1,A=!1,R=C.data(x),P=this;m={initialize:function(){m.verbose("Initializing checkbox",g),m.create.label(),m.bind.events(),m.set.tabbable(),m.hide.input(),m.observeChanges(),m.instantiate(),m.setup()},instantiate:function(){m.verbose("Storing instance of module",m),R=m,C.data(x,m)},destroy:function(){m.verbose("Destroying module"),m.unbind.events(),m.show.input(),C.removeData(x)},fix:{reference:function(){C.is(v.input)&&(m.debug("Behavior called on <input> adjusting invoked element"),C=C.closest(v.checkbox),m.refresh())}},setup:function(){m.set.initialLoad(),m.is.indeterminate()?(m.debug("Initial value is indeterminate"),m.indeterminate()):m.is.checked()?(m.debug("Initial value is checked"),m.check()):(m.debug("Initial value is unchecked"),m.uncheck()),m.remove.initialLoad()},refresh:function(){w=C.children(v.label),S=C.children(v.input),k=S[0]},hide:{input:function(){m.verbose("Modifying <input> z-index to be unselectable"),S.addClass(p.hidden)}},show:{input:function(){m.verbose("Modifying <input> z-index to be selectable"),S.removeClass(p.hidden)}},observeChanges:function(){"MutationObserver"in t&&((r=new MutationObserver(function(e){m.debug("DOM tree modified, updating selector cache"),m.refresh()})).observe(P,{childList:!0,subtree:!0}),m.debug("Setting up mutation observer",r))},attachEvents:function(t,n){var i=e(t);n=e.isFunction(m[n])?m[n]:m.toggle,i.length>0?(m.debug("Attaching checkbox events to element",t,n),i.on("click"+y,n)):m.error(b.notFound)},event:{click:function(t){var n=e(t.target);n.is(v.input)?m.verbose("Using default check action on initialized checkbox"):n.is(v.link)?m.debug("Clicking link inside checkbox, skipping toggle"):(m.toggle(),S.focus(),t.preventDefault())},keydown:function(e){var t=e.which,n=13,i=32;t==27?(m.verbose("Escape key pressed blurring field"),S.blur(),A=!0):e.ctrlKey||t!=i&&t!=n?A=!1:(m.verbose("Enter/space key pressed, toggling checkbox"),m.toggle(),A=!0)},keyup:function(e){A&&e.preventDefault()}},check:function(){m.should.allowCheck()&&(m.debug("Checking checkbox",S),m.set.checked(),m.should.ignoreCallbacks()||(g.onChecked.call(k),g.onChange.call(k)))},uncheck:function(){m.should.allowUncheck()&&(m.debug("Unchecking checkbox"),m.set.unchecked(),m.should.ignoreCallbacks()||(g.onUnchecked.call(k),g.onChange.call(k)))},indeterminate:function(){m.should.allowIndeterminate()?m.debug("Checkbox is already indeterminate"):(m.debug("Making checkbox indeterminate"),m.set.indeterminate(),m.should.ignoreCallbacks()||(g.onIndeterminate.call(k),g.onChange.call(k)))},determinate:function(){m.should.allowDeterminate()?m.debug("Checkbox is already determinate"):(m.debug("Making checkbox determinate"),m.set.determinate(),m.should.ignoreCallbacks()||(g.onDeterminate.call(k),g.onChange.call(k)))},enable:function(){m.is.enabled()?m.debug("Checkbox is already enabled"):(m.debug("Enabling checkbox"),m.set.enabled(),g.onEnable.call(k),g.onEnabled.call(k))},disable:function(){m.is.disabled()?m.debug("Checkbox is already disabled"):(m.debug("Disabling checkbox"),m.set.disabled(),g.onDisable.call(k),g.onDisabled.call(k))},get:{radios:function(){var t=m.get.name();return e('input[name="'+t+'"]').closest(v.checkbox)},otherRadios:function(){return m.get.radios().not(C)},name:function(){return S.attr("name")}},is:{initialLoad:function(){return T},radio:function(){return S.hasClass(p.radio)||"radio"==S.attr("type")},indeterminate:function(){return S.prop("indeterminate")!==i&&S.prop("indeterminate")},checked:function(){return S.prop("checked")!==i&&S.prop("checked")},disabled:function(){return S.prop("disabled")!==i&&S.prop("disabled")},enabled:function(){return!m.is.disabled()},determinate:function(){return!m.is.indeterminate()},unchecked:function(){return!m.is.checked()}},should:{allowCheck:function(){return m.is.determinate()&&m.is.checked()&&!m.should.forceCallbacks()?(m.debug("Should not allow check, checkbox is already checked"),!1):!1!==g.beforeChecked.apply(k)||(m.debug("Should not allow check, beforeChecked cancelled"),!1)},allowUncheck:function(){return m.is.determinate()&&m.is.unchecked()&&!m.should.forceCallbacks()?(m.debug("Should not allow uncheck, checkbox is already unchecked"),!1):!1!==g.beforeUnchecked.apply(k)||(m.debug("Should not allow uncheck, beforeUnchecked cancelled"),!1)},allowIndeterminate:function(){return m.is.indeterminate()&&!m.should.forceCallbacks()?(m.debug("Should not allow indeterminate, checkbox is already indeterminate"),!1):!1!==g.beforeIndeterminate.apply(k)||(m.debug("Should not allow indeterminate, beforeIndeterminate cancelled"),!1)},allowDeterminate:function(){return m.is.determinate()&&!m.should.forceCallbacks()?(m.debug("Should not allow determinate, checkbox is already determinate"),!1):!1!==g.beforeDeterminate.apply(k)||(m.debug("Should not allow determinate, beforeDeterminate cancelled"),!1)},forceCallbacks:function(){return m.is.initialLoad()&&g.fireOnInit},ignoreCallbacks:function(){return T&&!g.fireOnInit}},can:{change:function(){return!(C.hasClass(p.disabled)||C.hasClass(p.readOnly)||S.prop("disabled")||S.prop("readonly"))},uncheck:function(){return"boolean"==typeof g.uncheckable?g.uncheckable:!m.is.radio()}},set:{initialLoad:function(){T=!0},checked:function(){m.verbose("Setting class to checked"),C.removeClass(p.indeterminate).addClass(p.checked),m.is.radio()&&m.uncheckOthers(),m.is.indeterminate()||!m.is.checked()?(m.verbose("Setting state to checked",k),S.prop("indeterminate",!1).prop("checked",!0),m.trigger.change()):m.debug("Input is already checked, skipping input property change")},unchecked:function(){m.verbose("Removing checked class"),C.removeClass(p.indeterminate).removeClass(p.checked),m.is.indeterminate()||!m.is.unchecked()?(m.debug("Setting state to unchecked"),S.prop("indeterminate",!1).prop("checked",!1),m.trigger.change()):m.debug("Input is already unchecked")},indeterminate:function(){m.verbose("Setting class to indeterminate"),C.addClass(p.indeterminate),m.is.indeterminate()?m.debug("Input is already indeterminate, skipping input property change"):(m.debug("Setting state to indeterminate"),S.prop("indeterminate",!0),m.trigger.change())},determinate:function(){m.verbose("Removing indeterminate class"),C.removeClass(p.indeterminate),m.is.determinate()?m.debug("Input is already determinate, skipping input property change"):(m.debug("Setting state to determinate"),S.prop("indeterminate",!1))},disabled:function(){m.verbose("Setting class to disabled"),C.addClass(p.disabled),m.is.disabled()?m.debug("Input is already disabled, skipping input property change"):(m.debug("Setting state to disabled"),S.prop("disabled","disabled"),m.trigger.change())},enabled:function(){m.verbose("Removing disabled class"),C.removeClass(p.disabled),m.is.enabled()?m.debug("Input is already enabled, skipping input property change"):(m.debug("Setting state to enabled"),S.prop("disabled",!1),m.trigger.change())},tabbable:function(){m.verbose("Adding tabindex to checkbox"),S.attr("tabindex")===i&&S.attr("tabindex",0)}},remove:{initialLoad:function(){T=!1}},trigger:{change:function(){var e=n.createEvent("HTMLEvents"),t=S[0];t&&(m.verbose("Triggering native change event"),e.initEvent("change",!0,!1),t.dispatchEvent(e))}},create:{label:function(){S.prevAll(v.label).length>0?(S.prev(v.label).detach().insertAfter(S),m.debug("Moving existing label",w)):m.has.label()||(w=e("<label>").insertAfter(S),m.debug("Creating label",w))}},has:{label:function(){return w.length>0}},bind:{events:function(){m.verbose("Attaching checkbox events"),C.on("click"+y,m.event.click).on("keydown"+y,v.input,m.event.keydown).on("keyup"+y,v.input,m.event.keyup)}},unbind:{events:function(){m.debug("Removing events"),C.off(y)}},uncheckOthers:function(){var e=m.get.otherRadios();m.debug("Unchecking other radios",e),e.removeClass(p.checked)},toggle:function(){m.can.change()?m.is.indeterminate()||m.is.unchecked()?(m.debug("Currently unchecked"),m.check()):m.is.checked()&&m.can.uncheck()&&(m.debug("Currently checked"),m.uncheck()):m.is.radio()||m.debug("Checkbox is read-only or disabled, ignoring toggle")},setting:function(t,n){if(m.debug("Changing setting",t,n),e.isPlainObject(t))e.extend(!0,g,t);else{if(n===i)return g[t];e.isPlainObject(g[t])?e.extend(!0,g[t],n):g[t]=n}},internal:function(t,n){if(e.isPlainObject(t))e.extend(!0,m,t);else{if(n===i)return m[t];m[t]=n}},debug:function(){!g.silent&&g.debug&&(g.performance?m.performance.log(arguments):(m.debug=Function.prototype.bind.call(console.info,console,g.name+":"),m.debug.apply(console,arguments)))},verbose:function(){!g.silent&&g.verbose&&g.debug&&(g.performance?m.performance.log(arguments):(m.verbose=Function.prototype.bind.call(console.info,console,g.name+":"),m.verbose.apply(console,arguments)))},error:function(){g.silent||(m.error=Function.prototype.bind.call(console.error,console,g.name+":"),m.error.apply(console,arguments))},performance:{log:function(e){var t,n;g.performance&&(n=(t=(new Date).getTime())-(l||t),l=t,c.push({Name:e[0],Arguments:[].slice.call(e,1)||"",Element:P,"Execution Time":n})),clearTimeout(m.performance.timer),m.performance.timer=setTimeout(m.performance.display,500)},display:function(){var t=g.name+":",n=0;l=!1,clearTimeout(m.performance.timer),e.each(c,function(e,t){n+=t["Execution Time"]}),t+=" "+n+"ms",s&&(t+=" '"+s+"'"),(console.group!==i||console.table!==i)&&c.length>0&&(console.groupCollapsed(t),console.table?console.table(c):e.each(c,function(e,t){console.log(t.Name+": "+t["Execution Time"]+"ms")}),console.groupEnd()),c=[]}},invoke:function(t,n,o){var r,s,l,c=R;return n=n||f,o=P||o,"string"==typeof t&&c!==i&&(t=t.split(/[\. ]/),r=t.length-1,e.each(t,function(n,o){var a=n!=r?o+t[n+1].charAt(0).toUpperCase()+t[n+1].slice(1):t;if(e.isPlainObject(c[a])&&n!=r)c=c[a];else{if(c[a]!==i)return s=c[a],!1;if(!e.isPlainObject(c[o])||n==r)return c[o]!==i?(s=c[o],!1):(m.error(b.method,t),!1);c=c[o]}})),e.isFunction(s)?l=s.apply(o,n):s!==i&&(l=s),e.isArray(a)?a.push(l):a!==i?a=[a,l]:l!==i&&(a=l),s}},d?(R===i&&m.initialize(),m.invoke(u)):(R!==i&&R.invoke("destroy"),m.initialize())}),a!==i?a:this},e.fn.checkbox.settings={name:"Checkbox",namespace:"checkbox",silent:!1,debug:!1,verbose:!0,performance:!0,uncheckable:"auto",fireOnInit:!1,onChange:function(){},beforeChecked:function(){},beforeUnchecked:function(){},beforeDeterminate:function(){},beforeIndeterminate:function(){},onChecked:function(){},onUnchecked:function(){},onDeterminate:function(){},onIndeterminate:function(){},onEnable:function(){},onDisable:function(){},onEnabled:function(){},onDisabled:function(){},className:{checked:"checked",indeterminate:"indeterminate",disabled:"disabled",hidden:"hidden",radio:"radio",readOnly:"read-only"},error:{method:"The method you called is not defined"},selector:{checkbox:".ui.checkbox",label:"label, .box",input:'input[type="checkbox"], input[type="radio"]',link:"a[href]"}}}(jQuery,window,document),function(e,t,n,i){"use strict";t=void 0!==t&&t.Math==Math?t:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")(),e.fn.dimmer=function(t){var o,a=e(this),r=(new Date).getTime(),s=[],l=arguments[0],c="string"==typeof l,u=[].slice.call(arguments,1);return a.each(function(){var d,f,m,g=e.isPlainObject(t)?e.extend(!0,{},e.fn.dimmer.settings,t):e.extend({},e.fn.dimmer.settings),p=g.selector,h=g.namespace,v=g.className,b=g.error,y="."+h,x="module-"+h,C=a.selector||"",w="ontouchstart"in n.documentElement?"touchstart":"click",S=e(this),k=this,T=S.data(x);(m={preinitialize:function(){m.is.dimmer()?(f=S.parent(),d=S):(f=S,d=m.has.dimmer()?g.dimmerName?f.find(p.dimmer).filter("."+g.dimmerName):f.find(p.dimmer):m.create(),m.set.variation())},initialize:function(){m.debug("Initializing dimmer",g),m.bind.events(),m.set.dimmable(),m.instantiate()},instantiate:function(){m.verbose("Storing instance of module",m),T=m,S.data(x,T)},destroy:function(){m.verbose("Destroying previous module",d),m.unbind.events(),m.remove.variation(),f.off(y)},bind:{events:function(){"hover"==g.on?f.on("mouseenter"+y,m.show).on("mouseleave"+y,m.hide):"click"==g.on&&f.on(w+y,m.toggle),m.is.page()&&(m.debug("Setting as a page dimmer",f),m.set.pageDimmer()),m.is.closable()&&(m.verbose("Adding dimmer close event",d),f.on(w+y,p.dimmer,m.event.click))}},unbind:{events:function(){S.removeData(x),f.off(y)}},event:{click:function(t){m.verbose("Determining if event occured on dimmer",t),(0===d.find(t.target).length||e(t.target).is(p.content))&&(m.hide(),t.stopImmediatePropagation())}},addContent:function(t){var n=e(t);m.debug("Add content to dimmer",n),n.parent()[0]!==d[0]&&n.detach().appendTo(d)},create:function(){var t=e(g.template.dimmer());return g.dimmerName&&(m.debug("Creating named dimmer",g.dimmerName),t.addClass(g.dimmerName)),t.appendTo(f),t},show:function(t){t=e.isFunction(t)?t:function(){},m.debug("Showing dimmer",d,g),m.is.dimmed()&&!m.is.animating()||!m.is.enabled()?m.debug("Dimmer is already shown or disabled"):(m.animate.show(t),g.onShow.call(k),g.onChange.call(k))},hide:function(t){t=e.isFunction(t)?t:function(){},m.is.dimmed()||m.is.animating()?(m.debug("Hiding dimmer",d),m.animate.hide(t),g.onHide.call(k),g.onChange.call(k)):m.debug("Dimmer is not visible")},toggle:function(){m.verbose("Toggling dimmer visibility",d),m.is.dimmed()?m.hide():m.show()},animate:{show:function(t){t=e.isFunction(t)?t:function(){},g.useCSS&&e.fn.transition!==i&&d.transition("is supported")?("auto"!==g.opacity&&m.set.opacity(),d.transition({displayType:"flex",animation:g.transition+" in",queue:!1,duration:m.get.duration(),useFailSafe:!0,onStart:function(){m.set.dimmed()},onComplete:function(){m.set.active(),t()}})):(m.verbose("Showing dimmer animation with javascript"),m.set.dimmed(),"auto"==g.opacity&&(g.opacity=.8),d.stop().css({opacity:0,width:"100%",height:"100%"}).fadeTo(m.get.duration(),g.opacity,function(){d.removeAttr("style"),m.set.active(),t()}))},hide:function(t){t=e.isFunction(t)?t:function(){},g.useCSS&&e.fn.transition!==i&&d.transition("is supported")?(m.verbose("Hiding dimmer with css"),d.transition({displayType:"flex",animation:g.transition+" out",queue:!1,duration:m.get.duration(),useFailSafe:!0,onStart:function(){m.remove.dimmed()},onComplete:function(){m.remove.active(),t()}})):(m.verbose("Hiding dimmer with javascript"),m.remove.dimmed(),d.stop().fadeOut(m.get.duration(),function(){m.remove.active(),d.removeAttr("style"),t()}))}},get:{dimmer:function(){return d},duration:function(){return"object"==typeof g.duration?m.is.active()?g.duration.hide:g.duration.show:g.duration}},has:{dimmer:function(){return g.dimmerName?S.find(p.dimmer).filter("."+g.dimmerName).length>0:S.find(p.dimmer).length>0}},is:{active:function(){return d.hasClass(v.active)},animating:function(){return d.is(":animated")||d.hasClass(v.animating)},closable:function(){return"auto"==g.closable?"hover"!=g.on:g.closable},dimmer:function(){return S.hasClass(v.dimmer)},dimmable:function(){return S.hasClass(v.dimmable)},dimmed:function(){return f.hasClass(v.dimmed)},disabled:function(){return f.hasClass(v.disabled)},enabled:function(){return!m.is.disabled()},page:function(){return f.is("body")},pageDimmer:function(){return d.hasClass(v.pageDimmer)}},can:{show:function(){return!d.hasClass(v.disabled)}},set:{opacity:function(e){var t=d.css("background-color"),n=t.split(","),i=n&&3==n.length,o=n&&4==n.length;e=0===g.opacity?0:g.opacity||e,i||o?(n[3]=e+")",t=n.join(",")):t="rgba(0, 0, 0, "+e+")",m.debug("Setting opacity to",e),d.css("background-color",t)},active:function(){d.addClass(v.active)},dimmable:function(){f.addClass(v.dimmable)},dimmed:function(){f.addClass(v.dimmed)},pageDimmer:function(){d.addClass(v.pageDimmer)},disabled:function(){d.addClass(v.disabled)},variation:function(e){(e=e||g.variation)&&d.addClass(e)}},remove:{active:function(){d.removeClass(v.active)},dimmed:function(){f.removeClass(v.dimmed)},disabled:function(){d.removeClass(v.disabled)},variation:function(e){(e=e||g.variation)&&d.removeClass(e)}},setting:function(t,n){if(m.debug("Changing setting",t,n),e.isPlainObject(t))e.extend(!0,g,t);else{if(n===i)return g[t];e.isPlainObject(g[t])?e.extend(!0,g[t],n):g[t]=n}},internal:function(t,n){if(e.isPlainObject(t))e.extend(!0,m,t);else{if(n===i)return m[t];m[t]=n}},debug:function(){!g.silent&&g.debug&&(g.performance?m.performance.log(arguments):(m.debug=Function.prototype.bind.call(console.info,console,g.name+":"),m.debug.apply(console,arguments)))},verbose:function(){!g.silent&&g.verbose&&g.debug&&(g.performance?m.performance.log(arguments):(m.verbose=Function.prototype.bind.call(console.info,console,g.name+":"),m.verbose.apply(console,arguments)))},error:function(){g.silent||(m.error=Function.prototype.bind.call(console.error,console,g.name+":"),m.error.apply(console,arguments))},performance:{log:function(e){var t,n;g.performance&&(n=(t=(new Date).getTime())-(r||t),r=t,s.push({Name:e[0],Arguments:[].slice.call(e,1)||"",Element:k,"Execution Time":n})),clearTimeout(m.performance.timer),m.performance.timer=setTimeout(m.performance.display,500)},display:function(){var t=g.name+":",n=0;r=!1,clearTimeout(m.performance.timer),e.each(s,function(e,t){n+=t["Execution Time"]}),t+=" "+n+"ms",C&&(t+=" '"+C+"'"),a.length>1&&(t+=" ("+a.length+")"),(console.group!==i||console.table!==i)&&s.length>0&&(console.groupCollapsed(t),console.table?console.table(s):e.each(s,function(e,t){console.log(t.Name+": "+t["Execution Time"]+"ms")}),console.groupEnd()),s=[]}},invoke:function(t,n,a){var r,s,l,c=T;return n=n||u,a=k||a,"string"==typeof t&&c!==i&&(t=t.split(/[\. ]/),r=t.length-1,e.each(t,function(n,o){var a=n!=r?o+t[n+1].charAt(0).toUpperCase()+t[n+1].slice(1):t;if(e.isPlainObject(c[a])&&n!=r)c=c[a];else{if(c[a]!==i)return s=c[a],!1;if(!e.isPlainObject(c[o])||n==r)return c[o]!==i?(s=c[o],!1):(m.error(b.method,t),!1);c=c[o]}})),e.isFunction(s)?l=s.apply(a,n):s!==i&&(l=s),e.isArray(o)?o.push(l):o!==i?o=[o,l]:l!==i&&(o=l),s}}).preinitialize(),c?(T===i&&m.initialize(),m.invoke(l)):(T!==i&&T.invoke("destroy"),m.initialize())}),o!==i?o:this},e.fn.dimmer.settings={name:"Dimmer",namespace:"dimmer",silent:!1,debug:!1,verbose:!1,performance:!0,dimmerName:!1,variation:!1,closable:"auto",useCSS:!0,transition:"fade",on:!1,opacity:"auto",duration:{show:500,hide:500},onChange:function(){},onShow:function(){},onHide:function(){},error:{method:"The method you called is not defined."},className:{active:"active",animating:"animating",dimmable:"dimmable",dimmed:"dimmed",dimmer:"dimmer",disabled:"disabled",hide:"hide",pageDimmer:"page",show:"show"},selector:{dimmer:"> .ui.dimmer",content:".ui.dimmer > .content, .ui.dimmer > .content > .center"},template:{dimmer:function(){return e("<div />").attr("class","ui dimmer")}}}}(jQuery,window,document),function(e,t,n,i){"use strict";t=void 0!==t&&t.Math==Math?t:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")(),e.fn.dropdown=function(o){var a,r=e(this),s=e(n),l=r.selector||"",c="ontouchstart"in n.documentElement,u=(new Date).getTime(),d=[],f=arguments[0],m="string"==typeof f,g=[].slice.call(arguments,1);return r.each(function(p){var h,v,b,y,x,C,w,S,k=e.isPlainObject(o)?e.extend(!0,{},e.fn.dropdown.settings,o):e.extend({},e.fn.dropdown.settings),T=k.className,A=k.message,R=k.fields,P=k.keys,E=k.metadata,F=k.namespace,O=k.regExp,D=k.selector,q=k.error,j=k.templates,z="."+F,I="module-"+F,M=e(this),L=e(k.context),V=M.find(D.text),N=M.find(D.search),H=M.find(D.sizer),U=M.find(D.input),W=M.find(D.icon),B=M.prev().find(D.text).length>0?M.prev().find(D.text):M.prev(),Q=M.children(D.menu),X=Q.find(D.item),$=!1,Y=!1,Z=!1,K=this,J=M.data(I);S={initialize:function(){S.debug("Initializing dropdown",k),S.is.alreadySetup()?S.setup.reference():(S.setup.layout(),k.values&&S.change.values(k.values),S.refreshData(),S.save.defaults(),S.restore.selected(),S.create.id(),S.bind.events(),S.observeChanges(),S.instantiate())},instantiate:function(){S.verbose("Storing instance of dropdown",S),J=S,M.data(I,S)},destroy:function(){S.verbose("Destroying previous dropdown",M),S.remove.tabbable(),M.off(z).removeData(I),Q.off(z),s.off(y),S.disconnect.menuObserver(),S.disconnect.selectObserver()},observeChanges:function(){"MutationObserver"in t&&(C=new MutationObserver(S.event.select.mutation),w=new MutationObserver(S.event.menu.mutation),S.debug("Setting up mutation observer",C,w),S.observe.select(),S.observe.menu())},disconnect:{menuObserver:function(){w&&w.disconnect()},selectObserver:function(){C&&C.disconnect()}},observe:{select:function(){S.has.input()&&C.observe(M[0],{childList:!0,subtree:!0})},menu:function(){S.has.menu()&&w.observe(Q[0],{childList:!0,subtree:!0})}},create:{id:function(){x=(Math.random().toString(16)+"000000000").substr(2,8),y="."+x,S.verbose("Creating unique id for element",x)},userChoice:function(t){var n,o,a;return!!(t=t||S.get.userValues())&&(t=e.isArray(t)?t:[t],e.each(t,function(t,r){!1===S.get.item(r)&&(a=k.templates.addition(S.add.variables(A.addResult,r)),o=e("<div />").html(a).attr("data-"+E.value,r).attr("data-"+E.text,r).addClass(T.addition).addClass(T.item),k.hideAdditions&&o.addClass(T.hidden),n=n===i?o:n.add(o),S.verbose("Creating user choices for value",r,o))}),n)},userLabels:function(t){var n=S.get.userValues();n&&(S.debug("Adding user labels",n),e.each(n,function(e,t){S.verbose("Adding custom user value"),S.add.label(t,t)}))},menu:function(){Q=e("<div />").addClass(T.menu).appendTo(M)},sizer:function(){H=e("<span />").addClass(T.sizer).insertAfter(N)}},search:function(e){e=e!==i?e:S.get.query(),S.verbose("Searching for query",e),S.has.minCharacters(e)?S.filter(e):S.hide()},select:{firstUnfiltered:function(){S.verbose("Selecting first non-filtered element"),S.remove.selectedItem(),X.not(D.unselectable).not(D.addition+D.hidden).eq(0).addClass(T.selected)},nextAvailable:function(e){var t=(e=e.eq(0)).nextAll(D.item).not(D.unselectable).eq(0),n=e.prevAll(D.item).not(D.unselectable).eq(0);t.length>0?(S.verbose("Moving selection to",t),t.addClass(T.selected)):(S.verbose("Moving selection to",n),n.addClass(T.selected))}},setup:{api:function(){var e={debug:k.debug,urlData:{value:S.get.value(),query:S.get.query()},on:!1};S.verbose("First request, initializing API"),M.api(e)},layout:function(){M.is("select")&&(S.setup.select(),S.setup.returnedObject()),S.has.menu()||S.create.menu(),S.is.search()&&!S.has.search()&&(S.verbose("Adding search input"),N=e("<input />").addClass(T.search).prop("autocomplete","off").insertBefore(V)),S.is.multiple()&&S.is.searchSelection()&&!S.has.sizer()&&S.create.sizer(),k.allowTab&&S.set.tabbable()},select:function(){var t=S.get.selectValues();S.debug("Dropdown initialized on a select",t),M.is("select")&&(U=M),U.parent(D.dropdown).length>0?(S.debug("UI dropdown already exists. Creating dropdown menu only"),M=U.closest(D.dropdown),S.has.menu()||S.create.menu(),Q=M.children(D.menu),S.setup.menu(t)):(S.debug("Creating entire dropdown from select"),M=e("<div />").attr("class",U.attr("class")).addClass(T.selection).addClass(T.dropdown).html(j.dropdown(t)).insertBefore(U),U.hasClass(T.multiple)&&!1===U.prop("multiple")&&(S.error(q.missingMultiple),U.prop("multiple",!0)),U.is("[multiple]")&&S.set.multiple(),U.prop("disabled")&&(S.debug("Disabling dropdown"),M.addClass(T.disabled)),U.removeAttr("class").detach().prependTo(M)),S.refresh()},menu:function(e){Q.html(j.menu(e,R)),X=Q.find(D.item)},reference:function(){S.debug("Dropdown behavior was called on select, replacing with closest dropdown"),M=M.parent(D.dropdown),J=M.data(I),K=M.get(0),S.refresh(),S.setup.returnedObject()},returnedObject:function(){var e=r.slice(0,p),t=r.slice(p+1);r=e.add(M).add(t)}},refresh:function(){S.refreshSelectors(),S.refreshData()},refreshItems:function(){X=Q.find(D.item)},refreshSelectors:function(){S.verbose("Refreshing selector cache"),V=M.find(D.text),N=M.find(D.search),U=M.find(D.input),W=M.find(D.icon),B=M.prev().find(D.text).length>0?M.prev().find(D.text):M.prev(),Q=M.children(D.menu),X=Q.find(D.item)},refreshData:function(){S.verbose("Refreshing cached metadata"),X.removeData(E.text).removeData(E.value)},clearData:function(){S.verbose("Clearing metadata"),X.removeData(E.text).removeData(E.value),M.removeData(E.defaultText).removeData(E.defaultValue).removeData(E.placeholderText)},toggle:function(){S.verbose("Toggling menu visibility"),S.is.active()?S.hide():S.show()},show:function(t){if(t=e.isFunction(t)?t:function(){},!S.can.show()&&S.is.remote()&&(S.debug("No API results retrieved, searching before show"),S.queryRemote(S.get.query(),S.show)),S.can.show()&&!S.is.active()){if(S.debug("Showing dropdown"),!S.has.message()||S.has.maxSelections()||S.has.allResultsFiltered()||S.remove.message(),S.is.allFiltered())return!0;!1!==k.onShow.call(K)&&S.animate.show(function(){S.can.click()&&S.bind.intent(),S.has.menuSearch()&&S.focusSearch(),S.set.visible(),t.call(K)})}},hide:function(t){t=e.isFunction(t)?t:function(){},S.is.active()&&!S.is.animatingOutward()&&(S.debug("Hiding dropdown"),!1!==k.onHide.call(K)&&S.animate.hide(function(){S.remove.visible(),t.call(K)}))},hideOthers:function(){S.verbose("Finding other dropdowns to hide"),r.not(M).has(D.menu+"."+T.visible).dropdown("hide")},hideMenu:function(){S.verbose("Hiding menu  instantaneously"),S.remove.active(),S.remove.visible(),Q.transition("hide")},hideSubMenus:function(){var e=Q.children(D.item).find(D.menu);S.verbose("Hiding sub menus",e),e.transition("hide")},bind:{events:function(){c&&S.bind.touchEvents(),S.bind.keyboardEvents(),S.bind.inputEvents(),S.bind.mouseEvents()},touchEvents:function(){S.debug("Touch device detected binding additional touch events"),S.is.searchSelection()||S.is.single()&&M.on("touchstart"+z,S.event.test.toggle),Q.on("touchstart"+z,D.item,S.event.item.mouseenter)},keyboardEvents:function(){S.verbose("Binding keyboard events"),M.on("keydown"+z,S.event.keydown),S.has.search()&&M.on(S.get.inputEvent()+z,D.search,S.event.input),S.is.multiple()&&s.on("keydown"+y,S.event.document.keydown)},inputEvents:function(){S.verbose("Binding input change events"),M.on("change"+z,D.input,S.event.change)},mouseEvents:function(){S.verbose("Binding mouse events"),S.is.multiple()&&M.on("click"+z,D.label,S.event.label.click).on("click"+z,D.remove,S.event.remove.click),S.is.searchSelection()?(M.on("mousedown"+z,S.event.mousedown).on("mouseup"+z,S.event.mouseup).on("mousedown"+z,D.menu,S.event.menu.mousedown).on("mouseup"+z,D.menu,S.event.menu.mouseup).on("click"+z,D.icon,S.event.icon.click).on("focus"+z,D.search,S.event.search.focus).on("click"+z,D.search,S.event.search.focus).on("blur"+z,D.search,S.event.search.blur).on("click"+z,D.text,S.event.text.focus),S.is.multiple()&&M.on("click"+z,S.event.click)):("click"==k.on?M.on("click"+z,D.icon,S.event.icon.click).on("click"+z,S.event.test.toggle):"hover"==k.on?M.on("mouseenter"+z,S.delay.show).on("mouseleave"+z,S.delay.hide):M.on(k.on+z,S.toggle),M.on("mousedown"+z,S.event.mousedown).on("mouseup"+z,S.event.mouseup).on("focus"+z,S.event.focus),S.has.menuSearch()?M.on("blur"+z,D.search,S.event.search.blur):M.on("blur"+z,S.event.blur)),Q.on("mouseenter"+z,D.item,S.event.item.mouseenter).on("mouseleave"+z,D.item,S.event.item.mouseleave).on("click"+z,D.item,S.event.item.click)},intent:function(){S.verbose("Binding hide intent event to document"),c&&s.on("touchstart"+y,S.event.test.touch).on("touchmove"+y,S.event.test.touch),s.on("click"+y,S.event.test.hide)}},unbind:{intent:function(){S.verbose("Removing hide intent event from document"),c&&s.off("touchstart"+y).off("touchmove"+y),s.off("click"+y)}},filter:function(e){var t=e!==i?e:S.get.query(),n=function(){S.is.multiple()&&S.filterActive(),(e||!e&&0==S.get.activeItem().length)&&S.select.firstUnfiltered(),S.has.allResultsFiltered()?k.onNoResults.call(K,t)?k.allowAdditions?k.hideAdditions&&(S.verbose("User addition with no menu, setting empty style"),S.set.empty(),S.hideMenu()):(S.verbose("All items filtered, showing message",t),S.add.message(A.noResults)):(S.verbose("All items filtered, hiding dropdown",t),S.hideMenu()):(S.remove.empty(),S.remove.message()),k.allowAdditions&&S.add.userSuggestion(e),S.is.searchSelection()&&S.can.show()&&S.is.focusedOnSearch()&&S.show()};k.useLabels&&S.has.maxSelections()||(k.apiSettings?S.can.useAPI()?S.queryRemote(t,function(){k.filterRemoteData&&S.filterItems(t),n()}):S.error(q.noAPI):(S.filterItems(t),n()))},queryRemote:function(t,n){var i={errorDuration:!1,cache:"local",throttle:k.throttle,urlData:{query:t},onError:function(){S.add.message(A.serverError),n()},onFailure:function(){S.add.message(A.serverError),n()},onSuccess:function(e){S.remove.message(),S.setup.menu({values:e[R.remoteValues]}),n()}};M.api("get request")||S.setup.api(),i=e.extend(!0,{},i,k.apiSettings),M.api("setting",i).api("query")},filterItems:function(t){var n=t!==i?t:S.get.query(),o=null,a=S.escape.string(n),r=new RegExp("^"+a,"igm");S.has.query()&&(o=[],S.verbose("Searching for matching values",n),X.each(function(){var t,i,a=e(this);if("both"==k.match||"text"==k.match){if(-1!==(t=String(S.get.choiceText(a,!1))).search(r))return o.push(this),!0;if("exact"===k.fullTextSearch&&S.exactSearch(n,t))return o.push(this),!0;if(!0===k.fullTextSearch&&S.fuzzySearch(n,t))return o.push(this),!0}if("both"==k.match||"value"==k.match){if(-1!==(i=String(S.get.choiceValue(a,t))).search(r))return o.push(this),!0;if("exact"===k.fullTextSearch&&S.exactSearch(n,i))return o.push(this),!0;if(!0===k.fullTextSearch&&S.fuzzySearch(n,i))return o.push(this),!0}})),S.debug("Showing only matched items",n),S.remove.filteredItem(),o&&X.not(o).addClass(T.filtered)},fuzzySearch:function(e,t){var n=t.length,i=e.length;if(e=e.toLowerCase(),t=t.toLowerCase(),i>n)return!1;if(i===n)return e===t;e:for(var o=0,a=0;o<i;o++){for(var r=e.charCodeAt(o);a<n;)if(t.charCodeAt(a++)===r)continue e;return!1}return!0},exactSearch:function(e,t){return e=e.toLowerCase(),(t=t.toLowerCase()).indexOf(e)>-1},filterActive:function(){k.useLabels&&X.filter("."+T.active).addClass(T.filtered)},focusSearch:function(e){S.has.search()&&!S.is.focusedOnSearch()&&(e?(M.off("focus"+z,D.search),N.focus(),M.on("focus"+z,D.search,S.event.search.focus)):N.focus())},forceSelection:function(){var e=X.not(T.filtered).filter("."+T.selected).eq(0),t=X.not(T.filtered).filter("."+T.active).eq(0),n=e.length>0?e:t;if(n.length>0&&!S.is.multiple())return S.debug("Forcing partial selection to selected item",n),void S.event.item.click.call(n,{},!0);k.allowAdditions?(S.set.selected(S.get.query()),S.remove.searchTerm()):S.remove.searchTerm()},change:{values:function(t){k.allowAdditions||S.clear(),S.debug("Creating dropdown with specified values",t),S.setup.menu({values:t}),e.each(t,function(e,t){if(1==t.selected)return S.debug("Setting initial selection to",t.value),S.set.selected(t.value),!0})}},event:{change:function(){Z||(S.debug("Input changed, updating selection"),S.set.selected())},focus:function(){k.showOnFocus&&!$&&S.is.hidden()&&!v&&S.show()},blur:function(e){v=n.activeElement===this,$||v||(S.remove.activeLabel(),S.hide())},mousedown:function(){S.is.searchSelection()?b=!0:$=!0},mouseup:function(){S.is.searchSelection()?b=!1:$=!1},click:function(t){e(t.target).is(M)&&(S.is.focusedOnSearch()?S.show():S.focusSearch())},search:{focus:function(){$=!0,S.is.multiple()&&S.remove.activeLabel(),k.showOnFocus&&S.search()},blur:function(e){v=n.activeElement===this,S.is.searchSelection()&&!b&&(Y||v||(k.forceSelection&&S.forceSelection(),S.hide())),b=!1}},icon:{click:function(e){S.toggle()}},text:{focus:function(e){$=!0,S.focusSearch()}},input:function(e){(S.is.multiple()||S.is.searchSelection())&&S.set.filtered(),clearTimeout(S.timer),S.timer=setTimeout(S.search,k.delay.search)},label:{click:function(t){var n=e(this),i=M.find(D.label),o=i.filter("."+T.active),a=n.nextAll("."+T.active),r=n.prevAll("."+T.active),s=a.length>0?n.nextUntil(a).add(o).add(n):n.prevUntil(r).add(o).add(n);t.shiftKey?(o.removeClass(T.active),s.addClass(T.active)):t.ctrlKey?n.toggleClass(T.active):(o.removeClass(T.active),n.addClass(T.active)),k.onLabelSelect.apply(this,i.filter("."+T.active))}},remove:{click:function(){var t=e(this).parent();t.hasClass(T.active)?S.remove.activeLabels():S.remove.activeLabels(t)}},test:{toggle:function(e){var t=S.is.multiple()?S.show:S.toggle;S.is.bubbledLabelClick(e)||S.is.bubbledIconClick(e)||S.determine.eventOnElement(e,t)&&e.preventDefault()},touch:function(e){S.determine.eventOnElement(e,function(){"touchstart"==e.type?S.timer=setTimeout(function(){S.hide()},k.delay.touch):"touchmove"==e.type&&clearTimeout(S.timer)}),e.stopPropagation()},hide:function(e){S.determine.eventInModule(e,S.hide)}},select:{mutation:function(t){S.debug("<select> modified, recreating menu");var n=!1;e.each(t,function(t,i){if(e(i.target).is("select")||e(i.addedNodes).is("select"))return n=!0,!0}),n&&(S.disconnect.selectObserver(),S.refresh(),S.setup.select(),S.set.selected(),S.observe.select())}},menu:{mutation:function(t){var n=t[0],i=n.addedNodes?e(n.addedNodes[0]):e(!1),o=n.removedNodes?e(n.removedNodes[0]):e(!1),a=i.add(o),r=a.is(D.addition)||a.closest(D.addition).length>0,s=a.is(D.message)||a.closest(D.message).length>0;r||s?(S.debug("Updating item selector cache"),S.refreshItems()):(S.debug("Menu modified, updating selector cache"),S.refresh())},mousedown:function(){Y=!0},mouseup:function(){Y=!1}},item:{mouseenter:function(t){var n=e(t.target),i=e(this),o=i.children(D.menu),a=i.siblings(D.item).children(D.menu),r=o.length>0;!(o.find(n).length>0)&&r&&(clearTimeout(S.itemTimer),S.itemTimer=setTimeout(function(){S.verbose("Showing sub-menu",o),e.each(a,function(){S.animate.hide(!1,e(this))}),S.animate.show(!1,o)},k.delay.show),t.preventDefault())},mouseleave:function(t){var n=e(this).children(D.menu);n.length>0&&(clearTimeout(S.itemTimer),S.itemTimer=setTimeout(function(){S.verbose("Hiding sub-menu",n),S.animate.hide(!1,n)},k.delay.hide))},click:function(t,i){var o=e(this),a=e(t?t.target:""),r=o.find(D.menu),s=S.get.choiceText(o),l=S.get.choiceValue(o,s),c=r.length>0,u=r.find(a).length>0;S.has.menuSearch()&&e(n.activeElement).blur(),u||c&&!k.allowCategorySelection||(S.is.searchSelection()&&(k.allowAdditions&&S.remove.userAddition(),S.remove.searchTerm(),S.is.focusedOnSearch()||1==i||S.focusSearch(!0)),k.useLabels||(S.remove.filteredItem(),S.set.scrollPosition(o)),S.determine.selectAction.call(this,s,l))}},document:{keydown:function(e){var t=e.which;if(S.is.inObject(t,P)){var n=M.find(D.label),i=n.filter("."+T.active),o=(i.data(E.value),n.index(i)),a=n.length,r=i.length>0,s=i.length>1,l=0===o,c=o+1==a,u=S.is.searchSelection(),d=S.is.focusedOnSearch(),f=S.is.focused(),m=d&&0===S.get.caretPosition();if(u&&!r&&!d)return;t==P.leftArrow?!f&&!m||r?r&&(e.shiftKey?S.verbose("Adding previous label to selection"):(S.verbose("Selecting previous label"),n.removeClass(T.active)),l&&!s?i.addClass(T.active):i.prev(D.siblingLabel).addClass(T.active).end(),e.preventDefault()):(S.verbose("Selecting previous label"),n.last().addClass(T.active)):t==P.rightArrow?(f&&!r&&n.first().addClass(T.active),r&&(e.shiftKey?S.verbose("Adding next label to selection"):(S.verbose("Selecting next label"),n.removeClass(T.active)),c?u?d?n.removeClass(T.active):S.focusSearch():s?i.next(D.siblingLabel).addClass(T.active):i.addClass(T.active):i.next(D.siblingLabel).addClass(T.active),e.preventDefault())):t==P.deleteKey||t==P.backspace?r?(S.verbose("Removing active labels"),c&&u&&!d&&S.focusSearch(),i.last().next(D.siblingLabel).addClass(T.active),S.remove.activeLabels(i),e.preventDefault()):m&&!r&&t==P.backspace&&(S.verbose("Removing last label on input backspace"),i=n.last().addClass(T.active),S.remove.activeLabels(i)):i.removeClass(T.active)}}},keydown:function(e){var t=e.which;if(S.is.inObject(t,P)){var n,i=X.not(D.unselectable).filter("."+T.selected).eq(0),o=Q.children("."+T.active).eq(0),a=i.length>0?i:o,r=a.length>0?a.siblings(":not(."+T.filtered+")").addBack():Q.children(":not(."+T.filtered+")"),s=a.children(D.menu),l=a.closest(D.menu),c=l.hasClass(T.visible)||l.hasClass(T.animating)||l.parent(D.menu).length>0,u=s.length>0,d=a.length>0,f=a.not(D.unselectable).length>0,m=t==P.delimiter&&k.allowAdditions&&S.is.multiple();if(k.allowAdditions&&k.hideAdditions&&(t==P.enter||m)&&f&&(S.verbose("Selecting item from keyboard shortcut",a),S.event.item.click.call(a,e),S.is.searchSelection()&&S.remove.searchTerm()),S.is.visible()){if((t==P.enter||m)&&(t==P.enter&&d&&u&&!k.allowCategorySelection?(S.verbose("Pressed enter on unselectable category, opening sub menu"),t=P.rightArrow):f&&(S.verbose("Selecting item from keyboard shortcut",a),S.event.item.click.call(a,e),S.is.searchSelection()&&S.remove.searchTerm()),e.preventDefault()),d&&(t==P.leftArrow&&l[0]!==Q[0]&&(S.verbose("Left key pressed, closing sub-menu"),S.animate.hide(!1,l),a.removeClass(T.selected),l.closest(D.item).addClass(T.selected),e.preventDefault()),t==P.rightArrow&&u&&(S.verbose("Right key pressed, opening sub-menu"),S.animate.show(!1,s),a.removeClass(T.selected),s.find(D.item).eq(0).addClass(T.selected),e.preventDefault())),t==P.upArrow){if(n=d&&c?a.prevAll(D.item+":not("+D.unselectable+")").eq(0):X.eq(0),r.index(n)<0)return S.verbose("Up key pressed but reached top of current menu"),void e.preventDefault();S.verbose("Up key pressed, changing active item"),a.removeClass(T.selected),n.addClass(T.selected),S.set.scrollPosition(n),k.selectOnKeydown&&S.is.single()&&S.set.selectedItem(n),e.preventDefault()}if(t==P.downArrow){if(0===(n=d&&c?n=a.nextAll(D.item+":not("+D.unselectable+")").eq(0):X.eq(0)).length)return S.verbose("Down key pressed but reached bottom of current menu"),void e.preventDefault();S.verbose("Down key pressed, changing active item"),X.removeClass(T.selected),n.addClass(T.selected),S.set.scrollPosition(n),k.selectOnKeydown&&S.is.single()&&S.set.selectedItem(n),e.preventDefault()}t==P.pageUp&&(S.scrollPage("up"),e.preventDefault()),t==P.pageDown&&(S.scrollPage("down"),e.preventDefault()),t==P.escape&&(S.verbose("Escape key pressed, closing dropdown"),S.hide())}else m&&e.preventDefault(),t!=P.downArrow||S.is.visible()||(S.verbose("Down key pressed, showing dropdown"),S.show(),e.preventDefault())}else S.has.search()||S.set.selectedLetter(String.fromCharCode(t))}},trigger:{change:function(){var e=n.createEvent("HTMLEvents"),t=U[0];t&&(S.verbose("Triggering native change event"),e.initEvent("change",!0,!1),t.dispatchEvent(e))}},determine:{selectAction:function(t,n){S.verbose("Determining action",k.action),e.isFunction(S.action[k.action])?(S.verbose("Triggering preset action",k.action,t,n),S.action[k.action].call(K,t,n,this)):e.isFunction(k.action)?(S.verbose("Triggering user action",k.action,t,n),k.action.call(K,t,n,this)):S.error(q.action,k.action)},eventInModule:function(t,i){var o=e(t.target),a=o.closest(n.documentElement).length>0,r=o.closest(M).length>0;return i=e.isFunction(i)?i:function(){},a&&!r?(S.verbose("Triggering event",i),i(),!0):(S.verbose("Event occurred in dropdown, canceling callback"),!1)},eventOnElement:function(t,i){var o=e(t.target),a=o.closest(D.siblingLabel),r=n.body.contains(t.target),s=0===M.find(a).length,l=0===o.closest(Q).length;return i=e.isFunction(i)?i:function(){},r&&s&&l?(S.verbose("Triggering event",i),i(),!0):(S.verbose("Event occurred in dropdown menu, canceling callback"),!1)}},action:{nothing:function(){},activate:function(t,n,o){if(n=n!==i?n:t,S.can.activate(e(o))){if(S.set.selected(n,e(o)),S.is.multiple()&&!S.is.allFiltered())return;S.hideAndClear()}},select:function(t,n,o){if(n=n!==i?n:t,S.can.activate(e(o))){if(S.set.value(n,e(o)),S.is.multiple()&&!S.is.allFiltered())return;S.hideAndClear()}},combo:function(t,n,o){n=n!==i?n:t,S.set.selected(n,e(o)),S.hideAndClear()},hide:function(e,t,n){S.set.value(t,e),S.hideAndClear()}},get:{id:function(){return x},defaultText:function(){return M.data(E.defaultText)},defaultValue:function(){return M.data(E.defaultValue)},placeholderText:function(){return"auto"!=k.placeholder&&"string"==typeof k.placeholder?k.placeholder:M.data(E.placeholderText)||""},text:function(){return V.text()},query:function(){return e.trim(N.val())},searchWidth:function(e){return e=e!==i?e:N.val(),H.text(e),Math.ceil(H.width()+1)},selectionCount:function(){var t=S.get.values();return S.is.multiple()?e.isArray(t)?t.length:0:""!==S.get.value()?1:0},transition:function(e){return"auto"==k.transition?S.is.upward(e)?"slide up":"slide down":k.transition},userValues:function(){var t=S.get.values();return!!t&&(t=e.isArray(t)?t:[t],e.grep(t,function(e){return!1===S.get.item(e)}))},uniqueArray:function(t){return e.grep(t,function(n,i){return e.inArray(n,t)===i})},caretPosition:function(){var e,t,i=N.get(0);return"selectionStart"in i?i.selectionStart:n.selection?(i.focus(),t=(e=n.selection.createRange()).text.length,e.moveStart("character",-i.value.length),e.text.length-t):void 0},value:function(){var t=U.length>0?U.val():M.data(E.value),n=e.isArray(t)&&1===t.length&&""===t[0];return t===i||n?"":t},values:function(){var e=S.get.value();return""===e?"":!S.has.selectInput()&&S.is.multiple()?"string"==typeof e?e.split(k.delimiter):"":e},remoteValues:function(){var t=S.get.values(),n=!1;return t&&("string"==typeof t&&(t=[t]),e.each(t,function(e,t){var i=S.read.remoteData(t);S.verbose("Restoring value from session data",i,t),i&&(n||(n={}),n[t]=i)})),n},choiceText:function(t,n){if(n=n!==i?n:k.preserveHTML,t)return t.find(D.menu).length>0&&(S.verbose("Retrieving text of element with sub-menu"),(t=t.clone()).find(D.menu).remove(),t.find(D.menuIcon).remove()),t.data(E.text)!==i?t.data(E.text):n?e.trim(t.html()):e.trim(t.text())},choiceValue:function(t,n){return n=n||S.get.choiceText(t),!!t&&(t.data(E.value)!==i?String(t.data(E.value)):"string"==typeof n?e.trim(n.toLowerCase()):String(n))},inputEvent:function(){var e=N[0];return!!e&&(e.oninput!==i?"input":e.onpropertychange!==i?"propertychange":"keyup")},selectValues:function(){var t={values:[]};return M.find("option").each(function(){var n=e(this),o=n.html(),a=n.attr("disabled"),r=n.attr("value")!==i?n.attr("value"):o;"auto"===k.placeholder&&""===r?t.placeholder=o:t.values.push({name:o,value:r,disabled:a})}),k.placeholder&&"auto"!==k.placeholder&&(S.debug("Setting placeholder value to",k.placeholder),t.placeholder=k.placeholder),k.sortSelect?(t.values.sort(function(e,t){return e.name>t.name?1:-1}),S.debug("Retrieved and sorted values from select",t)):S.debug("Retrieved values from select",t),t},activeItem:function(){return X.filter("."+T.active)},selectedItem:function(){var e=X.not(D.unselectable).filter("."+T.selected);return e.length>0?e:X.eq(0)},itemWithAdditions:function(e){var t=S.get.item(e),n=S.create.userChoice(e);return n&&n.length>0&&(t=t.length>0?t.add(n):n),t},item:function(t,n){var o,a,r=!1;return t=t!==i?t:S.get.values()!==i?S.get.values():S.get.text(),o=a?t.length>0:t!==i&&null!==t,a=S.is.multiple()&&e.isArray(t),n=""===t||0===t||(n||!1),o&&X.each(function(){var o=e(this),s=S.get.choiceText(o),l=S.get.choiceValue(o,s);if(null!==l&&l!==i)if(a)-1===e.inArray(String(l),t)&&-1===e.inArray(s,t)||(r=r?r.add(o):o);else if(n){if(S.verbose("Ambiguous dropdown value using strict type check",o,t),l===t||s===t)return r=o,!0}else if(String(l)==String(t)||s==t)return S.verbose("Found select item by value",l,t),r=o,!0}),r}},check:{maxSelections:function(e){return!k.maxSelections||((e=e!==i?e:S.get.selectionCount())>=k.maxSelections?(S.debug("Maximum selection count reached"),k.useLabels&&(X.addClass(T.filtered),S.add.message(A.maxSelections)),!0):(S.verbose("No longer at maximum selection count"),S.remove.message(),S.remove.filteredItem(),S.is.searchSelection()&&S.filterItems(),!1))}},restore:{defaults:function(){S.clear(),S.restore.defaultText(),S.restore.defaultValue()},defaultText:function(){var e=S.get.defaultText();e===S.get.placeholderText?(S.debug("Restoring default placeholder text",e),S.set.placeholderText(e)):(S.debug("Restoring default text",e),S.set.text(e))},placeholderText:function(){S.set.placeholderText()},defaultValue:function(){var e=S.get.defaultValue();e!==i&&(S.debug("Restoring default value",e),""!==e?(S.set.value(e),S.set.selected()):(S.remove.activeItem(),S.remove.selectedItem()))},labels:function(){k.allowAdditions&&(k.useLabels||(S.error(q.labels),k.useLabels=!0),S.debug("Restoring selected values"),S.create.userLabels()),S.check.maxSelections()},selected:function(){S.restore.values(),S.is.multiple()?(S.debug("Restoring previously selected values and labels"),S.restore.labels()):S.debug("Restoring previously selected values")},values:function(){S.set.initialLoad(),k.apiSettings&&k.saveRemoteData&&S.get.remoteValues()?S.restore.remoteValues():S.set.selected(),S.remove.initialLoad()},remoteValues:function(){var t=S.get.remoteValues();S.debug("Recreating selected from session data",t),t&&(S.is.single()?e.each(t,function(e,t){S.set.text(t)}):e.each(t,function(e,t){S.add.label(e,t)}))}},read:{remoteData:function(e){var n;if(t.Storage!==i)return(n=sessionStorage.getItem(e))!==i&&n;S.error(q.noStorage)}},save:{defaults:function(){S.save.defaultText(),S.save.placeholderText(),S.save.defaultValue()},defaultValue:function(){var e=S.get.value();S.verbose("Saving default value as",e),M.data(E.defaultValue,e)},defaultText:function(){var e=S.get.text();S.verbose("Saving default text as",e),M.data(E.defaultText,e)},placeholderText:function(){var e;!1!==k.placeholder&&V.hasClass(T.placeholder)&&(e=S.get.text(),S.verbose("Saving placeholder text as",e),M.data(E.placeholderText,e))},remoteData:function(e,n){t.Storage!==i?(S.verbose("Saving remote data to session storage",n,e),sessionStorage.setItem(n,e)):S.error(q.noStorage)}},clear:function(){S.is.multiple()&&k.useLabels?S.remove.labels():(S.remove.activeItem(),S.remove.selectedItem()),S.set.placeholderText(),S.clearValue()},clearValue:function(){S.set.value("")},scrollPage:function(e,t){var n,i,o=t||S.get.selectedItem(),a=o.closest(D.menu),r=a.outerHeight(),s=a.scrollTop(),l=X.eq(0).outerHeight(),c=Math.floor(r/l),u=(a.prop("scrollHeight"),"up"==e?s-l*c:s+l*c),d=X.not(D.unselectable);i="up"==e?d.index(o)-c:d.index(o)+c,(n=("up"==e?i>=0:i<d.length)?d.eq(i):"up"==e?d.first():d.last()).length>0&&(S.debug("Scrolling page",e,n),o.removeClass(T.selected),n.addClass(T.selected),k.selectOnKeydown&&S.is.single()&&S.set.selectedItem(n),a.scrollTop(u))},set:{filtered:function(){var e=S.is.multiple(),t=S.is.searchSelection(),n=e&&t,i=t?S.get.query():"",o="string"==typeof i&&i.length>0,a=S.get.searchWidth(),r=""!==i;e&&o&&(S.verbose("Adjusting input width",a,k.glyphWidth),N.css("width",a)),o||n&&r?(S.verbose("Hiding placeholder text"),V.addClass(T.filtered)):(!e||n&&!r)&&(S.verbose("Showing placeholder text"),V.removeClass(T.filtered))},empty:function(){M.addClass(T.empty)},loading:function(){M.addClass(T.loading)},placeholderText:function(e){e=e||S.get.placeholderText(),S.debug("Setting placeholder text",e),S.set.text(e),V.addClass(T.placeholder)},tabbable:function(){S.is.searchSelection()?(S.debug("Added tabindex to searchable dropdown"),N.val("").attr("tabindex",0),Q.attr("tabindex",-1)):(S.debug("Added tabindex to dropdown"),M.attr("tabindex")===i&&(M.attr("tabindex",0),Q.attr("tabindex",-1)))},initialLoad:function(){S.verbose("Setting initial load"),h=!0},activeItem:function(e){k.allowAdditions&&e.filter(D.addition).length>0?e.addClass(T.filtered):e.addClass(T.active)},partialSearch:function(e){var t=S.get.query().length;N.val(e.substr(0,t))},scrollPosition:function(e,t){var n,o,a,r,s,l;n=(e=e||S.get.selectedItem()).closest(D.menu),o=e&&e.length>0,t=t!==i&&t,e&&n.length>0&&o&&(e.position().top,n.addClass(T.loading),a=(r=n.scrollTop())-n.offset().top+e.offset().top,t||(l=r+n.height()<a+5,s=a-5<r),S.debug("Scrolling to active item",a),(t||s||l)&&n.scrollTop(a),n.removeClass(T.loading))},text:function(e){"select"!==k.action&&("combo"==k.action?(S.debug("Changing combo button text",e,B),k.preserveHTML?B.html(e):B.text(e)):(e!==S.get.placeholderText()&&V.removeClass(T.placeholder),S.debug("Changing text",e,V),V.removeClass(T.filtered),k.preserveHTML?V.html(e):V.text(e)))},selectedItem:function(e){var t=S.get.choiceValue(e),n=S.get.choiceText(e,!1),i=S.get.choiceText(e,!0);S.debug("Setting user selection to item",e),S.remove.activeItem(),S.set.partialSearch(n),S.set.activeItem(e),S.set.selected(t,e),S.set.text(i)},selectedLetter:function(t){var n,i=X.filter("."+T.selected),o=i.length>0&&S.has.firstLetter(i,t),a=!1;o&&(n=i.nextAll(X).eq(0),S.has.firstLetter(n,t)&&(a=n)),a||X.each(function(){if(S.has.firstLetter(e(this),t))return a=e(this),!1}),a&&(S.verbose("Scrolling to next value with letter",t),S.set.scrollPosition(a),i.removeClass(T.selected),a.addClass(T.selected),k.selectOnKeydown&&S.is.single()&&S.set.selectedItem(a))},direction:function(e){"auto"==k.direction?(S.remove.upward(),S.can.openDownward(e)?S.remove.upward(e):S.set.upward(e),S.is.leftward(e)||S.can.openRightward(e)||S.set.leftward(e)):"upward"==k.direction&&S.set.upward(e)},upward:function(e){(e||M).addClass(T.upward)},leftward:function(e){(e||Q).addClass(T.leftward)},value:function(e,t,n){var o=S.escape.value(e),a=U.length>0,r=S.get.values(),s=e!==i?String(e):e;if(a){if(!k.allowReselection&&s==r&&(S.verbose("Skipping value update already same value",e,r),!S.is.initialLoad()))return;S.is.single()&&S.has.selectInput()&&S.can.extendSelect()&&(S.debug("Adding user option",e),S.add.optionValue(e)),S.debug("Updating input value",o,r),Z=!0,U.val(o),!1===k.fireOnInit&&S.is.initialLoad()?S.debug("Input native change event ignored on initial load"):S.trigger.change(),Z=!1}else S.verbose("Storing value in metadata",o,U),o!==r&&M.data(E.value,s);!1===k.fireOnInit&&S.is.initialLoad()?S.verbose("No callback on initial load",k.onChange):k.onChange.call(K,e,t,n)},active:function(){M.addClass(T.active)},multiple:function(){M.addClass(T.multiple)},visible:function(){M.addClass(T.visible)},exactly:function(e,t){S.debug("Setting selected to exact values"),S.clear(),S.set.selected(e,t)},selected:function(t,n){var i=S.is.multiple();(n=k.allowAdditions?n||S.get.itemWithAdditions(t):n||S.get.item(t))&&(S.debug("Setting selected menu item to",n),S.is.multiple()&&S.remove.searchWidth(),S.is.single()?(S.remove.activeItem(),S.remove.selectedItem()):k.useLabels&&S.remove.selectedItem(),n.each(function(){var t=e(this),o=S.get.choiceText(t),a=S.get.choiceValue(t,o),r=t.hasClass(T.filtered),s=t.hasClass(T.active),l=t.hasClass(T.addition),c=i&&1==n.length;i?!s||l?(k.apiSettings&&k.saveRemoteData&&S.save.remoteData(o,a),k.useLabels?(S.add.label(a,o,c),S.add.value(a,o,t),S.set.activeItem(t),S.filterActive(),S.select.nextAvailable(n)):(S.add.value(a,o,t),S.set.text(S.add.variables(A.count)),S.set.activeItem(t))):r||(S.debug("Selected active value, removing label"),S.remove.selected(a)):(k.apiSettings&&k.saveRemoteData&&S.save.remoteData(o,a),S.set.text(o),S.set.value(a,o,t),t.addClass(T.active).addClass(T.selected))}))}},add:{label:function(t,n,i){var o,a=S.is.searchSelection()?N:V,r=S.escape.value(t);o=e("<a />").addClass(T.label).attr("data-"+E.value,r).html(j.label(r,n)),o=k.onLabelCreate.call(o,r,n),S.has.value(t)?S.debug("User selection already exists, skipping",r):(k.label.variation&&o.addClass(k.label.variation),!0===i?(S.debug("Animating in label",o),o.addClass(T.hidden).insertBefore(a).transition(k.label.transition,k.label.duration)):(S.debug("Adding selection label",o),o.insertBefore(a)))},message:function(t){var n=Q.children(D.message),i=k.templates.message(S.add.variables(t));n.length>0?n.html(i):n=e("<div/>").html(i).addClass(T.message).appendTo(Q)},optionValue:function(t){var n=S.escape.value(t);U.find('option[value="'+S.escape.string(n)+'"]').length>0||(S.disconnect.selectObserver(),S.is.single()&&(S.verbose("Removing previous user addition"),U.find("option."+T.addition).remove()),e("<option/>").prop("value",n).addClass(T.addition).html(t).appendTo(U),S.verbose("Adding user addition as an <option>",t),S.observe.select())},userSuggestion:function(e){var t,n=Q.children(D.addition),i=S.get.item(e),o=i&&i.not(D.addition).length,a=n.length>0;k.useLabels&&S.has.maxSelections()||(""===e||o?n.remove():(a?(n.data(E.value,e).data(E.text,e).attr("data-"+E.value,e).attr("data-"+E.text,e).removeClass(T.filtered),k.hideAdditions||(t=k.templates.addition(S.add.variables(A.addResult,e)),n.html(t)),S.verbose("Replacing user suggestion with new value",n)):((n=S.create.userChoice(e)).prependTo(Q),S.verbose("Adding item choice to menu corresponding with user choice addition",n)),k.hideAdditions&&!S.is.allFiltered()||n.addClass(T.selected).siblings().removeClass(T.selected),S.refreshItems()))},variables:function(e,t){var n,i,o=-1!==e.search("{count}"),a=-1!==e.search("{maxCount}"),r=-1!==e.search("{term}");return S.verbose("Adding templated variables to message",e),o&&(n=S.get.selectionCount(),e=e.replace("{count}",n)),a&&(n=S.get.selectionCount(),e=e.replace("{maxCount}",k.maxSelections)),r&&(i=t||S.get.query(),e=e.replace("{term}",i)),e},value:function(t,n,i){var o,a=S.get.values();S.has.value(t)?S.debug("Value already selected"):""!==t?(e.isArray(a)?(o=a.concat([t]),o=S.get.uniqueArray(o)):o=[t],S.has.selectInput()?S.can.extendSelect()&&(S.debug("Adding value to select",t,o,U),S.add.optionValue(t)):(o=o.join(k.delimiter),S.debug("Setting hidden input to delimited value",o,U)),!1===k.fireOnInit&&S.is.initialLoad()?S.verbose("Skipping onadd callback on initial load",k.onAdd):k.onAdd.call(K,t,n,i),S.set.value(o,t,n,i),S.check.maxSelections()):S.debug("Cannot select blank values from multiselect")}},remove:{active:function(){M.removeClass(T.active)},activeLabel:function(){M.find(D.label).removeClass(T.active)},empty:function(){M.removeClass(T.empty)},loading:function(){M.removeClass(T.loading)},initialLoad:function(){h=!1},upward:function(e){(e||M).removeClass(T.upward)},leftward:function(e){(e||Q).removeClass(T.leftward)},visible:function(){M.removeClass(T.visible)},activeItem:function(){X.removeClass(T.active)},filteredItem:function(){k.useLabels&&S.has.maxSelections()||(k.useLabels&&S.is.multiple()?X.not("."+T.active).removeClass(T.filtered):X.removeClass(T.filtered),S.remove.empty())},optionValue:function(e){var t=S.escape.value(e),n=U.find('option[value="'+S.escape.string(t)+'"]');n.length>0&&n.hasClass(T.addition)&&(C&&(C.disconnect(),S.verbose("Temporarily disconnecting mutation observer")),n.remove(),S.verbose("Removing user addition as an <option>",t),C&&C.observe(U[0],{childList:!0,subtree:!0}))},message:function(){Q.children(D.message).remove()},searchWidth:function(){N.css("width","")},searchTerm:function(){S.verbose("Cleared search term"),N.val(""),S.set.filtered()},userAddition:function(){X.filter(D.addition).remove()},selected:function(t,n){if(!(n=k.allowAdditions?n||S.get.itemWithAdditions(t):n||S.get.item(t)))return!1;n.each(function(){var t=e(this),n=S.get.choiceText(t),i=S.get.choiceValue(t,n);S.is.multiple()?k.useLabels?(S.remove.value(i,n,t),S.remove.label(i)):(S.remove.value(i,n,t),0===S.get.selectionCount()?S.set.placeholderText():S.set.text(S.add.variables(A.count))):S.remove.value(i,n,t),t.removeClass(T.filtered).removeClass(T.active),k.useLabels&&t.removeClass(T.selected)})},selectedItem:function(){X.removeClass(T.selected)},value:function(e,t,n){var i,o=S.get.values();S.has.selectInput()?(S.verbose("Input is <select> removing selected option",e),i=S.remove.arrayValue(e,o),S.remove.optionValue(e)):(S.verbose("Removing from delimited values",e),i=(i=S.remove.arrayValue(e,o)).join(k.delimiter)),!1===k.fireOnInit&&S.is.initialLoad()?S.verbose("No callback on initial load",k.onRemove):k.onRemove.call(K,e,t,n),S.set.value(i,t,n),S.check.maxSelections()},arrayValue:function(t,n){return e.isArray(n)||(n=[n]),n=e.grep(n,function(e){return t!=e}),S.verbose("Removed value from delimited string",t,n),n},label:function(e,t){var n=M.find(D.label).filter("[data-"+E.value+'="'+S.escape.string(e)+'"]');S.verbose("Removing label",n),n.remove()},activeLabels:function(e){e=e||M.find(D.label).filter("."+T.active),S.verbose("Removing active label selections",e),S.remove.labels(e)},labels:function(t){t=t||M.find(D.label),S.verbose("Removing labels",t),t.each(function(){var t=e(this),n=t.data(E.value),o=n!==i?String(n):n,a=S.is.userValue(o);!1!==k.onLabelRemove.call(t,n)?(S.remove.message(),a?(S.remove.value(o),S.remove.label(o)):S.remove.selected(o)):S.debug("Label remove callback cancelled removal")})},tabbable:function(){S.is.searchSelection()?(S.debug("Searchable dropdown initialized"),N.removeAttr("tabindex"),Q.removeAttr("tabindex")):(S.debug("Simple selection dropdown initialized"),M.removeAttr("tabindex"),Q.removeAttr("tabindex"))}},has:{menuSearch:function(){return S.has.search()&&N.closest(Q).length>0},search:function(){return N.length>0},sizer:function(){return H.length>0},selectInput:function(){return U.is("select")},minCharacters:function(e){return!k.minCharacters||(e=e!==i?String(e):String(S.get.query())).length>=k.minCharacters},firstLetter:function(e,t){var n;return!(!e||0===e.length||"string"!=typeof t)&&(n=S.get.choiceText(e,!1),(t=t.toLowerCase())==String(n).charAt(0).toLowerCase())},input:function(){return U.length>0},items:function(){return X.length>0},menu:function(){return Q.length>0},message:function(){return 0!==Q.children(D.message).length},label:function(e){var t=S.escape.value(e);return M.find(D.label).filter("[data-"+E.value+'="'+S.escape.string(t)+'"]').length>0},maxSelections:function(){return k.maxSelections&&S.get.selectionCount()>=k.maxSelections},allResultsFiltered:function(){var e=X.not(D.addition);return e.filter(D.unselectable).length===e.length},userSuggestion:function(){return Q.children(D.addition).length>0},query:function(){return""!==S.get.query()},value:function(e){return k.ignoreCase?S.has.valueIgnoringCase(e):S.has.valueMatchingCase(e)},valueMatchingCase:function(t){var n=S.get.values();return!!(e.isArray(n)?n&&-1!==e.inArray(t,n):n==t)},valueIgnoringCase:function(t){var n=S.get.values(),i=!1;return e.isArray(n)||(n=[n]),e.each(n,function(e,n){if(String(t).toLowerCase()==String(n).toLowerCase())return i=!0,!1}),i}},is:{active:function(){return M.hasClass(T.active)},animatingInward:function(){return Q.transition("is inward")},animatingOutward:function(){return Q.transition("is outward")},bubbledLabelClick:function(t){return e(t.target).is("select, input")&&M.closest("label").length>0},bubbledIconClick:function(t){return e(t.target).closest(W).length>0},alreadySetup:function(){return M.is("select")&&M.parent(D.dropdown).data(I)!==i&&0===M.prev().length},animating:function(e){return e?e.transition&&e.transition("is animating"):Q.transition&&Q.transition("is animating")},leftward:function(e){return(e||Q).hasClass(T.leftward)},disabled:function(){return M.hasClass(T.disabled)},focused:function(){return n.activeElement===M[0]},focusedOnSearch:function(){return n.activeElement===N[0]},allFiltered:function(){return(S.is.multiple()||S.has.search())&&!(0==k.hideAdditions&&S.has.userSuggestion())&&!S.has.message()&&S.has.allResultsFiltered()},hidden:function(e){return!S.is.visible(e)},initialLoad:function(){return h},inObject:function(t,n){var i=!1;return e.each(n,function(e,n){if(n==t)return i=!0,!0}),i},multiple:function(){return M.hasClass(T.multiple)},remote:function(){return k.apiSettings&&S.can.useAPI()},single:function(){return!S.is.multiple()},selectMutation:function(t){var n=!1;return e.each(t,function(t,i){if(i.target&&e(i.target).is("select"))return n=!0,!0}),n},search:function(){return M.hasClass(T.search)},searchSelection:function(){return S.has.search()&&1===N.parent(D.dropdown).length},selection:function(){return M.hasClass(T.selection)},userValue:function(t){return-1!==e.inArray(t,S.get.userValues())},upward:function(e){return(e||M).hasClass(T.upward)},visible:function(e){return e?e.hasClass(T.visible):Q.hasClass(T.visible)},verticallyScrollableContext:function(){var e=L.get(0)!==t&&L.css("overflow-y");return"auto"==e||"scroll"==e},horizontallyScrollableContext:function(){var e=L.get(0)!==t&&L.css("overflow-X");return"auto"==e||"scroll"==e}},can:{activate:function(e){return!!k.useLabels||(!S.has.maxSelections()||!(!S.has.maxSelections()||!e.hasClass(T.active)))},openDownward:function(e){var n,i,o=e||Q,a=!0;return o.addClass(T.loading),i={context:{offset:L.get(0)===t?{top:0,left:0}:L.offset(),scrollTop:L.scrollTop(),height:L.outerHeight()},menu:{offset:o.offset(),height:o.outerHeight()}},S.is.verticallyScrollableContext()&&(i.menu.offset.top+=i.context.scrollTop),(n={above:i.context.scrollTop<=i.menu.offset.top-i.context.offset.top-i.menu.height,below:i.context.scrollTop+i.context.height>=i.menu.offset.top-i.context.offset.top+i.menu.height}).below?(S.verbose("Dropdown can fit in context downward",n),a=!0):n.below||n.above?(S.verbose("Dropdown cannot fit below, opening upward",n),a=!1):(S.verbose("Dropdown cannot fit in either direction, favoring downward",n),a=!0),o.removeClass(T.loading),a},openRightward:function(e){var n,i,o=e||Q,a=!0;return o.addClass(T.loading),i={context:{offset:L.get(0)===t?{top:0,left:0}:L.offset(),scrollLeft:L.scrollLeft(),width:L.outerWidth()},menu:{offset:o.offset(),width:o.outerWidth()}},S.is.horizontallyScrollableContext()&&(i.menu.offset.left+=i.context.scrollLeft),(n=i.menu.offset.left-i.context.offset.left+i.menu.width>=i.context.scrollLeft+i.context.width)&&(S.verbose("Dropdown cannot fit in context rightward",n),a=!1),o.removeClass(T.loading),a},click:function(){return c||"click"==k.on},extendSelect:function(){return k.allowAdditions||k.apiSettings},show:function(){return!S.is.disabled()&&(S.has.items()||S.has.message())},useAPI:function(){return e.fn.api!==i}},animate:{show:function(t,n){var o,a=n||Q,r=n?function(){}:function(){S.hideSubMenus(),S.hideOthers(),S.set.active()};t=e.isFunction(t)?t:function(){},S.verbose("Doing menu show animation",a),S.set.direction(n),o=S.get.transition(n),S.is.selection()&&S.set.scrollPosition(S.get.selectedItem(),!0),(S.is.hidden(a)||S.is.animating(a))&&("none"==o?(r(),a.transition("show"),t.call(K)):e.fn.transition!==i&&M.transition("is supported")?a.transition({animation:o+" in",debug:k.debug,verbose:k.verbose,duration:k.duration,queue:!0,onStart:r,onComplete:function(){t.call(K)}}):S.error(q.noTransition,o))},hide:function(t,n){var o=n||Q,a=(n?k.duration:k.duration,n?function(){}:function(){S.can.click()&&S.unbind.intent(),S.remove.active()}),r=S.get.transition(n);t=e.isFunction(t)?t:function(){},(S.is.visible(o)||S.is.animating(o))&&(S.verbose("Doing menu hide animation",o),"none"==r?(a(),o.transition("hide"),t.call(K)):e.fn.transition!==i&&M.transition("is supported")?o.transition({animation:r+" out",duration:k.duration,debug:k.debug,verbose:k.verbose,queue:!1,onStart:a,onComplete:function(){t.call(K)}}):S.error(q.transition))}},hideAndClear:function(){S.remove.searchTerm(),S.has.maxSelections()||(S.has.search()?S.hide(function(){S.remove.filteredItem()}):S.hide())},delay:{show:function(){S.verbose("Delaying show event to ensure user intent"),clearTimeout(S.timer),S.timer=setTimeout(S.show,k.delay.show)},hide:function(){S.verbose("Delaying hide event to ensure user intent"),clearTimeout(S.timer),S.timer=setTimeout(S.hide,k.delay.hide)}},escape:{value:function(t){var n=e.isArray(t),i="string"==typeof t,o=!i&&!n,a=i&&-1!==t.search(O.quote),r=[];return o||!a?t:(S.debug("Encoding quote values for use in select",t),n?(e.each(t,function(e,t){r.push(t.replace(O.quote,"&quot;"))}),r):t.replace(O.quote,"&quot;"))},string:function(e){return(e=String(e)).replace(O.escape,"\\$&")}},setting:function(t,n){if(S.debug("Changing setting",t,n),e.isPlainObject(t))e.extend(!0,k,t);else{if(n===i)return k[t];e.isPlainObject(k[t])?e.extend(!0,k[t],n):k[t]=n}},internal:function(t,n){if(e.isPlainObject(t))e.extend(!0,S,t);else{if(n===i)return S[t];S[t]=n}},debug:function(){!k.silent&&k.debug&&(k.performance?S.performance.log(arguments):(S.debug=Function.prototype.bind.call(console.info,console,k.name+":"),S.debug.apply(console,arguments)))},verbose:function(){!k.silent&&k.verbose&&k.debug&&(k.performance?S.performance.log(arguments):(S.verbose=Function.prototype.bind.call(console.info,console,k.name+":"),S.verbose.apply(console,arguments)))},error:function(){k.silent||(S.error=Function.prototype.bind.call(console.error,console,k.name+":"),S.error.apply(console,arguments))},performance:{log:function(e){var t,n;k.performance&&(n=(t=(new Date).getTime())-(u||t),u=t,d.push({Name:e[0],Arguments:[].slice.call(e,1)||"",Element:K,"Execution Time":n})),clearTimeout(S.performance.timer),S.performance.timer=setTimeout(S.performance.display,500)},display:function(){var t=k.name+":",n=0;u=!1,clearTimeout(S.performance.timer),e.each(d,function(e,t){n+=t["Execution Time"]}),t+=" "+n+"ms",l&&(t+=" '"+l+"'"),(console.group!==i||console.table!==i)&&d.length>0&&(console.groupCollapsed(t),console.table?console.table(d):e.each(d,function(e,t){console.log(t.Name+": "+t["Execution Time"]+"ms")}),console.groupEnd()),d=[]}},invoke:function(t,n,o){var r,s,l,c=J;return n=n||g,o=K||o,"string"==typeof t&&c!==i&&(t=t.split(/[\. ]/),r=t.length-1,e.each(t,function(n,o){var a=n!=r?o+t[n+1].charAt(0).toUpperCase()+t[n+1].slice(1):t;if(e.isPlainObject(c[a])&&n!=r)c=c[a];else{if(c[a]!==i)return s=c[a],!1;if(!e.isPlainObject(c[o])||n==r)return c[o]!==i?(s=c[o],!1):(S.error(q.method,t),!1);c=c[o]}})),e.isFunction(s)?l=s.apply(o,n):s!==i&&(l=s),e.isArray(a)?a.push(l):a!==i?a=[a,l]:l!==i&&(a=l),s}},m?(J===i&&S.initialize(),S.invoke(f)):(J!==i&&J.invoke("destroy"),S.initialize())}),a!==i?a:r},e.fn.dropdown.settings={silent:!1,debug:!1,verbose:!1,performance:!0,on:"click",action:"activate",values:!1,apiSettings:!1,selectOnKeydown:!0,minCharacters:0,filterRemoteData:!1,saveRemoteData:!0,throttle:200,context:t,direction:"auto",keepOnScreen:!0,match:"both",fullTextSearch:!1,placeholder:"auto",preserveHTML:!0,sortSelect:!1,forceSelection:!0,allowAdditions:!1,ignoreCase:!1,hideAdditions:!0,maxSelections:!1,useLabels:!0,delimiter:",",showOnFocus:!0,allowReselection:!1,allowTab:!0,allowCategorySelection:!1,fireOnInit:!1,transition:"auto",duration:200,glyphWidth:1.037,label:{transition:"scale",duration:200,variation:!1},delay:{hide:300,show:200,search:20,touch:50},onChange:function(e,t,n){},onAdd:function(e,t,n){},onRemove:function(e,t,n){},onLabelSelect:function(e){},onLabelCreate:function(t,n){return e(this)},onLabelRemove:function(e){return!0},onNoResults:function(e){return!0},onShow:function(){},onHide:function(){},name:"Dropdown",namespace:"dropdown",message:{addResult:"Add <b>{term}</b>",count:"{count} selected",maxSelections:"Max {maxCount} selections",noResults:"No results found.",serverError:"There was an error contacting the server"},error:{action:"You called a dropdown action that was not defined",alreadySetup:"Once a select has been initialized behaviors must be called on the created ui dropdown",labels:"Allowing user additions currently requires the use of labels.",missingMultiple:"<select> requires multiple property to be set to correctly preserve multiple values",method:"The method you called is not defined.",noAPI:"The API module is required to load resources remotely",noStorage:"Saving remote data requires session storage",noTransition:"This module requires ui transitions <https://github.com/Semantic-Org/UI-Transition>"},regExp:{escape:/[-[\]{}()*+?.,\\^$|#\s]/g,quote:/"/g},metadata:{defaultText:"defaultText",defaultValue:"defaultValue",placeholderText:"placeholder",text:"text",value:"value"},fields:{remoteValues:"results",values:"values",disabled:"disabled",name:"name",value:"value",text:"text"},keys:{backspace:8,delimiter:188,deleteKey:46,enter:13,escape:27,pageUp:33,pageDown:34,leftArrow:37,upArrow:38,rightArrow:39,downArrow:40},selector:{addition:".addition",dropdown:".ui.dropdown",hidden:".hidden",icon:"> .dropdown.icon",input:'> input[type="hidden"], > select',item:".item",label:"> .label",remove:"> .label > .delete.icon",siblingLabel:".label",menu:".menu",message:".message",menuIcon:".dropdown.icon",search:"input.search, .menu > .search > input, .menu input.search",sizer:"> input.sizer",text:"> .text:not(.icon)",unselectable:".disabled, .filtered"},className:{active:"active",addition:"addition",animating:"animating",disabled:"disabled",empty:"empty",dropdown:"ui dropdown",filtered:"filtered",hidden:"hidden transition",item:"item",label:"ui label",loading:"loading",menu:"menu",message:"message",multiple:"multiple",placeholder:"default",sizer:"sizer",search:"search",selected:"selected",selection:"selection",upward:"upward",leftward:"left",visible:"visible"}},e.fn.dropdown.settings.templates={dropdown:function(t){var n=t.placeholder||!1,i=(t.values,"");return i+='<i class="dropdown icon"></i>',t.placeholder?i+='<div class="default text">'+n+"</div>":i+='<div class="text"></div>',i+='<div class="menu">',e.each(t.values,function(e,t){i+=t.disabled?'<div class="disabled item" data-value="'+t.value+'">'+t.name+"</div>":'<div class="item" data-value="'+t.value+'">'+t.name+"</div>"}),i+="</div>"},menu:function(t,n){var i=t[n.values]||{},o="";return e.each(i,function(e,t){var i=t[n.text]?'data-text="'+t[n.text]+'"':"",a=t[n.disabled]?"disabled ":"";o+='<div class="'+a+'item" data-value="'+t[n.value]+'"'+i+">",o+=t[n.name],o+="</div>"}),o},label:function(e,t){return t+'<i class="delete icon"></i>'},message:function(e){return e},addition:function(e){return e}}}(jQuery,window,document),function(e,t,n,i){"use strict";t=void 0!==t&&t.Math==Math?t:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")(),e.fn.embed=function(n){var o,a=e(this),r=a.selector||"",s=(new Date).getTime(),l=[],c=arguments[0],u="string"==typeof c,d=[].slice.call(arguments,1);return a.each(function(){var f,m=e.isPlainObject(n)?e.extend(!0,{},e.fn.embed.settings,n):e.extend({},e.fn.embed.settings),g=m.selector,p=m.className,h=m.sources,v=m.error,b=m.metadata,y=m.namespace,x=m.templates,C="."+y,w="module-"+y,S=(e(t),e(this)),k=(S.find(g.placeholder),S.find(g.icon),S.find(g.embed)),T=this,A=S.data(w);f={initialize:function(){f.debug("Initializing embed"),f.determine.autoplay(),f.create(),f.bind.events(),f.instantiate()},instantiate:function(){f.verbose("Storing instance of module",f),A=f,S.data(w,f)},destroy:function(){f.verbose("Destroying previous instance of embed"),f.reset(),S.removeData(w).off(C)},refresh:function(){f.verbose("Refreshing selector cache"),S.find(g.placeholder),S.find(g.icon),k=S.find(g.embed)},bind:{events:function(){f.has.placeholder()&&(f.debug("Adding placeholder events"),S.on("click"+C,g.placeholder,f.createAndShow).on("click"+C,g.icon,f.createAndShow))}},create:function(){f.get.placeholder()?f.createPlaceholder():f.createAndShow()},createPlaceholder:function(e){var t=f.get.icon(),n=f.get.url();f.generate.embed(n);e=e||f.get.placeholder(),S.html(x.placeholder(e,t)),f.debug("Creating placeholder for embed",e,t)},createEmbed:function(t){f.refresh(),t=t||f.get.url(),k=e("<div/>").addClass(p.embed).html(f.generate.embed(t)).appendTo(S),m.onCreate.call(T,t),f.debug("Creating embed object",k)},changeEmbed:function(e){k.html(f.generate.embed(e))},createAndShow:function(){f.createEmbed(),f.show()},change:function(e,t,n){f.debug("Changing video to ",e,t,n),S.data(b.source,e).data(b.id,t),n?S.data(b.url,n):S.removeData(b.url),f.has.embed()?f.changeEmbed():f.create()},reset:function(){f.debug("Clearing embed and showing placeholder"),f.remove.active(),f.remove.embed(),f.showPlaceholder(),m.onReset.call(T)},show:function(){f.debug("Showing embed"),f.set.active(),m.onDisplay.call(T)},hide:function(){f.debug("Hiding embed"),f.showPlaceholder()},showPlaceholder:function(){f.debug("Showing placeholder image"),f.remove.active(),m.onPlaceholderDisplay.call(T)},get:{id:function(){return m.id||S.data(b.id)},placeholder:function(){return m.placeholder||S.data(b.placeholder)},icon:function(){return m.icon?m.icon:S.data(b.icon)!==i?S.data(b.icon):f.determine.icon()},source:function(e){return m.source?m.source:S.data(b.source)!==i?S.data(b.source):f.determine.source()},type:function(){var e=f.get.source();return h[e]!==i&&h[e].type},url:function(){return m.url?m.url:S.data(b.url)!==i?S.data(b.url):f.determine.url()}},determine:{autoplay:function(){f.should.autoplay()&&(m.autoplay=!0)},source:function(t){var n=!1;return(t=t||f.get.url())&&e.each(h,function(e,i){if(-1!==t.search(i.domain))return n=e,!1}),n},icon:function(){var e=f.get.source();return h[e]!==i&&h[e].icon},url:function(){var e,t=m.id||S.data(b.id),n=m.source||S.data(b.source);return(e=h[n]!==i&&h[n].url.replace("{id}",t))&&S.data(b.url,e),e}},set:{active:function(){S.addClass(p.active)}},remove:{active:function(){S.removeClass(p.active)},embed:function(){k.empty()}},encode:{parameters:function(e){var t,n=[];for(t in e)n.push(encodeURIComponent(t)+"="+encodeURIComponent(e[t]));return n.join("&amp;")}},generate:{embed:function(e){f.debug("Generating embed html");var t,n,i=f.get.source();return(e=f.get.url(e))?(n=f.generate.parameters(i),t=x.iframe(e,n)):f.error(v.noURL,S),t},parameters:function(t,n){var o=h[t]&&h[t].parameters!==i?h[t].parameters(m):{};return(n=n||m.parameters)&&(o=e.extend({},o,n)),o=m.onEmbed(o),f.encode.parameters(o)}},has:{embed:function(){return k.length>0},placeholder:function(){return m.placeholder||S.data(b.placeholder)}},should:{autoplay:function(){return"auto"===m.autoplay?m.placeholder||S.data(b.placeholder)!==i:m.autoplay}},is:{video:function(){return"video"==f.get.type()}},setting:function(t,n){if(f.debug("Changing setting",t,n),e.isPlainObject(t))e.extend(!0,m,t);else{if(n===i)return m[t];e.isPlainObject(m[t])?e.extend(!0,m[t],n):m[t]=n}},internal:function(t,n){if(e.isPlainObject(t))e.extend(!0,f,t);else{if(n===i)return f[t];f[t]=n}},debug:function(){!m.silent&&m.debug&&(m.performance?f.performance.log(arguments):(f.debug=Function.prototype.bind.call(console.info,console,m.name+":"),f.debug.apply(console,arguments)))},verbose:function(){!m.silent&&m.verbose&&m.debug&&(m.performance?f.performance.log(arguments):(f.verbose=Function.prototype.bind.call(console.info,console,m.name+":"),f.verbose.apply(console,arguments)))},error:function(){m.silent||(f.error=Function.prototype.bind.call(console.error,console,m.name+":"),f.error.apply(console,arguments))},performance:{log:function(e){var t,n;m.performance&&(n=(t=(new Date).getTime())-(s||t),s=t,l.push({Name:e[0],Arguments:[].slice.call(e,1)||"",Element:T,"Execution Time":n})),clearTimeout(f.performance.timer),f.performance.timer=setTimeout(f.performance.display,500)},display:function(){var t=m.name+":",n=0;s=!1,clearTimeout(f.performance.timer),e.each(l,function(e,t){n+=t["Execution Time"]}),t+=" "+n+"ms",r&&(t+=" '"+r+"'"),a.length>1&&(t+=" ("+a.length+")"),(console.group!==i||console.table!==i)&&l.length>0&&(console.groupCollapsed(t),console.table?console.table(l):e.each(l,function(e,t){console.log(t.Name+": "+t["Execution Time"]+"ms")}),console.groupEnd()),l=[]}},invoke:function(t,n,a){var r,s,l,c=A;return n=n||d,a=T||a,"string"==typeof t&&c!==i&&(t=t.split(/[\. ]/),r=t.length-1,e.each(t,function(n,o){var a=n!=r?o+t[n+1].charAt(0).toUpperCase()+t[n+1].slice(1):t;if(e.isPlainObject(c[a])&&n!=r)c=c[a];else{if(c[a]!==i)return s=c[a],!1;if(!e.isPlainObject(c[o])||n==r)return c[o]!==i?(s=c[o],!1):(f.error(v.method,t),!1);c=c[o]}})),e.isFunction(s)?l=s.apply(a,n):s!==i&&(l=s),e.isArray(o)?o.push(l):o!==i?o=[o,l]:l!==i&&(o=l),s}},u?(A===i&&f.initialize(),f.invoke(c)):(A!==i&&A.invoke("destroy"),f.initialize())}),o!==i?o:this},e.fn.embed.settings={name:"Embed",namespace:"embed",silent:!1,debug:!1,verbose:!1,performance:!0,icon:!1,source:!1,url:!1,id:!1,autoplay:"auto",color:"#444444",hd:!0,brandedUI:!1,parameters:!1,onDisplay:function(){},onPlaceholderDisplay:function(){},onReset:function(){},onCreate:function(e){},onEmbed:function(e){return e},metadata:{id:"id",icon:"icon",placeholder:"placeholder",source:"source",url:"url"},error:{noURL:"No URL specified",method:"The method you called is not defined"},className:{active:"active",embed:"embed"},selector:{embed:".embed",placeholder:".placeholder",icon:".icon"},sources:{youtube:{name:"youtube",type:"video",icon:"video play",domain:"youtube.com",url:"//www.youtube.com/embed/{id}",parameters:function(e){return{autohide:!e.brandedUI,autoplay:e.autoplay,color:e.color||i,hq:e.hd,jsapi:e.api,modestbranding:!e.brandedUI}}},vimeo:{name:"vimeo",type:"video",icon:"video play",domain:"vimeo.com",url:"//player.vimeo.com/video/{id}",parameters:function(e){return{api:e.api,autoplay:e.autoplay,byline:e.brandedUI,color:e.color||i,portrait:e.brandedUI,title:e.brandedUI}}}},templates:{iframe:function(e,t){var n=e;return t&&(n+="?"+t),'<iframe src="'+n+'" width="100%" height="100%" frameborder="0" scrolling="no" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'},placeholder:function(e,t){var n="";return t&&(n+='<i class="'+t+' icon"></i>'),e&&(n+='<img class="placeholder" src="'+e+'">'),n}},api:!1,onPause:function(){},onPlay:function(){},onStop:function(){}}}(jQuery,window,document),function(e,t,n,i){"use strict";t=void 0!==t&&t.Math==Math?t:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")(),e.fn.modal=function(o){var a,r=e(this),s=e(t),l=e(n),c=e("body"),u=r.selector||"",d=(new Date).getTime(),f=[],m=arguments[0],g="string"==typeof m,p=[].slice.call(arguments,1),h=t.requestAnimationFrame||t.mozRequestAnimationFrame||t.webkitRequestAnimationFrame||t.msRequestAnimationFrame||function(e){setTimeout(e,0)};return r.each(function(){var r,v,b,y,x,C,w,S,k,T=e.isPlainObject(o)?e.extend(!0,{},e.fn.modal.settings,o):e.extend({},e.fn.modal.settings),A=T.selector,R=T.className,P=T.namespace,E=T.error,F="."+P,O="module-"+P,D=e(this),q=e(T.context),j=D.find(A.close),z=this,I=D.data(O),M=!1;k={initialize:function(){k.verbose("Initializing dimmer",q),k.create.id(),k.create.dimmer(),k.refreshModals(),k.bind.events(),T.observeChanges&&k.observeChanges(),k.instantiate()},instantiate:function(){k.verbose("Storing instance of modal"),I=k,D.data(O,I)},create:{dimmer:function(){var t={debug:T.debug,variation:!T.centered&&"top aligned",dimmerName:"modals"},n=e.extend(!0,t,T.dimmerSettings);e.fn.dimmer!==i?(k.debug("Creating dimmer"),y=q.dimmer(n),T.detachable?(k.verbose("Modal is detachable, moving content into dimmer"),y.dimmer("add content",D)):k.set.undetached(),x=y.dimmer("get dimmer")):k.error(E.dimmer)},id:function(){w=(Math.random().toString(16)+"000000000").substr(2,8),C="."+w,k.verbose("Creating unique id for element",w)}},destroy:function(){k.verbose("Destroying previous modal"),D.removeData(O).off(F),s.off(C),x.off(C),j.off(F),q.dimmer("destroy")},observeChanges:function(){"MutationObserver"in t&&((S=new MutationObserver(function(e){k.debug("DOM tree modified, refreshing"),k.refresh()})).observe(z,{childList:!0,subtree:!0}),k.debug("Setting up mutation observer",S))},refresh:function(){k.remove.scrolling(),k.cacheSizes(),k.set.screenHeight(),k.set.type()},refreshModals:function(){v=D.siblings(A.modal),r=v.add(D)},attachEvents:function(t,n){var i=e(t);n=e.isFunction(k[n])?k[n]:k.toggle,i.length>0?(k.debug("Attaching modal events to element",t,n),i.off(F).on("click"+F,n)):k.error(E.notFound,t)},bind:{events:function(){k.verbose("Attaching events"),D.on("click"+F,A.close,k.event.close).on("click"+F,A.approve,k.event.approve).on("click"+F,A.deny,k.event.deny),s.on("resize"+C,k.event.resize)}},get:{id:function(){return(Math.random().toString(16)+"000000000").substr(2,8)}},event:{approve:function(){M||!1===T.onApprove.call(z,e(this))?k.verbose("Approve callback returned false cancelling hide"):(M=!0,k.hide(function(){M=!1}))},deny:function(){M||!1===T.onDeny.call(z,e(this))?k.verbose("Deny callback returned false cancelling hide"):(M=!0,k.hide(function(){M=!1}))},close:function(){k.hide()},click:function(t){if(T.closable){var i=e(t.target).closest(A.modal).length>0,o=e.contains(n.documentElement,t.target);!i&&o&&k.is.active()&&(k.debug("Dimmer clicked, hiding all modals"),k.remove.clickaway(),T.allowMultiple?k.hide():k.hideAll())}else k.verbose("Dimmer clicked but closable setting is disabled")},debounce:function(e,t){clearTimeout(k.timer),k.timer=setTimeout(e,t)},keyboard:function(e){27==e.which&&(T.closable?(k.debug("Escape key pressed hiding modal"),k.hide()):k.debug("Escape key pressed, but closable is set to false"),e.preventDefault())},resize:function(){y.dimmer("is active")&&(k.is.animating()||k.is.active())&&h(k.refresh)}},toggle:function(){k.is.active()||k.is.animating()?k.hide():k.show()},show:function(t){t=e.isFunction(t)?t:function(){},k.refreshModals(),k.set.dimmerSettings(),k.showModal(t)},hide:function(t){t=e.isFunction(t)?t:function(){},k.refreshModals(),k.hideModal(t)},showModal:function(t){t=e.isFunction(t)?t:function(){},k.is.animating()||!k.is.active()?(k.showDimmer(),k.cacheSizes(),k.set.screenHeight(),k.set.type(),k.set.clickaway(),!T.allowMultiple&&k.others.active()?k.hideOthers(k.showModal):(T.allowMultiple&&T.detachable&&D.detach().appendTo(x),T.onShow.call(z),T.transition&&e.fn.transition!==i&&D.transition("is supported")?(k.debug("Showing modal with css animations"),D.transition({debug:T.debug,animation:T.transition+" in",queue:T.queue,duration:T.duration,useFailSafe:!0,onComplete:function(){T.onVisible.apply(z),T.keyboardShortcuts&&k.add.keyboardShortcuts(),k.save.focus(),k.set.active(),T.autofocus&&k.set.autofocus(),t()}})):k.error(E.noTransition))):k.debug("Modal is already visible")},hideModal:function(t,n){t=e.isFunction(t)?t:function(){},k.debug("Hiding modal"),!1!==T.onHide.call(z,e(this))?(k.is.animating()||k.is.active())&&(T.transition&&e.fn.transition!==i&&D.transition("is supported")?(k.remove.active(),D.transition({debug:T.debug,animation:T.transition+" out",queue:T.queue,duration:T.duration,useFailSafe:!0,onStart:function(){k.others.active()||n||k.hideDimmer(),T.keyboardShortcuts&&k.remove.keyboardShortcuts()},onComplete:function(){T.onHidden.call(z),k.restore.focus(),t()}})):k.error(E.noTransition)):k.verbose("Hide callback returned false cancelling hide")},showDimmer:function(){y.dimmer("is animating")||!y.dimmer("is active")?(k.debug("Showing dimmer"),y.dimmer("show")):k.debug("Dimmer already visible")},hideDimmer:function(){y.dimmer("is animating")||y.dimmer("is active")?y.dimmer("hide",function(){k.remove.clickaway(),k.remove.screenHeight()}):k.debug("Dimmer is not visible cannot hide")},hideAll:function(t){var n=r.filter("."+R.active+", ."+R.animating);t=e.isFunction(t)?t:function(){},n.length>0&&(k.debug("Hiding all visible modals"),k.hideDimmer(),n.modal("hide modal",t))},hideOthers:function(t){var n=v.filter("."+R.active+", ."+R.animating);t=e.isFunction(t)?t:function(){},n.length>0&&(k.debug("Hiding other modals",v),n.modal("hide modal",t,!0))},others:{active:function(){return v.filter("."+R.active).length>0},animating:function(){return v.filter("."+R.animating).length>0}},add:{keyboardShortcuts:function(){k.verbose("Adding keyboard shortcuts"),l.on("keyup"+F,k.event.keyboard)}},save:{focus:function(){e(n.activeElement).closest(D).length>0||(b=e(n.activeElement).blur())}},restore:{focus:function(){b&&b.length>0&&b.focus()}},remove:{active:function(){D.removeClass(R.active)},clickaway:function(){x.off("click"+C)},bodyStyle:function(){""===c.attr("style")&&(k.verbose("Removing style attribute"),c.removeAttr("style"))},screenHeight:function(){k.debug("Removing page height"),c.css("height","")},keyboardShortcuts:function(){k.verbose("Removing keyboard shortcuts"),l.off("keyup"+F)},scrolling:function(){y.removeClass(R.scrolling),D.removeClass(R.scrolling)}},cacheSizes:function(){D.addClass(R.loading);var o=D.prop("scrollHeight"),a=D.outerHeight();k.cache!==i&&0===a||(k.cache={pageHeight:e(n).outerHeight(),height:a+T.offset,scrollHeight:o+T.offset,contextHeight:"body"==T.context?e(t).height():y.height()},k.cache.topOffset=-k.cache.height/2),D.removeClass(R.loading),k.debug("Caching modal and container sizes",k.cache)},can:{fit:function(){var e=k.cache.contextHeight,t=k.cache.contextHeight/2,n=k.cache.topOffset,i=k.cache.scrollHeight,o=k.cache.height,a=T.padding;return i>o?t+n+i+a<e:o+2*a<e}},is:{active:function(){return D.hasClass(R.active)},animating:function(){return D.transition("is supported")?D.transition("is animating"):D.is(":visible")},scrolling:function(){return y.hasClass(R.scrolling)},modernBrowser:function(){return!(t.ActiveXObject||"ActiveXObject"in t)}},set:{autofocus:function(){var e=D.find("[tabindex], :input").filter(":visible"),t=e.filter("[autofocus]"),n=t.length>0?t.first():e.first();n.length>0&&n.focus()},clickaway:function(){x.on("click"+C,k.event.click)},dimmerSettings:function(){if(e.fn.dimmer!==i){var t={debug:T.debug,dimmerName:"modals",closable:"auto",variation:!T.centered&&"top aligned",duration:{show:T.duration,hide:T.duration}},n=e.extend(!0,t,T.dimmerSettings);T.inverted?(n.variation=n.variation!==i?n.variation+" inverted":"inverted",x.addClass(R.inverted)):x.removeClass(R.inverted),T.blurring?y.addClass(R.blurring):y.removeClass(R.blurring),q.dimmer("setting",n)}else k.error(E.dimmer)},screenHeight:function(){k.can.fit()?c.css("height",""):(k.debug("Modal is taller than page content, resizing page height"),c.css("height",k.cache.height+2*T.padding))},active:function(){D.addClass(R.active)},scrolling:function(){y.addClass(R.scrolling),D.addClass(R.scrolling)},type:function(){k.can.fit()?(k.verbose("Modal fits on screen"),k.others.active()||k.others.animating()||k.remove.scrolling()):(k.verbose("Modal cannot fit on screen setting to scrolling"),k.set.scrolling())},undetached:function(){y.addClass(R.undetached)}},setting:function(t,n){if(k.debug("Changing setting",t,n),e.isPlainObject(t))e.extend(!0,T,t);else{if(n===i)return T[t];e.isPlainObject(T[t])?e.extend(!0,T[t],n):T[t]=n}},internal:function(t,n){if(e.isPlainObject(t))e.extend(!0,k,t);else{if(n===i)return k[t];k[t]=n}},debug:function(){!T.silent&&T.debug&&(T.performance?k.performance.log(arguments):(k.debug=Function.prototype.bind.call(console.info,console,T.name+":"),k.debug.apply(console,arguments)))},verbose:function(){!T.silent&&T.verbose&&T.debug&&(T.performance?k.performance.log(arguments):(k.verbose=Function.prototype.bind.call(console.info,console,T.name+":"),k.verbose.apply(console,arguments)))},error:function(){T.silent||(k.error=Function.prototype.bind.call(console.error,console,T.name+":"),k.error.apply(console,arguments))},performance:{log:function(e){var t,n;T.performance&&(n=(t=(new Date).getTime())-(d||t),d=t,f.push({Name:e[0],Arguments:[].slice.call(e,1)||"",Element:z,"Execution Time":n})),clearTimeout(k.performance.timer),k.performance.timer=setTimeout(k.performance.display,500)},display:function(){var t=T.name+":",n=0;d=!1,clearTimeout(k.performance.timer),e.each(f,function(e,t){n+=t["Execution Time"]}),t+=" "+n+"ms",u&&(t+=" '"+u+"'"),(console.group!==i||console.table!==i)&&f.length>0&&(console.groupCollapsed(t),console.table?console.table(f):e.each(f,function(e,t){console.log(t.Name+": "+t["Execution Time"]+"ms")}),console.groupEnd()),f=[]}},invoke:function(t,n,o){var r,s,l,c=I;return n=n||p,o=z||o,"string"==typeof t&&c!==i&&(t=t.split(/[\. ]/),r=t.length-1,e.each(t,function(n,o){var a=n!=r?o+t[n+1].charAt(0).toUpperCase()+t[n+1].slice(1):t;if(e.isPlainObject(c[a])&&n!=r)c=c[a];else{if(c[a]!==i)return s=c[a],!1;if(!e.isPlainObject(c[o])||n==r)return c[o]!==i&&(s=c[o],!1);c=c[o]}})),e.isFunction(s)?l=s.apply(o,n):s!==i&&(l=s),e.isArray(a)?a.push(l):a!==i?a=[a,l]:l!==i&&(a=l),s}},g?(I===i&&k.initialize(),k.invoke(m)):(I!==i&&I.invoke("destroy"),k.initialize())}),a!==i?a:this},e.fn.modal.settings={name:"Modal",namespace:"modal",silent:!1,debug:!1,verbose:!1,performance:!0,observeChanges:!1,allowMultiple:!1,detachable:!0,closable:!0,autofocus:!0,inverted:!1,blurring:!1,centered:!0,dimmerSettings:{closable:!1,useCSS:!0},keyboardShortcuts:!0,context:"body",queue:!1,duration:500,offset:0,transition:"scale",padding:50,onShow:function(){},onVisible:function(){},onHide:function(){return!0},onHidden:function(){},onApprove:function(){return!0},onDeny:function(){return!0},selector:{close:"> .close",approve:".actions .positive, .actions .approve, .actions .ok",deny:".actions .negative, .actions .deny, .actions .cancel",modal:".ui.modal"},error:{dimmer:"UI Dimmer, a required component is not included in this page",method:"The method you called is not defined.",notFound:"The element you specified could not be found"},className:{active:"active",animating:"animating",blurring:"blurring",inverted:"inverted",loading:"loading",scrolling:"scrolling",undetached:"undetached"}}}(jQuery,window,document),function(e,t,n,i){"use strict";t=void 0!==t&&t.Math==Math?t:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")(),e.fn.nag=function(n){var o,a=e(this),r=a.selector||"",s=(new Date).getTime(),l=[],c=arguments[0],u="string"==typeof c,d=[].slice.call(arguments,1);return a.each(function(){var a,f=e.isPlainObject(n)?e.extend(!0,{},e.fn.nag.settings,n):e.extend({},e.fn.nag.settings),m=(f.className,f.selector),g=f.error,p=f.namespace,h="."+p,v=p+"-module",b=e(this),y=(b.find(m.close),f.context?e(f.context):e("body")),x=this,C=b.data(v);t.requestAnimationFrame||t.mozRequestAnimationFrame||t.webkitRequestAnimationFrame||t.msRequestAnimationFrame;a={initialize:function(){a.verbose("Initializing element"),b.on("click"+h,m.close,a.dismiss).data(v,a),f.detachable&&b.parent()[0]!==y[0]&&b.detach().prependTo(y),f.displayTime>0&&setTimeout(a.hide,f.displayTime),a.show()},destroy:function(){a.verbose("Destroying instance"),b.removeData(v).off(h)},show:function(){a.should.show()&&!b.is(":visible")&&(a.debug("Showing nag",f.animation.show),"fade"==f.animation.show?b.fadeIn(f.duration,f.easing):b.slideDown(f.duration,f.easing))},hide:function(){a.debug("Showing nag",f.animation.hide),"fade"==f.animation.show?b.fadeIn(f.duration,f.easing):b.slideUp(f.duration,f.easing)},onHide:function(){a.debug("Removing nag",f.animation.hide),b.remove(),f.onHide&&f.onHide()},dismiss:function(e){f.storageMethod&&a.storage.set(f.key,f.value),a.hide(),e.stopImmediatePropagation(),e.preventDefault()},should:{show:function(){return f.persist?(a.debug("Persistent nag is set, can show nag"),!0):a.storage.get(f.key)!=f.value.toString()?(a.debug("Stored value is not set, can show nag",a.storage.get(f.key)),!0):(a.debug("Stored value is set, cannot show nag",a.storage.get(f.key)),!1)}},get:{storageOptions:function(){var e={};return f.expires&&(e.expires=f.expires),f.domain&&(e.domain=f.domain),f.path&&(e.path=f.path),e}},clear:function(){a.storage.remove(f.key)},storage:{set:function(n,o){var r=a.get.storageOptions();if("localstorage"==f.storageMethod&&t.localStorage!==i)t.localStorage.setItem(n,o),a.debug("Value stored using local storage",n,o);else if("sessionstorage"==f.storageMethod&&t.sessionStorage!==i)t.sessionStorage.setItem(n,o),a.debug("Value stored using session storage",n,o);else{if(e.cookie===i)return void a.error(g.noCookieStorage);e.cookie(n,o,r),a.debug("Value stored using cookie",n,o,r)}},get:function(n,o){var r;return"localstorage"==f.storageMethod&&t.localStorage!==i?r=t.localStorage.getItem(n):"sessionstorage"==f.storageMethod&&t.sessionStorage!==i?r=t.sessionStorage.getItem(n):e.cookie!==i?r=e.cookie(n):a.error(g.noCookieStorage),"undefined"!=r&&"null"!=r&&r!==i&&null!==r||(r=i),r},remove:function(n){var o=a.get.storageOptions();"localstorage"==f.storageMethod&&t.localStorage!==i?t.localStorage.removeItem(n):"sessionstorage"==f.storageMethod&&t.sessionStorage!==i?t.sessionStorage.removeItem(n):e.cookie!==i?e.removeCookie(n,o):a.error(g.noStorage)}},setting:function(t,n){if(a.debug("Changing setting",t,n),e.isPlainObject(t))e.extend(!0,f,t);else{if(n===i)return f[t];e.isPlainObject(f[t])?e.extend(!0,f[t],n):f[t]=n}},internal:function(t,n){if(e.isPlainObject(t))e.extend(!0,a,t);else{if(n===i)return a[t];a[t]=n}},debug:function(){!f.silent&&f.debug&&(f.performance?a.performance.log(arguments):(a.debug=Function.prototype.bind.call(console.info,console,f.name+":"),a.debug.apply(console,arguments)))},verbose:function(){!f.silent&&f.verbose&&f.debug&&(f.performance?a.performance.log(arguments):(a.verbose=Function.prototype.bind.call(console.info,console,f.name+":"),a.verbose.apply(console,arguments)))},error:function(){f.silent||(a.error=Function.prototype.bind.call(console.error,console,f.name+":"),a.error.apply(console,arguments))},performance:{log:function(e){var t,n;f.performance&&(n=(t=(new Date).getTime())-(s||t),s=t,l.push({Name:e[0],Arguments:[].slice.call(e,1)||"",Element:x,"Execution Time":n})),clearTimeout(a.performance.timer),a.performance.timer=setTimeout(a.performance.display,500)},display:function(){var t=f.name+":",n=0;s=!1,clearTimeout(a.performance.timer),e.each(l,function(e,t){n+=t["Execution Time"]}),t+=" "+n+"ms",r&&(t+=" '"+r+"'"),(console.group!==i||console.table!==i)&&l.length>0&&(console.groupCollapsed(t),console.table?console.table(l):e.each(l,function(e,t){console.log(t.Name+": "+t["Execution Time"]+"ms")}),console.groupEnd()),l=[]}},invoke:function(t,n,r){var s,l,c,u=C;return n=n||d,r=x||r,"string"==typeof t&&u!==i&&(t=t.split(/[\. ]/),s=t.length-1,e.each(t,function(n,o){var r=n!=s?o+t[n+1].charAt(0).toUpperCase()+t[n+1].slice(1):t;if(e.isPlainObject(u[r])&&n!=s)u=u[r];else{if(u[r]!==i)return l=u[r],!1;if(!e.isPlainObject(u[o])||n==s)return u[o]!==i?(l=u[o],!1):(a.error(g.method,t),!1);u=u[o]}})),e.isFunction(l)?c=l.apply(r,n):l!==i&&(c=l),e.isArray(o)?o.push(c):o!==i?o=[o,c]:c!==i&&(o=c),l}},u?(C===i&&a.initialize(),a.invoke(c)):(C!==i&&C.invoke("destroy"),a.initialize())}),o!==i?o:this},e.fn.nag.settings={name:"Nag",silent:!1,debug:!1,verbose:!1,performance:!0,namespace:"Nag",persist:!1,displayTime:0,animation:{show:"slide",hide:"slide"},context:!1,detachable:!1,expires:30,domain:!1,path:"/",storageMethod:"cookie",key:"nag",value:"dismiss",error:{noCookieStorage:"$.cookie is not included. A storage solution is required.",noStorage:"Neither $.cookie or store is defined. A storage solution is required for storing state",method:"The method you called is not defined."},className:{bottom:"bottom",fixed:"fixed"},selector:{close:".close.icon"},speed:500,easing:"easeOutQuad",onHide:function(){}},e.extend(e.easing,{easeOutQuad:function(e,t,n,i,o){return-i*(t/=o)*(t-2)+n}})}(jQuery,window,document),function(e,t,n,i){"use strict";t=void 0!==t&&t.Math==Math?t:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")(),e.fn.popup=function(o){var a,r=e(this),s=e(n),l=e(t),c=e("body"),u=r.selector||"",d=(new Date).getTime(),f=[],m=arguments[0],g="string"==typeof m,p=[].slice.call(arguments,1);return r.each(function(){var r,h,v,b,y,x,C=e.isPlainObject(o)?e.extend(!0,{},e.fn.popup.settings,o):e.extend({},e.fn.popup.settings),w=C.selector,S=C.className,k=C.error,T=C.metadata,A=C.namespace,R="."+C.namespace,P="module-"+A,E=e(this),F=e(C.context),O=e(C.scrollContext),D=e(C.boundary),q=C.target?e(C.target):E,j=0,z=!1,I=!1,M=this,L=E.data(P);x={initialize:function(){x.debug("Initializing",E),x.createID(),x.bind.events(),!x.exists()&&C.preserve&&x.create(),C.observeChanges&&x.observeChanges(),x.instantiate()},instantiate:function(){x.verbose("Storing instance",x),L=x,E.data(P,L)},observeChanges:function(){"MutationObserver"in t&&((v=new MutationObserver(x.event.documentChanged)).observe(n,{childList:!0,subtree:!0}),x.debug("Setting up mutation observer",v))},refresh:function(){C.popup?r=e(C.popup).eq(0):C.inline&&(r=q.nextAll(w.popup).eq(0),C.popup=r),C.popup?(r.addClass(S.loading),h=x.get.offsetParent(),r.removeClass(S.loading),C.movePopup&&x.has.popup()&&x.get.offsetParent(r)[0]!==h[0]&&(x.debug("Moving popup to the same offset parent as target"),r.detach().appendTo(h))):h=C.inline?x.get.offsetParent(q):x.has.popup()?x.get.offsetParent(r):c,h.is("html")&&h[0]!==c[0]&&(x.debug("Setting page as offset parent"),h=c),x.get.variation()&&x.set.variation()},reposition:function(){x.refresh(),x.set.position()},destroy:function(){x.debug("Destroying previous module"),v&&v.disconnect(),r&&!C.preserve&&x.removePopup(),clearTimeout(x.hideTimer),clearTimeout(x.showTimer),x.unbind.close(),x.unbind.events(),E.removeData(P)},event:{start:function(t){var n=e.isPlainObject(C.delay)?C.delay.show:C.delay;clearTimeout(x.hideTimer),I||(x.showTimer=setTimeout(x.show,n))},end:function(){var t=e.isPlainObject(C.delay)?C.delay.hide:C.delay;clearTimeout(x.showTimer),x.hideTimer=setTimeout(x.hide,t)},touchstart:function(e){I=!0,x.show()},resize:function(){x.is.visible()&&x.set.position()},documentChanged:function(t){[].forEach.call(t,function(t){t.removedNodes&&[].forEach.call(t.removedNodes,function(t){(t==M||e(t).find(M).length>0)&&(x.debug("Element removed from DOM, tearing down events"),x.destroy())})})},hideGracefully:function(t){var i=e(t.target),o=e.contains(n.documentElement,t.target),a=i.closest(w.popup).length>0;t&&!a&&o?(x.debug("Click occurred outside popup hiding popup"),x.hide()):x.debug("Click was inside popup, keeping popup open")}},create:function(){var t=x.get.html(),n=x.get.title(),i=x.get.content();t||i||n?(x.debug("Creating pop-up html"),t||(t=C.templates.popup({title:n,content:i})),r=e("<div/>").addClass(S.popup).data(T.activator,E).html(t),C.inline?(x.verbose("Inserting popup element inline",r),r.insertAfter(E)):(x.verbose("Appending popup element to body",r),r.appendTo(F)),x.refresh(),x.set.variation(),C.hoverable&&x.bind.popup(),C.onCreate.call(r,M)):0!==q.next(w.popup).length?(x.verbose("Pre-existing popup found"),C.inline=!0,C.popup=q.next(w.popup).data(T.activator,E),x.refresh(),C.hoverable&&x.bind.popup()):C.popup?(e(C.popup).data(T.activator,E),x.verbose("Used popup specified in settings"),x.refresh(),C.hoverable&&x.bind.popup()):x.debug("No content specified skipping display",M)},createID:function(){y=(Math.random().toString(16)+"000000000").substr(2,8),b="."+y,x.verbose("Creating unique id for element",y)},toggle:function(){x.debug("Toggling pop-up"),x.is.hidden()?(x.debug("Popup is hidden, showing pop-up"),x.unbind.close(),x.show()):(x.debug("Popup is visible, hiding pop-up"),x.hide())},show:function(e){if(e=e||function(){},x.debug("Showing pop-up",C.transition),x.is.hidden()&&(!x.is.active()||!x.is.dropdown())){if(x.exists()||x.create(),!1===C.onShow.call(r,M))return void x.debug("onShow callback returned false, cancelling popup animation");C.preserve||C.popup||x.refresh(),r&&x.set.position()&&(x.save.conditions(),C.exclusive&&x.hideAll(),x.animate.show(e))}},hide:function(e){if(e=e||function(){},x.is.visible()||x.is.animating()){if(!1===C.onHide.call(r,M))return void x.debug("onHide callback returned false, cancelling popup animation");x.remove.visible(),x.unbind.close(),x.restore.conditions(),x.animate.hide(e)}},hideAll:function(){e(w.popup).filter("."+S.popupVisible).each(function(){e(this).data(T.activator).popup("hide")})},exists:function(){return!!r&&(C.inline||C.popup?x.has.popup():r.closest(F).length>=1)},removePopup:function(){x.has.popup()&&!C.popup&&(x.debug("Removing popup",r),r.remove(),r=i,C.onRemove.call(r,M))},save:{conditions:function(){x.cache={title:E.attr("title")},x.cache.title&&E.removeAttr("title"),x.verbose("Saving original attributes",x.cache.title)}},restore:{conditions:function(){return x.cache&&x.cache.title&&(E.attr("title",x.cache.title),x.verbose("Restoring original attributes",x.cache.title)),!0}},supports:{svg:function(){return"undefined"==typeof SVGGraphicsElement}},animate:{show:function(t){t=e.isFunction(t)?t:function(){},C.transition&&e.fn.transition!==i&&E.transition("is supported")?(x.set.visible(),r.transition({animation:C.transition+" in",queue:!1,debug:C.debug,verbose:C.verbose,duration:C.duration,onComplete:function(){x.bind.close(),t.call(r,M),C.onVisible.call(r,M)}})):x.error(k.noTransition)},hide:function(t){t=e.isFunction(t)?t:function(){},x.debug("Hiding pop-up"),!1!==C.onHide.call(r,M)?C.transition&&e.fn.transition!==i&&E.transition("is supported")?r.transition({animation:C.transition+" out",queue:!1,duration:C.duration,debug:C.debug,verbose:C.verbose,onComplete:function(){x.reset(),t.call(r,M),C.onHidden.call(r,M)}}):x.error(k.noTransition):x.debug("onHide callback returned false, cancelling popup animation")}},change:{content:function(e){r.html(e)}},get:{html:function(){return E.removeData(T.html),E.data(T.html)||C.html},title:function(){return E.removeData(T.title),E.data(T.title)||C.title},content:function(){return E.removeData(T.content),E.data(T.content)||C.content||E.attr("title")},variation:function(){return E.removeData(T.variation),E.data(T.variation)||C.variation},popup:function(){return r},popupOffset:function(){return r.offset()},calculations:function(){var e,n=x.get.offsetParent(r),i=q[0],o=D[0]==t,a=C.inline||C.popup&&C.movePopup?q.position():q.offset(),s=o?{top:0,left:0}:D.offset(),c={},u=o?{top:l.scrollTop(),left:l.scrollLeft()}:{top:0,left:0};if(c={target:{element:q[0],width:q.outerWidth(),height:q.outerHeight(),top:a.top,left:a.left,margin:{}},popup:{width:r.outerWidth(),height:r.outerHeight()},parent:{width:h.outerWidth(),height:h.outerHeight()},screen:{top:s.top,left:s.left,scroll:{top:u.top,left:u.left},width:D.width(),height:D.height()}},n.get(0)!==h.get(0)){var d=n.offset();c.target.top-=d.top,c.target.left-=d.left,c.parent.width=n.outerWidth(),c.parent.height=n.outerHeight()}return C.setFluidWidth&&x.is.fluid()&&(c.container={width:r.parent().outerWidth()},c.popup.width=c.container.width),c.target.margin.top=C.inline?parseInt(t.getComputedStyle(i).getPropertyValue("margin-top"),10):0,c.target.margin.left=C.inline?x.is.rtl()?parseInt(t.getComputedStyle(i).getPropertyValue("margin-right"),10):parseInt(t.getComputedStyle(i).getPropertyValue("margin-left"),10):0,e=c.screen,c.boundary={top:e.top+e.scroll.top,bottom:e.top+e.scroll.top+e.height,left:e.left+e.scroll.left,right:e.left+e.scroll.left+e.width},c},id:function(){return y},startEvent:function(){return"hover"==C.on?"mouseenter":"focus"==C.on&&"focus"},scrollEvent:function(){return"scroll"},endEvent:function(){return"hover"==C.on?"mouseleave":"focus"==C.on&&"blur"},distanceFromBoundary:function(e,t){var n,i,o={};return n=(t=t||x.get.calculations()).popup,i=t.boundary,e&&(o={top:e.top-i.top,left:e.left-i.left,right:i.right-(e.left+n.width),bottom:i.bottom-(e.top+n.height)},x.verbose("Distance from boundaries determined",e,o)),o},offsetParent:function(t){var n=(t!==i?t[0]:q[0]).parentNode,o=e(n);if(n)for(var a="none"===o.css("transform"),r="static"===o.css("position"),s=o.is("body");n&&!s&&r&&a;)n=n.parentNode,a="none"===(o=e(n)).css("transform"),r="static"===o.css("position"),s=o.is("body");return o&&o.length>0?o:e()},positions:function(){return{"top left":!1,"top center":!1,"top right":!1,"bottom left":!1,"bottom center":!1,"bottom right":!1,"left center":!1,"right center":!1}},nextPosition:function(e){var t=e.split(" "),n=t[0],i=t[1],o="top"==n||"bottom"==n,a=!1,r=!1,s=!1;return z||(x.verbose("All available positions available"),z=x.get.positions()),x.debug("Recording last position tried",e),z[e]=!0,"opposite"===C.prefer&&(s=(s=[{top:"bottom",bottom:"top",left:"right",right:"left"}[n],i]).join(" "),a=!0===z[s],x.debug("Trying opposite strategy",s)),"adjacent"===C.prefer&&o&&(s=(s=[n,{left:"center",center:"right",right:"left"}[i]]).join(" "),r=!0===z[s],x.debug("Trying adjacent strategy",s)),(r||a)&&(x.debug("Using backup position",s),s={"top left":"top center","top center":"top right","top right":"right center","right center":"bottom right","bottom right":"bottom center","bottom center":"bottom left","bottom left":"left center","left center":"top left"}[e]),s}},set:{position:function(e,t){if(0!==q.length&&0!==r.length){var n,o,a,s,l,c,u,d;if(t=t||x.get.calculations(),e=e||E.data(T.position)||C.position,n=E.data(T.offset)||C.offset,o=C.distanceAway,a=t.target,s=t.popup,l=t.parent,x.should.centerArrow(t)&&(x.verbose("Adjusting offset to center arrow on small target element"),"top left"!=e&&"bottom left"!=e||(n+=a.width/2,n-=C.arrowPixelsFromEdge),"top right"!=e&&"bottom right"!=e||(n-=a.width/2,n+=C.arrowPixelsFromEdge)),0===a.width&&0===a.height&&!x.is.svg(a.element))return x.debug("Popup target is hidden, no action taken"),!1;switch(C.inline&&(x.debug("Adding margin to calculation",a.margin),"left center"==e||"right center"==e?(n+=a.margin.top,o+=-a.margin.left):"top left"==e||"top center"==e||"top right"==e?(n+=a.margin.left,o-=a.margin.top):(n+=a.margin.left,o+=a.margin.top)),x.debug("Determining popup position from calculations",e,t),x.is.rtl()&&(e=e.replace(/left|right/g,function(e){return"left"==e?"right":"left"}),x.debug("RTL: Popup position updated",e)),j==C.maxSearchDepth&&"string"==typeof C.lastResort&&(e=C.lastResort),e){case"top left":c={top:"auto",bottom:l.height-a.top+o,left:a.left+n,right:"auto"};break;case"top center":c={bottom:l.height-a.top+o,left:a.left+a.width/2-s.width/2+n,top:"auto",right:"auto"};break;case"top right":c={bottom:l.height-a.top+o,right:l.width-a.left-a.width-n,top:"auto",left:"auto"};break;case"left center":c={top:a.top+a.height/2-s.height/2+n,right:l.width-a.left+o,left:"auto",bottom:"auto"};break;case"right center":c={top:a.top+a.height/2-s.height/2+n,left:a.left+a.width+o,bottom:"auto",right:"auto"};break;case"bottom left":c={top:a.top+a.height+o,left:a.left+n,bottom:"auto",right:"auto"};break;case"bottom center":c={top:a.top+a.height+o,left:a.left+a.width/2-s.width/2+n,bottom:"auto",right:"auto"};break;case"bottom right":c={top:a.top+a.height+o,right:l.width-a.left-a.width-n,left:"auto",bottom:"auto"}}if(c===i&&x.error(k.invalidPosition,e),x.debug("Calculated popup positioning values",c),r.css(c).removeClass(S.position).addClass(e).addClass(S.loading),u=x.get.popupOffset(),d=x.get.distanceFromBoundary(u,t),x.is.offstage(d,e)){if(x.debug("Position is outside viewport",e),j<C.maxSearchDepth)return j++,e=x.get.nextPosition(e),x.debug("Trying new position",e),!!r&&x.set.position(e,t);if(!C.lastResort)return x.debug("Popup could not find a position to display",r),x.error(k.cannotPlace,M),x.remove.attempts(),x.remove.loading(),x.reset(),C.onUnplaceable.call(r,M),!1;x.debug("No position found, showing with last position")}return x.debug("Position is on stage",e),x.remove.attempts(),x.remove.loading(),C.setFluidWidth&&x.is.fluid()&&x.set.fluidWidth(t),!0}x.error(k.notFound)},fluidWidth:function(e){e=e||x.get.calculations(),x.debug("Automatically setting element width to parent width",e.parent.width),r.css("width",e.container.width)},variation:function(e){(e=e||x.get.variation())&&x.has.popup()&&(x.verbose("Adding variation to popup",e),r.addClass(e))},visible:function(){E.addClass(S.visible)}},remove:{loading:function(){r.removeClass(S.loading)},variation:function(e){(e=e||x.get.variation())&&(x.verbose("Removing variation",e),r.removeClass(e))},visible:function(){E.removeClass(S.visible)},attempts:function(){x.verbose("Resetting all searched positions"),j=0,z=!1}},bind:{events:function(){x.debug("Binding popup events to module"),"click"==C.on&&E.on("click"+R,x.toggle),"hover"==C.on&&E.on("touchstart"+R,x.event.touchstart),x.get.startEvent()&&E.on(x.get.startEvent()+R,x.event.start).on(x.get.endEvent()+R,x.event.end),C.target&&x.debug("Target set to element",q),l.on("resize"+b,x.event.resize)},popup:function(){x.verbose("Allowing hover events on popup to prevent closing"),r&&x.has.popup()&&r.on("mouseenter"+R,x.event.start).on("mouseleave"+R,x.event.end)},close:function(){(!0===C.hideOnScroll||"auto"==C.hideOnScroll&&"click"!=C.on)&&x.bind.closeOnScroll(),"hover"==C.on&&I&&x.bind.touchClose(),"click"==C.on&&C.closable&&x.bind.clickaway()},closeOnScroll:function(){x.verbose("Binding scroll close event to document"),O.one(x.get.scrollEvent()+b,x.event.hideGracefully)},touchClose:function(){x.verbose("Binding popup touchclose event to document"),s.on("touchstart"+b,function(e){x.verbose("Touched away from popup"),x.event.hideGracefully.call(M,e)})},clickaway:function(){x.verbose("Binding popup close event to document"),s.on("click"+b,function(e){x.verbose("Clicked away from popup"),x.event.hideGracefully.call(M,e)})}},unbind:{events:function(){l.off(b),E.off(R)},close:function(){s.off(b),O.off(b)}},has:{popup:function(){return r&&r.length>0}},should:{centerArrow:function(e){return!x.is.basic()&&e.target.width<=2*C.arrowPixelsFromEdge}},is:{offstage:function(t,n){var i=[];return e.each(t,function(e,t){t<-C.jitter&&(x.debug("Position exceeds allowable distance from edge",e,t,n),i.push(e))}),i.length>0},svg:function(e){return x.supports.svg()&&e instanceof SVGGraphicsElement},basic:function(){return E.hasClass(S.basic)},active:function(){return E.hasClass(S.active)},animating:function(){return r!==i&&r.hasClass(S.animating)},fluid:function(){return r!==i&&r.hasClass(S.fluid)},visible:function(){return r!==i&&r.hasClass(S.popupVisible)},dropdown:function(){return E.hasClass(S.dropdown)},hidden:function(){return!x.is.visible()},rtl:function(){return"rtl"==E.css("direction")}},reset:function(){x.remove.visible(),C.preserve?e.fn.transition!==i&&r.transition("remove transition"):x.removePopup()},setting:function(t,n){if(e.isPlainObject(t))e.extend(!0,C,t);else{if(n===i)return C[t];C[t]=n}},internal:function(t,n){if(e.isPlainObject(t))e.extend(!0,x,t);else{if(n===i)return x[t];x[t]=n}},debug:function(){!C.silent&&C.debug&&(C.performance?x.performance.log(arguments):(x.debug=Function.prototype.bind.call(console.info,console,C.name+":"),x.debug.apply(console,arguments)))},verbose:function(){!C.silent&&C.verbose&&C.debug&&(C.performance?x.performance.log(arguments):(x.verbose=Function.prototype.bind.call(console.info,console,C.name+":"),x.verbose.apply(console,arguments)))},error:function(){C.silent||(x.error=Function.prototype.bind.call(console.error,console,C.name+":"),x.error.apply(console,arguments))},performance:{log:function(e){var t,n;C.performance&&(n=(t=(new Date).getTime())-(d||t),d=t,f.push({Name:e[0],Arguments:[].slice.call(e,1)||"",Element:M,"Execution Time":n})),clearTimeout(x.performance.timer),x.performance.timer=setTimeout(x.performance.display,500)},display:function(){var t=C.name+":",n=0;d=!1,clearTimeout(x.performance.timer),e.each(f,function(e,t){n+=t["Execution Time"]}),t+=" "+n+"ms",u&&(t+=" '"+u+"'"),(console.group!==i||console.table!==i)&&f.length>0&&(console.groupCollapsed(t),console.table?console.table(f):e.each(f,function(e,t){console.log(t.Name+": "+t["Execution Time"]+"ms")}),console.groupEnd()),f=[]}},invoke:function(t,n,o){var r,s,l,c=L;return n=n||p,o=M||o,"string"==typeof t&&c!==i&&(t=t.split(/[\. ]/),r=t.length-1,e.each(t,function(n,o){var a=n!=r?o+t[n+1].charAt(0).toUpperCase()+t[n+1].slice(1):t;if(e.isPlainObject(c[a])&&n!=r)c=c[a];else{if(c[a]!==i)return s=c[a],!1;if(!e.isPlainObject(c[o])||n==r)return c[o]!==i&&(s=c[o],!1);c=c[o]}})),e.isFunction(s)?l=s.apply(o,n):s!==i&&(l=s),e.isArray(a)?a.push(l):a!==i?a=[a,l]:l!==i&&(a=l),s}},g?(L===i&&x.initialize(),x.invoke(m)):(L!==i&&L.invoke("destroy"),x.initialize())}),a!==i?a:this},e.fn.popup.settings={name:"Popup",silent:!1,debug:!1,verbose:!1,performance:!0,namespace:"popup",observeChanges:!0,onCreate:function(){},onRemove:function(){},onShow:function(){},onVisible:function(){},onHide:function(){},onUnplaceable:function(){},onHidden:function(){},on:"hover",boundary:t,addTouchEvents:!0,position:"top left",variation:"",movePopup:!0,target:!1,popup:!1,inline:!1,preserve:!1,hoverable:!1,content:!1,html:!1,title:!1,closable:!0,hideOnScroll:"auto",exclusive:!1,context:"body",scrollContext:t,prefer:"opposite",lastResort:!1,arrowPixelsFromEdge:20,delay:{show:50,hide:70},setFluidWidth:!0,duration:200,transition:"scale",distanceAway:0,jitter:2,offset:0,maxSearchDepth:15,error:{invalidPosition:"The position you specified is not a valid position",cannotPlace:"Popup does not fit within the boundaries of the viewport",method:"The method you called is not defined.",noTransition:"This module requires ui transitions <https://github.com/Semantic-Org/UI-Transition>",notFound:"The target or popup you specified does not exist on the page"},metadata:{activator:"activator",content:"content",html:"html",offset:"offset",position:"position",title:"title",variation:"variation"},className:{active:"active",basic:"basic",animating:"animating",dropdown:"dropdown",fluid:"fluid",loading:"loading",popup:"ui popup",position:"top left center bottom right",visible:"visible",popupVisible:"visible"},selector:{popup:".ui.popup"},templates:{escape:function(e){var t={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#x27;","`":"&#x60;"};return/[&<>"'`]/.test(e)?e.replace(/[&<>"'`]/g,function(e){return t[e]}):e},popup:function(t){var n="",o=e.fn.popup.settings.templates.escape;return typeof t!==i&&(typeof t.title!==i&&t.title&&(t.title=o(t.title),n+='<div class="header">'+t.title+"</div>"),typeof t.content!==i&&t.content&&(t.content=o(t.content),n+='<div class="content">'+t.content+"</div>")),n}}}}(jQuery,window,document),function(e,t,n,i){"use strict";void 0!==(t=void 0!==t&&t.Math==Math?t:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")())&&t.Math==Math||("undefined"!=typeof self&&self.Math==Math?self:Function("return this")());e.fn.progress=function(t){var o,a=e(this),r=a.selector||"",s=(new Date).getTime(),l=[],c=arguments[0],u="string"==typeof c,d=[].slice.call(arguments,1);return a.each(function(){var a,f=e.isPlainObject(t)?e.extend(!0,{},e.fn.progress.settings,t):e.extend({},e.fn.progress.settings),m=f.className,g=f.metadata,p=f.namespace,h=f.selector,v=f.error,b="."+p,y="module-"+p,x=e(this),C=e(this).find(h.bar),w=e(this).find(h.progress),S=e(this).find(h.label),k=this,T=x.data(y),A=!1;a={initialize:function(){a.debug("Initializing progress bar",f),a.set.duration(),a.set.transitionEvent(),a.read.metadata(),a.read.settings(),a.instantiate()},instantiate:function(){a.verbose("Storing instance of progress",a),T=a,x.data(y,a)},destroy:function(){a.verbose("Destroying previous progress for",x),clearInterval(T.interval),a.remove.state(),x.removeData(y),T=i},reset:function(){a.remove.nextValue(),a.update.progress(0)},complete:function(){(a.percent===i||a.percent<100)&&(a.remove.progressPoll(),a.set.percent(100))},read:{metadata:function(){var e={percent:x.data(g.percent),total:x.data(g.total),value:x.data(g.value)};e.percent&&(a.debug("Current percent value set from metadata",e.percent),a.set.percent(e.percent)),e.total&&(a.debug("Total value set from metadata",e.total),a.set.total(e.total)),e.value&&(a.debug("Current value set from metadata",e.value),a.set.value(e.value),a.set.progress(e.value))},settings:function(){!1!==f.total&&(a.debug("Current total set in settings",f.total),a.set.total(f.total)),!1!==f.value&&(a.debug("Current value set in settings",f.value),a.set.value(f.value),a.set.progress(a.value)),!1!==f.percent&&(a.debug("Current percent set in settings",f.percent),a.set.percent(f.percent))}},bind:{transitionEnd:function(e){var t=a.get.transitionEnd();C.one(t+b,function(t){clearTimeout(a.failSafeTimer),e.call(this,t)}),a.failSafeTimer=setTimeout(function(){C.triggerHandler(t)},f.duration+f.failSafeDelay),a.verbose("Adding fail safe timer",a.timer)}},increment:function(e){var t,n;a.has.total()?n=(t=a.get.value())+(e=e||1):(n=(t=a.get.percent())+(e=e||a.get.randomValue()),100,a.debug("Incrementing percentage by",t,n)),n=a.get.normalizedValue(n),a.set.progress(n)},decrement:function(e){var t,n;a.get.total()?(n=(t=a.get.value())-(e=e||1),a.debug("Decrementing value by",e,t)):(n=(t=a.get.percent())-(e=e||a.get.randomValue()),a.debug("Decrementing percentage by",e,t)),n=a.get.normalizedValue(n),a.set.progress(n)},has:{progressPoll:function(){return a.progressPoll},total:function(){return!1!==a.get.total()}},get:{text:function(e){var t=a.value||0,n=a.total||0,i=A?a.get.displayPercent():a.percent||0,o=a.total>0?n-t:100-i;return e=(e=e||"").replace("{value}",t).replace("{total}",n).replace("{left}",o).replace("{percent}",i),a.verbose("Adding variables to progress bar text",e),e},normalizedValue:function(e){if(e<0)return a.debug("Value cannot decrement below 0"),0;if(a.has.total()){if(e>a.total)return a.debug("Value cannot increment above total",a.total),a.total}else if(e>100)return a.debug("Value cannot increment above 100 percent"),100;return e},updateInterval:function(){return"auto"==f.updateInterval?f.duration:f.updateInterval},randomValue:function(){return a.debug("Generating random increment percentage"),Math.floor(Math.random()*f.random.max+f.random.min)},numericValue:function(e){return"string"==typeof e?""!==e.replace(/[^\d.]/g,"")&&+e.replace(/[^\d.]/g,""):e},transitionEnd:function(){var e,t=n.createElement("element"),o={transition:"transitionend",OTransition:"oTransitionEnd",MozTransition:"transitionend",WebkitTransition:"webkitTransitionEnd"};for(e in o)if(t.style[e]!==i)return o[e]},displayPercent:function(){var e=C.width(),t=x.width(),n=e>parseInt(C.css("min-width"),10)?e/t*100:a.percent;return f.precision>0?Math.round(n*(10*f.precision))/(10*f.precision):Math.round(n)},percent:function(){return a.percent||0},value:function(){return a.nextValue||a.value||0},total:function(){return a.total||!1}},create:{progressPoll:function(){a.progressPoll=setTimeout(function(){a.update.toNextValue(),a.remove.progressPoll()},a.get.updateInterval())}},is:{complete:function(){return a.is.success()||a.is.warning()||a.is.error()},success:function(){return x.hasClass(m.success)},warning:function(){return x.hasClass(m.warning)},error:function(){return x.hasClass(m.error)},active:function(){return x.hasClass(m.active)},visible:function(){return x.is(":visible")}},remove:{progressPoll:function(){a.verbose("Removing progress poll timer"),a.progressPoll&&(clearTimeout(a.progressPoll),delete a.progressPoll)},nextValue:function(){a.verbose("Removing progress value stored for next update"),delete a.nextValue},state:function(){a.verbose("Removing stored state"),delete a.total,delete a.percent,delete a.value},active:function(){a.verbose("Removing active state"),x.removeClass(m.active)},success:function(){a.verbose("Removing success state"),x.removeClass(m.success)},warning:function(){a.verbose("Removing warning state"),x.removeClass(m.warning)},error:function(){a.verbose("Removing error state"),x.removeClass(m.error)}},set:{barWidth:function(e){e>100?a.error(v.tooHigh,e):e<0?a.error(v.tooLow,e):(C.css("width",e+"%"),x.attr("data-percent",parseInt(e,10)))},duration:function(e){e="number"==typeof(e=e||f.duration)?e+"ms":e,a.verbose("Setting progress bar transition duration",e),C.css({"transition-duration":e})},percent:function(e){e="string"==typeof e?+e.replace("%",""):e,e=f.precision>0?Math.round(e*(10*f.precision))/(10*f.precision):Math.round(e),a.percent=e,a.has.total()||(a.value=f.precision>0?Math.round(e/100*a.total*(10*f.precision))/(10*f.precision):Math.round(e/100*a.total*10)/10,f.limitValues&&(a.value=a.value>100?100:a.value<0?0:a.value)),a.set.barWidth(e),a.set.labelInterval(),a.set.labels(),f.onChange.call(k,e,a.value,a.total)},labelInterval:function(){clearInterval(a.interval),a.bind.transitionEnd(function(){a.verbose("Bar finished animating, removing continuous label updates"),clearInterval(a.interval),A=!1,a.set.labels()}),A=!0,a.interval=setInterval(function(){e.contains(n.documentElement,k)||(clearInterval(a.interval),A=!1),a.set.labels()},f.framerate)},labels:function(){a.verbose("Setting both bar progress and outer label text"),a.set.barLabel(),a.set.state()},label:function(e){(e=e||"")&&(e=a.get.text(e),a.verbose("Setting label to text",e),S.text(e))},state:function(e){100===(e=e!==i?e:a.percent)?f.autoSuccess&&!(a.is.warning()||a.is.error()||a.is.success())?(a.set.success(),a.debug("Automatically triggering success at 100%")):(a.verbose("Reached 100% removing active state"),a.remove.active(),a.remove.progressPoll()):e>0?(a.verbose("Adjusting active progress bar label",e),a.set.active()):(a.remove.active(),a.set.label(f.text.active))},barLabel:function(e){e!==i?w.text(a.get.text(e)):"ratio"==f.label&&a.total?(a.verbose("Adding ratio to bar label"),w.text(a.get.text(f.text.ratio))):"percent"==f.label&&(a.verbose("Adding percentage to bar label"),w.text(a.get.text(f.text.percent)))},active:function(e){e=e||f.text.active,a.debug("Setting active state"),f.showActivity&&!a.is.active()&&x.addClass(m.active),a.remove.warning(),a.remove.error(),a.remove.success(),(e=f.onLabelUpdate("active",e,a.value,a.total))&&a.set.label(e),a.bind.transitionEnd(function(){f.onActive.call(k,a.value,a.total)})},success:function(e){e=e||f.text.success||f.text.active,a.debug("Setting success state"),x.addClass(m.success),a.remove.active(),a.remove.warning(),a.remove.error(),a.complete(),f.text.success?(e=f.onLabelUpdate("success",e,a.value,a.total),a.set.label(e)):(e=f.onLabelUpdate("active",e,a.value,a.total),a.set.label(e)),a.bind.transitionEnd(function(){f.onSuccess.call(k,a.total)})},warning:function(e){e=e||f.text.warning,a.debug("Setting warning state"),x.addClass(m.warning),a.remove.active(),a.remove.success(),a.remove.error(),a.complete(),(e=f.onLabelUpdate("warning",e,a.value,a.total))&&a.set.label(e),a.bind.transitionEnd(function(){f.onWarning.call(k,a.value,a.total)})},error:function(e){e=e||f.text.error,a.debug("Setting error state"),x.addClass(m.error),a.remove.active(),a.remove.success(),a.remove.warning(),a.complete(),(e=f.onLabelUpdate("error",e,a.value,a.total))&&a.set.label(e),a.bind.transitionEnd(function(){f.onError.call(k,a.value,a.total)})},transitionEvent:function(){a.get.transitionEnd()},total:function(e){a.total=e},value:function(e){a.value=e},progress:function(e){a.has.progressPoll()?(a.debug("Updated within interval, setting next update to use new value",e),a.set.nextValue(e)):(a.debug("First update in progress update interval, immediately updating",e),a.update.progress(e),a.create.progressPoll())},nextValue:function(e){a.nextValue=e}},update:{toNextValue:function(){var e=a.nextValue;e&&(a.debug("Update interval complete using last updated value",e),a.update.progress(e),a.remove.nextValue())},progress:function(e){var t;!1===(e=a.get.numericValue(e))&&a.error(v.nonNumeric,e),e=a.get.normalizedValue(e),a.has.total()?(a.set.value(e),t=e/a.total*100,a.debug("Calculating percent complete from total",t),a.set.percent(t)):(t=e,a.debug("Setting value to exact percentage value",t),a.set.percent(t))}},setting:function(t,n){if(a.debug("Changing setting",t,n),e.isPlainObject(t))e.extend(!0,f,t);else{if(n===i)return f[t];e.isPlainObject(f[t])?e.extend(!0,f[t],n):f[t]=n}},internal:function(t,n){if(e.isPlainObject(t))e.extend(!0,a,t);else{if(n===i)return a[t];a[t]=n}},debug:function(){!f.silent&&f.debug&&(f.performance?a.performance.log(arguments):(a.debug=Function.prototype.bind.call(console.info,console,f.name+":"),a.debug.apply(console,arguments)))},verbose:function(){!f.silent&&f.verbose&&f.debug&&(f.performance?a.performance.log(arguments):(a.verbose=Function.prototype.bind.call(console.info,console,f.name+":"),a.verbose.apply(console,arguments)))},error:function(){f.silent||(a.error=Function.prototype.bind.call(console.error,console,f.name+":"),a.error.apply(console,arguments))},performance:{log:function(e){var t,n;f.performance&&(n=(t=(new Date).getTime())-(s||t),s=t,l.push({Name:e[0],Arguments:[].slice.call(e,1)||"",Element:k,"Execution Time":n})),clearTimeout(a.performance.timer),a.performance.timer=setTimeout(a.performance.display,500)},display:function(){var t=f.name+":",n=0;s=!1,clearTimeout(a.performance.timer),e.each(l,function(e,t){n+=t["Execution Time"]}),t+=" "+n+"ms",r&&(t+=" '"+r+"'"),(console.group!==i||console.table!==i)&&l.length>0&&(console.groupCollapsed(t),console.table?console.table(l):e.each(l,function(e,t){console.log(t.Name+": "+t["Execution Time"]+"ms")}),console.groupEnd()),l=[]}},invoke:function(t,n,r){var s,l,c,u=T;return n=n||d,r=k||r,"string"==typeof t&&u!==i&&(t=t.split(/[\. ]/),s=t.length-1,e.each(t,function(n,o){var r=n!=s?o+t[n+1].charAt(0).toUpperCase()+t[n+1].slice(1):t;if(e.isPlainObject(u[r])&&n!=s)u=u[r];else{if(u[r]!==i)return l=u[r],!1;if(!e.isPlainObject(u[o])||n==s)return u[o]!==i?(l=u[o],!1):(a.error(v.method,t),!1);u=u[o]}})),e.isFunction(l)?c=l.apply(r,n):l!==i&&(c=l),e.isArray(o)?o.push(c):o!==i?o=[o,c]:c!==i&&(o=c),l}},u?(T===i&&a.initialize(),a.invoke(c)):(T!==i&&T.invoke("destroy"),a.initialize())}),o!==i?o:this},e.fn.progress.settings={name:"Progress",namespace:"progress",silent:!1,debug:!1,verbose:!1,performance:!0,random:{min:2,max:5},duration:300,updateInterval:"auto",autoSuccess:!0,showActivity:!0,limitValues:!0,label:"percent",precision:0,framerate:1e3/30,percent:!1,total:!1,value:!1,failSafeDelay:100,onLabelUpdate:function(e,t,n,i){return t},onChange:function(e,t,n){},onSuccess:function(e){},onActive:function(e,t){},onError:function(e,t){},onWarning:function(e,t){},error:{method:"The method you called is not defined.",nonNumeric:"Progress value is non numeric",tooHigh:"Value specified is above 100%",tooLow:"Value specified is below 0%"},regExp:{variable:/\{\$*[A-z0-9]+\}/g},metadata:{percent:"percent",total:"total",value:"value"},selector:{bar:"> .bar",label:"> .label",progress:".bar > .progress"},text:{active:!1,error:!1,success:!1,warning:!1,percent:"{percent}%",ratio:"{value} of {total}"},className:{active:"active",error:"error",success:"success",warning:"warning"}}}(jQuery,window,document),function(e,t,n,i){"use strict";t=void 0!==t&&t.Math==Math?t:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")(),e.fn.rating=function(t){var n,o=e(this),a=o.selector||"",r=(new Date).getTime(),s=[],l=arguments[0],c="string"==typeof l,u=[].slice.call(arguments,1);return o.each(function(){var d,f,m=e.isPlainObject(t)?e.extend(!0,{},e.fn.rating.settings,t):e.extend({},e.fn.rating.settings),g=m.namespace,p=m.className,h=m.metadata,v=m.selector,b=(m.error,"."+g),y="module-"+g,x=this,C=e(this).data(y),w=e(this),S=w.find(v.icon);f={initialize:function(){f.verbose("Initializing rating module",m),0===S.length&&f.setup.layout(),m.interactive?f.enable():f.disable(),f.set.initialLoad(),f.set.rating(f.get.initialRating()),f.remove.initialLoad(),f.instantiate()},instantiate:function(){f.verbose("Instantiating module",m),C=f,w.data(y,f)},destroy:function(){f.verbose("Destroying previous instance",C),f.remove.events(),w.removeData(y)},refresh:function(){S=w.find(v.icon)},setup:{layout:function(){var t=f.get.maxRating(),n=e.fn.rating.settings.templates.icon(t);f.debug("Generating icon html dynamically"),w.html(n),f.refresh()}},event:{mouseenter:function(){var t=e(this);t.nextAll().removeClass(p.selected),w.addClass(p.selected),t.addClass(p.selected).prevAll().addClass(p.selected)},mouseleave:function(){w.removeClass(p.selected),S.removeClass(p.selected)},click:function(){var t=e(this),n=f.get.rating(),i=S.index(t)+1;("auto"==m.clearable?1===S.length:m.clearable)&&n==i?f.clearRating():f.set.rating(i)}},clearRating:function(){f.debug("Clearing current rating"),f.set.rating(0)},bind:{events:function(){f.verbose("Binding events"),w.on("mouseenter"+b,v.icon,f.event.mouseenter).on("mouseleave"+b,v.icon,f.event.mouseleave).on("click"+b,v.icon,f.event.click)}},remove:{events:function(){f.verbose("Removing events"),w.off(b)},initialLoad:function(){d=!1}},enable:function(){f.debug("Setting rating to interactive mode"),f.bind.events(),w.removeClass(p.disabled)},disable:function(){f.debug("Setting rating to read-only mode"),f.remove.events(),w.addClass(p.disabled)},is:{initialLoad:function(){return d}},get:{initialRating:function(){return w.data(h.rating)!==i?(w.removeData(h.rating),w.data(h.rating)):m.initialRating},maxRating:function(){return w.data(h.maxRating)!==i?(w.removeData(h.maxRating),w.data(h.maxRating)):m.maxRating},rating:function(){var e=S.filter("."+p.active).length;return f.verbose("Current rating retrieved",e),e}},set:{rating:function(e){var t=e-1>=0?e-1:0,n=S.eq(t);w.removeClass(p.selected),S.removeClass(p.selected).removeClass(p.active),e>0&&(f.verbose("Setting current rating to",e),n.prevAll().addBack().addClass(p.active)),f.is.initialLoad()||m.onRate.call(x,e)},initialLoad:function(){d=!0}},setting:function(t,n){if(f.debug("Changing setting",t,n),e.isPlainObject(t))e.extend(!0,m,t);else{if(n===i)return m[t];e.isPlainObject(m[t])?e.extend(!0,m[t],n):m[t]=n}},internal:function(t,n){if(e.isPlainObject(t))e.extend(!0,f,t);else{if(n===i)return f[t];f[t]=n}},debug:function(){!m.silent&&m.debug&&(m.performance?f.performance.log(arguments):(f.debug=Function.prototype.bind.call(console.info,console,m.name+":"),f.debug.apply(console,arguments)))},verbose:function(){!m.silent&&m.verbose&&m.debug&&(m.performance?f.performance.log(arguments):(f.verbose=Function.prototype.bind.call(console.info,console,m.name+":"),f.verbose.apply(console,arguments)))},error:function(){m.silent||(f.error=Function.prototype.bind.call(console.error,console,m.name+":"),f.error.apply(console,arguments))},performance:{log:function(e){var t,n;m.performance&&(n=(t=(new Date).getTime())-(r||t),r=t,s.push({Name:e[0],Arguments:[].slice.call(e,1)||"",Element:x,"Execution Time":n})),clearTimeout(f.performance.timer),f.performance.timer=setTimeout(f.performance.display,500)},display:function(){var t=m.name+":",n=0;r=!1,clearTimeout(f.performance.timer),e.each(s,function(e,t){n+=t["Execution Time"]}),t+=" "+n+"ms",a&&(t+=" '"+a+"'"),o.length>1&&(t+=" ("+o.length+")"),(console.group!==i||console.table!==i)&&s.length>0&&(console.groupCollapsed(t),console.table?console.table(s):e.each(s,function(e,t){console.log(t.Name+": "+t["Execution Time"]+"ms")}),console.groupEnd()),s=[]}},invoke:function(t,o,a){var r,s,l,c=C;return o=o||u,a=x||a,"string"==typeof t&&c!==i&&(t=t.split(/[\. ]/),r=t.length-1,e.each(t,function(n,o){var a=n!=r?o+t[n+1].charAt(0).toUpperCase()+t[n+1].slice(1):t;if(e.isPlainObject(c[a])&&n!=r)c=c[a];else{if(c[a]!==i)return s=c[a],!1;if(!e.isPlainObject(c[o])||n==r)return c[o]!==i&&(s=c[o],!1);c=c[o]}})),e.isFunction(s)?l=s.apply(a,o):s!==i&&(l=s),e.isArray(n)?n.push(l):n!==i?n=[n,l]:l!==i&&(n=l),s}},c?(C===i&&f.initialize(),f.invoke(l)):(C!==i&&C.invoke("destroy"),f.initialize())}),n!==i?n:this},e.fn.rating.settings={name:"Rating",namespace:"rating",slent:!1,debug:!1,verbose:!1,performance:!0,initialRating:0,interactive:!0,maxRating:4,clearable:"auto",fireOnInit:!1,onRate:function(e){},error:{method:"The method you called is not defined",noMaximum:"No maximum rating specified. Cannot generate HTML automatically"},metadata:{rating:"rating",maxRating:"maxRating"},className:{active:"active",disabled:"disabled",selected:"selected",loading:"loading"},selector:{icon:".icon"},templates:{icon:function(e){for(var t=1,n="";t<=e;)n+='<i class="icon"></i>',t++;return n}}}}(jQuery,window,document),function(e,t,n,i){"use strict";t=void 0!==t&&t.Math==Math?t:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")(),e.fn.search=function(o){var a,r=e(this),s=r.selector||"",l=(new Date).getTime(),c=[],u=arguments[0],d="string"==typeof u,f=[].slice.call(arguments,1);return e(this).each(function(){var m,g=e.isPlainObject(o)?e.extend(!0,{},e.fn.search.settings,o):e.extend({},e.fn.search.settings),p=g.className,h=g.metadata,v=g.regExp,b=g.fields,y=g.selector,x=g.error,C=g.namespace,w="."+C,S=C+"-module",k=e(this),T=k.find(y.prompt),A=k.find(y.searchButton),R=k.find(y.results),P=k.find(y.result),E=(k.find(y.category),this),F=k.data(S),O=!1,D=!1;m={initialize:function(){m.verbose("Initializing module"),m.get.settings(),m.determine.searchFields(),m.bind.events(),m.set.type(),m.create.results(),m.instantiate()},instantiate:function(){m.verbose("Storing instance of module",m),F=m,k.data(S,m)},destroy:function(){m.verbose("Destroying instance"),k.off(w).removeData(S)},refresh:function(){m.debug("Refreshing selector cache"),T=k.find(y.prompt),A=k.find(y.searchButton),k.find(y.category),R=k.find(y.results),P=k.find(y.result)},refreshResults:function(){R=k.find(y.results),P=k.find(y.result)},bind:{events:function(){m.verbose("Binding events to search"),g.automatic&&(k.on(m.get.inputEvent()+w,y.prompt,m.event.input),T.attr("autocomplete","off")),k.on("focus"+w,y.prompt,m.event.focus).on("blur"+w,y.prompt,m.event.blur).on("keydown"+w,y.prompt,m.handleKeyboard).on("click"+w,y.searchButton,m.query).on("mousedown"+w,y.results,m.event.result.mousedown).on("mouseup"+w,y.results,m.event.result.mouseup).on("click"+w,y.result,m.event.result.click)}},determine:{searchFields:function(){o&&o.searchFields!==i&&(g.searchFields=o.searchFields)}},event:{input:function(){g.searchDelay?(clearTimeout(m.timer),m.timer=setTimeout(function(){m.is.focused()&&m.query()},g.searchDelay)):m.query()},focus:function(){m.set.focus(),g.searchOnFocus&&m.has.minimumCharacters()&&m.query(function(){m.can.show()&&m.showResults()})},blur:function(e){var t=n.activeElement===this,i=function(){m.cancel.query(),m.remove.focus(),m.timer=setTimeout(m.hideResults,g.hideDelay)};t||(D=!1,m.resultsClicked?(m.debug("Determining if user action caused search to close"),k.one("click.close"+w,y.results,function(e){m.is.inMessage(e)||O?T.focus():(O=!1,m.is.animating()||m.is.hidden()||i())})):(m.debug("Input blurred without user action, closing results"),i()))},result:{mousedown:function(){m.resultsClicked=!0},mouseup:function(){m.resultsClicked=!1},click:function(n){m.debug("Search result selected");var i=e(this),o=i.find(y.title).eq(0),a=i.is("a[href]")?i:i.find("a[href]").eq(0),r=a.attr("href")||!1,s=a.attr("target")||!1,l=(o.html(),o.length>0&&o.text()),c=m.get.results(),u=i.data(h.result)||m.get.result(l,c);if(e.isFunction(g.onSelect)&&!1===g.onSelect.call(E,u,c))return m.debug("Custom onSelect callback cancelled default select action"),void(O=!0);m.hideResults(),l&&m.set.value(l),r&&(m.verbose("Opening search link found in result",a),"_blank"==s||n.ctrlKey?t.open(r):t.location.href=r)}}},handleKeyboard:function(e){var t,n=k.find(y.result),i=k.find(y.category),o=n.filter("."+p.active),a=n.index(o),r=n.length,s=o.length>0,l=e.which,c=13,u=38,d=40;if(l==27&&(m.verbose("Escape key pressed, blurring search field"),m.hideResults(),D=!0),m.is.visible())if(l==c){if(m.verbose("Enter key pressed, selecting active result"),n.filter("."+p.active).length>0)return m.event.result.click.call(n.filter("."+p.active),e),e.preventDefault(),!1}else l==u&&s?(m.verbose("Up key pressed, changing active result"),t=a-1<0?a:a-1,i.removeClass(p.active),n.removeClass(p.active).eq(t).addClass(p.active).closest(i).addClass(p.active),e.preventDefault()):l==d&&(m.verbose("Down key pressed, changing active result"),t=a+1>=r?a:a+1,i.removeClass(p.active),n.removeClass(p.active).eq(t).addClass(p.active).closest(i).addClass(p.active),e.preventDefault());else l==c&&(m.verbose("Enter key pressed, executing query"),m.query(),m.set.buttonPressed(),T.one("keyup",m.remove.buttonFocus))},setup:{api:function(t,n){var i={debug:g.debug,on:!1,cache:!0,action:"search",urlData:{query:t},onSuccess:function(e){m.parse.response.call(E,e,t),n()},onFailure:function(){m.displayMessage(x.serverError),n()},onAbort:function(e){},onError:m.error};e.extend(!0,i,g.apiSettings),m.verbose("Setting up API request",i),k.api(i)}},can:{useAPI:function(){return e.fn.api!==i},show:function(){return m.is.focused()&&!m.is.visible()&&!m.is.empty()},transition:function(){return g.transition&&e.fn.transition!==i&&k.transition("is supported")}},is:{animating:function(){return R.hasClass(p.animating)},hidden:function(){return R.hasClass(p.hidden)},inMessage:function(t){if(t.target){var i=e(t.target);return e.contains(n.documentElement,t.target)&&i.closest(y.message).length>0}},empty:function(){return""===R.html()},visible:function(){return R.filter(":visible").length>0},focused:function(){return T.filter(":focus").length>0}},get:{settings:function(){e.isPlainObject(o)&&o.searchFullText&&(g.fullTextSearch=o.searchFullText,m.error(g.error.oldSearchSyntax,E))},inputEvent:function(){var e=T[0];return e!==i&&e.oninput!==i?"input":e!==i&&e.onpropertychange!==i?"propertychange":"keyup"},value:function(){return T.val()},results:function(){return k.data(h.results)},result:function(t,n){var o=["title","id"],a=!1;return t=t!==i?t:m.get.value(),n=n!==i?n:m.get.results(),"category"===g.type?(m.debug("Finding result that matches",t),e.each(n,function(n,i){if(e.isArray(i.results)&&(a=m.search.object(t,i.results,o)[0]))return!1})):(m.debug("Finding result in results object",t),a=m.search.object(t,n,o)[0]),a||!1}},select:{firstResult:function(){m.verbose("Selecting first result"),P.first().addClass(p.active)}},set:{focus:function(){k.addClass(p.focus)},loading:function(){k.addClass(p.loading)},value:function(e){m.verbose("Setting search input value",e),T.val(e)},type:function(e){e=e||g.type,"category"==g.type&&k.addClass(g.type)},buttonPressed:function(){A.addClass(p.pressed)}},remove:{loading:function(){k.removeClass(p.loading)},focus:function(){k.removeClass(p.focus)},buttonPressed:function(){A.removeClass(p.pressed)}},query:function(t){t=e.isFunction(t)?t:function(){};var n=m.get.value(),i=m.read.cache(n);t=t||function(){},m.has.minimumCharacters()?(i?(m.debug("Reading result from cache",n),m.save.results(i.results),m.addResults(i.html),m.inject.id(i.results),t()):(m.debug("Querying for",n),e.isPlainObject(g.source)||e.isArray(g.source)?(m.search.local(n),t()):m.can.useAPI()?m.search.remote(n,t):(m.error(x.source),t())),g.onSearchQuery.call(E,n)):m.hideResults()},search:{local:function(e){var t,n=m.search.object(e,g.content);m.set.loading(),m.save.results(n),m.debug("Returned full local search results",n),g.maxResults>0&&(m.debug("Using specified max results",n),n=n.slice(0,g.maxResults)),"category"==g.type&&(n=m.create.categoryResults(n)),t=m.generateResults({results:n}),m.remove.loading(),m.addResults(t),m.inject.id(n),m.write.cache(e,{html:t,results:n})},remote:function(t,n){n=e.isFunction(n)?n:function(){},k.api("is loading")&&k.api("abort"),m.setup.api(t,n),k.api("query")},object:function(t,n,o){var a=[],r=[],s=[],l=t.toString().replace(v.escape,"\\$&"),c=new RegExp(v.beginsWith+l,"i"),u=function(t,n){var i=-1==e.inArray(n,a),o=-1==e.inArray(n,s);i&&o&&t.push(n)};return n=n||g.source,o=o!==i?o:g.searchFields,e.isArray(o)||(o=[o]),n===i||!1===n?(m.error(x.source),[]):(e.each(o,function(i,o){e.each(n,function(e,n){"string"==typeof n[o]&&(-1!==n[o].search(c)?u(a,n):"exact"===g.fullTextSearch&&m.exactSearch(t,n[o])?u(r,n):1==g.fullTextSearch&&m.fuzzySearch(t,n[o])&&u(s,n))})}),e.merge(r,s),e.merge(a,r),a)}},exactSearch:function(e,t){return e=e.toLowerCase(),(t=t.toLowerCase()).indexOf(e)>-1},fuzzySearch:function(e,t){var n=t.length,i=e.length;if("string"!=typeof e)return!1;if(e=e.toLowerCase(),t=t.toLowerCase(),i>n)return!1;if(i===n)return e===t;e:for(var o=0,a=0;o<i;o++){for(var r=e.charCodeAt(o);a<n;)if(t.charCodeAt(a++)===r)continue e;return!1}return!0},parse:{response:function(e,t){var n=m.generateResults(e);m.verbose("Parsing server response",e),e!==i&&t!==i&&e[b.results]!==i&&(m.addResults(n),m.inject.id(e[b.results]),m.write.cache(t,{html:n,results:e[b.results]}),m.save.results(e[b.results]))}},cancel:{query:function(){m.can.useAPI()&&k.api("abort")}},has:{minimumCharacters:function(){return m.get.value().length>=g.minCharacters},results:function(){return 0!==R.length&&""!=R.html()}},clear:{cache:function(e){var t=k.data(h.cache);e?e&&t&&t[e]&&(m.debug("Removing value from cache",e),delete t[e],k.data(h.cache,t)):(m.debug("Clearing cache",e),k.removeData(h.cache))}},read:{cache:function(e){var t=k.data(h.cache);return!!g.cache&&(m.verbose("Checking cache for generated html for query",e),"object"==typeof t&&t[e]!==i&&t[e])}},create:{categoryResults:function(t){var n={};return e.each(t,function(e,t){t.category&&(n[t.category]===i?(m.verbose("Creating new category of results",t.category),n[t.category]={name:t.category,results:[t]}):n[t.category].results.push(t))}),n},id:function(e,t){var n,o=e+1;return t!==i?(n=String.fromCharCode(97+t)+o,m.verbose("Creating category result id",n)):(n=o,m.verbose("Creating result id",n)),n},results:function(){0===R.length&&(R=e("<div />").addClass(p.results).appendTo(k))}},inject:{result:function(e,t,n){m.verbose("Injecting result into results");var o=n!==i?R.children().eq(n).children(y.results).first().children(y.result).eq(t):R.children(y.result).eq(t);m.verbose("Injecting results metadata",o),o.data(h.result,e)},id:function(t){m.debug("Injecting unique ids into results");var n=0,o=0;return"category"===g.type?e.each(t,function(t,a){o=0,e.each(a.results,function(e,t){var r=a.results[e];r.id===i&&(r.id=m.create.id(o,n)),m.inject.result(r,o,n),o++}),n++}):e.each(t,function(e,n){var a=t[e];a.id===i&&(a.id=m.create.id(o)),m.inject.result(a,o),o++}),t}},save:{results:function(e){m.verbose("Saving current search results to metadata",e),k.data(h.results,e)}},write:{cache:function(e,t){var n=k.data(h.cache)!==i?k.data(h.cache):{};g.cache&&(m.verbose("Writing generated html to cache",e,t),n[e]=t,k.data(h.cache,n))}},addResults:function(t){if(e.isFunction(g.onResultsAdd)&&!1===g.onResultsAdd.call(R,t))return m.debug("onResultsAdd callback cancelled default action"),!1;t?(R.html(t),m.refreshResults(),g.selectFirstResult&&m.select.firstResult(),m.showResults()):m.hideResults(function(){R.empty()})},showResults:function(t){t=e.isFunction(t)?t:function(){},D||!m.is.visible()&&m.has.results()&&(m.can.transition()?(m.debug("Showing results with css animations"),R.transition({animation:g.transition+" in",debug:g.debug,verbose:g.verbose,duration:g.duration,onComplete:function(){t()},queue:!0})):(m.debug("Showing results with javascript"),R.stop().fadeIn(g.duration,g.easing)),g.onResultsOpen.call(R))},hideResults:function(t){t=e.isFunction(t)?t:function(){},m.is.visible()&&(m.can.transition()?(m.debug("Hiding results with css animations"),R.transition({animation:g.transition+" out",debug:g.debug,verbose:g.verbose,duration:g.duration,onComplete:function(){t()},queue:!0})):(m.debug("Hiding results with javascript"),R.stop().fadeOut(g.duration,g.easing)),g.onResultsClose.call(R))},generateResults:function(t){m.debug("Generating html from response",t);var n=g.templates[g.type],i=e.isPlainObject(t[b.results])&&!e.isEmptyObject(t[b.results]),o=e.isArray(t[b.results])&&t[b.results].length>0,a="";return i||o?(g.maxResults>0&&(i?"standard"==g.type&&m.error(x.maxResults):t[b.results]=t[b.results].slice(0,g.maxResults)),e.isFunction(n)?a=n(t,b):m.error(x.noTemplate,!1)):g.showNoResults&&(a=m.displayMessage(x.noResults,"empty")),g.onResults.call(E,t),a},displayMessage:function(e,t){return t=t||"standard",m.debug("Displaying message",e,t),m.addResults(g.templates.message(e,t)),g.templates.message(e,t)},setting:function(t,n){if(e.isPlainObject(t))e.extend(!0,g,t);else{if(n===i)return g[t];g[t]=n}},internal:function(t,n){if(e.isPlainObject(t))e.extend(!0,m,t);else{if(n===i)return m[t];m[t]=n}},debug:function(){!g.silent&&g.debug&&(g.performance?m.performance.log(arguments):(m.debug=Function.prototype.bind.call(console.info,console,g.name+":"),m.debug.apply(console,arguments)))},verbose:function(){!g.silent&&g.verbose&&g.debug&&(g.performance?m.performance.log(arguments):(m.verbose=Function.prototype.bind.call(console.info,console,g.name+":"),m.verbose.apply(console,arguments)))},error:function(){g.silent||(m.error=Function.prototype.bind.call(console.error,console,g.name+":"),m.error.apply(console,arguments))},performance:{log:function(e){var t,n;g.performance&&(n=(t=(new Date).getTime())-(l||t),l=t,c.push({Name:e[0],Arguments:[].slice.call(e,1)||"",Element:E,"Execution Time":n})),clearTimeout(m.performance.timer),m.performance.timer=setTimeout(m.performance.display,500)},display:function(){var t=g.name+":",n=0;l=!1,clearTimeout(m.performance.timer),e.each(c,function(e,t){n+=t["Execution Time"]}),t+=" "+n+"ms",s&&(t+=" '"+s+"'"),r.length>1&&(t+=" ("+r.length+")"),(console.group!==i||console.table!==i)&&c.length>0&&(console.groupCollapsed(t),console.table?console.table(c):e.each(c,function(e,t){console.log(t.Name+": "+t["Execution Time"]+"ms")}),console.groupEnd()),c=[]}},invoke:function(t,n,o){var r,s,l,c=F;return n=n||f,o=E||o,"string"==typeof t&&c!==i&&(t=t.split(/[\. ]/),r=t.length-1,e.each(t,function(n,o){var a=n!=r?o+t[n+1].charAt(0).toUpperCase()+t[n+1].slice(1):t;if(e.isPlainObject(c[a])&&n!=r)c=c[a];else{if(c[a]!==i)return s=c[a],!1;if(!e.isPlainObject(c[o])||n==r)return c[o]!==i&&(s=c[o],!1);c=c[o]}})),e.isFunction(s)?l=s.apply(o,n):s!==i&&(l=s),e.isArray(a)?a.push(l):a!==i?a=[a,l]:l!==i&&(a=l),s}},d?(F===i&&m.initialize(),m.invoke(u)):(F!==i&&F.invoke("destroy"),m.initialize())}),a!==i?a:this},e.fn.search.settings={name:"Search",namespace:"search",silent:!1,debug:!1,verbose:!1,performance:!0,type:"standard",minCharacters:1,selectFirstResult:!1,apiSettings:!1,source:!1,searchOnFocus:!0,searchFields:["title","description"],displayField:"",fullTextSearch:"exact",automatic:!0,hideDelay:0,searchDelay:200,maxResults:7,cache:!0,showNoResults:!0,transition:"scale",duration:200,easing:"easeOutExpo",onSelect:!1,onResultsAdd:!1,onSearchQuery:function(e){},onResults:function(e){},onResultsOpen:function(){},onResultsClose:function(){},className:{animating:"animating",active:"active",empty:"empty",focus:"focus",hidden:"hidden",loading:"loading",results:"results",pressed:"down"},error:{source:"Cannot search. No source used, and Semantic API module was not included",noResults:"Your search returned no results",logging:"Error in debug logging, exiting.",noEndpoint:"No search endpoint was specified",noTemplate:"A valid template name was not specified.",oldSearchSyntax:"searchFullText setting has been renamed fullTextSearch for consistency, please adjust your settings.",serverError:"There was an issue querying the server.",maxResults:"Results must be an array to use maxResults setting",method:"The method you called is not defined."},metadata:{cache:"cache",results:"results",result:"result"},regExp:{escape:/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g,beginsWith:"(?:s|^)"},fields:{categories:"results",categoryName:"name",categoryResults:"results",description:"description",image:"image",price:"price",results:"results",title:"title",url:"url",action:"action",actionText:"text",actionURL:"url"},selector:{prompt:".prompt",searchButton:".search.button",results:".results",message:".results > .message",category:".category",result:".result",title:".title, .name"},templates:{escape:function(e){var t={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#x27;","`":"&#x60;"};return/[&<>"'`]/.test(e)?e.replace(/[&<>"'`]/g,function(e){return t[e]}):e},message:function(e,t){var n="";return e!==i&&t!==i&&(n+='<div class="message '+t+'">',n+="empty"==t?'<div class="header">No Results</div class="header"><div class="description">'+e+'</div class="description">':' <div class="description">'+e+"</div>",n+="</div>"),n},category:function(t,n){var o="";e.fn.search.settings.templates.escape;return t[n.categoryResults]!==i&&(e.each(t[n.categoryResults],function(t,a){a[n.results]!==i&&a.results.length>0&&(o+='<div class="category">',a[n.categoryName]!==i&&(o+='<div class="name">'+a[n.categoryName]+"</div>"),o+='<div class="results">',e.each(a.results,function(e,t){t[n.url]?o+='<a class="result" href="'+t[n.url]+'">':o+='<a class="result">',t[n.image]!==i&&(o+='<div class="image"> <img src="'+t[n.image]+'"></div>'),o+='<div class="content">',t[n.price]!==i&&(o+='<div class="price">'+t[n.price]+"</div>"),t[n.title]!==i&&(o+='<div class="title">'+t[n.title]+"</div>"),t[n.description]!==i&&(o+='<div class="description">'+t[n.description]+"</div>"),o+="</div>",o+="</a>"}),o+="</div>",o+="</div>")}),t[n.action]&&(o+='<a href="'+t[n.action][n.actionURL]+'" class="action">'+t[n.action][n.actionText]+"</a>"),o)},standard:function(t,n){var o="";return t[n.results]!==i&&(e.each(t[n.results],function(e,t){t[n.url]?o+='<a class="result" href="'+t[n.url]+'">':o+='<a class="result">',t[n.image]!==i&&(o+='<div class="image"> <img src="'+t[n.image]+'"></div>'),o+='<div class="content">',t[n.price]!==i&&(o+='<div class="price">'+t[n.price]+"</div>"),t[n.title]!==i&&(o+='<div class="title">'+t[n.title]+"</div>"),t[n.description]!==i&&(o+='<div class="description">'+t[n.description]+"</div>"),o+="</div>",o+="</a>"}),t[n.action]&&(o+='<a href="'+t[n.action][n.actionURL]+'" class="action">'+t[n.action][n.actionText]+"</a>"),o)}}}}(jQuery,window,document),function(e,t,n,i){"use strict";t=void 0!==t&&t.Math==Math?t:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")(),e.fn.shape=function(o){var a,r=e(this),s=(e("body"),(new Date).getTime()),l=[],c=arguments[0],u="string"==typeof c,d=[].slice.call(arguments,1),f=t.requestAnimationFrame||t.mozRequestAnimationFrame||t.webkitRequestAnimationFrame||t.msRequestAnimationFrame||function(e){setTimeout(e,0)};return r.each(function(){var t,m,g,p=r.selector||"",h=e.isPlainObject(o)?e.extend(!0,{},e.fn.shape.settings,o):e.extend({},e.fn.shape.settings),v=h.namespace,b=h.selector,y=h.error,x=h.className,C="."+v,w="module-"+v,S=e(this),k=S.find(b.sides),T=S.find(b.side),A=!1,R=this,P=S.data(w);g={initialize:function(){g.verbose("Initializing module for",R),g.set.defaultSide(),g.instantiate()},instantiate:function(){g.verbose("Storing instance of module",g),P=g,S.data(w,P)},destroy:function(){g.verbose("Destroying previous module for",R),S.removeData(w).off(C)},refresh:function(){g.verbose("Refreshing selector cache for",R),S=e(R),k=e(this).find(b.shape),T=e(this).find(b.side)},repaint:function(){g.verbose("Forcing repaint event");(k[0]||n.createElement("div")).offsetWidth},animate:function(e,n){g.verbose("Animating box with properties",e),n=n||function(e){g.verbose("Executing animation callback"),e!==i&&e.stopPropagation(),g.reset(),g.set.active()},h.beforeChange.call(m[0]),g.get.transitionEvent()?(g.verbose("Starting CSS animation"),S.addClass(x.animating),k.css(e).one(g.get.transitionEvent(),n),g.set.duration(h.duration),f(function(){S.addClass(x.animating),t.addClass(x.hidden)})):n()},queue:function(e){g.debug("Queueing animation of",e),k.one(g.get.transitionEvent(),function(){g.debug("Executing queued animation"),setTimeout(function(){S.shape(e)},0)})},reset:function(){g.verbose("Animating states reset"),S.removeClass(x.animating).attr("style","").removeAttr("style"),k.attr("style","").removeAttr("style"),T.attr("style","").removeAttr("style").removeClass(x.hidden),m.removeClass(x.animating).attr("style","").removeAttr("style")},is:{complete:function(){return T.filter("."+x.active)[0]==m[0]},animating:function(){return S.hasClass(x.animating)}},set:{defaultSide:function(){t=S.find("."+h.className.active),m=t.next(b.side).length>0?t.next(b.side):S.find(b.side).first(),A=!1,g.verbose("Active side set to",t),g.verbose("Next side set to",m)},duration:function(e){e="number"==typeof(e=e||h.duration)?e+"ms":e,g.verbose("Setting animation duration",e),(h.duration||0===h.duration)&&k.add(T).css({"-webkit-transition-duration":e,"-moz-transition-duration":e,"-ms-transition-duration":e,"-o-transition-duration":e,"transition-duration":e})},currentStageSize:function(){var e=S.find("."+h.className.active),t=e.outerWidth(!0),n=e.outerHeight(!0);S.css({width:t,height:n})},stageSize:function(){var e=S.clone().addClass(x.loading),t=e.find("."+h.className.active),n=A?e.find(b.side).eq(A):t.next(b.side).length>0?t.next(b.side):e.find(b.side).first(),i="next"==h.width?n.outerWidth(!0):"initial"==h.width?S.width():h.width,o="next"==h.height?n.outerHeight(!0):"initial"==h.height?S.height():h.height;t.removeClass(x.active),n.addClass(x.active),e.insertAfter(S),e.remove(),"auto"!=h.width&&(S.css("width",i+h.jitter),g.verbose("Specifying width during animation",i)),"auto"!=h.height&&(S.css("height",o+h.jitter),g.verbose("Specifying height during animation",o))},nextSide:function(e){A=e,m=T.filter(e),A=T.index(m),0===m.length&&(g.set.defaultSide(),g.error(y.side)),g.verbose("Next side manually set to",m)},active:function(){g.verbose("Setting new side to active",m),T.removeClass(x.active),m.addClass(x.active),h.onChange.call(m[0]),g.set.defaultSide()}},flip:{up:function(){if(!g.is.complete()||g.is.animating()||h.allowRepeats)if(g.is.animating())g.queue("flip up");else{g.debug("Flipping up",m);var e=g.get.transform.up();g.set.stageSize(),g.stage.above(),g.animate(e)}else g.debug("Side already visible",m)},down:function(){if(!g.is.complete()||g.is.animating()||h.allowRepeats)if(g.is.animating())g.queue("flip down");else{g.debug("Flipping down",m);var e=g.get.transform.down();g.set.stageSize(),g.stage.below(),g.animate(e)}else g.debug("Side already visible",m)},left:function(){if(!g.is.complete()||g.is.animating()||h.allowRepeats)if(g.is.animating())g.queue("flip left");else{g.debug("Flipping left",m);var e=g.get.transform.left();g.set.stageSize(),g.stage.left(),g.animate(e)}else g.debug("Side already visible",m)},right:function(){if(!g.is.complete()||g.is.animating()||h.allowRepeats)if(g.is.animating())g.queue("flip right");else{g.debug("Flipping right",m);var e=g.get.transform.right();g.set.stageSize(),g.stage.right(),g.animate(e)}else g.debug("Side already visible",m)},over:function(){!g.is.complete()||g.is.animating()||h.allowRepeats?g.is.animating()?g.queue("flip over"):(g.debug("Flipping over",m),g.set.stageSize(),g.stage.behind(),g.animate(g.get.transform.over())):g.debug("Side already visible",m)},back:function(){!g.is.complete()||g.is.animating()||h.allowRepeats?g.is.animating()?g.queue("flip back"):(g.debug("Flipping back",m),g.set.stageSize(),g.stage.behind(),g.animate(g.get.transform.back())):g.debug("Side already visible",m)}},get:{transform:{up:function(){return{transform:"translateY("+-(t.outerHeight(!0)-m.outerHeight(!0))/2+"px) translateZ("+-t.outerHeight(!0)/2+"px) rotateX(-90deg)"}},down:function(){return{transform:"translateY("+-(t.outerHeight(!0)-m.outerHeight(!0))/2+"px) translateZ("+-t.outerHeight(!0)/2+"px) rotateX(90deg)"}},left:function(){return{transform:"translateX("+-(t.outerWidth(!0)-m.outerWidth(!0))/2+"px) translateZ("+-t.outerWidth(!0)/2+"px) rotateY(90deg)"}},right:function(){return{transform:"translateX("+-(t.outerWidth(!0)-m.outerWidth(!0))/2+"px) translateZ("+-t.outerWidth(!0)/2+"px) rotateY(-90deg)"}},over:function(){return{transform:"translateX("+-(t.outerWidth(!0)-m.outerWidth(!0))/2+"px) rotateY(180deg)"}},back:function(){return{transform:"translateX("+-(t.outerWidth(!0)-m.outerWidth(!0))/2+"px) rotateY(-180deg)"}}},transitionEvent:function(){var e,t=n.createElement("element"),o={transition:"transitionend",OTransition:"oTransitionEnd",MozTransition:"transitionend",WebkitTransition:"webkitTransitionEnd"};for(e in o)if(t.style[e]!==i)return o[e]},nextSide:function(){return t.next(b.side).length>0?t.next(b.side):S.find(b.side).first()}},stage:{above:function(){var e={origin:(t.outerHeight(!0)-m.outerHeight(!0))/2,depth:{active:m.outerHeight(!0)/2,next:t.outerHeight(!0)/2}};g.verbose("Setting the initial animation position as above",m,e),k.css({transform:"translateZ(-"+e.depth.active+"px)"}),t.css({transform:"rotateY(0deg) translateZ("+e.depth.active+"px)"}),m.addClass(x.animating).css({top:e.origin+"px",transform:"rotateX(90deg) translateZ("+e.depth.next+"px)"})},below:function(){var e={origin:(t.outerHeight(!0)-m.outerHeight(!0))/2,depth:{active:m.outerHeight(!0)/2,next:t.outerHeight(!0)/2}};g.verbose("Setting the initial animation position as below",m,e),k.css({transform:"translateZ(-"+e.depth.active+"px)"}),t.css({transform:"rotateY(0deg) translateZ("+e.depth.active+"px)"}),m.addClass(x.animating).css({top:e.origin+"px",transform:"rotateX(-90deg) translateZ("+e.depth.next+"px)"})},left:function(){var e=t.outerWidth(!0),n=m.outerWidth(!0),i={origin:(e-n)/2,depth:{active:n/2,next:e/2}};g.verbose("Setting the initial animation position as left",m,i),k.css({transform:"translateZ(-"+i.depth.active+"px)"}),t.css({transform:"rotateY(0deg) translateZ("+i.depth.active+"px)"}),m.addClass(x.animating).css({left:i.origin+"px",transform:"rotateY(-90deg) translateZ("+i.depth.next+"px)"})},right:function(){var e=t.outerWidth(!0),n=m.outerWidth(!0),i={origin:(e-n)/2,depth:{active:n/2,next:e/2}};g.verbose("Setting the initial animation position as left",m,i),k.css({transform:"translateZ(-"+i.depth.active+"px)"}),t.css({transform:"rotateY(0deg) translateZ("+i.depth.active+"px)"}),m.addClass(x.animating).css({left:i.origin+"px",transform:"rotateY(90deg) translateZ("+i.depth.next+"px)"})},behind:function(){var e=t.outerWidth(!0),n=m.outerWidth(!0),i={origin:(e-n)/2,depth:{active:n/2,next:e/2}};g.verbose("Setting the initial animation position as behind",m,i),t.css({transform:"rotateY(0deg)"}),m.addClass(x.animating).css({left:i.origin+"px",transform:"rotateY(-180deg)"})}},setting:function(t,n){if(g.debug("Changing setting",t,n),e.isPlainObject(t))e.extend(!0,h,t);else{if(n===i)return h[t];e.isPlainObject(h[t])?e.extend(!0,h[t],n):h[t]=n}},internal:function(t,n){if(e.isPlainObject(t))e.extend(!0,g,t);else{if(n===i)return g[t];g[t]=n}},debug:function(){!h.silent&&h.debug&&(h.performance?g.performance.log(arguments):(g.debug=Function.prototype.bind.call(console.info,console,h.name+":"),g.debug.apply(console,arguments)))},verbose:function(){!h.silent&&h.verbose&&h.debug&&(h.performance?g.performance.log(arguments):(g.verbose=Function.prototype.bind.call(console.info,console,h.name+":"),g.verbose.apply(console,arguments)))},error:function(){h.silent||(g.error=Function.prototype.bind.call(console.error,console,h.name+":"),g.error.apply(console,arguments))},performance:{log:function(e){var t,n;h.performance&&(n=(t=(new Date).getTime())-(s||t),s=t,l.push({Name:e[0],Arguments:[].slice.call(e,1)||"",Element:R,"Execution Time":n})),clearTimeout(g.performance.timer),g.performance.timer=setTimeout(g.performance.display,500)},display:function(){var t=h.name+":",n=0;s=!1,clearTimeout(g.performance.timer),e.each(l,function(e,t){n+=t["Execution Time"]}),t+=" "+n+"ms",p&&(t+=" '"+p+"'"),r.length>1&&(t+=" ("+r.length+")"),(console.group!==i||console.table!==i)&&l.length>0&&(console.groupCollapsed(t),console.table?console.table(l):e.each(l,function(e,t){console.log(t.Name+": "+t["Execution Time"]+"ms")}),console.groupEnd()),l=[]}},invoke:function(t,n,o){var r,s,l,c=P;return n=n||d,o=R||o,"string"==typeof t&&c!==i&&(t=t.split(/[\. ]/),r=t.length-1,e.each(t,function(n,o){var a=n!=r?o+t[n+1].charAt(0).toUpperCase()+t[n+1].slice(1):t;if(e.isPlainObject(c[a])&&n!=r)c=c[a];else{if(c[a]!==i)return s=c[a],!1;if(!e.isPlainObject(c[o])||n==r)return c[o]!==i&&(s=c[o],!1);c=c[o]}})),e.isFunction(s)?l=s.apply(o,n):s!==i&&(l=s),e.isArray(a)?a.push(l):a!==i?a=[a,l]:l!==i&&(a=l),s}},u?(P===i&&g.initialize(),g.invoke(c)):(P!==i&&P.invoke("destroy"),g.initialize())}),a!==i?a:this},e.fn.shape.settings={name:"Shape",silent:!1,debug:!1,verbose:!1,jitter:0,performance:!0,namespace:"shape",width:"initial",height:"initial",beforeChange:function(){},onChange:function(){},allowRepeats:!1,duration:!1,error:{side:"You tried to switch to a side that does not exist.",method:"The method you called is not defined"},className:{animating:"animating",hidden:"hidden",loading:"loading",active:"active"},selector:{sides:".sides",side:".side"}}}(jQuery,window,document),function(e,t,n,i){"use strict";t=void 0!==t&&t.Math==Math?t:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")(),e.fn.sidebar=function(o){var a,r=e(this),s=e(t),l=e(n),c=e("html"),u=e("head"),d=r.selector||"",f=(new Date).getTime(),m=[],g=arguments[0],p="string"==typeof g,h=[].slice.call(arguments,1),v=t.requestAnimationFrame||t.mozRequestAnimationFrame||t.webkitRequestAnimationFrame||t.msRequestAnimationFrame||function(e){setTimeout(e,0)};return r.each(function(){var r,b,y,x,C,w,S=e.isPlainObject(o)?e.extend(!0,{},e.fn.sidebar.settings,o):e.extend({},e.fn.sidebar.settings),k=S.selector,T=S.className,A=S.namespace,R=S.regExp,P=S.error,E="."+A,F="module-"+A,O=e(this),D=e(S.context),q=O.children(k.sidebar),j=(D.children(k.fixed),D.children(k.pusher)),z=this,I=O.data(F);w={initialize:function(){w.debug("Initializing sidebar",o),w.create.id(),C=w.get.transitionEvent(),S.delaySetup?v(w.setup.layout):w.setup.layout(),v(function(){w.setup.cache()}),w.instantiate()},instantiate:function(){w.verbose("Storing instance of module",w),I=w,O.data(F,w)},create:{id:function(){y=(Math.random().toString(16)+"000000000").substr(2,8),b="."+y,w.verbose("Creating unique id for element",y)}},destroy:function(){w.verbose("Destroying previous module for",O),O.off(E).removeData(F),w.is.ios()&&w.remove.ios(),D.off(b),s.off(b),l.off(b)},event:{clickaway:function(e){var t=j.find(e.target).length>0||j.is(e.target),n=D.is(e.target);t&&(w.verbose("User clicked on dimmed page"),w.hide()),n&&(w.verbose("User clicked on dimmable context (scaled out page)"),w.hide())},touch:function(e){},containScroll:function(e){z.scrollTop<=0&&(z.scrollTop=1),z.scrollTop+z.offsetHeight>=z.scrollHeight&&(z.scrollTop=z.scrollHeight-z.offsetHeight-1)},scroll:function(t){0===e(t.target).closest(k.sidebar).length&&t.preventDefault()}},bind:{clickaway:function(){w.verbose("Adding clickaway events to context",D),S.closable&&D.on("click"+b,w.event.clickaway).on("touchend"+b,w.event.clickaway)},scrollLock:function(){S.scrollLock&&(w.debug("Disabling page scroll"),s.on("DOMMouseScroll"+b,w.event.scroll)),w.verbose("Adding events to contain sidebar scroll"),l.on("touchmove"+b,w.event.touch),O.on("scroll"+E,w.event.containScroll)}},unbind:{clickaway:function(){w.verbose("Removing clickaway events from context",D),D.off(b)},scrollLock:function(){w.verbose("Removing scroll lock from page"),l.off(b),s.off(b),O.off("scroll"+E)}},add:{inlineCSS:function(){var t,n=w.cache.width||O.outerWidth(),i=w.cache.height||O.outerHeight(),o=w.is.rtl(),a=w.get.direction(),s={left:n,right:-n,top:i,bottom:-i};o&&(w.verbose("RTL detected, flipping widths"),s.left=-n,s.right=n),t="<style>","left"===a||"right"===a?(w.debug("Adding CSS rules for animation distance",n),t+=" .ui.visible."+a+".sidebar ~ .fixed, .ui.visible."+a+".sidebar ~ .pusher {   -webkit-transform: translate3d("+s[a]+"px, 0, 0);           transform: translate3d("+s[a]+"px, 0, 0); }"):"top"!==a&&"bottom"!=a||(t+=" .ui.visible."+a+".sidebar ~ .fixed, .ui.visible."+a+".sidebar ~ .pusher {   -webkit-transform: translate3d(0, "+s[a]+"px, 0);           transform: translate3d(0, "+s[a]+"px, 0); }"),w.is.ie()&&("left"===a||"right"===a?(w.debug("Adding CSS rules for animation distance",n),t+=" body.pushable > .ui.visible."+a+".sidebar ~ .pusher:after {   -webkit-transform: translate3d("+s[a]+"px, 0, 0);           transform: translate3d("+s[a]+"px, 0, 0); }"):"top"!==a&&"bottom"!=a||(t+=" body.pushable > .ui.visible."+a+".sidebar ~ .pusher:after {   -webkit-transform: translate3d(0, "+s[a]+"px, 0);           transform: translate3d(0, "+s[a]+"px, 0); }"),t+=" body.pushable > .ui.visible.left.sidebar ~ .ui.visible.right.sidebar ~ .pusher:after, body.pushable > .ui.visible.right.sidebar ~ .ui.visible.left.sidebar ~ .pusher:after {   -webkit-transform: translate3d(0px, 0, 0);           transform: translate3d(0px, 0, 0); }"),r=e(t+="</style>").appendTo(u),w.debug("Adding sizing css to head",r)}},refresh:function(){w.verbose("Refreshing selector cache"),D=e(S.context),q=D.children(k.sidebar),j=D.children(k.pusher),D.children(k.fixed),w.clear.cache()},refreshSidebars:function(){w.verbose("Refreshing other sidebars"),q=D.children(k.sidebar)},repaint:function(){w.verbose("Forcing repaint event"),z.style.display="none";z.offsetHeight;z.scrollTop=z.scrollTop,z.style.display=""},setup:{cache:function(){w.cache={width:O.outerWidth(),height:O.outerHeight(),rtl:"rtl"==O.css("direction")}},layout:function(){0===D.children(k.pusher).length&&(w.debug("Adding wrapper element for sidebar"),w.error(P.pusher),j=e('<div class="pusher" />'),D.children().not(k.omitted).not(q).wrapAll(j),w.refresh()),0!==O.nextAll(k.pusher).length&&O.nextAll(k.pusher)[0]===j[0]||(w.debug("Moved sidebar to correct parent element"),w.error(P.movedSidebar,z),O.detach().prependTo(D),w.refresh()),w.clear.cache(),w.set.pushable(),w.set.direction()}},attachEvents:function(t,n){var i=e(t);n=e.isFunction(w[n])?w[n]:w.toggle,i.length>0?(w.debug("Attaching sidebar events to element",t,n),i.on("click"+E,n)):w.error(P.notFound,t)},show:function(t){if(t=e.isFunction(t)?t:function(){},w.is.hidden()){if(w.refreshSidebars(),S.overlay&&(w.error(P.overlay),S.transition="overlay"),w.refresh(),w.othersActive())if(w.debug("Other sidebars currently visible"),S.exclusive){if("overlay"!=S.transition)return void w.hideOthers(w.show);w.hideOthers()}else S.transition="overlay";w.pushPage(function(){t.call(z),S.onShow.call(z)}),S.onChange.call(z),S.onVisible.call(z)}else w.debug("Sidebar is already visible")},hide:function(t){t=e.isFunction(t)?t:function(){},(w.is.visible()||w.is.animating())&&(w.debug("Hiding sidebar",t),w.refreshSidebars(),w.pullPage(function(){t.call(z),S.onHidden.call(z)}),S.onChange.call(z),S.onHide.call(z))},othersAnimating:function(){return q.not(O).filter("."+T.animating).length>0},othersVisible:function(){return q.not(O).filter("."+T.visible).length>0},othersActive:function(){return w.othersVisible()||w.othersAnimating()},hideOthers:function(e){var t=q.not(O).filter("."+T.visible),n=t.length,i=0;e=e||function(){},t.sidebar("hide",function(){++i==n&&e()})},toggle:function(){w.verbose("Determining toggled direction"),w.is.hidden()?w.show():w.hide()},pushPage:function(t){var n,i,o,a=w.get.transition(),r="overlay"===a||w.othersActive()?O:j;t=e.isFunction(t)?t:function(){},"scale down"==S.transition&&w.scrollToTop(),w.set.transition(a),w.repaint(),n=function(){w.bind.clickaway(),w.add.inlineCSS(),w.set.animating(),w.set.visible()},i=function(){w.set.dimmed()},o=function(e){e.target==r[0]&&(r.off(C+b,o),w.remove.animating(),w.bind.scrollLock(),t.call(z))},r.off(C+b),r.on(C+b,o),v(n),S.dimPage&&!w.othersVisible()&&v(i)},pullPage:function(t){var n,i,o=w.get.transition(),a="overlay"==o||w.othersActive()?O:j;t=e.isFunction(t)?t:function(){},w.verbose("Removing context push state",w.get.direction()),w.unbind.clickaway(),w.unbind.scrollLock(),n=function(){w.set.transition(o),w.set.animating(),w.remove.visible(),S.dimPage&&!w.othersVisible()&&j.removeClass(T.dimmed)},i=function(e){e.target==a[0]&&(a.off(C+b,i),w.remove.animating(),w.remove.transition(),w.remove.inlineCSS(),("scale down"==o||S.returnScroll&&w.is.mobile())&&w.scrollBack(),t.call(z))},a.off(C+b),a.on(C+b,i),v(n)},scrollToTop:function(){w.verbose("Scrolling to top of page to avoid animation issues"),x=e(t).scrollTop(),O.scrollTop(0),t.scrollTo(0,0)},scrollBack:function(){w.verbose("Scrolling back to original page position"),t.scrollTo(0,x)},clear:{cache:function(){w.verbose("Clearing cached dimensions"),w.cache={}}},set:{ios:function(){c.addClass(T.ios)},pushed:function(){D.addClass(T.pushed)},pushable:function(){D.addClass(T.pushable)},dimmed:function(){j.addClass(T.dimmed)},active:function(){O.addClass(T.active)},animating:function(){O.addClass(T.animating)},transition:function(e){e=e||w.get.transition(),O.addClass(e)},direction:function(e){e=e||w.get.direction(),O.addClass(T[e])},visible:function(){O.addClass(T.visible)},overlay:function(){O.addClass(T.overlay)}},remove:{inlineCSS:function(){w.debug("Removing inline css styles",r),r&&r.length>0&&r.remove()},ios:function(){c.removeClass(T.ios)},pushed:function(){D.removeClass(T.pushed)},pushable:function(){D.removeClass(T.pushable)},active:function(){O.removeClass(T.active)},animating:function(){O.removeClass(T.animating)},transition:function(e){e=e||w.get.transition(),O.removeClass(e)},direction:function(e){e=e||w.get.direction(),O.removeClass(T[e])},visible:function(){O.removeClass(T.visible)},overlay:function(){O.removeClass(T.overlay)}},get:{direction:function(){return O.hasClass(T.top)?T.top:O.hasClass(T.right)?T.right:O.hasClass(T.bottom)?T.bottom:T.left},transition:function(){var e,t=w.get.direction();return e=w.is.mobile()?"auto"==S.mobileTransition?S.defaultTransition.mobile[t]:S.mobileTransition:"auto"==S.transition?S.defaultTransition.computer[t]:S.transition,w.verbose("Determined transition",e),e},transitionEvent:function(){var e,t=n.createElement("element"),o={transition:"transitionend",OTransition:"oTransitionEnd",MozTransition:"transitionend",WebkitTransition:"webkitTransitionEnd"};for(e in o)if(t.style[e]!==i)return o[e]}},is:{ie:function(){return!t.ActiveXObject&&"ActiveXObject"in t||"ActiveXObject"in t},ios:function(){var e=navigator.userAgent,t=e.match(R.ios),n=e.match(R.mobileChrome);return!(!t||n)&&(w.verbose("Browser was found to be iOS",e),!0)},mobile:function(){var e=navigator.userAgent;return e.match(R.mobile)?(w.verbose("Browser was found to be mobile",e),!0):(w.verbose("Browser is not mobile, using regular transition",e),!1)},hidden:function(){return!w.is.visible()},visible:function(){return O.hasClass(T.visible)},open:function(){return w.is.visible()},closed:function(){return w.is.hidden()},vertical:function(){return O.hasClass(T.top)},animating:function(){return D.hasClass(T.animating)},rtl:function(){return w.cache.rtl===i&&(w.cache.rtl="rtl"==O.css("direction")),w.cache.rtl}},setting:function(t,n){if(w.debug("Changing setting",t,n),e.isPlainObject(t))e.extend(!0,S,t);else{if(n===i)return S[t];e.isPlainObject(S[t])?e.extend(!0,S[t],n):S[t]=n}},internal:function(t,n){if(e.isPlainObject(t))e.extend(!0,w,t);else{if(n===i)return w[t];w[t]=n}},debug:function(){!S.silent&&S.debug&&(S.performance?w.performance.log(arguments):(w.debug=Function.prototype.bind.call(console.info,console,S.name+":"),w.debug.apply(console,arguments)))},verbose:function(){!S.silent&&S.verbose&&S.debug&&(S.performance?w.performance.log(arguments):(w.verbose=Function.prototype.bind.call(console.info,console,S.name+":"),w.verbose.apply(console,arguments)))},error:function(){S.silent||(w.error=Function.prototype.bind.call(console.error,console,S.name+":"),w.error.apply(console,arguments))},performance:{log:function(e){var t,n;S.performance&&(n=(t=(new Date).getTime())-(f||t),f=t,m.push({Name:e[0],Arguments:[].slice.call(e,1)||"",Element:z,"Execution Time":n})),clearTimeout(w.performance.timer),w.performance.timer=setTimeout(w.performance.display,500)},display:function(){var t=S.name+":",n=0;f=!1,clearTimeout(w.performance.timer),e.each(m,function(e,t){n+=t["Execution Time"]}),t+=" "+n+"ms",d&&(t+=" '"+d+"'"),(console.group!==i||console.table!==i)&&m.length>0&&(console.groupCollapsed(t),console.table?console.table(m):e.each(m,function(e,t){console.log(t.Name+": "+t["Execution Time"]+"ms")}),console.groupEnd()),m=[]}},invoke:function(t,n,o){var r,s,l,c=I;return n=n||h,o=z||o,"string"==typeof t&&c!==i&&(t=t.split(/[\. ]/),r=t.length-1,e.each(t,function(n,o){var a=n!=r?o+t[n+1].charAt(0).toUpperCase()+t[n+1].slice(1):t;if(e.isPlainObject(c[a])&&n!=r)c=c[a];else{if(c[a]!==i)return s=c[a],!1;if(!e.isPlainObject(c[o])||n==r)return c[o]!==i?(s=c[o],!1):(w.error(P.method,t),!1);c=c[o]}})),e.isFunction(s)?l=s.apply(o,n):s!==i&&(l=s),e.isArray(a)?a.push(l):a!==i?a=[a,l]:l!==i&&(a=l),s}},p?(I===i&&w.initialize(),w.invoke(g)):(I!==i&&w.invoke("destroy"),w.initialize())}),a!==i?a:this},e.fn.sidebar.settings={name:"Sidebar",namespace:"sidebar",silent:!1,debug:!1,verbose:!1,performance:!0,transition:"auto",mobileTransition:"auto",defaultTransition:{computer:{left:"uncover",right:"uncover",top:"overlay",bottom:"overlay"},mobile:{left:"uncover",right:"uncover",top:"overlay",bottom:"overlay"}},context:"body",exclusive:!1,closable:!0,dimPage:!0,scrollLock:!1,returnScroll:!1,delaySetup:!1,duration:500,onChange:function(){},onShow:function(){},onHide:function(){},onHidden:function(){},onVisible:function(){},className:{active:"active",animating:"animating",dimmed:"dimmed",ios:"ios",pushable:"pushable",pushed:"pushed",right:"right",top:"top",left:"left",bottom:"bottom",visible:"visible"},selector:{fixed:".fixed",omitted:"script, link, style, .ui.modal, .ui.dimmer, .ui.nag, .ui.fixed",pusher:".pusher",sidebar:".ui.sidebar"},regExp:{ios:/(iPad|iPhone|iPod)/g,mobileChrome:/(CriOS)/g,mobile:/Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/g},error:{method:"The method you called is not defined.",pusher:"Had to add pusher element. For optimal performance make sure body content is inside a pusher element",movedSidebar:"Had to move sidebar. For optimal performance make sure sidebar and pusher are direct children of your body tag",overlay:"The overlay setting is no longer supported, use animation: overlay",notFound:"There were no elements that matched the specified selector"}}}(jQuery,window,document),function(e,t,n,i){"use strict";t=void 0!==t&&t.Math==Math?t:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")(),e.fn.sticky=function(o){var a,r=e(this),s=r.selector||"",l=(new Date).getTime(),c=[],u=arguments[0],d="string"==typeof u,f=[].slice.call(arguments,1);return r.each(function(){var r,m,g,p,h,v=e.isPlainObject(o)?e.extend(!0,{},e.fn.sticky.settings,o):e.extend({},e.fn.sticky.settings),b=v.className,y=v.namespace,x=v.error,C="."+y,w="module-"+y,S=e(this),k=e(t),T=e(v.scrollContext),A=(S.selector,S.data(w)),R=t.requestAnimationFrame||t.mozRequestAnimationFrame||t.webkitRequestAnimationFrame||t.msRequestAnimationFrame||function(e){setTimeout(e,0)},P=this;h={initialize:function(){h.determineContainer(),h.determineContext(),h.verbose("Initializing sticky",v,r),h.save.positions(),h.checkErrors(),h.bind.events(),v.observeChanges&&h.observeChanges(),h.instantiate()},instantiate:function(){h.verbose("Storing instance of module",h),A=h,S.data(w,h)},destroy:function(){h.verbose("Destroying previous instance"),h.reset(),g&&g.disconnect(),p&&p.disconnect(),k.off("load"+C,h.event.load).off("resize"+C,h.event.resize),T.off("scrollchange"+C,h.event.scrollchange),S.removeData(w)},observeChanges:function(){"MutationObserver"in t&&(g=new MutationObserver(h.event.documentChanged),p=new MutationObserver(h.event.changed),g.observe(n,{childList:!0,subtree:!0}),p.observe(P,{childList:!0,subtree:!0}),p.observe(m[0],{childList:!0,subtree:!0}),h.debug("Setting up mutation observer",p))},determineContainer:function(){r=v.container?e(v.container):S.offsetParent()},determineContext:function(){0!==(m=v.context?e(v.context):r).length||h.error(x.invalidContext,v.context,S)},checkErrors:function(){if(h.is.hidden()&&h.error(x.visible,S),h.cache.element.height>h.cache.context.height)return h.reset(),void h.error(x.elementSize,S)},bind:{events:function(){k.on("load"+C,h.event.load).on("resize"+C,h.event.resize),T.off("scroll"+C).on("scroll"+C,h.event.scroll).on("scrollchange"+C,h.event.scrollchange)}},event:{changed:function(e){clearTimeout(h.timer),h.timer=setTimeout(function(){h.verbose("DOM tree modified, updating sticky menu",e),h.refresh()},100)},documentChanged:function(t){[].forEach.call(t,function(t){t.removedNodes&&[].forEach.call(t.removedNodes,function(t){(t==P||e(t).find(P).length>0)&&(h.debug("Element removed from DOM, tearing down events"),h.destroy())})})},load:function(){h.verbose("Page contents finished loading"),R(h.refresh)},resize:function(){h.verbose("Window resized"),R(h.refresh)},scroll:function(){R(function(){T.triggerHandler("scrollchange"+C,T.scrollTop())})},scrollchange:function(e,t){h.stick(t),v.onScroll.call(P)}},refresh:function(e){h.reset(),v.context||h.determineContext(),e&&h.determineContainer(),h.save.positions(),h.stick(),v.onReposition.call(P)},supports:{sticky:function(){var t=e("<div/>");t[0];return t.addClass(b.supported),t.css("position").match("sticky")}},save:{lastScroll:function(e){h.lastScroll=e},elementScroll:function(e){h.elementScroll=e},positions:function(){var e={height:T.height()},t={margin:{top:parseInt(S.css("margin-top"),10),bottom:parseInt(S.css("margin-bottom"),10)},offset:S.offset(),width:S.outerWidth(),height:S.outerHeight()},n={offset:m.offset(),height:m.outerHeight()};r.outerHeight();h.is.standardScroll()||(h.debug("Non-standard scroll. Removing scroll offset from element offset"),e.top=T.scrollTop(),e.left=T.scrollLeft(),t.offset.top+=e.top,n.offset.top+=e.top,t.offset.left+=e.left,n.offset.left+=e.left),h.cache={fits:t.height+v.offset<=e.height,sameHeight:t.height==n.height,scrollContext:{height:e.height},element:{margin:t.margin,top:t.offset.top-t.margin.top,left:t.offset.left,width:t.width,height:t.height,bottom:t.offset.top+t.height},context:{top:n.offset.top,height:n.height,bottom:n.offset.top+n.height}},h.set.containerSize(),h.stick(),h.debug("Caching element positions",h.cache)}},get:{direction:function(e){var t="down";return e=e||T.scrollTop(),h.lastScroll!==i&&(h.lastScroll<e?t="down":h.lastScroll>e&&(t="up")),t},scrollChange:function(e){return e=e||T.scrollTop(),h.lastScroll?e-h.lastScroll:0},currentElementScroll:function(){return h.elementScroll?h.elementScroll:h.is.top()?Math.abs(parseInt(S.css("top"),10))||0:Math.abs(parseInt(S.css("bottom"),10))||0},elementScroll:function(e){e=e||T.scrollTop();var t=h.cache.element,n=h.cache.scrollContext,i=h.get.scrollChange(e),o=t.height-n.height+v.offset,a=h.get.currentElementScroll(),r=a+i;return a=h.cache.fits||r<0?0:r>o?o:r}},remove:{lastScroll:function(){delete h.lastScroll},elementScroll:function(e){delete h.elementScroll},minimumSize:function(){r.css("min-height","")},offset:function(){S.css("margin-top","")}},set:{offset:function(){h.verbose("Setting offset on element",v.offset),S.css("margin-top",v.offset)},containerSize:function(){var e=r.get(0).tagName;"HTML"===e||"body"==e?h.determineContainer():Math.abs(r.outerHeight()-h.cache.context.height)>v.jitter&&(h.debug("Context has padding, specifying exact height for container",h.cache.context.height),r.css({height:h.cache.context.height}))},minimumSize:function(){var e=h.cache.element;r.css("min-height",e.height)},scroll:function(e){h.debug("Setting scroll on element",e),h.elementScroll!=e&&(h.is.top()&&S.css("bottom","").css("top",-e),h.is.bottom()&&S.css("top","").css("bottom",e))},size:function(){0!==h.cache.element.height&&0!==h.cache.element.width&&(P.style.setProperty("width",h.cache.element.width+"px","important"),P.style.setProperty("height",h.cache.element.height+"px","important"))}},is:{standardScroll:function(){return T[0]==t},top:function(){return S.hasClass(b.top)},bottom:function(){return S.hasClass(b.bottom)},initialPosition:function(){return!h.is.fixed()&&!h.is.bound()},hidden:function(){return!S.is(":visible")},bound:function(){return S.hasClass(b.bound)},fixed:function(){return S.hasClass(b.fixed)}},stick:function(e){var t=e||T.scrollTop(),n=h.cache,i=n.fits,o=n.sameHeight,a=n.element,r=n.scrollContext,s=n.context,l=h.is.bottom()&&v.pushing?v.bottomOffset:v.offset,c=(e={top:t+l,bottom:t+l+r.height},h.get.direction(e.top),i?0:h.get.elementScroll(e.top)),u=!i;0!==a.height&&!o&&(h.is.initialPosition()?e.top>=s.bottom?(h.debug("Initial element position is bottom of container"),h.bindBottom()):e.top>a.top&&(a.height+e.top-c>=s.bottom?(h.debug("Initial element position is bottom of container"),h.bindBottom()):(h.debug("Initial element position is fixed"),h.fixTop())):h.is.fixed()?h.is.top()?e.top<=a.top?(h.debug("Fixed element reached top of container"),h.setInitialPosition()):a.height+e.top-c>=s.bottom?(h.debug("Fixed element reached bottom of container"),h.bindBottom()):u&&(h.set.scroll(c),h.save.lastScroll(e.top),h.save.elementScroll(c)):h.is.bottom()&&(e.bottom-a.height<=a.top?(h.debug("Bottom fixed rail has reached top of container"),h.setInitialPosition()):e.bottom>=s.bottom?(h.debug("Bottom fixed rail has reached bottom of container"),h.bindBottom()):u&&(h.set.scroll(c),h.save.lastScroll(e.top),h.save.elementScroll(c))):h.is.bottom()&&(e.top<=a.top?(h.debug("Jumped from bottom fixed to top fixed, most likely used home/end button"),h.setInitialPosition()):v.pushing?h.is.bound()&&e.bottom<=s.bottom&&(h.debug("Fixing bottom attached element to bottom of browser."),h.fixBottom()):h.is.bound()&&e.top<=s.bottom-a.height&&(h.debug("Fixing bottom attached element to top of browser."),h.fixTop())))},bindTop:function(){h.debug("Binding element to top of parent container"),h.remove.offset(),S.css({left:"",top:"",marginBottom:""}).removeClass(b.fixed).removeClass(b.bottom).addClass(b.bound).addClass(b.top),v.onTop.call(P),v.onUnstick.call(P)},bindBottom:function(){h.debug("Binding element to bottom of parent container"),h.remove.offset(),S.css({left:"",top:""}).removeClass(b.fixed).removeClass(b.top).addClass(b.bound).addClass(b.bottom),v.onBottom.call(P),v.onUnstick.call(P)},setInitialPosition:function(){h.debug("Returning to initial position"),h.unfix(),h.unbind()},fixTop:function(){h.debug("Fixing element to top of page"),v.setSize&&h.set.size(),h.set.minimumSize(),h.set.offset(),S.css({left:h.cache.element.left,bottom:"",marginBottom:""}).removeClass(b.bound).removeClass(b.bottom).addClass(b.fixed).addClass(b.top),v.onStick.call(P)},fixBottom:function(){h.debug("Sticking element to bottom of page"),v.setSize&&h.set.size(),h.set.minimumSize(),h.set.offset(),S.css({left:h.cache.element.left,bottom:"",marginBottom:""}).removeClass(b.bound).removeClass(b.top).addClass(b.fixed).addClass(b.bottom),v.onStick.call(P)},unbind:function(){h.is.bound()&&(h.debug("Removing container bound position on element"),h.remove.offset(),S.removeClass(b.bound).removeClass(b.top).removeClass(b.bottom))},unfix:function(){h.is.fixed()&&(h.debug("Removing fixed position on element"),h.remove.minimumSize(),h.remove.offset(),S.removeClass(b.fixed).removeClass(b.top).removeClass(b.bottom),v.onUnstick.call(P))},reset:function(){h.debug("Resetting elements position"),h.unbind(),h.unfix(),h.resetCSS(),h.remove.offset(),h.remove.lastScroll()},resetCSS:function(){S.css({width:"",height:""}),r.css({height:""})},setting:function(t,n){if(e.isPlainObject(t))e.extend(!0,v,t);else{if(n===i)return v[t];v[t]=n}},internal:function(t,n){if(e.isPlainObject(t))e.extend(!0,h,t);else{if(n===i)return h[t];h[t]=n}},debug:function(){!v.silent&&v.debug&&(v.performance?h.performance.log(arguments):(h.debug=Function.prototype.bind.call(console.info,console,v.name+":"),h.debug.apply(console,arguments)))},verbose:function(){!v.silent&&v.verbose&&v.debug&&(v.performance?h.performance.log(arguments):(h.verbose=Function.prototype.bind.call(console.info,console,v.name+":"),h.verbose.apply(console,arguments)))},error:function(){v.silent||(h.error=Function.prototype.bind.call(console.error,console,v.name+":"),h.error.apply(console,arguments))},performance:{log:function(e){var t,n;v.performance&&(n=(t=(new Date).getTime())-(l||t),l=t,c.push({Name:e[0],Arguments:[].slice.call(e,1)||"",Element:P,"Execution Time":n})),clearTimeout(h.performance.timer),h.performance.timer=setTimeout(h.performance.display,0)},display:function(){var t=v.name+":",n=0;l=!1,clearTimeout(h.performance.timer),e.each(c,function(e,t){n+=t["Execution Time"]}),t+=" "+n+"ms",s&&(t+=" '"+s+"'"),(console.group!==i||console.table!==i)&&c.length>0&&(console.groupCollapsed(t),console.table?console.table(c):e.each(c,function(e,t){console.log(t.Name+": "+t["Execution Time"]+"ms")}),console.groupEnd()),c=[]}},invoke:function(t,n,o){var r,s,l,c=A;return n=n||f,o=P||o,"string"==typeof t&&c!==i&&(t=t.split(/[\. ]/),r=t.length-1,e.each(t,function(n,o){var a=n!=r?o+t[n+1].charAt(0).toUpperCase()+t[n+1].slice(1):t;if(e.isPlainObject(c[a])&&n!=r)c=c[a];else{if(c[a]!==i)return s=c[a],!1;if(!e.isPlainObject(c[o])||n==r)return c[o]!==i&&(s=c[o],!1);c=c[o]}})),e.isFunction(s)?l=s.apply(o,n):s!==i&&(l=s),e.isArray(a)?a.push(l):a!==i?a=[a,l]:l!==i&&(a=l),s}},d?(A===i&&h.initialize(),h.invoke(u)):(A!==i&&A.invoke("destroy"),h.initialize())}),a!==i?a:this},e.fn.sticky.settings={name:"Sticky",namespace:"sticky",silent:!1,debug:!1,verbose:!0,performance:!0,pushing:!1,context:!1,container:!1,scrollContext:t,offset:0,bottomOffset:0,jitter:5,setSize:!0,observeChanges:!1,onReposition:function(){},onScroll:function(){},onStick:function(){},onUnstick:function(){},onTop:function(){},onBottom:function(){},error:{container:"Sticky element must be inside a relative container",visible:"Element is hidden, you must call refresh after element becomes visible. Use silent setting to surpress this warning in production.",method:"The method you called is not defined.",invalidContext:"Context specified does not exist",elementSize:"Sticky element is larger than its container, cannot create sticky."},className:{bound:"bound",fixed:"fixed",supported:"native",top:"top",bottom:"bottom"}}}(jQuery,window,document),function(e,t,n,i){"use strict";t=void 0!==t&&t.Math==Math?t:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")(),e.fn.tab=function(o){var a,r=e.isFunction(this)?e(t):e(this),s=r.selector||"",l=(new Date).getTime(),c=[],u=arguments[0],d="string"==typeof u,f=[].slice.call(arguments,1),m=!1;return r.each(function(){var g,p,h,v,b,y,x=e.isPlainObject(o)?e.extend(!0,{},e.fn.tab.settings,o):e.extend({},e.fn.tab.settings),C=x.className,w=x.metadata,S=x.selector,k=x.error,T="."+x.namespace,A="module-"+x.namespace,R=e(this),P={},E=!0,F=0,O=this,D=R.data(A);b={initialize:function(){b.debug("Initializing tab menu item",R),b.fix.callbacks(),b.determineTabs(),b.debug("Determining tabs",x.context,p),x.auto&&b.set.auto(),b.bind.events(),x.history&&!m&&(b.initializeHistory(),m=!0),b.instantiate()},instantiate:function(){b.verbose("Storing instance of module",b),D=b,R.data(A,b)},destroy:function(){b.debug("Destroying tabs",R),R.removeData(A).off(T)},bind:{events:function(){e.isWindow(O)||(b.debug("Attaching tab activation events to element",R),R.on("click"+T,b.event.click))}},determineTabs:function(){var t;"parent"===x.context?(R.closest(S.ui).length>0?(t=R.closest(S.ui),b.verbose("Using closest UI element as parent",t)):t=R,g=t.parent(),b.verbose("Determined parent element for creating context",g)):x.context?(g=e(x.context),b.verbose("Using selector for tab context",x.context,g)):g=e("body"),x.childrenOnly?(p=g.children(S.tabs),b.debug("Searching tab context children for tabs",g,p)):(p=g.find(S.tabs),b.debug("Searching tab context for tabs",g,p))},fix:{callbacks:function(){e.isPlainObject(o)&&(o.onTabLoad||o.onTabInit)&&(o.onTabLoad&&(o.onLoad=o.onTabLoad,delete o.onTabLoad,b.error(k.legacyLoad,o.onLoad)),o.onTabInit&&(o.onFirstLoad=o.onTabInit,delete o.onTabInit,b.error(k.legacyInit,o.onFirstLoad)),x=e.extend(!0,{},e.fn.tab.settings,o))}},initializeHistory:function(){if(b.debug("Initializing page state"),e.address===i)return b.error(k.state),!1;if("state"==x.historyType){if(b.debug("Using HTML5 to manage state"),!1===x.path)return b.error(k.path),!1;e.address.history(!0).state(x.path)}e.address.bind("change",b.event.history.change)},event:{click:function(t){var n=e(this).data(w.tab);n!==i?(x.history?(b.verbose("Updating page state",t),e.address.value(n)):(b.verbose("Changing tab",t),b.changeTab(n)),t.preventDefault()):b.debug("No tab specified")},history:{change:function(t){var n=t.pathNames.join("/")||b.get.initialPath(),o=x.templates.determineTitle(n)||!1;b.performance.display(),b.debug("History change event",n,t),y=t,n!==i&&b.changeTab(n),o&&e.address.title(o)}}},refresh:function(){h&&(b.debug("Refreshing tab",h),b.changeTab(h))},cache:{read:function(e){return e!==i&&P[e]},add:function(e,t){e=e||h,b.debug("Adding cached content for",e),P[e]=t},remove:function(e){e=e||h,b.debug("Removing cached content for",e),delete P[e]}},set:{auto:function(){var t="string"==typeof x.path?x.path.replace(/\/$/,"")+"/{$tab}":"/{$tab}";b.verbose("Setting up automatic tab retrieval from server",t),e.isPlainObject(x.apiSettings)?x.apiSettings.url=t:x.apiSettings={url:t}},loading:function(e){var t=b.get.tabElement(e);t.hasClass(C.loading)||(b.verbose("Setting loading state for",t),t.addClass(C.loading).siblings(p).removeClass(C.active+" "+C.loading),t.length>0&&x.onRequest.call(t[0],e))},state:function(t){e.address.value(t)}},changeTab:function(n){var i=t.history&&t.history.pushState&&x.ignoreFirstLoad&&E,o=x.auto||e.isPlainObject(x.apiSettings),a=o&&!i?b.utilities.pathToArray(n):b.get.defaultPathArray(n);n=b.utilities.arrayToPath(a),e.each(a,function(t,r){var s,l,c,u,d=a.slice(0,t+1),f=b.utilities.arrayToPath(d),m=b.is.tab(f),p=t+1==a.length,S=b.get.tabElement(f);if(b.verbose("Looking for tab",r),m){if(b.verbose("Tab was found",r),h=f,v=b.utilities.filterArray(a,d),p?u=!0:(l=a.slice(0,t+2),c=b.utilities.arrayToPath(l),(u=!b.is.tab(c))&&b.verbose("Tab parameters found",l)),u&&o)return i?(b.debug("Ignoring remote content on first tab load",f),E=!1,b.cache.add(n,S.html()),b.activate.all(f),x.onFirstLoad.call(S[0],f,v,y),x.onLoad.call(S[0],f,v,y)):(b.activate.navigation(f),b.fetch.content(f,n)),!1;b.debug("Opened local tab",f),b.activate.all(f),b.cache.read(f)||(b.cache.add(f,!0),b.debug("First time tab loaded calling tab init"),x.onFirstLoad.call(S[0],f,v,y)),x.onLoad.call(S[0],f,v,y)}else{if(-1!=n.search("/")||""===n)return b.error(k.missingTab,R,g,f),!1;if(f=(s=e("#"+n+', a[name="'+n+'"]')).closest("[data-tab]").data(w.tab),S=b.get.tabElement(f),s&&s.length>0&&f)return b.debug("Anchor link used, opening parent tab",S,s),S.hasClass(C.active)||setTimeout(function(){b.scrollTo(s)},0),b.activate.all(f),b.cache.read(f)||(b.cache.add(f,!0),b.debug("First time tab loaded calling tab init"),x.onFirstLoad.call(S[0],f,v,y)),x.onLoad.call(S[0],f,v,y),!1}})},scrollTo:function(t){var i=!!(t&&t.length>0)&&t.offset().top;!1!==i&&(b.debug("Forcing scroll to an in-page link in a hidden tab",i,t),e(n).scrollTop(i))},update:{content:function(t,n,o){var a=b.get.tabElement(t),r=a[0];o=o!==i?o:x.evaluateScripts,"string"==typeof x.cacheType&&"dom"==x.cacheType.toLowerCase()&&"string"!=typeof n?a.empty().append(e(n).clone(!0)):o?(b.debug("Updating HTML and evaluating inline scripts",t,n),a.html(n)):(b.debug("Updating HTML",t,n),r.innerHTML=n)}},fetch:{content:function(t,n){var o,a,r=b.get.tabElement(t),s={dataType:"html",encodeParameters:!1,on:"now",cache:x.alwaysRefresh,headers:{"X-Remote":!0},onSuccess:function(e){"response"==x.cacheType&&b.cache.add(n,e),b.update.content(t,e),t==h?(b.debug("Content loaded",t),b.activate.tab(t)):b.debug("Content loaded in background",t),x.onFirstLoad.call(r[0],t,v,y),x.onLoad.call(r[0],t,v,y),x.loadOnce?b.cache.add(n,!0):"string"==typeof x.cacheType&&"dom"==x.cacheType.toLowerCase()&&r.children().length>0?setTimeout(function(){var e=r.children().clone(!0);e=e.not("script"),b.cache.add(n,e)},0):b.cache.add(n,r.html())},urlData:{tab:n}},l=r.api("get request")||!1,c=l&&"pending"===l.state();n=n||t,a=b.cache.read(n),x.cache&&a?(b.activate.tab(t),b.debug("Adding cached content",n),x.loadOnce||("once"==x.evaluateScripts?b.update.content(t,a,!1):b.update.content(t,a)),x.onLoad.call(r[0],t,v,y)):c?(b.set.loading(t),b.debug("Content is already loading",n)):e.api!==i?(o=e.extend(!0,{},x.apiSettings,s),b.debug("Retrieving remote content",n,o),b.set.loading(t),r.api(o)):b.error(k.api)}},activate:{all:function(e){b.activate.tab(e),b.activate.navigation(e)},tab:function(e){var t=b.get.tabElement(e),n="siblings"==x.deactivate?t.siblings(p):p.not(t),i=t.hasClass(C.active);b.verbose("Showing tab content for",t),i||(t.addClass(C.active),n.removeClass(C.active+" "+C.loading),t.length>0&&x.onVisible.call(t[0],e))},navigation:function(e){var t=b.get.navElement(e),n="siblings"==x.deactivate?t.siblings(r):r.not(t),i=t.hasClass(C.active);b.verbose("Activating tab navigation for",t,e),i||(t.addClass(C.active),n.removeClass(C.active+" "+C.loading))}},deactivate:{all:function(){b.deactivate.navigation(),b.deactivate.tabs()},navigation:function(){r.removeClass(C.active)},tabs:function(){p.removeClass(C.active+" "+C.loading)}},is:{tab:function(e){return e!==i&&b.get.tabElement(e).length>0}},get:{initialPath:function(){return r.eq(0).data(w.tab)||p.eq(0).data(w.tab)},path:function(){return e.address.value()},defaultPathArray:function(e){return b.utilities.pathToArray(b.get.defaultPath(e))},defaultPath:function(e){var t=r.filter("[data-"+w.tab+'^="'+e+'/"]').eq(0).data(w.tab)||!1;if(t){if(b.debug("Found default tab",t),F<x.maxDepth)return F++,b.get.defaultPath(t);b.error(k.recursion)}else b.debug("No default tabs found for",e,p);return F=0,e},navElement:function(e){return e=e||h,r.filter("[data-"+w.tab+'="'+e+'"]')},tabElement:function(e){var t,n,i,o;return e=e||h,i=b.utilities.pathToArray(e),o=b.utilities.last(i),t=p.filter("[data-"+w.tab+'="'+e+'"]'),n=p.filter("[data-"+w.tab+'="'+o+'"]'),t.length>0?t:n},tab:function(){return h}},utilities:{filterArray:function(t,n){return e.grep(t,function(t){return-1==e.inArray(t,n)})},last:function(t){return!!e.isArray(t)&&t[t.length-1]},pathToArray:function(e){return e===i&&(e=h),"string"==typeof e?e.split("/"):[e]},arrayToPath:function(t){return!!e.isArray(t)&&t.join("/")}},setting:function(t,n){if(b.debug("Changing setting",t,n),e.isPlainObject(t))e.extend(!0,x,t);else{if(n===i)return x[t];e.isPlainObject(x[t])?e.extend(!0,x[t],n):x[t]=n}},internal:function(t,n){if(e.isPlainObject(t))e.extend(!0,b,t);else{if(n===i)return b[t];b[t]=n}},debug:function(){!x.silent&&x.debug&&(x.performance?b.performance.log(arguments):(b.debug=Function.prototype.bind.call(console.info,console,x.name+":"),b.debug.apply(console,arguments)))},verbose:function(){!x.silent&&x.verbose&&x.debug&&(x.performance?b.performance.log(arguments):(b.verbose=Function.prototype.bind.call(console.info,console,x.name+":"),b.verbose.apply(console,arguments)))},error:function(){x.silent||(b.error=Function.prototype.bind.call(console.error,console,x.name+":"),b.error.apply(console,arguments))},performance:{log:function(e){var t,n;x.performance&&(n=(t=(new Date).getTime())-(l||t),l=t,c.push({Name:e[0],Arguments:[].slice.call(e,1)||"",Element:O,"Execution Time":n})),clearTimeout(b.performance.timer),b.performance.timer=setTimeout(b.performance.display,500)},display:function(){var t=x.name+":",n=0;l=!1,clearTimeout(b.performance.timer),e.each(c,function(e,t){n+=t["Execution Time"]}),t+=" "+n+"ms",s&&(t+=" '"+s+"'"),(console.group!==i||console.table!==i)&&c.length>0&&(console.groupCollapsed(t),console.table?console.table(c):e.each(c,function(e,t){console.log(t.Name+": "+t["Execution Time"]+"ms")}),console.groupEnd()),c=[]}},invoke:function(t,n,o){var r,s,l,c=D;return n=n||f,o=O||o,"string"==typeof t&&c!==i&&(t=t.split(/[\. ]/),r=t.length-1,e.each(t,function(n,o){var a=n!=r?o+t[n+1].charAt(0).toUpperCase()+t[n+1].slice(1):t;if(e.isPlainObject(c[a])&&n!=r)c=c[a];else{if(c[a]!==i)return s=c[a],!1;if(!e.isPlainObject(c[o])||n==r)return c[o]!==i?(s=c[o],!1):(b.error(k.method,t),!1);c=c[o]}})),e.isFunction(s)?l=s.apply(o,n):s!==i&&(l=s),e.isArray(a)?a.push(l):a!==i?a=[a,l]:l!==i&&(a=l),s}},d?(D===i&&b.initialize(),b.invoke(u)):(D!==i&&D.invoke("destroy"),b.initialize())}),a!==i?a:this},e.tab=function(){e(t).tab.apply(this,arguments)},e.fn.tab.settings={name:"Tab",namespace:"tab",silent:!1,debug:!1,verbose:!1,performance:!0,auto:!1,history:!1,historyType:"hash",path:!1,context:!1,childrenOnly:!1,maxDepth:25,deactivate:"siblings",alwaysRefresh:!1,cache:!0,loadOnce:!1,cacheType:"response",ignoreFirstLoad:!1,apiSettings:!1,evaluateScripts:"once",onFirstLoad:function(e,t,n){},onLoad:function(e,t,n){},onVisible:function(e,t,n){},onRequest:function(e,t,n){},templates:{determineTitle:function(e){}},error:{api:"You attempted to load content without API module",method:"The method you called is not defined",missingTab:"Activated tab cannot be found. Tabs are case-sensitive.",noContent:"The tab you specified is missing a content url.",path:"History enabled, but no path was specified",recursion:"Max recursive depth reached",legacyInit:"onTabInit has been renamed to onFirstLoad in 2.0, please adjust your code.",legacyLoad:"onTabLoad has been renamed to onLoad in 2.0. Please adjust your code",state:"History requires Asual's Address library <https://github.com/asual/jquery-address>"},metadata:{tab:"tab",loaded:"loaded",promise:"promise"},className:{loading:"loading",active:"active"},selector:{tabs:".ui.tab",ui:".ui"}}}(jQuery,window,document),function(e,t,n,i){"use strict";t=void 0!==t&&t.Math==Math?t:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")(),e.fn.transition=function(){var o,a=e(this),r=a.selector||"",s=(new Date).getTime(),l=[],c=arguments,u=c[0],d=[].slice.call(arguments,1),f="string"==typeof u;t.requestAnimationFrame||t.mozRequestAnimationFrame||t.webkitRequestAnimationFrame||t.msRequestAnimationFrame;return a.each(function(t){var m,g,p,h,v,b,y,x,C,w=e(this),S=this;(C={initialize:function(){m=C.get.settings.apply(S,c),h=m.className,p=m.error,v=m.metadata,x="."+m.namespace,y="module-"+m.namespace,g=w.data(y)||C,b=C.get.animationEndEvent(),f&&(f=C.invoke(u)),!1===f&&(C.verbose("Converted arguments into settings object",m),m.interval?C.delay(m.animate):C.animate(),C.instantiate())},instantiate:function(){C.verbose("Storing instance of module",C),g=C,w.data(y,g)},destroy:function(){C.verbose("Destroying previous module for",S),w.removeData(y)},refresh:function(){C.verbose("Refreshing display type on next animation"),delete C.displayType},forceRepaint:function(){C.verbose("Forcing element repaint");var e=w.parent(),t=w.next();0===t.length?w.detach().appendTo(e):w.detach().insertBefore(t)},repaint:function(){C.verbose("Repainting element");S.offsetWidth},delay:function(e){var n,o=C.get.animationDirection();o||(o=C.can.transition()?C.get.direction():"static"),e=e!==i?e:m.interval,n="auto"==m.reverse&&o==h.outward||1==m.reverse?(a.length-t)*m.interval:t*m.interval,C.debug("Delaying animation by",n),setTimeout(C.animate,n)},animate:function(e){if(m=e||m,!C.is.supported())return C.error(p.support),!1;if(C.debug("Preparing animation",m.animation),C.is.animating()){if(m.queue)return!m.allowRepeats&&C.has.direction()&&C.is.occurring()&&!0!==C.queuing?C.debug("Animation is currently occurring, preventing queueing same animation",m.animation):C.queue(m.animation),!1;if(!m.allowRepeats&&C.is.occurring())return C.debug("Animation is already occurring, will not execute repeated animation",m.animation),!1;C.debug("New animation started, completing previous early",m.animation),g.complete()}C.can.animate()?C.set.animating(m.animation):C.error(p.noAnimation,m.animation,S)},reset:function(){C.debug("Resetting animation to beginning conditions"),C.remove.animationCallbacks(),C.restore.conditions(),C.remove.animating()},queue:function(e){C.debug("Queueing animation of",e),C.queuing=!0,w.one(b+".queue"+x,function(){C.queuing=!1,C.repaint(),C.animate.apply(this,m)})},complete:function(e){C.debug("Animation complete",m.animation),C.remove.completeCallback(),C.remove.failSafe(),C.is.looping()||(C.is.outward()?(C.verbose("Animation is outward, hiding element"),C.restore.conditions(),C.hide()):C.is.inward()?(C.verbose("Animation is outward, showing element"),C.restore.conditions(),C.show()):(C.verbose("Static animation completed"),C.restore.conditions(),m.onComplete.call(S)))},force:{visible:function(){var e=w.attr("style"),t=C.get.userStyle(),n=C.get.displayType(),o=t+"display: "+n+" !important;",a=w.css("display"),r=e===i||""===e;a!==n?(C.verbose("Overriding default display to show element",n),w.attr("style",o)):r&&w.removeAttr("style")},hidden:function(){var e=w.attr("style"),t=w.css("display"),n=e===i||""===e;"none"===t||C.is.hidden()?n&&w.removeAttr("style"):(C.verbose("Overriding default display to hide element"),w.css("display","none"))}},has:{direction:function(t){var n=!1;return"string"==typeof(t=t||m.animation)&&(t=t.split(" "),e.each(t,function(e,t){t!==h.inward&&t!==h.outward||(n=!0)})),n},inlineDisplay:function(){var t=w.attr("style")||"";return e.isArray(t.match(/display.*?;/,""))}},set:{animating:function(e){var t;C.remove.completeCallback(),e=e||m.animation,t=C.get.animationClass(e),C.save.animation(t),C.force.visible(),C.remove.hidden(),C.remove.direction(),C.start.animation(t)},duration:function(e,t){((t="number"==typeof(t=t||m.duration)?t+"ms":t)||0===t)&&(C.verbose("Setting animation duration",t),w.css({"animation-duration":t}))},direction:function(e){(e=e||C.get.direction())==h.inward?C.set.inward():C.set.outward()},looping:function(){C.debug("Transition set to loop"),w.addClass(h.looping)},hidden:function(){w.addClass(h.transition).addClass(h.hidden)},inward:function(){C.debug("Setting direction to inward"),w.removeClass(h.outward).addClass(h.inward)},outward:function(){C.debug("Setting direction to outward"),w.removeClass(h.inward).addClass(h.outward)},visible:function(){w.addClass(h.transition).addClass(h.visible)}},start:{animation:function(e){e=e||C.get.animationClass(),C.debug("Starting tween",e),w.addClass(e).one(b+".complete"+x,C.complete),m.useFailSafe&&C.add.failSafe(),C.set.duration(m.duration),m.onStart.call(S)}},save:{animation:function(e){C.cache||(C.cache={}),C.cache.animation=e},displayType:function(e){"none"!==e&&w.data(v.displayType,e)},transitionExists:function(t,n){e.fn.transition.exists[t]=n,C.verbose("Saving existence of transition",t,n)}},restore:{conditions:function(){var e=C.get.currentAnimation();e&&(w.removeClass(e),C.verbose("Removing animation class",C.cache)),C.remove.duration()}},add:{failSafe:function(){var e=C.get.duration();C.timer=setTimeout(function(){w.triggerHandler(b)},e+m.failSafeDelay),C.verbose("Adding fail safe timer",C.timer)}},remove:{animating:function(){w.removeClass(h.animating)},animationCallbacks:function(){C.remove.queueCallback(),C.remove.completeCallback()},queueCallback:function(){w.off(".queue"+x)},completeCallback:function(){w.off(".complete"+x)},display:function(){w.css("display","")},direction:function(){w.removeClass(h.inward).removeClass(h.outward)},duration:function(){w.css("animation-duration","")},failSafe:function(){C.verbose("Removing fail safe timer",C.timer),C.timer&&clearTimeout(C.timer)},hidden:function(){w.removeClass(h.hidden)},visible:function(){w.removeClass(h.visible)},looping:function(){C.debug("Transitions are no longer looping"),C.is.looping()&&(C.reset(),w.removeClass(h.looping))},transition:function(){w.removeClass(h.visible).removeClass(h.hidden)}},get:{settings:function(t,n,i){return"object"==typeof t?e.extend(!0,{},e.fn.transition.settings,t):"function"==typeof i?e.extend({},e.fn.transition.settings,{animation:t,onComplete:i,duration:n}):"string"==typeof n||"number"==typeof n?e.extend({},e.fn.transition.settings,{animation:t,duration:n}):"object"==typeof n?e.extend({},e.fn.transition.settings,n,{animation:t}):"function"==typeof n?e.extend({},e.fn.transition.settings,{animation:t,onComplete:n}):e.extend({},e.fn.transition.settings,{animation:t})},animationClass:function(e){var t=e||m.animation,n=C.can.transition()&&!C.has.direction()?C.get.direction()+" ":"";return h.animating+" "+h.transition+" "+n+t},currentAnimation:function(){return!(!C.cache||C.cache.animation===i)&&C.cache.animation},currentDirection:function(){return C.is.inward()?h.inward:h.outward},direction:function(){return C.is.hidden()||!C.is.visible()?h.inward:h.outward},animationDirection:function(t){var n;return"string"==typeof(t=t||m.animation)&&(t=t.split(" "),e.each(t,function(e,t){t===h.inward?n=h.inward:t===h.outward&&(n=h.outward)})),n||!1},duration:function(e){return!1===(e=e||m.duration)&&(e=w.css("animation-duration")||0),"string"==typeof e?e.indexOf("ms")>-1?parseFloat(e):1e3*parseFloat(e):e},displayType:function(e){return e=e===i||e,m.displayType?m.displayType:(e&&w.data(v.displayType)===i&&C.can.transition(!0),w.data(v.displayType))},userStyle:function(e){return(e=e||w.attr("style")||"").replace(/display.*?;/,"")},transitionExists:function(t){return e.fn.transition.exists[t]},animationStartEvent:function(){var e,t=n.createElement("div"),o={animation:"animationstart",OAnimation:"oAnimationStart",MozAnimation:"mozAnimationStart",WebkitAnimation:"webkitAnimationStart"};for(e in o)if(t.style[e]!==i)return o[e];return!1},animationEndEvent:function(){var e,t=n.createElement("div"),o={animation:"animationend",OAnimation:"oAnimationEnd",MozAnimation:"mozAnimationEnd",WebkitAnimation:"webkitAnimationEnd"};for(e in o)if(t.style[e]!==i)return o[e];return!1}},can:{transition:function(t){var n,o,a,r,s,l,c=m.animation,u=C.get.transitionExists(c),d=C.get.displayType(!1);if(u===i||t){if(C.verbose("Determining whether animation exists"),n=w.attr("class"),o=w.prop("tagName"),r=(a=e("<"+o+" />").addClass(n).insertAfter(w)).addClass(c).removeClass(h.inward).removeClass(h.outward).addClass(h.animating).addClass(h.transition).css("animationName"),s=a.addClass(h.inward).css("animationName"),d||(d=a.attr("class",n).removeAttr("style").removeClass(h.hidden).removeClass(h.visible).show().css("display"),C.verbose("Determining final display state",d),C.save.displayType(d)),a.remove(),r!=s)C.debug("Direction exists for animation",c),l=!0;else{if("none"==r||!r)return void C.debug("No animation defined in css",c);C.debug("Static animation found",c,d),l=!1}C.save.transitionExists(c,l)}return u!==i?u:l},animate:function(){return C.can.transition()!==i}},is:{animating:function(){return w.hasClass(h.animating)},inward:function(){return w.hasClass(h.inward)},outward:function(){return w.hasClass(h.outward)},looping:function(){return w.hasClass(h.looping)},occurring:function(e){return e="."+(e=e||m.animation).replace(" ","."),w.filter(e).length>0},visible:function(){return w.is(":visible")},hidden:function(){return"hidden"===w.css("visibility")},supported:function(){return!1!==b}},hide:function(){C.verbose("Hiding element"),C.is.animating()&&C.reset(),S.blur(),C.remove.display(),C.remove.visible(),C.set.hidden(),C.force.hidden(),m.onHide.call(S),m.onComplete.call(S)},show:function(e){C.verbose("Showing element",e),C.remove.hidden(),C.set.visible(),C.force.visible(),m.onShow.call(S),m.onComplete.call(S)},toggle:function(){C.is.visible()?C.hide():C.show()},stop:function(){C.debug("Stopping current animation"),w.triggerHandler(b)},stopAll:function(){C.debug("Stopping all animation"),C.remove.queueCallback(),w.triggerHandler(b)},clear:{queue:function(){C.debug("Clearing animation queue"),C.remove.queueCallback()}},enable:function(){C.verbose("Starting animation"),w.removeClass(h.disabled)},disable:function(){C.debug("Stopping animation"),w.addClass(h.disabled)},setting:function(t,n){if(C.debug("Changing setting",t,n),e.isPlainObject(t))e.extend(!0,m,t);else{if(n===i)return m[t];e.isPlainObject(m[t])?e.extend(!0,m[t],n):m[t]=n}},internal:function(t,n){if(e.isPlainObject(t))e.extend(!0,C,t);else{if(n===i)return C[t];C[t]=n}},debug:function(){!m.silent&&m.debug&&(m.performance?C.performance.log(arguments):(C.debug=Function.prototype.bind.call(console.info,console,m.name+":"),C.debug.apply(console,arguments)))},verbose:function(){!m.silent&&m.verbose&&m.debug&&(m.performance?C.performance.log(arguments):(C.verbose=Function.prototype.bind.call(console.info,console,m.name+":"),C.verbose.apply(console,arguments)))},error:function(){m.silent||(C.error=Function.prototype.bind.call(console.error,console,m.name+":"),C.error.apply(console,arguments))},performance:{log:function(e){var t,n;m.performance&&(n=(t=(new Date).getTime())-(s||t),s=t,l.push({Name:e[0],Arguments:[].slice.call(e,1)||"",Element:S,"Execution Time":n})),clearTimeout(C.performance.timer),C.performance.timer=setTimeout(C.performance.display,500)},display:function(){var t=m.name+":",n=0;s=!1,clearTimeout(C.performance.timer),e.each(l,function(e,t){n+=t["Execution Time"]}),t+=" "+n+"ms",r&&(t+=" '"+r+"'"),a.length>1&&(t+=" ("+a.length+")"),(console.group!==i||console.table!==i)&&l.length>0&&(console.groupCollapsed(t),console.table?console.table(l):e.each(l,function(e,t){console.log(t.Name+": "+t["Execution Time"]+"ms")}),console.groupEnd()),l=[]}},invoke:function(t,n,a){var r,s,l,c=g;return n=n||d,a=S||a,"string"==typeof t&&c!==i&&(t=t.split(/[\. ]/),r=t.length-1,e.each(t,function(n,o){var a=n!=r?o+t[n+1].charAt(0).toUpperCase()+t[n+1].slice(1):t;if(e.isPlainObject(c[a])&&n!=r)c=c[a];else{if(c[a]!==i)return s=c[a],!1;if(!e.isPlainObject(c[o])||n==r)return c[o]!==i&&(s=c[o],!1);c=c[o]}})),e.isFunction(s)?l=s.apply(a,n):s!==i&&(l=s),e.isArray(o)?o.push(l):o!==i?o=[o,l]:l!==i&&(o=l),s!==i&&s}}).initialize()}),o!==i?o:this},e.fn.transition.exists={},e.fn.transition.settings={name:"Transition",silent:!1,debug:!1,verbose:!1,performance:!0,namespace:"transition",interval:0,reverse:"auto",onStart:function(){},onComplete:function(){},onShow:function(){},onHide:function(){},useFailSafe:!0,failSafeDelay:100,allowRepeats:!1,displayType:!1,animation:"fade",duration:!1,queue:!0,metadata:{displayType:"display"},className:{animating:"animating",disabled:"disabled",hidden:"hidden",inward:"in",loading:"loading",looping:"looping",outward:"out",transition:"transition",visible:"visible"},error:{noAnimation:"Element is no longer attached to DOM. Unable to animate.  Use silent setting to surpress this warning in production.",repeated:"That animation is already occurring, cancelling repeated animation",method:"The method you called is not defined",support:"This browser does not support CSS animations"}}}(jQuery,window,document),function(e,t,n,i){"use strict";t=void 0!==t&&t.Math==Math?t:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")();e.api=e.fn.api=function(n){var o,a=e.isFunction(this)?e(t):e(this),r=a.selector||"",s=(new Date).getTime(),l=[],c=arguments[0],u="string"==typeof c,d=[].slice.call(arguments,1);return a.each(function(){var a,f,m,g,p,h,v=e.isPlainObject(n)?e.extend(!0,{},e.fn.api.settings,n):e.extend({},e.fn.api.settings),b=v.namespace,y=v.metadata,x=v.selector,C=v.error,w=v.className,S="."+b,k="module-"+b,T=e(this),A=T.closest(x.form),R=v.stateContext?e(v.stateContext):T,P=this,E=R[0],F=T.data(k);h={initialize:function(){u||h.bind.events(),h.instantiate()},instantiate:function(){h.verbose("Storing instance of module",h),F=h,T.data(k,F)},destroy:function(){h.verbose("Destroying previous module for",P),T.removeData(k).off(S)},bind:{events:function(){var e=h.get.event();e?(h.verbose("Attaching API events to element",e),T.on(e+S,h.event.trigger)):"now"==v.on&&(h.debug("Querying API endpoint immediately"),h.query())}},decode:{json:function(e){if(e!==i&&"string"==typeof e)try{e=JSON.parse(e)}catch(e){}return e}},read:{cachedResponse:function(e){var n;if(t.Storage!==i)return n=sessionStorage.getItem(e),h.debug("Using cached response",e,n),n=h.decode.json(n);h.error(C.noStorage)}},write:{cachedResponse:function(n,o){o&&""===o?h.debug("Response empty, not caching",o):t.Storage!==i?(e.isPlainObject(o)&&(o=JSON.stringify(o)),sessionStorage.setItem(n,o),h.verbose("Storing cached response for url",n,o)):h.error(C.noStorage)}},query:function(){if(h.is.disabled())h.debug("Element is disabled API request aborted");else{if(h.is.loading()){if(!v.interruptRequests)return void h.debug("Cancelling request, previous request is still pending");h.debug("Interrupting previous request"),h.abort()}if(v.defaultData&&e.extend(!0,v.urlData,h.get.defaultData()),v.serializeForm&&(v.data=h.add.formData(v.data)),!1===(f=h.get.settings()))return h.cancelled=!0,void h.error(C.beforeSend);if(h.cancelled=!1,(m=h.get.templatedURL())||h.is.mocked()){if((m=h.add.urlData(m))||h.is.mocked()){if(f.url=v.base+m,a=e.extend(!0,{},v,{type:v.method||v.type,data:g,url:v.base+m,beforeSend:v.beforeXHR,success:function(){},failure:function(){},complete:function(){}}),h.debug("Querying URL",a.url),h.verbose("Using AJAX settings",a),"local"===v.cache&&h.read.cachedResponse(m))return h.debug("Response returned from local cache"),h.request=h.create.request(),void h.request.resolveWith(E,[h.read.cachedResponse(m)]);v.throttle?v.throttleFirstRequest||h.timer?(h.debug("Throttling request",v.throttle),clearTimeout(h.timer),h.timer=setTimeout(function(){h.timer&&delete h.timer,h.debug("Sending throttled request",g,a.method),h.send.request()},v.throttle)):(h.debug("Sending request",g,a.method),h.send.request(),h.timer=setTimeout(function(){},v.throttle)):(h.debug("Sending request",g,a.method),h.send.request())}}else h.error(C.missingURL)}},should:{removeError:function(){return!0===v.hideError||"auto"===v.hideError&&!h.is.form()}},is:{disabled:function(){return T.filter(x.disabled).length>0},expectingJSON:function(){return"json"===v.dataType||"jsonp"===v.dataType},form:function(){return T.is("form")||R.is("form")},mocked:function(){return v.mockResponse||v.mockResponseAsync||v.response||v.responseAsync},input:function(){return T.is("input")},loading:function(){return!!h.request&&"pending"==h.request.state()},abortedRequest:function(e){return e&&e.readyState!==i&&0===e.readyState?(h.verbose("XHR request determined to be aborted"),!0):(h.verbose("XHR request was not aborted"),!1)},validResponse:function(t){return h.is.expectingJSON()&&e.isFunction(v.successTest)?(h.debug("Checking JSON returned success",v.successTest,t),v.successTest(t)?(h.debug("Response passed success test",t),!0):(h.debug("Response failed success test",t),!1)):(h.verbose("Response is not JSON, skipping validation",v.successTest,t),!0)}},was:{cancelled:function(){return h.cancelled||!1},succesful:function(){return h.request&&"resolved"==h.request.state()},failure:function(){return h.request&&"rejected"==h.request.state()},complete:function(){return h.request&&("resolved"==h.request.state()||"rejected"==h.request.state())}},add:{urlData:function(t,n){var o,a;return t&&(o=t.match(v.regExp.required),a=t.match(v.regExp.optional),n=n||v.urlData,o&&(h.debug("Looking for required URL variables",o),e.each(o,function(o,a){var r=-1!==a.indexOf("$")?a.substr(2,a.length-3):a.substr(1,a.length-2),s=e.isPlainObject(n)&&n[r]!==i?n[r]:T.data(r)!==i?T.data(r):R.data(r)!==i?R.data(r):n[r];if(s===i)return h.error(C.requiredParameter,r,t),t=!1,!1;h.verbose("Found required variable",r,s),s=v.encodeParameters?h.get.urlEncodedValue(s):s,t=t.replace(a,s)})),a&&(h.debug("Looking for optional URL variables",o),e.each(a,function(o,a){var r=-1!==a.indexOf("$")?a.substr(3,a.length-4):a.substr(2,a.length-3),s=e.isPlainObject(n)&&n[r]!==i?n[r]:T.data(r)!==i?T.data(r):R.data(r)!==i?R.data(r):n[r];s!==i?(h.verbose("Optional variable Found",r,s),t=t.replace(a,s)):(h.verbose("Optional variable not found",r),t=-1!==t.indexOf("/"+a)?t.replace("/"+a,""):t.replace(a,""))}))),t},formData:function(t){var n=e.fn.serializeObject!==i,o=n?A.serializeObject():A.serialize();return t=t||v.data,e.isPlainObject(t)?n?(h.debug("Extending existing data with form data",t,o),t=e.extend(!0,{},t,o)):(h.error(C.missingSerialize),h.debug("Cant extend data. Replacing data with form data",t,o),t=o):(h.debug("Adding form data",o),t=o),t}},send:{request:function(){h.set.loading(),h.request=h.create.request(),h.is.mocked()?h.mockedXHR=h.create.mockedXHR():h.xhr=h.create.xhr(),v.onRequest.call(E,h.request,h.xhr)}},event:{trigger:function(e){h.query(),"submit"!=e.type&&"click"!=e.type||e.preventDefault()},xhr:{always:function(){},done:function(t,n,i){var o=this,a=(new Date).getTime()-p,r=v.loadingDuration-a,s=!!e.isFunction(v.onResponse)&&(h.is.expectingJSON()?v.onResponse.call(o,e.extend(!0,{},t)):v.onResponse.call(o,t));r=r>0?r:0,s&&(h.debug("Modified API response in onResponse callback",v.onResponse,s,t),t=s),r>0&&h.debug("Response completed early delaying state change by",r),setTimeout(function(){h.is.validResponse(t)?h.request.resolveWith(o,[t,i]):h.request.rejectWith(o,[i,"invalid"])},r)},fail:function(e,t,n){var i=this,o=(new Date).getTime()-p,a=v.loadingDuration-o;(a=a>0?a:0)>0&&h.debug("Response completed early delaying state change by",a),setTimeout(function(){h.is.abortedRequest(e)?h.request.rejectWith(i,[e,"aborted",n]):h.request.rejectWith(i,[e,"error",t,n])},a)}},request:{done:function(e,t){h.debug("Successful API Response",e),"local"===v.cache&&m&&(h.write.cachedResponse(m,e),h.debug("Saving server response locally",h.cache)),v.onSuccess.call(E,e,T,t)},complete:function(e,t){var n,i;h.was.succesful()?(i=e,n=t):(n=e,i=h.get.responseFromXHR(n)),h.remove.loading(),v.onComplete.call(E,i,T,n)},fail:function(e,t,n){var o=h.get.responseFromXHR(e),r=h.get.errorFromRequest(o,t,n);if("aborted"==t)return h.debug("XHR Aborted (Most likely caused by page navigation or CORS Policy)",t,n),v.onAbort.call(E,t,T,e),!0;"invalid"==t?h.debug("JSON did not pass success test. A server-side error has most likely occurred",o):"error"==t&&e!==i&&(h.debug("XHR produced a server error",t,n),200!=e.status&&n!==i&&""!==n&&h.error(C.statusMessage+n,a.url),v.onError.call(E,r,T,e)),v.errorDuration&&"aborted"!==t&&(h.debug("Adding error state"),h.set.error(),h.should.removeError()&&setTimeout(h.remove.error,v.errorDuration)),h.debug("API Request failed",r,e),v.onFailure.call(E,o,T,e)}}},create:{request:function(){return e.Deferred().always(h.event.request.complete).done(h.event.request.done).fail(h.event.request.fail)},mockedXHR:function(){var t,n,i,o=v.mockResponse||v.response,a=v.mockResponseAsync||v.responseAsync;return i=e.Deferred().always(h.event.xhr.complete).done(h.event.xhr.done).fail(h.event.xhr.fail),o?(e.isFunction(o)?(h.debug("Using specified synchronous callback",o),n=o.call(E,f)):(h.debug("Using settings specified response",o),n=o),i.resolveWith(E,[n,!1,{responseText:n}])):e.isFunction(a)&&(t=function(e){h.debug("Async callback returned response",e),e?i.resolveWith(E,[e,!1,{responseText:e}]):i.rejectWith(E,[{responseText:e},!1,!1])},h.debug("Using specified async response callback",a),a.call(E,f,t)),i},xhr:function(){var t;return t=e.ajax(a).always(h.event.xhr.always).done(h.event.xhr.done).fail(h.event.xhr.fail),h.verbose("Created server request",t,a),t}},set:{error:function(){h.verbose("Adding error state to element",R),R.addClass(w.error)},loading:function(){h.verbose("Adding loading state to element",R),R.addClass(w.loading),p=(new Date).getTime()}},remove:{error:function(){h.verbose("Removing error state from element",R),R.removeClass(w.error)},loading:function(){h.verbose("Removing loading state from element",R),R.removeClass(w.loading)}},get:{responseFromXHR:function(t){return!!e.isPlainObject(t)&&(h.is.expectingJSON()?h.decode.json(t.responseText):t.responseText)},errorFromRequest:function(t,n,o){return e.isPlainObject(t)&&t.error!==i?t.error:v.error[n]!==i?v.error[n]:o},request:function(){return h.request||!1},xhr:function(){return h.xhr||!1},settings:function(){var t;return(t=v.beforeSend.call(E,v))&&(t.success!==i&&(h.debug("Legacy success callback detected",t),h.error(C.legacyParameters,t.success),t.onSuccess=t.success),t.failure!==i&&(h.debug("Legacy failure callback detected",t),h.error(C.legacyParameters,t.failure),t.onFailure=t.failure),t.complete!==i&&(h.debug("Legacy complete callback detected",t),h.error(C.legacyParameters,t.complete),t.onComplete=t.complete)),t===i&&h.error(C.noReturnedValue),!1===t?t:t!==i?e.extend(!0,{},t):e.extend(!0,{},v)},urlEncodedValue:function(e){var n=t.decodeURIComponent(e),i=t.encodeURIComponent(e);return n!==e?(h.debug("URL value is already encoded, avoiding double encoding",e),e):(h.verbose("Encoding value using encodeURIComponent",e,i),i)},defaultData:function(){var t={};return e.isWindow(P)||(h.is.input()?t.value=T.val():h.is.form()||(t.text=T.text())),t},event:function(){return e.isWindow(P)||"now"==v.on?(h.debug("API called without element, no events attached"),!1):"auto"==v.on?T.is("input")?P.oninput!==i?"input":P.onpropertychange!==i?"propertychange":"keyup":T.is("form")?"submit":"click":v.on},templatedURL:function(e){if(e=e||T.data(y.action)||v.action||!1,m=T.data(y.url)||v.url||!1)return h.debug("Using specified url",m),m;if(e){if(h.debug("Looking up url for action",e,v.api),v.api[e]===i&&!h.is.mocked())return void h.error(C.missingAction,v.action,v.api);m=v.api[e]}else h.is.form()&&(m=T.attr("action")||R.attr("action")||!1,h.debug("No url or action specified, defaulting to form action",m));return m}},abort:function(){var e=h.get.xhr();e&&"resolved"!==e.state()&&(h.debug("Cancelling API request"),e.abort())},reset:function(){h.remove.error(),h.remove.loading()},setting:function(t,n){if(h.debug("Changing setting",t,n),e.isPlainObject(t))e.extend(!0,v,t);else{if(n===i)return v[t];e.isPlainObject(v[t])?e.extend(!0,v[t],n):v[t]=n}},internal:function(t,n){if(e.isPlainObject(t))e.extend(!0,h,t);else{if(n===i)return h[t];h[t]=n}},debug:function(){!v.silent&&v.debug&&(v.performance?h.performance.log(arguments):(h.debug=Function.prototype.bind.call(console.info,console,v.name+":"),h.debug.apply(console,arguments)))},verbose:function(){!v.silent&&v.verbose&&v.debug&&(v.performance?h.performance.log(arguments):(h.verbose=Function.prototype.bind.call(console.info,console,v.name+":"),h.verbose.apply(console,arguments)))},error:function(){v.silent||(h.error=Function.prototype.bind.call(console.error,console,v.name+":"),h.error.apply(console,arguments))},performance:{log:function(e){var t,n;v.performance&&(n=(t=(new Date).getTime())-(s||t),s=t,l.push({Name:e[0],Arguments:[].slice.call(e,1)||"","Execution Time":n})),clearTimeout(h.performance.timer),h.performance.timer=setTimeout(h.performance.display,500)},display:function(){var t=v.name+":",n=0;s=!1,clearTimeout(h.performance.timer),e.each(l,function(e,t){n+=t["Execution Time"]}),t+=" "+n+"ms",r&&(t+=" '"+r+"'"),(console.group!==i||console.table!==i)&&l.length>0&&(console.groupCollapsed(t),console.table?console.table(l):e.each(l,function(e,t){console.log(t.Name+": "+t["Execution Time"]+"ms")}),console.groupEnd()),l=[]}},invoke:function(t,n,a){var r,s,l,c=F;return n=n||d,a=P||a,"string"==typeof t&&c!==i&&(t=t.split(/[\. ]/),r=t.length-1,e.each(t,function(n,o){var a=n!=r?o+t[n+1].charAt(0).toUpperCase()+t[n+1].slice(1):t;if(e.isPlainObject(c[a])&&n!=r)c=c[a];else{if(c[a]!==i)return s=c[a],!1;if(!e.isPlainObject(c[o])||n==r)return c[o]!==i?(s=c[o],!1):(h.error(C.method,t),!1);c=c[o]}})),e.isFunction(s)?l=s.apply(a,n):s!==i&&(l=s),e.isArray(o)?o.push(l):o!==i?o=[o,l]:l!==i&&(o=l),s}},u?(F===i&&h.initialize(),h.invoke(c)):(F!==i&&F.invoke("destroy"),h.initialize())}),o!==i?o:this},e.api.settings={name:"API",namespace:"api",debug:!1,verbose:!1,performance:!0,api:{},cache:!0,interruptRequests:!0,on:"auto",stateContext:!1,loadingDuration:0,hideError:"auto",errorDuration:2e3,encodeParameters:!0,action:!1,url:!1,base:"",urlData:{},defaultData:!0,serializeForm:!1,throttle:0,throttleFirstRequest:!0,method:"get",data:{},dataType:"json",mockResponse:!1,mockResponseAsync:!1,response:!1,responseAsync:!1,beforeSend:function(e){return e},beforeXHR:function(e){},onRequest:function(e,t){},onResponse:!1,onSuccess:function(e,t){},onComplete:function(e,t){},onFailure:function(e,t){},onError:function(e,t){},onAbort:function(e,t){},successTest:!1,error:{beforeSend:"The before send function has aborted the request",error:"There was an error with your request",exitConditions:"API Request Aborted. Exit conditions met",JSONParse:"JSON could not be parsed during error handling",legacyParameters:"You are using legacy API success callback names",method:"The method you called is not defined",missingAction:"API action used but no url was defined",missingSerialize:"jquery-serialize-object is required to add form data to an existing data object",missingURL:"No URL specified for api event",noReturnedValue:"The beforeSend callback must return a settings object, beforeSend ignored.",noStorage:"Caching responses locally requires session storage",parseError:"There was an error parsing your request",requiredParameter:"Missing a required URL parameter: ",statusMessage:"Server gave an error: ",timeout:"Your request timed out"},regExp:{required:/\{\$*[A-z0-9]+\}/g,optional:/\{\/\$*[A-z0-9]+\}/g},className:{loading:"loading",error:"error"},selector:{disabled:".disabled",form:"form"},metadata:{action:"action",url:"url"}}}(jQuery,window,document),function(e,t,n,i){"use strict";t=void 0!==t&&t.Math==Math?t:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")(),e.fn.state=function(t){var o,a=e(this),r=a.selector||"",s=(n.documentElement,(new Date).getTime()),l=[],c=arguments[0],u="string"==typeof c,d=[].slice.call(arguments,1);return a.each(function(){var n,f=e.isPlainObject(t)?e.extend(!0,{},e.fn.state.settings,t):e.extend({},e.fn.state.settings),m=f.error,g=f.metadata,p=f.className,h=f.namespace,v=f.states,b=f.text,y="."+h,x=h+"-module",C=e(this),w=this,S=C.data(x);n={initialize:function(){n.verbose("Initializing module"),f.automatic&&n.add.defaults(),f.context&&""!==r?e(f.context).on(r,"mouseenter"+y,n.change.text).on(r,"mouseleave"+y,n.reset.text).on(r,"click"+y,n.toggle.state):C.on("mouseenter"+y,n.change.text).on("mouseleave"+y,n.reset.text).on("click"+y,n.toggle.state),n.instantiate()},instantiate:function(){n.verbose("Storing instance of module",n),S=n,C.data(x,n)},destroy:function(){n.verbose("Destroying previous module",S),C.off(y).removeData(x)},refresh:function(){n.verbose("Refreshing selector cache"),C=e(w)},add:{defaults:function(){var o=t&&e.isPlainObject(t.states)?t.states:{};e.each(f.defaults,function(t,a){n.is[t]!==i&&n.is[t]()&&(n.verbose("Adding default states",t,w),e.extend(f.states,a,o))})}},is:{active:function(){return C.hasClass(p.active)},loading:function(){return C.hasClass(p.loading)},inactive:function(){return!C.hasClass(p.active)},state:function(e){return p[e]!==i&&C.hasClass(p[e])},enabled:function(){return!C.is(f.filter.active)},disabled:function(){return C.is(f.filter.active)},textEnabled:function(){return!C.is(f.filter.text)},button:function(){return C.is(".button:not(a, .submit)")},input:function(){return C.is("input")},progress:function(){return C.is(".ui.progress")}},allow:function(e){n.debug("Now allowing state",e),v[e]=!0},disallow:function(e){n.debug("No longer allowing",e),v[e]=!1},allows:function(e){return v[e]||!1},enable:function(){C.removeClass(p.disabled)},disable:function(){C.addClass(p.disabled)},setState:function(e){n.allows(e)&&C.addClass(p[e])},removeState:function(e){n.allows(e)&&C.removeClass(p[e])},toggle:{state:function(){var t;if(n.allows("active")&&n.is.enabled()){if(n.refresh(),e.fn.api!==i)if(t=C.api("get request"),C.api("was cancelled"))n.debug("API Request cancelled by beforesend"),f.activateTest=function(){return!1},f.deactivateTest=function(){return!1};else if(t)return void n.listenTo(t);n.change.state()}}},listenTo:function(t){n.debug("API request detected, waiting for state signal",t),t&&(b.loading&&n.update.text(b.loading),e.when(t).then(function(){"resolved"==t.state()?(n.debug("API request succeeded"),f.activateTest=function(){return!0},f.deactivateTest=function(){return!0}):(n.debug("API request failed"),f.activateTest=function(){return!1},f.deactivateTest=function(){return!1}),n.change.state()}))},change:{state:function(){n.debug("Determining state change direction"),n.is.inactive()?n.activate():n.deactivate(),f.sync&&n.sync(),f.onChange.call(w)},text:function(){n.is.textEnabled()&&(n.is.disabled()?(n.verbose("Changing text to disabled text",b.hover),n.update.text(b.disabled)):n.is.active()?b.hover?(n.verbose("Changing text to hover text",b.hover),n.update.text(b.hover)):b.deactivate&&(n.verbose("Changing text to deactivating text",b.deactivate),n.update.text(b.deactivate)):b.hover?(n.verbose("Changing text to hover text",b.hover),n.update.text(b.hover)):b.activate&&(n.verbose("Changing text to activating text",b.activate),n.update.text(b.activate)))}},activate:function(){f.activateTest.call(w)&&(n.debug("Setting state to active"),C.addClass(p.active),n.update.text(b.active),f.onActivate.call(w))},deactivate:function(){f.deactivateTest.call(w)&&(n.debug("Setting state to inactive"),C.removeClass(p.active),n.update.text(b.inactive),f.onDeactivate.call(w))},sync:function(){n.verbose("Syncing other buttons to current state"),n.is.active()?a.not(C).state("activate"):a.not(C).state("deactivate")},get:{text:function(){return f.selector.text?C.find(f.selector.text).text():C.html()},textFor:function(e){return b[e]||!1}},flash:{text:function(e,t,i){var o=n.get.text();n.debug("Flashing text message",e,t),e=e||f.text.flash,t=t||f.flashDuration,i=i||function(){},n.update.text(e),setTimeout(function(){n.update.text(o),i.call(w)},t)}},reset:{text:function(){var e=b.active||C.data(g.storedText),t=b.inactive||C.data(g.storedText);n.is.textEnabled()&&(n.is.active()&&e?(n.verbose("Resetting active text",e),n.update.text(e)):t&&(n.verbose("Resetting inactive text",e),n.update.text(t)))}},update:{text:function(e){var t=n.get.text();e&&e!==t?(n.debug("Updating text",e),f.selector.text?C.data(g.storedText,e).find(f.selector.text).text(e):C.data(g.storedText,e).html(e)):n.debug("Text is already set, ignoring update",e)}},setting:function(t,o){if(n.debug("Changing setting",t,o),e.isPlainObject(t))e.extend(!0,f,t);else{if(o===i)return f[t];e.isPlainObject(f[t])?e.extend(!0,f[t],o):f[t]=o}},internal:function(t,o){if(e.isPlainObject(t))e.extend(!0,n,t);else{if(o===i)return n[t];n[t]=o}},debug:function(){!f.silent&&f.debug&&(f.performance?n.performance.log(arguments):(n.debug=Function.prototype.bind.call(console.info,console,f.name+":"),n.debug.apply(console,arguments)))},verbose:function(){!f.silent&&f.verbose&&f.debug&&(f.performance?n.performance.log(arguments):(n.verbose=Function.prototype.bind.call(console.info,console,f.name+":"),n.verbose.apply(console,arguments)))},error:function(){f.silent||(n.error=Function.prototype.bind.call(console.error,console,f.name+":"),n.error.apply(console,arguments))},performance:{log:function(e){var t,i;f.performance&&(i=(t=(new Date).getTime())-(s||t),s=t,l.push({Name:e[0],Arguments:[].slice.call(e,1)||"",Element:w,"Execution Time":i})),clearTimeout(n.performance.timer),n.performance.timer=setTimeout(n.performance.display,500)},display:function(){var t=f.name+":",o=0;s=!1,clearTimeout(n.performance.timer),e.each(l,function(e,t){o+=t["Execution Time"]}),t+=" "+o+"ms",r&&(t+=" '"+r+"'"),(console.group!==i||console.table!==i)&&l.length>0&&(console.groupCollapsed(t),console.table?console.table(l):e.each(l,function(e,t){console.log(t.Name+": "+t["Execution Time"]+"ms")}),console.groupEnd()),l=[]}},invoke:function(t,a,r){var s,l,c,u=S;return a=a||d,r=w||r,"string"==typeof t&&u!==i&&(t=t.split(/[\. ]/),s=t.length-1,e.each(t,function(o,a){var r=o!=s?a+t[o+1].charAt(0).toUpperCase()+t[o+1].slice(1):t;if(e.isPlainObject(u[r])&&o!=s)u=u[r];else{if(u[r]!==i)return l=u[r],!1;if(!e.isPlainObject(u[a])||o==s)return u[a]!==i?(l=u[a],!1):(n.error(m.method,t),!1);u=u[a]}})),e.isFunction(l)?c=l.apply(r,a):l!==i&&(c=l),e.isArray(o)?o.push(c):o!==i?o=[o,c]:c!==i&&(o=c),l}},u?(S===i&&n.initialize(),n.invoke(c)):(S!==i&&S.invoke("destroy"),n.initialize())}),o!==i?o:this},e.fn.state.settings={name:"State",debug:!1,verbose:!1,namespace:"state",performance:!0,onActivate:function(){},onDeactivate:function(){},onChange:function(){},activateTest:function(){return!0},deactivateTest:function(){return!0},automatic:!0,sync:!1,flashDuration:1e3,filter:{text:".loading, .disabled",active:".disabled"},context:!1,error:{beforeSend:"The before send function has cancelled state change",method:"The method you called is not defined."},metadata:{promise:"promise",storedText:"stored-text"},className:{active:"active",disabled:"disabled",error:"error",loading:"loading",success:"success",warning:"warning"},selector:{text:!1},defaults:{input:{disabled:!0,loading:!0,active:!0},button:{disabled:!0,loading:!0,active:!0},progress:{active:!0,success:!0,warning:!0,error:!0}},states:{active:!0,disabled:!0,error:!0,loading:!0,success:!0,warning:!0},text:{disabled:!1,flash:!1,hover:!1,active:!1,inactive:!1,activate:!1,deactivate:!1}}}(jQuery,window,document),function(e,t,n,i){"use strict";t=void 0!==t&&t.Math==Math?t:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")(),e.fn.visibility=function(o){var a,r=e(this),s=r.selector||"",l=(new Date).getTime(),c=[],u=arguments[0],d="string"==typeof u,f=[].slice.call(arguments,1),m=r.length,g=0;return r.each(function(){var r,p,h,v,b=e.isPlainObject(o)?e.extend(!0,{},e.fn.visibility.settings,o):e.extend({},e.fn.visibility.settings),y=b.className,x=b.namespace,C=b.error,w=b.metadata,S="."+x,k="module-"+x,T=e(t),A=e(this),R=e(b.context),P=(A.selector,A.data(k)),E=t.requestAnimationFrame||t.mozRequestAnimationFrame||t.webkitRequestAnimationFrame||t.msRequestAnimationFrame||function(e){setTimeout(e,0)},F=this,O=!1;v={initialize:function(){v.debug("Initializing",b),v.setup.cache(),v.should.trackChanges()&&("image"==b.type&&v.setup.image(),"fixed"==b.type&&v.setup.fixed(),b.observeChanges&&v.observeChanges(),v.bind.events()),v.save.position(),v.is.visible()||v.error(C.visible,A),b.initialCheck&&v.checkVisibility(),v.instantiate()},instantiate:function(){v.debug("Storing instance",v),A.data(k,v),P=v},destroy:function(){v.verbose("Destroying previous module"),h&&h.disconnect(),p&&p.disconnect(),T.off("load"+S,v.event.load).off("resize"+S,v.event.resize),R.off("scroll"+S,v.event.scroll).off("scrollchange"+S,v.event.scrollchange),"fixed"==b.type&&(v.resetFixed(),v.remove.placeholder()),A.off(S).removeData(k)},observeChanges:function(){"MutationObserver"in t&&(p=new MutationObserver(v.event.contextChanged),h=new MutationObserver(v.event.changed),p.observe(n,{childList:!0,subtree:!0}),h.observe(F,{childList:!0,subtree:!0}),v.debug("Setting up mutation observer",h))},bind:{events:function(){v.verbose("Binding visibility events to scroll and resize"),b.refreshOnLoad&&T.on("load"+S,v.event.load),T.on("resize"+S,v.event.resize),R.off("scroll"+S).on("scroll"+S,v.event.scroll).on("scrollchange"+S,v.event.scrollchange)}},event:{changed:function(e){v.verbose("DOM tree modified, updating visibility calculations"),v.timer=setTimeout(function(){v.verbose("DOM tree modified, updating sticky menu"),v.refresh()},100)},contextChanged:function(t){[].forEach.call(t,function(t){t.removedNodes&&[].forEach.call(t.removedNodes,function(t){(t==F||e(t).find(F).length>0)&&(v.debug("Element removed from DOM, tearing down events"),v.destroy())})})},resize:function(){v.debug("Window resized"),b.refreshOnResize&&E(v.refresh)},load:function(){v.debug("Page finished loading"),E(v.refresh)},scroll:function(){b.throttle?(clearTimeout(v.timer),v.timer=setTimeout(function(){R.triggerHandler("scrollchange"+S,[R.scrollTop()])},b.throttle)):E(function(){R.triggerHandler("scrollchange"+S,[R.scrollTop()])})},scrollchange:function(e,t){v.checkVisibility(t)}},precache:function(t,i){t instanceof Array||(t=[t]);for(var o=t.length,a=0,r=[],s=n.createElement("img"),l=function(){++a>=t.length&&e.isFunction(i)&&i()};o--;)(s=n.createElement("img")).onload=l,s.onerror=l,s.src=t[o],r.push(s)},enableCallbacks:function(){v.debug("Allowing callbacks to occur"),O=!1},disableCallbacks:function(){v.debug("Disabling all callbacks temporarily"),O=!0},should:{trackChanges:function(){return d?(v.debug("One time query, no need to bind events"),!1):(v.debug("Callbacks being attached"),!0)}},setup:{cache:function(){v.cache={occurred:{},screen:{},element:{}}},image:function(){var e=A.data(w.src);e&&(v.verbose("Lazy loading image",e),b.once=!0,b.observeChanges=!1,b.onOnScreen=function(){v.debug("Image on screen",F),v.precache(e,function(){v.set.image(e,function(){++g==m&&b.onAllLoaded.call(this),b.onLoad.call(this)})})})},fixed:function(){v.debug("Setting up fixed"),b.once=!1,b.observeChanges=!1,b.initialCheck=!0,b.refreshOnLoad=!0,o.transition||(b.transition=!1),v.create.placeholder(),v.debug("Added placeholder",r),b.onTopPassed=function(){v.debug("Element passed, adding fixed position",A),v.show.placeholder(),v.set.fixed(),b.transition&&e.fn.transition!==i&&A.transition(b.transition,b.duration)},b.onTopPassedReverse=function(){v.debug("Element returned to position, removing fixed",A),v.hide.placeholder(),v.remove.fixed()}}},create:{placeholder:function(){v.verbose("Creating fixed position placeholder"),r=A.clone(!1).css("display","none").addClass(y.placeholder).insertAfter(A)}},show:{placeholder:function(){v.verbose("Showing placeholder"),r.css("display","block").css("visibility","hidden")}},hide:{placeholder:function(){v.verbose("Hiding placeholder"),r.css("display","none").css("visibility","")}},set:{fixed:function(){v.verbose("Setting element to fixed position"),A.addClass(y.fixed).css({position:"fixed",top:b.offset+"px",left:"auto",zIndex:b.zIndex}),b.onFixed.call(F)},image:function(t,n){if(A.attr("src",t),b.transition)if(e.fn.transition!==i){if(A.hasClass(y.visible))return void v.debug("Transition already occurred on this image, skipping animation");A.transition(b.transition,b.duration,n)}else A.fadeIn(b.duration,n);else A.show()}},is:{onScreen:function(){return v.get.elementCalculations().onScreen},offScreen:function(){return v.get.elementCalculations().offScreen},visible:function(){return!(!v.cache||!v.cache.element)&&!(0===v.cache.element.width&&0===v.cache.element.offset.top)},verticallyScrollableContext:function(){var e=R.get(0)!==t&&R.css("overflow-y");return"auto"==e||"scroll"==e},horizontallyScrollableContext:function(){var e=R.get(0)!==t&&R.css("overflow-x");return"auto"==e||"scroll"==e}},refresh:function(){v.debug("Refreshing constants (width/height)"),"fixed"==b.type&&v.resetFixed(),v.reset(),v.save.position(),b.checkOnRefresh&&v.checkVisibility(),b.onRefresh.call(F)},resetFixed:function(){v.remove.fixed(),v.remove.occurred()},reset:function(){v.verbose("Resetting all cached values"),e.isPlainObject(v.cache)&&(v.cache.screen={},v.cache.element={})},checkVisibility:function(e){v.verbose("Checking visibility of element",v.cache.element),!O&&v.is.visible()&&(v.save.scroll(e),v.save.calculations(),v.passed(),v.passingReverse(),v.topVisibleReverse(),v.bottomVisibleReverse(),v.topPassedReverse(),v.bottomPassedReverse(),v.onScreen(),v.offScreen(),v.passing(),v.topVisible(),v.bottomVisible(),v.topPassed(),v.bottomPassed(),b.onUpdate&&b.onUpdate.call(F,v.get.elementCalculations()))},passed:function(t,n){var o=v.get.elementCalculations();if(t&&n)b.onPassed[t]=n;else{if(t!==i)return v.get.pixelsPassed(t)>o.pixelsPassed;o.passing&&e.each(b.onPassed,function(e,t){o.bottomVisible||o.pixelsPassed>v.get.pixelsPassed(e)?v.execute(t,e):b.once||v.remove.occurred(t)})}},onScreen:function(e){var t=v.get.elementCalculations(),n=e||b.onOnScreen,o="onScreen";if(e&&(v.debug("Adding callback for onScreen",e),b.onOnScreen=e),t.onScreen?v.execute(n,o):b.once||v.remove.occurred(o),e!==i)return t.onOnScreen},offScreen:function(e){var t=v.get.elementCalculations(),n=e||b.onOffScreen,o="offScreen";if(e&&(v.debug("Adding callback for offScreen",e),b.onOffScreen=e),t.offScreen?v.execute(n,o):b.once||v.remove.occurred(o),e!==i)return t.onOffScreen},passing:function(e){var t=v.get.elementCalculations(),n=e||b.onPassing,o="passing";if(e&&(v.debug("Adding callback for passing",e),b.onPassing=e),t.passing?v.execute(n,o):b.once||v.remove.occurred(o),e!==i)return t.passing},topVisible:function(e){var t=v.get.elementCalculations(),n=e||b.onTopVisible,o="topVisible";if(e&&(v.debug("Adding callback for top visible",e),b.onTopVisible=e),t.topVisible?v.execute(n,o):b.once||v.remove.occurred(o),e===i)return t.topVisible},bottomVisible:function(e){var t=v.get.elementCalculations(),n=e||b.onBottomVisible,o="bottomVisible";if(e&&(v.debug("Adding callback for bottom visible",e),b.onBottomVisible=e),t.bottomVisible?v.execute(n,o):b.once||v.remove.occurred(o),e===i)return t.bottomVisible},topPassed:function(e){var t=v.get.elementCalculations(),n=e||b.onTopPassed,o="topPassed";if(e&&(v.debug("Adding callback for top passed",e),b.onTopPassed=e),t.topPassed?v.execute(n,o):b.once||v.remove.occurred(o),e===i)return t.topPassed},bottomPassed:function(e){var t=v.get.elementCalculations(),n=e||b.onBottomPassed,o="bottomPassed";if(e&&(v.debug("Adding callback for bottom passed",e),b.onBottomPassed=e),t.bottomPassed?v.execute(n,o):b.once||v.remove.occurred(o),e===i)return t.bottomPassed},passingReverse:function(e){var t=v.get.elementCalculations(),n=e||b.onPassingReverse,o="passingReverse";if(e&&(v.debug("Adding callback for passing reverse",e),b.onPassingReverse=e),t.passing?b.once||v.remove.occurred(o):v.get.occurred("passing")&&v.execute(n,o),e!==i)return!t.passing},topVisibleReverse:function(e){var t=v.get.elementCalculations(),n=e||b.onTopVisibleReverse,o="topVisibleReverse";if(e&&(v.debug("Adding callback for top visible reverse",e),b.onTopVisibleReverse=e),t.topVisible?b.once||v.remove.occurred(o):v.get.occurred("topVisible")&&v.execute(n,o),e===i)return!t.topVisible},bottomVisibleReverse:function(e){var t=v.get.elementCalculations(),n=e||b.onBottomVisibleReverse,o="bottomVisibleReverse";if(e&&(v.debug("Adding callback for bottom visible reverse",e),b.onBottomVisibleReverse=e),t.bottomVisible?b.once||v.remove.occurred(o):v.get.occurred("bottomVisible")&&v.execute(n,o),e===i)return!t.bottomVisible},topPassedReverse:function(e){var t=v.get.elementCalculations(),n=e||b.onTopPassedReverse,o="topPassedReverse";if(e&&(v.debug("Adding callback for top passed reverse",e),b.onTopPassedReverse=e),t.topPassed?b.once||v.remove.occurred(o):v.get.occurred("topPassed")&&v.execute(n,o),e===i)return!t.onTopPassed},bottomPassedReverse:function(e){var t=v.get.elementCalculations(),n=e||b.onBottomPassedReverse,o="bottomPassedReverse";if(e&&(v.debug("Adding callback for bottom passed reverse",e),b.onBottomPassedReverse=e),t.bottomPassed?b.once||v.remove.occurred(o):v.get.occurred("bottomPassed")&&v.execute(n,o),e===i)return!t.bottomPassed},execute:function(e,t){var n=v.get.elementCalculations(),i=v.get.screenCalculations();(e=e||!1)&&(b.continuous?(v.debug("Callback being called continuously",t,n),e.call(F,n,i)):v.get.occurred(t)||(v.debug("Conditions met",t,n),e.call(F,n,i))),v.save.occurred(t)},remove:{fixed:function(){v.debug("Removing fixed position"),A.removeClass(y.fixed).css({position:"",top:"",left:"",zIndex:""}),b.onUnfixed.call(F)},placeholder:function(){v.debug("Removing placeholder content"),r&&r.remove()},occurred:function(e){if(e){var t=v.cache.occurred;t[e]!==i&&!0===t[e]&&(v.debug("Callback can now be called again",e),v.cache.occurred[e]=!1)}else v.cache.occurred={}}},save:{calculations:function(){v.verbose("Saving all calculations necessary to determine positioning"),v.save.direction(),v.save.screenCalculations(),v.save.elementCalculations()},occurred:function(e){e&&(v.cache.occurred[e]!==i&&!0===v.cache.occurred[e]||(v.verbose("Saving callback occurred",e),v.cache.occurred[e]=!0))},scroll:function(e){e=e+b.offset||R.scrollTop()+b.offset,v.cache.scroll=e},direction:function(){var e,t=v.get.scroll(),n=v.get.lastScroll();return e=t>n&&n?"down":t<n&&n?"up":"static",v.cache.direction=e,v.cache.direction},elementPosition:function(){var e=v.cache.element,t=v.get.screenSize();return v.verbose("Saving element position"),e.fits=e.height<t.height,e.offset=A.offset(),e.width=A.outerWidth(),e.height=A.outerHeight(),v.is.verticallyScrollableContext()&&(e.offset.top+=R.scrollTop()-R.offset().top),v.is.horizontallyScrollableContext()&&(e.offset.left+=R.scrollLeft-R.offset().left),v.cache.element=e,e},elementCalculations:function(){var e=v.get.screenCalculations(),t=v.get.elementPosition();return b.includeMargin?(t.margin={},t.margin.top=parseInt(A.css("margin-top"),10),t.margin.bottom=parseInt(A.css("margin-bottom"),10),t.top=t.offset.top-t.margin.top,t.bottom=t.offset.top+t.height+t.margin.bottom):(t.top=t.offset.top,t.bottom=t.offset.top+t.height),t.topPassed=e.top>=t.top,t.bottomPassed=e.top>=t.bottom,t.topVisible=e.bottom>=t.top&&!t.topPassed,t.bottomVisible=e.bottom>=t.bottom&&!t.bottomPassed,t.pixelsPassed=0,t.percentagePassed=0,t.onScreen=t.topVisible&&!t.bottomPassed,t.passing=t.topPassed&&!t.bottomPassed,t.offScreen=!t.onScreen,t.passing&&(t.pixelsPassed=e.top-t.top,t.percentagePassed=(e.top-t.top)/t.height),v.cache.element=t,v.verbose("Updated element calculations",t),t},screenCalculations:function(){var e=v.get.scroll();return v.save.direction(),v.cache.screen.top=e,v.cache.screen.bottom=e+v.cache.screen.height,v.cache.screen},screenSize:function(){v.verbose("Saving window position"),v.cache.screen={height:R.height()}},position:function(){v.save.screenSize(),v.save.elementPosition()}},get:{pixelsPassed:function(e){var t=v.get.elementCalculations();return e.search("%")>-1?t.height*(parseInt(e,10)/100):parseInt(e,10)},occurred:function(e){return v.cache.occurred!==i&&v.cache.occurred[e]||!1},direction:function(){return v.cache.direction===i&&v.save.direction(),v.cache.direction},elementPosition:function(){return v.cache.element===i&&v.save.elementPosition(),v.cache.element},elementCalculations:function(){return v.cache.element===i&&v.save.elementCalculations(),v.cache.element},screenCalculations:function(){return v.cache.screen===i&&v.save.screenCalculations(),v.cache.screen},screenSize:function(){return v.cache.screen===i&&v.save.screenSize(),v.cache.screen},scroll:function(){return v.cache.scroll===i&&v.save.scroll(),v.cache.scroll},lastScroll:function(){return v.cache.screen===i?(v.debug("First scroll event, no last scroll could be found"),!1):v.cache.screen.top}},setting:function(t,n){if(e.isPlainObject(t))e.extend(!0,b,t);else{if(n===i)return b[t];b[t]=n}},internal:function(t,n){if(e.isPlainObject(t))e.extend(!0,v,t);else{if(n===i)return v[t];v[t]=n}},debug:function(){!b.silent&&b.debug&&(b.performance?v.performance.log(arguments):(v.debug=Function.prototype.bind.call(console.info,console,b.name+":"),v.debug.apply(console,arguments)))},verbose:function(){!b.silent&&b.verbose&&b.debug&&(b.performance?v.performance.log(arguments):(v.verbose=Function.prototype.bind.call(console.info,console,b.name+":"),v.verbose.apply(console,arguments)))},error:function(){b.silent||(v.error=Function.prototype.bind.call(console.error,console,b.name+":"),v.error.apply(console,arguments))},performance:{log:function(e){var t,n;b.performance&&(n=(t=(new Date).getTime())-(l||t),l=t,c.push({Name:e[0],Arguments:[].slice.call(e,1)||"",Element:F,"Execution Time":n})),clearTimeout(v.performance.timer),v.performance.timer=setTimeout(v.performance.display,500)},display:function(){var t=b.name+":",n=0;l=!1,clearTimeout(v.performance.timer),e.each(c,function(e,t){n+=t["Execution Time"]}),t+=" "+n+"ms",s&&(t+=" '"+s+"'"),(console.group!==i||console.table!==i)&&c.length>0&&(console.groupCollapsed(t),console.table?console.table(c):e.each(c,function(e,t){console.log(t.Name+": "+t["Execution Time"]+"ms")}),console.groupEnd()),c=[]}},invoke:function(t,n,o){var r,s,l,c=P;return n=n||f,o=F||o,"string"==typeof t&&c!==i&&(t=t.split(/[\. ]/),r=t.length-1,e.each(t,function(n,o){var a=n!=r?o+t[n+1].charAt(0).toUpperCase()+t[n+1].slice(1):t;if(e.isPlainObject(c[a])&&n!=r)c=c[a];else{if(c[a]!==i)return s=c[a],!1;if(!e.isPlainObject(c[o])||n==r)return c[o]!==i?(s=c[o],!1):(v.error(C.method,t),!1);c=c[o]}})),e.isFunction(s)?l=s.apply(o,n):s!==i&&(l=s),e.isArray(a)?a.push(l):a!==i?a=[a,l]:l!==i&&(a=l),s}},d?(P===i&&v.initialize(),P.save.scroll(),P.save.calculations(),v.invoke(u)):(P!==i&&P.invoke("destroy"),v.initialize())}),a!==i?a:this},e.fn.visibility.settings={name:"Visibility",namespace:"visibility",debug:!1,verbose:!1,performance:!0,observeChanges:!0,initialCheck:!0,refreshOnLoad:!0,refreshOnResize:!0,checkOnRefresh:!0,once:!0,continuous:!1,offset:0,includeMargin:!1,context:t,throttle:!1,type:!1,zIndex:"10",transition:"fade in",duration:1e3,onPassed:{},onOnScreen:!1,onOffScreen:!1,onPassing:!1,onTopVisible:!1,onBottomVisible:!1,onTopPassed:!1,onBottomPassed:!1,onPassingReverse:!1,onTopVisibleReverse:!1,onBottomVisibleReverse:!1,onTopPassedReverse:!1,onBottomPassedReverse:!1,onLoad:function(){},onAllLoaded:function(){},onFixed:function(){},onUnfixed:function(){},onUpdate:!1,onRefresh:function(){},metadata:{src:"src"},className:{fixed:"fixed",placeholder:"placeholder",visible:"visible"},error:{method:"The method you called is not defined.",visible:"Element is hidden, you must call refresh after element becomes visible"}}}(jQuery,window,document);
+;/*
+ * jsGrid v1.5.3 (http://js-grid.com)
+ * (c) 2016 Artem Tabalin
+ * Licensed under MIT (https://github.com/tabalinas/jsgrid/blob/master/LICENSE)
+ */
+
+!function(a,b,c){function d(a,c){var d=b(a);d.data(f,this),this._container=d,this.data=[],this.fields=[],this._editingRow=null,this._sortField=null,this._sortOrder=i,this._firstDisplayingPage=1,this._init(c),this.render()}var e="JSGrid",f=e,g="JSGridItem",h="JSGridEditRow",i="asc",j="desc",k="{first}",l="{pages}",m="{prev}",n="{next}",o="{last}",p="{pageIndex}",q="{pageCount}",r="{itemCount}",s="javascript:void(0);",t=function(a,c){return b.isFunction(a)?a.apply(c,b.makeArray(arguments).slice(2)):a},u=function(a){var c=b.Deferred();return a&&a.then?a.then(function(){c.resolve.apply(c,arguments)},function(){c.reject.apply(c,arguments)}):c.resolve(a),c.promise()},v={loadData:b.noop,insertItem:b.noop,updateItem:b.noop,deleteItem:b.noop};d.prototype={width:"auto",height:"auto",updateOnResize:!0,rowClass:b.noop,rowRenderer:null,rowClick:function(a){this.editing&&this.editItem(b(a.event.target).closest("tr"))},rowDoubleClick:b.noop,noDataContent:"Not found",noDataRowClass:"jsgrid-nodata-row",heading:!0,headerRowRenderer:null,headerRowClass:"jsgrid-header-row",headerCellClass:"jsgrid-header-cell",filtering:!1,filterRowRenderer:null,filterRowClass:"jsgrid-filter-row",inserting:!1,insertRowRenderer:null,insertRowClass:"jsgrid-insert-row",editing:!1,editRowRenderer:null,editRowClass:"jsgrid-edit-row",confirmDeleting:!0,deleteConfirm:"Are you sure?",selecting:!0,selectedRowClass:"jsgrid-selected-row",oddRowClass:"jsgrid-row",evenRowClass:"jsgrid-alt-row",cellClass:"jsgrid-cell",sorting:!1,sortableClass:"jsgrid-header-sortable",sortAscClass:"jsgrid-header-sort jsgrid-header-sort-asc",sortDescClass:"jsgrid-header-sort jsgrid-header-sort-desc",paging:!1,pagerContainer:null,pageIndex:1,pageSize:20,pageButtonCount:15,pagerFormat:"Pages: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} of {pageCount}",pagePrevText:"Prev",pageNextText:"Next",pageFirstText:"First",pageLastText:"Last",pageNavigatorNextText:"...",pageNavigatorPrevText:"...",pagerContainerClass:"jsgrid-pager-container",pagerClass:"jsgrid-pager",pagerNavButtonClass:"jsgrid-pager-nav-button",pagerNavButtonInactiveClass:"jsgrid-pager-nav-inactive-button",pageClass:"jsgrid-pager-page",currentPageClass:"jsgrid-pager-current-page",customLoading:!1,pageLoading:!1,autoload:!1,controller:v,loadIndication:!0,loadIndicationDelay:500,loadMessage:"Please, wait...",loadShading:!0,invalidMessage:"Invalid data entered!",invalidNotify:function(c){var d=b.map(c.errors,function(a){return a.message||null});a.alert([this.invalidMessage].concat(d).join("\n"))},onInit:b.noop,onRefreshing:b.noop,onRefreshed:b.noop,onPageChanged:b.noop,onItemDeleting:b.noop,onItemDeleted:b.noop,onItemInserting:b.noop,onItemInserted:b.noop,onItemEditing:b.noop,onItemUpdating:b.noop,onItemUpdated:b.noop,onItemInvalid:b.noop,onDataLoading:b.noop,onDataLoaded:b.noop,onOptionChanging:b.noop,onOptionChanged:b.noop,onError:b.noop,invalidClass:"jsgrid-invalid",containerClass:"jsgrid",tableClass:"jsgrid-table",gridHeaderClass:"jsgrid-grid-header",gridBodyClass:"jsgrid-grid-body",_init:function(a){b.extend(this,a),this._initLoadStrategy(),this._initController(),this._initFields(),this._attachWindowLoadResize(),this._attachWindowResizeCallback(),this._callEventHandler(this.onInit)},loadStrategy:function(){return this.pageLoading?new jsGrid.loadStrategies.PageLoadingStrategy(this):new jsGrid.loadStrategies.DirectLoadingStrategy(this)},_initLoadStrategy:function(){this._loadStrategy=t(this.loadStrategy,this)},_initController:function(){this._controller=b.extend({},v,t(this.controller,this))},renderTemplate:function(a,b,d){args=[];for(var e in d)args.push(d[e]);return args.unshift(a,b),a=t.apply(null,args),a===c||null===a?"":a},loadIndicator:function(a){return new jsGrid.LoadIndicator(a)},validation:function(a){return jsGrid.Validation&&new jsGrid.Validation(a)},_initFields:function(){var a=this;a.fields=b.map(a.fields,function(c){if(b.isPlainObject(c)){var d=c.type&&jsGrid.fields[c.type]||jsGrid.Field;c=new d(c)}return c._grid=a,c})},_attachWindowLoadResize:function(){b(a).on("load",b.proxy(this._refreshSize,this))},_attachWindowResizeCallback:function(){this.updateOnResize&&b(a).on("resize",b.proxy(this._refreshSize,this))},_detachWindowResizeCallback:function(){b(a).off("resize",this._refreshSize)},option:function(a,b){var c,d;return 1===arguments.length?this[a]:(c={option:a,oldValue:this[a],newValue:b},this._callEventHandler(this.onOptionChanging,c),this._handleOptionChange(c.option,c.newValue),d={option:c.option,value:c.newValue},void this._callEventHandler(this.onOptionChanged,d))},fieldOption:function(a,b,c){return a=this._normalizeField(a),2===arguments.length?a[b]:(a[b]=c,void this._renderGrid())},_handleOptionChange:function(a,b){switch(this[a]=b,a){case"width":case"height":this._refreshSize();break;case"rowClass":case"rowRenderer":case"rowClick":case"rowDoubleClick":case"noDataRowClass":case"noDataContent":case"selecting":case"selectedRowClass":case"oddRowClass":case"evenRowClass":this._refreshContent();break;case"pageButtonCount":case"pagerFormat":case"pagePrevText":case"pageNextText":case"pageFirstText":case"pageLastText":case"pageNavigatorNextText":case"pageNavigatorPrevText":case"pagerClass":case"pagerNavButtonClass":case"pageClass":case"currentPageClass":case"pagerRenderer":this._refreshPager();break;case"fields":this._initFields(),this.render();break;case"data":case"editing":case"heading":case"filtering":case"inserting":case"paging":this.refresh();break;case"loadStrategy":case"pageLoading":this._initLoadStrategy(),this.search();break;case"pageIndex":this.openPage(b);break;case"pageSize":this.refresh(),this.search();break;case"editRowRenderer":case"editRowClass":this.cancelEdit();break;case"updateOnResize":this._detachWindowResizeCallback(),this._attachWindowResizeCallback();break;case"invalidNotify":case"invalidMessage":break;default:this.render()}},destroy:function(){this._detachWindowResizeCallback(),this._clear(),this._container.removeData(f)},render:function(){return this._renderGrid(),this.autoload?this.loadData():b.Deferred().resolve().promise()},_renderGrid:function(){this._clear(),this._container.addClass(this.containerClass).css("position","relative").append(this._createHeader()).append(this._createBody()),this._pagerContainer=this._createPagerContainer(),this._loadIndicator=this._createLoadIndicator(),this._validation=this._createValidation(),this.refresh()},_createLoadIndicator:function(){return t(this.loadIndicator,this,{message:this.loadMessage,shading:this.loadShading,container:this._container})},_createValidation:function(){return t(this.validation,this)},_clear:function(){this.cancelEdit(),clearTimeout(this._loadingTimer),this._pagerContainer&&this._pagerContainer.empty(),this._container.empty().css({position:"",width:"",height:""})},_createHeader:function(){var a=this._headerRow=this._createHeaderRow(),c=this._filterRow=this._createFilterRow(),d=this._insertRow=this._createInsertRow(),e=this._headerGrid=b("<table>").addClass(this.tableClass).append(a).append(c).append(d),f=this._header=b("<div>").addClass(this.gridHeaderClass).addClass(this._scrollBarWidth()?"jsgrid-header-scrollbar":"").append(e);return f},_createBody:function(){var a=this._content=b("<tbody>"),c=this._bodyGrid=b("<table>").addClass(this.tableClass).append(a),d=this._body=b("<div>").addClass(this.gridBodyClass).append(c).on("scroll",b.proxy(function(a){this._header.scrollLeft(a.target.scrollLeft)},this));return d},_createPagerContainer:function(){var a=this.pagerContainer||b("<div>").appendTo(this._container);return b(a).addClass(this.pagerContainerClass)},_eachField:function(a){var c=this;b.each(this.fields,function(b,d){d.visible&&a.call(c,d,b)})},_createHeaderRow:function(){if(b.isFunction(this.headerRowRenderer))return b(this.renderTemplate(this.headerRowRenderer,this));var a=b("<tr>").addClass(this.headerRowClass);return this._eachField(function(c,d){var e=this._prepareCell("<th>",c,"headercss",this.headerCellClass).append(this.renderTemplate(c.headerTemplate,c)).appendTo(a);this.sorting&&c.sorting&&e.addClass(this.sortableClass).on("click",b.proxy(function(){this.sort(d)},this))}),a},_prepareCell:function(a,c,d,e){return b(a).css("width",c.width).addClass(e||this.cellClass).addClass(d&&c[d]||c.css).addClass(c.align?"jsgrid-align-"+c.align:"")},_createFilterRow:function(){if(b.isFunction(this.filterRowRenderer))return b(this.renderTemplate(this.filterRowRenderer,this));var a=b("<tr>").addClass(this.filterRowClass);return this._eachField(function(b){this._prepareCell("<td>",b,"filtercss").append(this.renderTemplate(b.filterTemplate,b)).appendTo(a)}),a},_createInsertRow:function(){if(b.isFunction(this.insertRowRenderer))return b(this.renderTemplate(this.insertRowRenderer,this));var a=b("<tr>").addClass(this.insertRowClass);return this._eachField(function(b){this._prepareCell("<td>",b,"insertcss").append(this.renderTemplate(b.insertTemplate,b)).appendTo(a)}),a},_callEventHandler:function(a,c){return a.call(this,b.extend(c,{grid:this})),c},reset:function(){return this._resetSorting(),this._resetPager(),this._loadStrategy.reset()},_resetPager:function(){this._firstDisplayingPage=1,this._setPage(1)},_resetSorting:function(){this._sortField=null,this._sortOrder=i,this._clearSortingCss()},refresh:function(){this._callEventHandler(this.onRefreshing),this.cancelEdit(),this._refreshHeading(),this._refreshFiltering(),this._refreshInserting(),this._refreshContent(),this._refreshPager(),this._refreshSize(),this._callEventHandler(this.onRefreshed)},_refreshHeading:function(){this._headerRow.toggle(this.heading)},_refreshFiltering:function(){this._filterRow.toggle(this.filtering)},_refreshInserting:function(){this._insertRow.toggle(this.inserting)},_refreshContent:function(){var a=this._content;if(a.empty(),!this.data.length)return a.append(this._createNoDataRow()),this;for(var b=this._loadStrategy.firstDisplayIndex(),c=this._loadStrategy.lastDisplayIndex(),d=b;c>d;d++){var e=this.data[d];a.append(this._createRow(e,d))}},_createNoDataRow:function(){var a=0;return this._eachField(function(){a++}),b("<tr>").addClass(this.noDataRowClass).append(b("<td>").addClass(this.cellClass).attr("colspan",a).append(this.renderTemplate(this.noDataContent,this)))},_createRow:function(a,c){var d;return b.isFunction(this.rowRenderer)?d=this.renderTemplate(this.rowRenderer,this,{item:a,itemIndex:c}):(d=b("<tr>"),this._renderCells(d,a)),d.addClass(this._getRowClasses(a,c)).data(g,a).on("click",b.proxy(function(b){this.rowClick({item:a,itemIndex:c,event:b})},this)).on("dblclick",b.proxy(function(b){this.rowDoubleClick({item:a,itemIndex:c,event:b})},this)),this.selecting&&this._attachRowHover(d),d},_getRowClasses:function(a,b){var c=[];return c.push((b+1)%2?this.oddRowClass:this.evenRowClass),c.push(t(this.rowClass,this,a,b)),c.join(" ")},_attachRowHover:function(a){var c=this.selectedRowClass;a.hover(function(){b(this).addClass(c)},function(){b(this).removeClass(c)})},_renderCells:function(a,b){return this._eachField(function(c){a.append(this._createCell(b,c))}),this},_createCell:function(a,c){var d,e=this._getItemFieldValue(a,c),f={value:e,item:a};return d=b.isFunction(c.cellRenderer)?this.renderTemplate(c.cellRenderer,c,f):b("<td>").append(this.renderTemplate(c.itemTemplate||e,c,f)),this._prepareCell(d,c)},_getItemFieldValue:function(a,b){for(var c=b.name.split("."),d=a[c.shift()];d&&c.length;)d=d[c.shift()];return d},_setItemFieldValue:function(a,b,c){for(var d=b.name.split("."),e=a,f=d[0];e&&d.length;)a=e,f=d.shift(),e=a[f];if(!e)for(;d.length;)a=a[f]={},f=d.shift();a[f]=c},sort:function(a,c){return b.isPlainObject(a)&&(c=a.order,a=a.field),this._clearSortingCss(),this._setSortingParams(a,c),this._setSortingCss(),this._loadStrategy.sort()},_clearSortingCss:function(){this._headerRow.find("th").removeClass(this.sortAscClass).removeClass(this.sortDescClass)},_setSortingParams:function(a,b){a=this._normalizeField(a),b=b||(this._sortField===a?this._reversedSortOrder(this._sortOrder):i),this._sortField=a,this._sortOrder=b},_normalizeField:function(a){return b.isNumeric(a)?this.fields[a]:"string"==typeof a?b.grep(this.fields,function(b){return b.name===a})[0]:a},_reversedSortOrder:function(a){return a===i?j:i},_setSortingCss:function(){var a=this._visibleFieldIndex(this._sortField);this._headerRow.find("th").eq(a).addClass(this._sortOrder===i?this.sortAscClass:this.sortDescClass)},_visibleFieldIndex:function(a){return b.inArray(a,b.grep(this.fields,function(a){return a.visible}))},_sortData:function(){var a=this._sortFactor(),b=this._sortField;b&&this.data.sort(function(c,d){return a*b.sortingFunc(c[b.name],d[b.name])})},_sortFactor:function(){return this._sortOrder===i?1:-1},_itemsCount:function(){return this._loadStrategy.itemsCount()},_pagesCount:function(){var a=this._itemsCount(),b=this.pageSize;return Math.floor(a/b)+(a%b?1:0)},_refreshPager:function(){var a=this._pagerContainer;a.empty(),this.paging&&a.append(this._createPager());var b=this.paging&&this._pagesCount()>1;a.toggle(b)},_createPager:function(){var a;return a=b.isFunction(this.pagerRenderer)?b(this.pagerRenderer({pageIndex:this.pageIndex,pageCount:this._pagesCount()})):b("<div>").append(this._createPagerByFormat()),a.addClass(this.pagerClass),a},_createPagerByFormat:function(){var a=this.pageIndex,c=this._pagesCount(),d=this._itemsCount(),e=this.pagerFormat.split(" ");return b.map(e,b.proxy(function(e){var f=e;return e===l?f=this._createPages():e===k?f=this._createPagerNavButton(this.pageFirstText,1,a>1):e===m?f=this._createPagerNavButton(this.pagePrevText,a-1,a>1):e===n?f=this._createPagerNavButton(this.pageNextText,a+1,c>a):e===o?f=this._createPagerNavButton(this.pageLastText,c,c>a):e===p?f=a:e===q?f=c:e===r&&(f=d),b.isArray(f)?f.concat([" "]):[f," "]},this))},_createPages:function(){var a=this._pagesCount(),b=this.pageButtonCount,c=this._firstDisplayingPage,d=[];c>1&&d.push(this._createPagerPageNavButton(this.pageNavigatorPrevText,this.showPrevPages));for(var e=0,f=c;b>e&&a>=f;e++,f++)d.push(f===this.pageIndex?this._createPagerCurrentPage():this._createPagerPage(f));return a>c+b-1&&d.push(this._createPagerPageNavButton(this.pageNavigatorNextText,this.showNextPages)),d},_createPagerNavButton:function(a,c,d){return this._createPagerButton(a,this.pagerNavButtonClass+(d?"":" "+this.pagerNavButtonInactiveClass),d?function(){this.openPage(c)}:b.noop)},_createPagerPageNavButton:function(a,b){return this._createPagerButton(a,this.pagerNavButtonClass,b)},_createPagerPage:function(a){return this._createPagerButton(a,this.pageClass,function(){this.openPage(a)})},_createPagerButton:function(a,c,d){var e=b("<a>").attr("href",s).html(a).on("click",b.proxy(d,this));return b("<span>").addClass(c).append(e)},_createPagerCurrentPage:function(){return b("<span>").addClass(this.pageClass).addClass(this.currentPageClass).text(this.pageIndex)},_refreshSize:function(){this._refreshHeight(),this._refreshWidth()},_refreshWidth:function(){var a="auto"===this.width?this._getAutoWidth():this.width;this._container.width(a)},_getAutoWidth:function(){var a=this._headerGrid,b=this._header;a.width("auto");var c=a.outerWidth(),d=b.outerWidth()-b.innerWidth();return a.width(""),c+d},_scrollBarWidth:function(){var a;return function(){if(a===c){var d=b("<div style='width:50px;height:50px;overflow:hidden;position:absolute;top:-10000px;left:-10000px;'></div>"),e=b("<div style='height:100px;'></div>");d.append(e).appendTo("body");var f=e.innerWidth();d.css("overflow-y","auto");var g=e.innerWidth();d.remove(),a=f-g}return a}}(),_refreshHeight:function(){var a,b=this._container,c=this._pagerContainer,d=this.height;b.height(d),"auto"!==d&&(d=b.height(),a=this._header.outerHeight(!0),c.parents(b).length&&(a+=c.outerHeight(!0)),this._body.outerHeight(d-a))},showPrevPages:function(){var a=this._firstDisplayingPage,b=this.pageButtonCount;this._firstDisplayingPage=a>b?a-b:1,this._refreshPager()},showNextPages:function(){var a=this._firstDisplayingPage,b=this.pageButtonCount,c=this._pagesCount();this._firstDisplayingPage=a+2*b>c?c-b+1:a+b,this._refreshPager()},openPage:function(a){1>a||a>this._pagesCount()||(this._setPage(a),this._loadStrategy.openPage(a))},_setPage:function(a){var b=this._firstDisplayingPage,c=this.pageButtonCount;this.pageIndex=a,b>a&&(this._firstDisplayingPage=a),a>b+c-1&&(this._firstDisplayingPage=a-c+1),this._callEventHandler(this.onPageChanged,{pageIndex:a})},_controllerCall:function(a,c,d,e){if(d)return b.Deferred().reject().promise();this._showLoading();var f=this._controller;if(!f||!f[a])throw Error("controller has no method '"+a+"'");return u(f[a](c)).done(b.proxy(e,this)).fail(b.proxy(this._errorHandler,this)).always(b.proxy(this._hideLoading,this))},_errorHandler:function(){this._callEventHandler(this.onError,{args:b.makeArray(arguments)})},_showLoading:function(){this.loadIndication&&(clearTimeout(this._loadingTimer),this._loadingTimer=setTimeout(b.proxy(function(){this._loadIndicator.show()},this),this.loadIndicationDelay))},_hideLoading:function(){this.loadIndication&&(clearTimeout(this._loadingTimer),this._loadIndicator.hide())},search:function(a){return this._resetSorting(),this._resetPager(),this.loadData(a)},loadData:function(a){a=a||(this.filtering?this.getFilter():{}),b.extend(a,this._loadStrategy.loadParams(),this._sortingParams());var c=this._callEventHandler(this.onDataLoading,{filter:a});return this._controllerCall("loadData",a,c.cancel,function(a){a&&(this._loadStrategy.finishLoad(a),this._callEventHandler(this.onDataLoaded,{data:a}))})},getFilter:function(){var a={};return this._eachField(function(b){b.filtering&&this._setItemFieldValue(a,b,b.filterValue())}),a},_sortingParams:function(){return this.sorting&&this._sortField?{sortField:this._sortField.name,sortOrder:this._sortOrder}:{}},getSorting:function(){var a=this._sortingParams();return{field:a.sortField,order:a.sortOrder}},clearFilter:function(){var a=this._createFilterRow();return this._filterRow.replaceWith(a),this._filterRow=a,this.search()},insertItem:function(a){var c=a||this._getValidatedInsertItem();if(!c)return b.Deferred().reject().promise();var d=this._callEventHandler(this.onItemInserting,{item:c});return this._controllerCall("insertItem",c,d.cancel,function(a){a=a||c,this._loadStrategy.finishInsert(a),this._callEventHandler(this.onItemInserted,{item:a})})},_getValidatedInsertItem:function(){var a=this._getInsertItem();return this._validateItem(a,this._insertRow)?a:null},_getInsertItem:function(){var a={};return this._eachField(function(b){b.inserting&&this._setItemFieldValue(a,b,b.insertValue())}),a},_validateItem:function(a,c){var d=[],e={item:a,itemIndex:this._rowIndex(c),row:c};if(this._eachField(function(f){if(f.validate&&(c!==this._insertRow||f.inserting)&&(c!==this._getEditRow()||f.editing)){var g=this._getItemFieldValue(a,f),h=this._validation.validate(b.extend({value:g,rules:f.validate},e));this._setCellValidity(c.children().eq(this._visibleFieldIndex(f)),h),h.length&&d.push.apply(d,b.map(h,function(a){return{field:f,message:a}}))}}),!d.length)return!0;var f=b.extend({errors:d},e);return this._callEventHandler(this.onItemInvalid,f),this.invalidNotify(f),!1},_setCellValidity:function(a,b){a.toggleClass(this.invalidClass,!!b.length).attr("title",b.join("\n"))},clearInsert:function(){var a=this._createInsertRow();this._insertRow.replaceWith(a),this._insertRow=a,this.refresh()},editItem:function(a){var b=this.rowByItem(a);b.length&&this._editRow(b)},rowByItem:function(a){return a.jquery||a.nodeType?b(a):this._content.find("tr").filter(function(){return b.data(this,g)===a})},_editRow:function(a){if(this.editing){var b=a.data(g),c=this._callEventHandler(this.onItemEditing,{row:a,item:b,itemIndex:this._itemIndex(b)});if(!c.cancel){this._editingRow&&this.cancelEdit();var d=this._createEditRow(b);this._editingRow=a,a.hide(),d.insertBefore(a),a.data(h,d)}}},_createEditRow:function(a){if(b.isFunction(this.editRowRenderer))return b(this.renderTemplate(this.editRowRenderer,this,{item:a,itemIndex:this._itemIndex(a)}));var c=b("<tr>").addClass(this.editRowClass);return this._eachField(function(b){var d=this._getItemFieldValue(a,b);this._prepareCell("<td>",b,"editcss").append(this.renderTemplate(b.editTemplate||"",b,{value:d,item:a})).appendTo(c)}),c},updateItem:function(a,b){1===arguments.length&&(b=a);var c=a?this.rowByItem(a):this._editingRow;return(b=b||this._getValidatedEditedItem())?this._updateRow(c,b):void 0},_getValidatedEditedItem:function(){var a=this._getEditedItem();return this._validateItem(a,this._getEditRow())?a:null},_updateRow:function(a,c){var d=a.data(g),e=this._itemIndex(d),f=b.extend(!0,{},d,c),h=this._callEventHandler(this.onItemUpdating,{row:a,item:f,itemIndex:e,previousItem:d});return this._controllerCall("updateItem",f,h.cancel,function(g){var h=b.extend(!0,{},d);f=g||b.extend(!0,d,c);var i=this._finishUpdate(a,f,e);this._callEventHandler(this.onItemUpdated,{row:i,item:f,itemIndex:e,previousItem:h})})},_rowIndex:function(a){return this._content.children().index(b(a))},_itemIndex:function(a){return b.inArray(a,this.data)},_finishUpdate:function(a,b,c){this.cancelEdit(),this.data[c]=b;var d=this._createRow(b,c);return a.replaceWith(d),d},_getEditedItem:function(){var a={};return this._eachField(function(b){b.editing&&this._setItemFieldValue(a,b,b.editValue())}),a},cancelEdit:function(){this._editingRow&&(this._getEditRow().remove(),this._editingRow.show(),this._editingRow=null)},_getEditRow:function(){return this._editingRow&&this._editingRow.data(h)},deleteItem:function(b){var c=this.rowByItem(b);if(c.length&&(!this.confirmDeleting||a.confirm(t(this.deleteConfirm,this,c.data(g)))))return this._deleteRow(c)},_deleteRow:function(a){var b=a.data(g),c=this._itemIndex(b),d=this._callEventHandler(this.onItemDeleting,{row:a,item:b,itemIndex:c});return this._controllerCall("deleteItem",b,d.cancel,function(){this._loadStrategy.finishDelete(b,c),this._callEventHandler(this.onItemDeleted,{row:a,item:b,itemIndex:c})})}},b.fn.jsGrid=function(a){var e=b.makeArray(arguments),g=e.slice(1),h=this;return this.each(function(){var e,i=b(this),j=i.data(f);if(j)if("string"==typeof a){if(e=j[a].apply(j,g),e!==c&&e!==j)return h=e,!1}else j._detachWindowResizeCallback(),j._init(a),j.render();else new d(i,a)}),h};var w={},x=function(a){var c;b.isPlainObject(a)?c=d.prototype:(c=w[a].prototype,a=arguments[1]||{}),b.extend(c,a)},y={},z=function(a){var c=b.isPlainObject(a)?a:y[a];if(!c)throw Error("unknown locale "+a);A(jsGrid,c)},A=function(a,c){b.each(c,function(c,d){return b.isPlainObject(d)?void A(a[c]||a[c[0].toUpperCase()+c.slice(1)],d):void(a.hasOwnProperty(c)?a[c]=d:a.prototype[c]=d)})};a.jsGrid={Grid:d,fields:w,setDefaults:x,locales:y,locale:z,version:"1.5.3"}}(window,jQuery),function(a,b){function c(a){this._init(a)}c.prototype={container:"body",message:"Loading...",shading:!0,zIndex:1e3,shaderClass:"jsgrid-load-shader",loadPanelClass:"jsgrid-load-panel",_init:function(a){b.extend(!0,this,a),this._initContainer(),this._initShader(),this._initLoadPanel()},_initContainer:function(){this._container=b(this.container)},_initShader:function(){this.shading&&(this._shader=b("<div>").addClass(this.shaderClass).hide().css({position:"absolute",top:0,right:0,bottom:0,left:0,zIndex:this.zIndex}).appendTo(this._container))},_initLoadPanel:function(){this._loadPanel=b("<div>").addClass(this.loadPanelClass).text(this.message).hide().css({position:"absolute",top:"50%",left:"50%",zIndex:this.zIndex}).appendTo(this._container)},show:function(){var a=this._loadPanel.show(),b=a.outerWidth(),c=a.outerHeight();a.css({marginTop:-c/2,marginLeft:-b/2}),this._shader.show()},hide:function(){this._loadPanel.hide(),this._shader.hide()}},a.LoadIndicator=c}(jsGrid,jQuery),function(a,b){function c(a){this._grid=a}function d(a){this._grid=a,this._itemsCount=0}c.prototype={firstDisplayIndex:function(){var a=this._grid;return a.option("paging")?(a.option("pageIndex")-1)*a.option("pageSize"):0},lastDisplayIndex:function(){var a=this._grid,b=a.option("data").length;return a.option("paging")?Math.min(a.option("pageIndex")*a.option("pageSize"),b):b},itemsCount:function(){return this._grid.option("data").length},openPage:function(){this._grid.refresh()},loadParams:function(){return{}},sort:function(){return this._grid._sortData(),this._grid.refresh(),b.Deferred().resolve().promise()},reset:function(){return this._grid.refresh(),b.Deferred().resolve().promise()},finishLoad:function(a){this._grid.option("data",a)},finishInsert:function(a){var b=this._grid;b.option("data").push(a),b.refresh()},finishDelete:function(a,b){var c=this._grid;c.option("data").splice(b,1),c.reset()}},d.prototype={firstDisplayIndex:function(){return 0},lastDisplayIndex:function(){return this._grid.option("data").length},itemsCount:function(){return this._itemsCount},openPage:function(){this._grid.loadData()},loadParams:function(){var a=this._grid;return{pageIndex:a.option("pageIndex"),pageSize:a.option("pageSize")}},reset:function(){return this._grid.loadData()},sort:function(){return this._grid.loadData()},finishLoad:function(a){this._itemsCount=a.itemsCount,this._grid.option("data",a.data)},finishInsert:function(){this._grid.search()},finishDelete:function(){this._grid.search()}},a.loadStrategies={DirectLoadingStrategy:c,PageLoadingStrategy:d}}(jsGrid,jQuery),function(a){var b=function(a){return"undefined"!=typeof a&&null!==a},c={string:function(a,c){return b(a)||b(c)?b(a)?b(c)?(""+a).localeCompare(""+c):1:-1:0},number:function(a,b){return a-b},date:function(a,b){return a-b},numberAsString:function(a,b){return parseFloat(a)-parseFloat(b)}};a.sortStrategies=c}(jsGrid,jQuery),function(a,b,c){function d(a){this._init(a)}d.prototype={_init:function(a){b.extend(!0,this,a)},validate:function(a){var c=[];return b.each(this._normalizeRules(a.rules),function(d,e){if(!e.validator(a.value,a.item,e.param)){var f=b.isFunction(e.message)?e.message(a.value,a.item):e.message;c.push(f)}}),c},_normalizeRules:function(a){return b.isArray(a)||(a=[a]),b.map(a,b.proxy(function(a){return this._normalizeRule(a)},this))},_normalizeRule:function(a){if("string"==typeof a&&(a={validator:a}),b.isFunction(a)&&(a={validator:a}),!b.isPlainObject(a))throw Error("wrong validation config specified");return a=b.extend({},a),b.isFunction(a.validator)?a:this._applyNamedValidator(a,a.validator)},_applyNamedValidator:function(a,c){delete a.validator;var d=e[c];if(!d)throw Error('unknown validator "'+c+'"');return b.isFunction(d)&&(d={validator:d}),b.extend({},d,a)}},a.Validation=d;var e={required:{message:"Field is required",validator:function(a){return a!==c&&null!==a&&""!==a}},rangeLength:{message:"Field value length is out of the defined range",validator:function(a,b,c){return a.length>=c[0]&&a.length<=c[1]}},minLength:{message:"Field value is too short",validator:function(a,b,c){return a.length>=c}},maxLength:{message:"Field value is too long",validator:function(a,b,c){return a.length<=c}},pattern:{message:"Field value is not matching the defined pattern",validator:function(a,b,c){return"string"==typeof c&&(c=new RegExp("^(?:"+c+")$")),c.test(a)}},range:{message:"Field value is out of the defined range",validator:function(a,b,c){return a>=c[0]&&a<=c[1]}},min:{message:"Field value is too small",validator:function(a,b,c){return a>=c}},max:{message:"Field value is too large",validator:function(a,b,c){return c>=a}}};a.validators=e}(jsGrid,jQuery),function(a,b,c){function d(a){b.extend(!0,this,a),this.sortingFunc=this._getSortingFunc()}d.prototype={name:"",title:null,css:"",align:"",width:100,visible:!0,filtering:!0,inserting:!0,editing:!0,sorting:!0,sorter:"string",headerTemplate:function(){return this.title===c||null===this.title?this.name:this.title},itemTemplate:function(a){return a},filterTemplate:function(){return""},insertTemplate:function(){return""},editTemplate:function(a,b){return this._value=a,this.itemTemplate(a,b)},filterValue:function(){return""},insertValue:function(){return""},editValue:function(){return this._value},_getSortingFunc:function(){var c=this.sorter;if(b.isFunction(c))return c;if("string"==typeof c)return a.sortStrategies[c];throw Error('wrong sorter for the field "'+this.name+'"!')}},a.Field=d}(jsGrid,jQuery),function(a,b){function c(a){d.call(this,a)}var d=a.Field;c.prototype=new d({autosearch:!0,readOnly:!1,filterTemplate:function(){if(!this.filtering)return"";var a=this._grid,b=this.filterControl=this._createTextBox();return this.autosearch&&b.on("keypress",function(b){13===b.which&&(a.search(),b.preventDefault())}),b},insertTemplate:function(){return this.inserting?this.insertControl=this._createTextBox():""},editTemplate:function(a){if(!this.editing)return this.itemTemplate.apply(this,arguments);var b=this.editControl=this._createTextBox();return b.val(a),b},filterValue:function(){return this.filterControl.val()},insertValue:function(){return this.insertControl.val()},editValue:function(){return this.editControl.val()},_createTextBox:function(){return b("<input>").attr("type","text").prop("readonly",!!this.readOnly)}}),a.fields.text=a.TextField=c}(jsGrid,jQuery),function(a,b,c){function d(a){e.call(this,a)}var e=a.TextField;d.prototype=new e({sorter:"number",align:"right",readOnly:!1,filterValue:function(){return this.filterControl.val()?parseInt(this.filterControl.val()||0,10):c},insertValue:function(){return this.insertControl.val()?parseInt(this.insertControl.val()||0,10):c},editValue:function(){return this.editControl.val()?parseInt(this.editControl.val()||0,10):c},_createTextBox:function(){return b("<input>").attr("type","number").prop("readonly",!!this.readOnly)}}),a.fields.number=a.NumberField=d}(jsGrid,jQuery),function(a,b){function c(a){d.call(this,a)}var d=a.TextField;c.prototype=new d({insertTemplate:function(){return this.inserting?this.insertControl=this._createTextArea():""},editTemplate:function(a){if(!this.editing)return this.itemTemplate.apply(this,arguments);var b=this.editControl=this._createTextArea();return b.val(a),b},_createTextArea:function(){return b("<textarea>").prop("readonly",!!this.readOnly)}}),a.fields.textarea=a.TextAreaField=c}(jsGrid,jQuery),function(a,b,c){function d(a){if(this.items=[],this.selectedIndex=-1,this.valueField="",this.textField="",a.valueField&&a.items.length){var b=a.items[0][a.valueField];this.valueType=typeof b===f?f:g}this.sorter=this.valueType,e.call(this,a)}var e=a.NumberField,f="number",g="string";d.prototype=new e({align:"center",valueType:f,itemTemplate:function(a){var d,e=this.items,f=this.valueField,g=this.textField;d=f?b.grep(e,function(b){return b[f]===a})[0]||{}:e[a];var h=g?d[g]:d;return h===c||null===h?"":h},filterTemplate:function(){if(!this.filtering)return"";var a=this._grid,b=this.filterControl=this._createSelect();return this.autosearch&&b.on("change",function(){a.search()}),b},insertTemplate:function(){return this.inserting?this.insertControl=this._createSelect():""},editTemplate:function(a){if(!this.editing)return this.itemTemplate.apply(this,arguments);var b=this.editControl=this._createSelect();return a!==c&&b.val(a),b},filterValue:function(){var a=this.filterControl.val();return this.valueType===f?parseInt(a||0,10):a},insertValue:function(){var a=this.insertControl.val();return this.valueType===f?parseInt(a||0,10):a},editValue:function(){var a=this.editControl.val();return this.valueType===f?parseInt(a||0,10):a},_createSelect:function(){var a=b("<select>"),c=this.valueField,d=this.textField,e=this.selectedIndex;return b.each(this.items,function(f,g){var h=c?g[c]:f,i=d?g[d]:g,j=b("<option>").attr("value",h).text(i).appendTo(a);j.prop("selected",e===f)}),a.prop("disabled",!!this.readOnly),a}}),a.fields.select=a.SelectField=d}(jsGrid,jQuery),function(a,b,c){function d(a){e.call(this,a)}var e=a.Field;d.prototype=new e({sorter:"number",align:"center",autosearch:!0,itemTemplate:function(a){return this._createCheckbox().prop({checked:a,disabled:!0})},filterTemplate:function(){if(!this.filtering)return"";var a=this._grid,c=this.filterControl=this._createCheckbox();return c.prop({readOnly:!0,indeterminate:!0}),c.on("click",function(){var a=b(this);
+a.prop("readOnly")?a.prop({checked:!1,readOnly:!1}):a.prop("checked")||a.prop({readOnly:!0,indeterminate:!0})}),this.autosearch&&c.on("click",function(){a.search()}),c},insertTemplate:function(){return this.inserting?this.insertControl=this._createCheckbox():""},editTemplate:function(a){if(!this.editing)return this.itemTemplate.apply(this,arguments);var b=this.editControl=this._createCheckbox();return b.prop("checked",a),b},filterValue:function(){return this.filterControl.get(0).indeterminate?c:this.filterControl.is(":checked")},insertValue:function(){return this.insertControl.is(":checked")},editValue:function(){return this.editControl.is(":checked")},_createCheckbox:function(){return b("<input>").attr("type","checkbox")}}),a.fields.checkbox=a.CheckboxField=d}(jsGrid,jQuery),function(a,b){function c(a){d.call(this,a),this._configInitialized=!1}var d=a.Field;c.prototype=new d({css:"jsgrid-control-field",align:"center",width:50,filtering:!1,inserting:!1,editing:!1,sorting:!1,buttonClass:"jsgrid-button",modeButtonClass:"jsgrid-mode-button",modeOnButtonClass:"jsgrid-mode-on-button",searchModeButtonClass:"jsgrid-search-mode-button",insertModeButtonClass:"jsgrid-insert-mode-button",editButtonClass:"jsgrid-edit-button",deleteButtonClass:"jsgrid-delete-button",searchButtonClass:"jsgrid-search-button",clearFilterButtonClass:"jsgrid-clear-filter-button",insertButtonClass:"jsgrid-insert-button",updateButtonClass:"jsgrid-update-button",cancelEditButtonClass:"jsgrid-cancel-edit-button",searchModeButtonTooltip:"Switch to searching",insertModeButtonTooltip:"Switch to inserting",editButtonTooltip:"Edit",deleteButtonTooltip:"Delete",searchButtonTooltip:"Search",clearFilterButtonTooltip:"Clear filter",insertButtonTooltip:"Insert",updateButtonTooltip:"Update",cancelEditButtonTooltip:"Cancel edit",editButton:!0,deleteButton:!0,clearFilterButton:!0,modeSwitchButton:!0,_initConfig:function(){this._hasFiltering=this._grid.filtering,this._hasInserting=this._grid.inserting,this._hasInserting&&this.modeSwitchButton&&(this._grid.inserting=!1),this._configInitialized=!0},headerTemplate:function(){this._configInitialized||this._initConfig();var a=this._hasFiltering,b=this._hasInserting;return this.modeSwitchButton&&(a||b)?a&&!b?this._createFilterSwitchButton():b&&!a?this._createInsertSwitchButton():this._createModeSwitchButton():""},itemTemplate:function(a,c){var d=b([]);return this.editButton&&(d=d.add(this._createEditButton(c))),this.deleteButton&&(d=d.add(this._createDeleteButton(c))),d},filterTemplate:function(){var a=this._createSearchButton();return this.clearFilterButton?a.add(this._createClearFilterButton()):a},insertTemplate:function(){return this._createInsertButton()},editTemplate:function(){return this._createUpdateButton().add(this._createCancelEditButton())},_createFilterSwitchButton:function(){return this._createOnOffSwitchButton("filtering",this.searchModeButtonClass,!0)},_createInsertSwitchButton:function(){return this._createOnOffSwitchButton("inserting",this.insertModeButtonClass,!1)},_createOnOffSwitchButton:function(a,c,d){var e=d,f=b.proxy(function(){g.toggleClass(this.modeOnButtonClass,e)},this),g=this._createGridButton(this.modeButtonClass+" "+c,"",function(b){e=!e,b.option(a,e),f()});return f(),g},_createModeSwitchButton:function(){var a=!1,c=b.proxy(function(){d.attr("title",a?this.searchModeButtonTooltip:this.insertModeButtonTooltip).toggleClass(this.insertModeButtonClass,!a).toggleClass(this.searchModeButtonClass,a)},this),d=this._createGridButton(this.modeButtonClass,"",function(b){a=!a,b.option("inserting",a),b.option("filtering",!a),c()});return c(),d},_createEditButton:function(a){return this._createGridButton(this.editButtonClass,this.editButtonTooltip,function(b,c){b.editItem(a),c.stopPropagation()})},_createDeleteButton:function(a){return this._createGridButton(this.deleteButtonClass,this.deleteButtonTooltip,function(b,c){b.deleteItem(a),c.stopPropagation()})},_createSearchButton:function(){return this._createGridButton(this.searchButtonClass,this.searchButtonTooltip,function(a){a.search()})},_createClearFilterButton:function(){return this._createGridButton(this.clearFilterButtonClass,this.clearFilterButtonTooltip,function(a){a.clearFilter()})},_createInsertButton:function(){return this._createGridButton(this.insertButtonClass,this.insertButtonTooltip,function(a){a.insertItem().done(function(){a.clearInsert()})})},_createUpdateButton:function(){return this._createGridButton(this.updateButtonClass,this.updateButtonTooltip,function(a,b){a.updateItem(),b.stopPropagation()})},_createCancelEditButton:function(){return this._createGridButton(this.cancelEditButtonClass,this.cancelEditButtonTooltip,function(a,b){a.cancelEdit(),b.stopPropagation()})},_createGridButton:function(a,c,d){var e=this._grid;return b("<input>").addClass(this.buttonClass).addClass(a).attr({type:"button",title:c}).on("click",function(a){d(e,a)})},editValue:function(){return""}}),a.fields.control=a.ControlField=c}(jsGrid,jQuery);
 ;
 //# sourceMappingURL=scripts.bundle.js.map

@@ -66,7 +66,7 @@ var AppRoutingModule = /** @class */ (function () {
     function AppRoutingModule() {
     }
     AppRoutingModule = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["I" /* NgModule */])({
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["K" /* NgModule */])({
             imports: [__WEBPACK_IMPORTED_MODULE_2__angular_router__["c" /* RouterModule */].forRoot(routes)],
             exports: [__WEBPACK_IMPORTED_MODULE_2__angular_router__["c" /* RouterModule */]]
         })
@@ -149,17 +149,19 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_service__ = __webpack_require__("./src/app/app.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/platform-browser.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__("./src/app/app.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_common_http__ = __webpack_require__("./node_modules/@angular/common/esm5/http.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_vehicle_vehicle_component__ = __webpack_require__("./src/app/components/vehicle/vehicle.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_routing_module__ = __webpack_require__("./src/app/app-routing.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_menu_menu_component__ = __webpack_require__("./src/app/components/menu/menu.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_home_home_component__ = __webpack_require__("./src/app/components/home/home.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__services_vehicle_service__ = __webpack_require__("./src/app/services/vehicle.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_ngx_toastr__ = __webpack_require__("./node_modules/ngx-toastr/esm5/ngx-toastr.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__components_vehicle_list_vehicle_list_component__ = __webpack_require__("./src/app/components/vehicle-list/vehicle-list.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__components_view_vehicle_view_vehicle_component__ = __webpack_require__("./src/app/components/view-vehicle/view-vehicle.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_platform_browser_animations__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/animations.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__("./src/app/app.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_common_http__ = __webpack_require__("./node_modules/@angular/common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_vehicle_vehicle_component__ = __webpack_require__("./src/app/components/vehicle/vehicle.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__app_routing_module__ = __webpack_require__("./src/app/app-routing.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_menu_menu_component__ = __webpack_require__("./src/app/components/menu/menu.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_home_home_component__ = __webpack_require__("./src/app/components/home/home.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__services_vehicle_service__ = __webpack_require__("./src/app/services/vehicle.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_ngx_toastr__ = __webpack_require__("./node_modules/ngx-toastr/esm5/ngx-toastr.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__components_vehicle_list_vehicle_list_component__ = __webpack_require__("./src/app/components/vehicle-list/vehicle-list.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__components_view_vehicle_view_vehicle_component__ = __webpack_require__("./src/app/components/view-vehicle/view-vehicle.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__material_module__ = __webpack_require__("./src/app/material.module.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -182,28 +184,32 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
+
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
     AppModule = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["I" /* NgModule */])({
+        Object(__WEBPACK_IMPORTED_MODULE_3__angular_core__["K" /* NgModule */])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */],
-                __WEBPACK_IMPORTED_MODULE_6__components_vehicle_vehicle_component__["a" /* VehicleComponent */],
-                __WEBPACK_IMPORTED_MODULE_9__components_menu_menu_component__["a" /* MenuComponent */],
-                __WEBPACK_IMPORTED_MODULE_10__components_home_home_component__["a" /* HomeComponent */],
-                __WEBPACK_IMPORTED_MODULE_13__components_vehicle_list_vehicle_list_component__["a" /* VehicleListComponent */],
-                __WEBPACK_IMPORTED_MODULE_14__components_view_vehicle_view_vehicle_component__["a" /* ViewVehicleComponent */]
+                __WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AppComponent */],
+                __WEBPACK_IMPORTED_MODULE_7__components_vehicle_vehicle_component__["a" /* VehicleComponent */],
+                __WEBPACK_IMPORTED_MODULE_10__components_menu_menu_component__["a" /* MenuComponent */],
+                __WEBPACK_IMPORTED_MODULE_11__components_home_home_component__["a" /* HomeComponent */],
+                __WEBPACK_IMPORTED_MODULE_14__components_vehicle_list_vehicle_list_component__["a" /* VehicleListComponent */],
+                __WEBPACK_IMPORTED_MODULE_15__components_view_vehicle_view_vehicle_component__["a" /* ViewVehicleComponent */]
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_7__app_routing_module__["a" /* AppRoutingModule */],
+                __WEBPACK_IMPORTED_MODULE_4__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
+                __WEBPACK_IMPORTED_MODULE_8__app_routing_module__["a" /* AppRoutingModule */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["a" /* BrowserModule */],
-                __WEBPACK_IMPORTED_MODULE_5__angular_common_http__["b" /* HttpClientModule */],
-                __WEBPACK_IMPORTED_MODULE_8__angular_forms__["a" /* FormsModule */],
-                __WEBPACK_IMPORTED_MODULE_12_ngx_toastr__["a" /* ToastrModule */].forRoot()
+                __WEBPACK_IMPORTED_MODULE_6__angular_common_http__["b" /* HttpClientModule */],
+                __WEBPACK_IMPORTED_MODULE_9__angular_forms__["c" /* FormsModule */],
+                __WEBPACK_IMPORTED_MODULE_16__material_module__["a" /* MaterialModule */],
+                __WEBPACK_IMPORTED_MODULE_13_ngx_toastr__["a" /* ToastrModule */].forRoot()
             ],
-            providers: [/*{provide: ErrorHandler, useClass: AppErrorHandler}*/ __WEBPACK_IMPORTED_MODULE_1__app_service__["a" /* AppService */], __WEBPACK_IMPORTED_MODULE_11__services_vehicle_service__["a" /* VehicleService */], __WEBPACK_IMPORTED_MODULE_0__services_photo_service__["a" /* PhotoService */]],
-            bootstrap: [__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */]]
+            providers: [/*{provide: ErrorHandler, useClass: AppErrorHandler}*/ __WEBPACK_IMPORTED_MODULE_1__app_service__["a" /* AppService */], __WEBPACK_IMPORTED_MODULE_12__services_vehicle_service__["a" /* VehicleService */], __WEBPACK_IMPORTED_MODULE_0__services_photo_service__["a" /* PhotoService */]],
+            bootstrap: [__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AppComponent */]]
         })
     ], AppModule);
     return AppModule;
@@ -236,7 +242,7 @@ var AppService = /** @class */ (function () {
         this.http = http;
     }
     AppService = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["C" /* Injectable */])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]])
     ], AppService);
     return AppService;
@@ -256,7 +262,7 @@ module.exports = ""
 /***/ "./src/app/components/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  Home will come here\n</p>\n"
+module.exports = "<p>\n  Home will come here\n</p>\n<mat-checkbox>Check me!</mat-checkbox>\n"
 
 /***/ }),
 
@@ -641,8 +647,8 @@ var ViewVehicleComponent = /** @class */ (function () {
         this.photoService.getPhotos(this.vehicle.id).subscribe(function (photos) { return _this.photos = photos; });
     };
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["_9" /* ViewChild */])('fileInput'),
-        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2__angular_core__["t" /* ElementRef */])
+        Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["_11" /* ViewChild */])('fileInput'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2__angular_core__["u" /* ElementRef */])
     ], ViewVehicleComponent.prototype, "fileInput", void 0);
     ViewVehicleComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["n" /* Component */])({
@@ -653,6 +659,106 @@ var ViewVehicleComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_vehicle_service__["a" /* VehicleService */], __WEBPACK_IMPORTED_MODULE_3__angular_router__["a" /* ActivatedRoute */], __WEBPACK_IMPORTED_MODULE_0__services_photo_service__["a" /* PhotoService */]])
     ], ViewVehicleComponent);
     return ViewVehicleComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/material.module.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MaterialModule; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_material__ = __webpack_require__("./node_modules/@angular/material/esm5/material.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_cdk_table__ = __webpack_require__("./node_modules/@angular/cdk/esm5/table.es5.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
+var MaterialModule = /** @class */ (function () {
+    function MaterialModule() {
+    }
+    MaterialModule = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["K" /* NgModule */])({
+            imports: [
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["a" /* MatAutocompleteModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["b" /* MatButtonModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["c" /* MatButtonToggleModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["d" /* MatCardModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["e" /* MatCheckboxModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["f" /* MatChipsModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["g" /* MatDatepickerModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["h" /* MatDialogModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["i" /* MatExpansionModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["j" /* MatFormFieldModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["k" /* MatGridListModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["l" /* MatIconModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["m" /* MatInputModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["n" /* MatListModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["o" /* MatMenuModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["p" /* MatNativeDateModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["q" /* MatPaginatorModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["r" /* MatProgressBarModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["s" /* MatProgressSpinnerModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["t" /* MatRadioModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["u" /* MatRippleModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["v" /* MatSelectModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["w" /* MatSidenavModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["y" /* MatSliderModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["x" /* MatSlideToggleModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["z" /* MatSnackBarModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["B" /* MatStepperModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["A" /* MatSortModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["C" /* MatTableModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["D" /* MatTabsModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["E" /* MatToolbarModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["F" /* MatTooltipModule */],
+                __WEBPACK_IMPORTED_MODULE_2__angular_cdk_table__["m" /* CdkTableModule */]
+            ],
+            exports: [
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["a" /* MatAutocompleteModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["b" /* MatButtonModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["c" /* MatButtonToggleModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["d" /* MatCardModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["e" /* MatCheckboxModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["f" /* MatChipsModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["g" /* MatDatepickerModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["h" /* MatDialogModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["i" /* MatExpansionModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["k" /* MatGridListModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["l" /* MatIconModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["m" /* MatInputModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["n" /* MatListModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["o" /* MatMenuModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["p" /* MatNativeDateModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["q" /* MatPaginatorModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["r" /* MatProgressBarModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["s" /* MatProgressSpinnerModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["t" /* MatRadioModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["u" /* MatRippleModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["v" /* MatSelectModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["w" /* MatSidenavModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["y" /* MatSliderModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["x" /* MatSlideToggleModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["z" /* MatSnackBarModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["B" /* MatStepperModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["A" /* MatSortModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["C" /* MatTableModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["D" /* MatTabsModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["E" /* MatToolbarModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_material__["F" /* MatTooltipModule */],
+                __WEBPACK_IMPORTED_MODULE_2__angular_cdk_table__["m" /* CdkTableModule */]
+            ]
+        })
+    ], MaterialModule);
+    return MaterialModule;
 }());
 
 
@@ -690,7 +796,7 @@ var PhotoService = /** @class */ (function () {
         return this.http.get("/api/vehicles/" + id + "/photos");
     };
     PhotoService = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["A" /* Injectable */])(),
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["C" /* Injectable */])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */]])
     ], PhotoService);
     return PhotoService;
@@ -766,7 +872,7 @@ var VehicleService = /** @class */ (function () {
         return false;
     };
     VehicleService = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["A" /* Injectable */])(),
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["C" /* Injectable */])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */]])
     ], VehicleService);
     return VehicleService;
@@ -801,12 +907,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__ = __webpack_require__("./node_modules/@angular/platform-browser-dynamic/esm5/platform-browser-dynamic.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_app_module__ = __webpack_require__("./src/app/app.module.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__("./src/environments/environment.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_hammerjs__ = __webpack_require__("./node_modules/hammerjs/hammer.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_hammerjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_hammerjs__);
+
 
 
 
 
 if (__WEBPACK_IMPORTED_MODULE_3__environments_environment__["a" /* environment */].production) {
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* enableProdMode */])();
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_17" /* enableProdMode */])();
 }
 Object(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_2__app_app_module__["a" /* AppModule */])
     .catch(function (err) { return console.log(err); });
